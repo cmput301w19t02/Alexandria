@@ -8,7 +8,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 
 public class ChatRoom {
 
-    private List<Message> messages = new ArrayList<>();
+    private List<Message> messages;
     private String id;
 
     public ChatRoom(String id) {
@@ -17,6 +17,8 @@ public class ChatRoom {
         }
 
         this.id = id;
+
+        messages = new ArrayList<>();
     }
 
     public List<Message> getMessages() {
@@ -46,4 +48,5 @@ public class ChatRoom {
 
         this.id = id;
     }
+
 }

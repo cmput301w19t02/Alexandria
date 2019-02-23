@@ -1,6 +1,7 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.model;
+package ca.ualberta.CMPUT3012019T02.alexandria.model.user;
 
 public class BorrowedBook {
+
     private String isbn;
     private String status;
     private String owner;
@@ -34,4 +35,5 @@ public class BorrowedBook {
     public void setOwner(String owner) {
         this.owner = owner;
     }
+
 }

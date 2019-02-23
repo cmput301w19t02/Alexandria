@@ -1,8 +1,9 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.model;
+package ca.ualberta.CMPUT3012019T02.alexandria.model.user;
 
 import android.graphics.Bitmap;
 
 public class UserProfile {
+
     private String name;
     private String email;
     private String phone;
@@ -46,4 +47,5 @@ public class UserProfile {
     public void setPicture(Bitmap picture) {
         this.picture = picture;
     }
+
 }
