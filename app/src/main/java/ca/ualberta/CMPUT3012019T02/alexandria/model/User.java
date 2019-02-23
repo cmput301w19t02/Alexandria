@@ -84,7 +84,7 @@ public class User{
     }
 
     public void setId(String id) {
-        if(id == null || id.trim().isEmpty()) {
+        if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Id cannot be null or empty");
         }
 
