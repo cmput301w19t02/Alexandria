@@ -5,12 +5,12 @@ import android.view.View;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
-public class ViewAvailableUserBook extends ViewUserBook {
+public class ViewRequestedUserBookActivity extends ViewUserBookActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_available_user_book);
+        setContentView(R.layout.activity_view_requested_user_book);
     }
 
     @Override
@@ -19,7 +19,7 @@ public class ViewAvailableUserBook extends ViewUserBook {
         throw new UnsupportedOperationException();
     }
 
-    public void sendRequest(View view) {
+    public void cancelRequest(View view) {
         // TODO: Finish implementation
         throw new UnsupportedOperationException();
     }

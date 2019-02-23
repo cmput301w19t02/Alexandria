@@ -3,7 +3,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity.viewuserbook;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-public abstract class ViewUserBook extends AppCompatActivity {
+public abstract class ViewUserBookActivity extends AppCompatActivity {
 
     private void getUserBook() {
         // TODO: Finish implementation
