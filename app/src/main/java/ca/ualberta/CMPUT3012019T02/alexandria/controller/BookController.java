@@ -1,10 +1,13 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 
 public class BookController {
+    private FirebaseDatabase database;
 
     private static BookController instance;
 
