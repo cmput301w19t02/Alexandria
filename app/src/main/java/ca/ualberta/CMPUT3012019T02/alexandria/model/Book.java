@@ -8,12 +8,13 @@ import java.util.Date;
 import java.util.List;
 
 public class Book {
+
     private String isbn;
     private Bitmap image;
     private String title;
     private String author;
     private Date date;
-    private List<String> availableOwners = new ArrayList<>();
+    private List<String> availableOwners;
 
     public Book(String isbn, Bitmap image, String title, String author, Date date) {
         if (isbn == null || isbn.trim().isEmpty()) {
@@ -25,6 +26,8 @@ public class Book {
         this.title = title;
         this.author = author;
         this.date = date;
+
+        availableOwners = new ArrayList<>();
     }
 
     public String getIsbn() {
@@ -86,4 +89,5 @@ public class Book {
     public void removeAvailableOwners(String avaliableOwner) {
         this.availableOwners.remove(avaliableOwner);
     }
+
 }

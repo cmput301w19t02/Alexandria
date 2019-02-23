@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.model;
+package ca.ualberta.CMPUT3012019T02.alexandria.model.user;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,28 +6,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class User{
-    private HashMap<String,String> chatRooms = new HashMap<>();
-    private List<OwnedBook> ownedBooks = new ArrayList();
-    private List<BorrowedBook> borrowedBooks = new ArrayList();
+public class User {
+
+    private Map<String, String> chatRooms;
+    private List<OwnedBook> ownedBooks;
+    private List<BorrowedBook> borrowedBooks;
     private UserProfile profile;
     private String id;
-    private List<String> blockedUsers = new ArrayList<>();
+    private List<String> blockedUsers;
 
-    public User(String id,UserProfile profile) {
+    public User(String id, UserProfile profile) {
         if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Id cannot be null or empty");
         }
 
         this.id = id;
         this.profile = profile;
+
+        chatRooms = new HashMap<>();
+        ownedBooks = new ArrayList<>();
+        borrowedBooks = new ArrayList<>();
+        blockedUsers = new ArrayList<>();
     }
 
     public Map<String, String> getChatRooms() {
         return Collections.unmodifiableMap(chatRooms);
     }
 
-    public void setChatRooms(HashMap<String, String> chatRooms) {
+    public void setChatRooms(Map<String, String> chatRooms) {
         this.chatRooms = chatRooms;
     }
 
@@ -106,4 +112,5 @@ public class User{
     public void removeBlockedUser(String blockedUser) {
         this.blockedUsers.remove(blockedUser);
     }
+
 }

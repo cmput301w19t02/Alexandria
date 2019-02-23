@@ -2,8 +2,8 @@ package ca.ualberta.CMPUT3012019T02.alexandria;
 
 import org.junit.Test;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.User;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.UserProfile;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.User;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
 public class UserTests {
     @Test(expected = UnsupportedOperationException.class)
