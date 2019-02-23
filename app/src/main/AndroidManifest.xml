@@ -9,6 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".activity.viewuserbook.ViewBorrowedUserBookActivity" />
+        <activity android:name=".activity.viewuserbook.ViewRequestedUserBookActivity" />
+        <activity android:name=".activity.viewuserbook.ViewAcceptedUserBookActivity" />
+        <activity android:name=".activity.viewuserbook.ViewAvailableUserBookActivity" />
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name">
