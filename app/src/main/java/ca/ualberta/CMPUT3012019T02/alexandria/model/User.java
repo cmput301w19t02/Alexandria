@@ -9,13 +9,13 @@ import java.util.Map;
 public class User{
     private HashMap<String,String> chatRooms = new HashMap<>();
     private List<OwnedBook> ownedBooks = new ArrayList();
-    private List<Book> borrowedBooks = new ArrayList();
+    private List<BorrowedBook> borrowedBooks = new ArrayList();
     private UserProfile profile;
     private String id;
     private List<String> blockedUsers = new ArrayList<>();
 
     public User(String id,UserProfile profile) {
-        if(id==null||id.trim().isEmpty()){
+        if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Id cannot be null or empty");
         }
 
@@ -55,19 +55,19 @@ public class User{
         this.ownedBooks.remove(ownedBook);
     }
 
-    public List<Book> getBorrowedBooks() {
+    public List<BorrowedBook> getBorrowedBooks() {
         return Collections.unmodifiableList(borrowedBooks);
     }
 
-    public void setBorrowedBooks(List<Book> borrowedBooks) {
+    public void setBorrowedBooks(List<BorrowedBook> borrowedBooks) {
         this.borrowedBooks = borrowedBooks;
     }
 
-    public void addBorrowedBook(Book borrowedBook) {
+    public void addBorrowedBook(BorrowedBook borrowedBook) {
         this.borrowedBooks.add(borrowedBook);
     }
 
-    public void removeBorrowedBook(Book borrowedBook) {
+    public void removeBorrowedBook(BorrowedBook borrowedBook) {
         this.borrowedBooks.remove(borrowedBook);
     }
 
@@ -84,7 +84,7 @@ public class User{
     }
 
     public void setId(String id) {
-        if(id==null||id.trim().isEmpty()){
+        if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Id cannot be null or empty");
         }
 

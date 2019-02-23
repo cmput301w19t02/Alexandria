@@ -8,11 +8,11 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 
 public class ChatRoom {
 
-    List<Message> messages = new ArrayList<>();
-    String id;
+    private List<Message> messages = new ArrayList<>();
+    private String id;
 
     public ChatRoom(String id) {
-        if(id==null||id.trim().isEmpty()){
+        if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Id cannot be null or empty");
         }
 
@@ -40,7 +40,7 @@ public class ChatRoom {
     }
 
     public void setId(String id) {
-        if(id==null||id.trim().isEmpty()){
+        if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Id cannot be null or empty");
         }
 

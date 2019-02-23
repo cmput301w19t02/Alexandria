@@ -14,7 +14,7 @@ public class OwnedBook {
     private String userBorrowing;
 
     public OwnedBook(String isbn, String status, String userBorrowing) {
-        if(isbn==null||isbn.trim().isEmpty()){
+        if (isbn == null || isbn.trim().isEmpty()) {
             throw new IllegalArgumentException("Isbn cannot be null or empty");
         }
 
@@ -28,7 +28,7 @@ public class OwnedBook {
     }
 
     public void setIsbn(String isbn) {
-        if(isbn==null||isbn.trim().isEmpty()){
+        if (isbn == null || isbn.trim().isEmpty()) {
             throw new IllegalArgumentException("Isbn cannot be null or empty");
         }
 
