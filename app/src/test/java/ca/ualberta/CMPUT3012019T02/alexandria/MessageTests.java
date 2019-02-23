@@ -165,7 +165,7 @@ public class MessageTests {
     @Test
     public void setSenderTest() {
         Message message = new TestMessage("text","TEST content","unread", new Date(), "johndoe@email.com");
-        message.setSender("janesomeone@email.com")
+        message.setSender("janesomeone@email.com");
         assertEquals("janesomeone@email.com", message.getSender());
     }
     // negative setSender
