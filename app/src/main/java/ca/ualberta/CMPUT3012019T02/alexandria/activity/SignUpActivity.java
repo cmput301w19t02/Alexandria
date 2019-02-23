@@ -20,6 +20,9 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void signUp(View view) {
+        // Make sure username is unique
+        // Add to database
+        // Navigate to exchange
         //TODO Implement
         throw new UnsupportedOperationException("Not implemented");
     }
