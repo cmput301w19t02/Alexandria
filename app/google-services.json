@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "461628567406",
+    "firebase_url": "https://alexandria-a5aac.firebaseio.com",
+    "project_id": "alexandria-a5aac",
+    "storage_bucket": "alexandria-a5aac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461628567406:android:fd9f4b2671aa6430",
+        "android_client_info": {
+          "package_name": "ca.ualberta.CMPUT3012019T02.alexandria"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "461628567406-hso85ogvdpqjqlntq6cih3a579qb5io3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0Km9mozkCqNX7N0Sy4V_Uk1OIvxUvRn4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
