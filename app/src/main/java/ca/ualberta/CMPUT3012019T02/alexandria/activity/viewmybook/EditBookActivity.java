@@ -5,10 +5,9 @@ import android.os.Bundle;
 
 import java.util.Date;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 
-public class editBookActivity extends addNewBookActivity {
+public class EditBookActivity extends AddNewBookActivity {
     private Book book;
     private String title ;
     private String author;
