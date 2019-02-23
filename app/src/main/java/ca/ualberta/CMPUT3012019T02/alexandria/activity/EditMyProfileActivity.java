@@ -7,12 +7,12 @@ import android.view.MenuItem;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
-public class BlockedUsers extends AppCompatActivity {
+public class EditMyProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blocked_users);
+        setContentView(R.layout.activity_edit_my_profile);
 
         // toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -29,9 +29,9 @@ public class BlockedUsers extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
+         if (item.getItemId() == android.R.id.home) {
+             finish();
+         }
 
         return super.onOptionsItemSelected(item);
     }

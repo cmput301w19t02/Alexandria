@@ -6,11 +6,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
-public class MyProfile extends AppCompatActivity {
+public class MyProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +42,12 @@ public class MyProfile extends AppCompatActivity {
 
             case R.id.edit_profile:
                 // edit activity
-                Intent startEditProfile = new Intent(this, EditMyProfile.class);
+                Intent startEditProfile = new Intent(this, EditMyProfileActivity.class);
                 startActivity(startEditProfile);
                 break;
             case R.id.blocked_users:
                 // black list activity
-                Intent startBlockedUsers = new Intent(this, BlockedUsers.class);
+                Intent startBlockedUsers = new Intent(this, BlockedUsersActivity.class);
                 startActivity(startBlockedUsers);
                 break;
             case android.R.id.home:

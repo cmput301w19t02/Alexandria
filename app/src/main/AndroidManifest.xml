@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activity.EditMyProfile"></activity>
-        <activity android:name=".activity.BlockedUsers" />
-        <activity android:name=".activity.MyProfile" />
+        <activity android:name=".activity.EditMyProfileActivity"></activity>
+        <activity android:name=".activity.BlockedUsersActivity" />
+        <activity android:name=".activity.MyProfileActivity" />
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name">

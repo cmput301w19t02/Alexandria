@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MyProfile"
+    tools:context=".activity.MyProfileActivity"
     android:background="@color/colorAccent">
 
     <android.support.v7.widget.Toolbar

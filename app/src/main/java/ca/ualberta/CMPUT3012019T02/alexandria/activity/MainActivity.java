@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.user_profile) {
             // open profile
-            Intent startOpenMyProfile = new Intent(this, MyProfile.class);
+            Intent startOpenMyProfile = new Intent(this, MyProfileActivity.class);
             startActivity(startOpenMyProfile);
 
             return true;
