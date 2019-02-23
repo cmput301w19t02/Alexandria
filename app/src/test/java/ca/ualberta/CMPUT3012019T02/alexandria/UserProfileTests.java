@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 
 public class UserProfileTests {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void setNameTest() {
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
         String name = "Alexa Bliss";
@@ -18,7 +18,7 @@ public class UserProfileTests {
         assertEquals(userProfile.getName(), name);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void setEmailTest() {
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
         String email = "alexa@example.com";
@@ -26,7 +26,7 @@ public class UserProfileTests {
         assertEquals(userProfile.getEmail(), email);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void setPhoneTest() {
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
         String phone = "7809991122";
@@ -34,7 +34,7 @@ public class UserProfileTests {
         assertEquals(userProfile.getPhone(), phone);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void setPictureTest() {
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
         Bitmap picture = Bitmap.createBitmap(32,32, Bitmap.Config.ARGB_8888);
