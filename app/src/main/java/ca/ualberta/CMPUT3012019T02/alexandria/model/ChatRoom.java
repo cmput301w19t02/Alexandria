@@ -12,7 +12,7 @@ public class ChatRoom {
     String id;
 
     public ChatRoom(String id) {
-        if(id==null||id.trim().isEmpty()){
+        if(id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Id cannot be null or empty");
         }
 
@@ -40,7 +40,7 @@ public class ChatRoom {
     }
 
     public void setId(String id) {
-        if(id==null||id.trim().isEmpty()){
+        if(id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Id cannot be null or empty");
         }
 
