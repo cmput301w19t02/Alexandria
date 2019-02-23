@@ -20,7 +20,7 @@ public class TextMessageTests {
     }
     // negative constructor tests
     @Test(expected = IllegalArgumentException.class)
-    public void emptyContentConstructorTest() {
+    public void emptyTextConstructorTest() {
         new TextMessage("", "unread", new Date(),"johndoe@email.com");
     }
 
@@ -35,7 +35,7 @@ public class TextMessageTests {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void nullContentConstructorTest() {
+    public void nullTextConstructorTest() {
         new TextMessage(null, "unread", new Date(),"johndoe@email.com");
     }
 
@@ -62,72 +62,14 @@ public class TextMessageTests {
     }
     // negative setText
     @Test(expected = IllegalArgumentException.class)
-    public void emptySetContentTest(){
+    public void emptySetTextTest(){
         TextMessage message = new TextMessage("TEST content", "unread", new Date(), "johndoe@email.com");
         message.setText("");
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void nullSetContentTest(){
+    public void nullSetTextTest(){
         TextMessage message = new TextMessage("TEST content", "unread", new Date(), "johndoe@email.com");
         message.setText(null);
     }
-    // positive setStatus
-    @Test
-    public void setStatusTest(){
-        TextMessage message = new TextMessage("TEST content", "unread", new Date(), "johndoe@email.com");
-        Assert.assertEquals("unread", message.getStatus());
-        message.setType("read");
-        Assert.assertEquals("read", message.getStatus());
-    }
-    // negative setStatus
-    @Test(expected = IllegalArgumentException.class)
-    public void emptySetStatusTest(){
-        TextMessage message = new TextMessage("TEST content", "unread", new Date(), "johndoe@email.com");
-        message.setStatus("");
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void nullSetStatusTest(){
-        TextMessage message = new TextMessage("TEST content", "unread", new Date(), "johndoe@email.com");
-        message.setStatus(null);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void badSetStatusTest(){
-        TextMessage message = new TextMessage("TEST content", "unread", new Date(), "johndoe@email.com");
-        message.setStatus("ardvark");
-    }
-    // positive setDate
-    @Test
-    public void setDateTest() {
-        Date date = new Date();
-        TextMessage message = new TextMessage("TEST content","unread", date, "johndoe@email.com");
-        Assert.assertEquals(date, message.getDate());
-    }
-    // negative setDate
-    @Test(expected = IllegalArgumentException.class)
-    public void nullSetDateTest(){
-        TextMessage message = new TextMessage("TEST content", "unread", new Date(), "johndoe@email.com");
-        message.setDate(null);
-    }
-    // positive setSender
-    @Test
-    public void setSenderTest() {
-        TextMessage message = new TextMessage("TEST content","unread", new Date(), "johndoe@email.com");
-        message.setSender("janesomeone@email.com");
-        Assert.assertEquals("janesomeone@email.com", message.getSender());
-    }
-    // negative setSender
-    @Test(expected = IllegalArgumentException.class)
-    public void emptySetSenderTest(){
-        TextMessage message = new TextMessage("TEST content", "unread", new Date(), "johndoe@email.com");
-        message.setSender("");
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void nullSetSenderTest(){
-        TextMessage message = new TextMessage("TEST content", "unread", new Date(), "johndoe@email.com");
-        message.setSender(null);
-    }   
 }
