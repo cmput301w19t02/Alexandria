@@ -5,17 +5,19 @@ import android.graphics.Bitmap;
 import java.util.Date;
 
 public class ImageMessage extends Message {
+
     public ImageMessage(String content, String status, Date date, String sender) {
         super("Image", content, status, date, sender);
     }
 
-    public Bitmap getImage(){
+    public Bitmap getImage() {
         // TODO Finish implementation
         throw new UnsupportedOperationException();
     }
 
-    public void setImage(Bitmap image){
+    public void setImage(Bitmap image) {
         // TODO Finish implementation
         throw new UnsupportedOperationException();
     }
+
 }

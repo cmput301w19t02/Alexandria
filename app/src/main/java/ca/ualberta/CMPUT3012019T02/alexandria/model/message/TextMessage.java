@@ -8,11 +8,12 @@ public class TextMessage extends Message {
         super("Text", content, status, date, sender);
     }
 
-    public String getText(){
+    public String getText() {
         return getContent();
     }
 
-    public void setText(String text){
+    public void setText(String text) {
         setContent(text);
     }
+
 }
