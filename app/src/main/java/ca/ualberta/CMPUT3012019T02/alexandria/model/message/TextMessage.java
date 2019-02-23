@@ -5,7 +5,7 @@ import java.util.Date;
 public class TextMessage extends Message {
 
     public TextMessage(String content, String status, Date date, String sender) {
-        super("Text", content, status, date, sender);
+        super("text", content, status, date, sender);
     }
 
     public String getText(){
