@@ -7,7 +7,7 @@ import java.util.Date;
 public class ImageMessage extends Message {
 
     public ImageMessage(String content, String status, Date date, String sender) {
-        super("Image", content, status, date, sender);
+        super("image", content, status, date, sender);
     }
 
     public Bitmap getImage() {
