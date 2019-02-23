@@ -1,6 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
-
 public class ExchangeActivity {
 
     private enum Page {BORROWED, ACCEPTED, REQUESTED}
@@ -12,7 +11,6 @@ public class ExchangeActivity {
     }
 
     private void onStart() {}
-
 
     private void filterPage(Page page) {}
 

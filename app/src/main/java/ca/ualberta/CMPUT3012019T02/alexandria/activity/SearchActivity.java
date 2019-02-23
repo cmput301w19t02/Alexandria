@@ -6,9 +6,9 @@ import java.util.List;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 
 public class SearchActivity {
-    private List<Book> searchResult = new ArrayList();
+    private List<Book> searchResult;
 
-    public void BookTap(String isbn){}
+    public void onBookTap(String isbn){}
 
     public void onDataChange(String data) {
         if (data.length() >= 2){}
