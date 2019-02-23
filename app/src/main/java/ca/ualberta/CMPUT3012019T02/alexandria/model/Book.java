@@ -16,7 +16,7 @@ public class Book {
     private List<String> availableOwners = new ArrayList<>();
 
     public Book(String isbn, Bitmap image, String title, String author, Date date) {
-        if( isbn == null || isbn.trim().isEmpty()) {
+        if(isbn == null || isbn.trim().isEmpty()) {
             throw new IllegalArgumentException("Isbn cannot be null or empty");
         }
 
@@ -32,7 +32,7 @@ public class Book {
     }
 
     public void setIsbn(String isbn) {
-        if( isbn == null || isbn.trim().isEmpty()) {
+        if(isbn == null || isbn.trim().isEmpty()) {
             throw new IllegalArgumentException("Isbn cannot be null or empty");
         }
 
