@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.model;
+package ca.ualberta.CMPUT3012019T02.alexandria.model.user;
 
 import android.graphics.Bitmap;
 
@@ -7,9 +7,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class OwnedBook {
+
     private String isbn;
-    private List<String> usersRequesting = new ArrayList<>();
-    private List<Bitmap> images = new ArrayList<>();
+    private List<String> usersRequesting;
+    private List<Bitmap> images;
     private String status;
     private String userBorrowing;
 
@@ -21,6 +22,9 @@ public class OwnedBook {
         this.isbn = isbn;
         this.status = status;
         this.userBorrowing = userBorrowing;
+
+        usersRequesting = new ArrayList<>();
+        images = new ArrayList<>();
     }
 
     public String getIsbn() {
@@ -82,4 +86,5 @@ public class OwnedBook {
     public void setUserBorrowing(String userBorrowing) {
         this.userBorrowing = userBorrowing;
     }
+
 }

@@ -3,6 +3,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria.model.message;
 import java.util.Date;
 
 public abstract class Message {
+
     private String type;
     private String content;
     private String status;
@@ -52,4 +53,5 @@ public abstract class Message {
     public void setSender(String sender) {
         this.sender = sender;
     }
+
 }

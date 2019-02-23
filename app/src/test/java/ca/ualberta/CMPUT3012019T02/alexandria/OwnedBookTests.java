@@ -2,7 +2,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria;
 
 import org.junit.Test;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.OwnedBook;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 
 public class OwnedBookTests {
 
