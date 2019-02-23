@@ -2,6 +2,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -49,11 +50,10 @@ public class UserTests {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
         User user = new User(id, userProfile);
-        List<String> blockedUsers = Arrays.asList("userId1", "userId2", "userId3", "userId4", "userId5");
-        user.setBlockedUsers(blockedUsers);
+
         String blockedUser6 = "userId6";
         user.addBlockedUser(blockedUser6);
-        blockedUsers.add(blockedUser6);
+        List<String> blockedUsers = Collections.singletonList(blockedUser6);
         assertEquals(user.getBlockedUsers(), blockedUsers);
     }
 
@@ -62,10 +62,15 @@ public class UserTests {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
         User user = new User(id, userProfile);
-        List<String> blockedUsers = Arrays.asList("userId1", "userId2", "userId3", "userId4", "userId5");
+        List<String> blockedUsers = new ArrayList<>();
+        blockedUsers.add("userId1");
+        blockedUsers.add("userId2");
+        blockedUsers.add("userId3");
         user.setBlockedUsers(blockedUsers);
-        user.removeBlockedUser("userId2");
-        blockedUsers.remove("userId2");
+
+        String blockedUser = "userId2";
+        user.removeBlockedUser(blockedUser);
+        blockedUsers.remove(blockedUser);
         assertEquals(user.getBlockedUsers(), blockedUsers);
     }
 
