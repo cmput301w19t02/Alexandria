@@ -8,8 +8,8 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 
 public class ChatRoom {
 
-    List<Message> messages = new ArrayList<>();
-    String id;
+    private List<Message> messages = new ArrayList<>();
+    private String id;
 
     public ChatRoom(String id) {
         if(id == null || id.trim().isEmpty()) {
