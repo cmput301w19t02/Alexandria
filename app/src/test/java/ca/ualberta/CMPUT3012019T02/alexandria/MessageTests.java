@@ -127,7 +127,7 @@ public class MessageTests {
     public void setStatusTest(){
         Message message = new TestMessage("text", "TEST content", "unread", new Date(), "johndoe@email.com");
         assertEquals("unread", message.getStatus());
-        message.setType("read");
+        message.setStatus("read");
         assertEquals("read", message.getStatus());
     }
     // negative setStatus

@@ -13,22 +13,22 @@ public abstract class Message {
         if (type == null || type.isEmpty()) {
             throw new IllegalArgumentException("Type cannot be null or empty");
         }
-        if (!type.equals("text") || !type.equals("image") || !type.equals("location")) {
+        if (!type.equals("text") && !type.equals("image") && !type.equals("location")) {
             throw new IllegalArgumentException("Message object needs type of text, image or location");
         }
-        if (content == null || type.isEmpty()) {
+        if (content == null || content.isEmpty()) {
             throw new IllegalArgumentException("Content cannot be null or empty");
         }
         if (status == null || type.isEmpty()) {
             throw new IllegalArgumentException("Status cannot be null or empty");
         }
-        if (!status.equals("read") || !status.equals("unread")){
+        if (!status.equals("read") && !status.equals("unread")){
             throw new IllegalArgumentException("Message object needs a status of read or unread");
         }
         if (date == null) {
             throw new IllegalArgumentException("Date cannot be null");
         }
-        if (sender == null || type.isEmpty()) {
+        if (sender == null || sender.isEmpty()) {
             throw new IllegalArgumentException("Sender cannot be null or empty");
         }
 
@@ -47,7 +47,7 @@ public abstract class Message {
         if (type == null || type.isEmpty()) {
             throw new IllegalArgumentException("Type cannot be null or empty");
         }
-        if (!type.equals("text") || !type.equals("image") || !type.equals("location")) {
+        if (!type.equals("text") && !type.equals("image") && !type.equals("location")) {
             throw new IllegalArgumentException("Message object needs type of text, image or location");
         }
 
@@ -74,7 +74,7 @@ public abstract class Message {
         if (status == null || status.isEmpty()) {
             throw new IllegalArgumentException("Status cannot be null or empty");
         }
-        if (!status.equals("read") || !status.equals("unread")){
+        if (!status.equals("read") && !status.equals("unread")){
             throw new IllegalArgumentException("Message object needs a status of read or unread");
         }
 
