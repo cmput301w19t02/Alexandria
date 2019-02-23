@@ -213,6 +213,11 @@ public class UserTests {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void nullProfileConstructorTest() {
+        new User("6588a715-1651-4d44-94bc-ee0a40176a93", null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void emptyIdConstructorTest() {
         new User("", new UserProfile("John Smith", "john@example.com", "7801234567", null));
     }
