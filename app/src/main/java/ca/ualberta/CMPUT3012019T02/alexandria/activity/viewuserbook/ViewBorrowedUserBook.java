@@ -1,6 +1,7 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity.viewuserbook;
 
 import android.os.Bundle;
+import android.view.View;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
@@ -18,7 +19,7 @@ public class ViewBorrowedUserBook extends ViewUserBook {
         throw new UnsupportedOperationException();
     }
 
-    public void processReturn() {
+    public void processReturn(View view) {
         // calls scanIsbn()
         // TODO: Finish implementation
         throw new UnsupportedOperationException();

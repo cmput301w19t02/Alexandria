@@ -1,6 +1,7 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity.viewuserbook;
 
 import android.os.Bundle;
+import android.view.View;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
@@ -18,7 +19,7 @@ public class ViewRequestedUserBook extends ViewUserBook {
         throw new UnsupportedOperationException();
     }
 
-    public void cancelRequest() {
+    public void cancelRequest(View view) {
         // TODO: Finish implementation
         throw new UnsupportedOperationException();
     }
