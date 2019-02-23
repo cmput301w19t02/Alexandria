@@ -3,10 +3,10 @@ package ca.ualberta.CMPUT3012019T02.alexandria;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.ChatRoom;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.User;
@@ -88,7 +88,7 @@ public class UserTests {
 
         OwnedBook newOwnedBook = new OwnedBook("9780545013333", "Available",null);
         user.addOwnedBook(newOwnedBook);
-        List<OwnedBook> ownedBooks = Arrays.asList(newOwnedBook);
+        List<OwnedBook> ownedBooks = Collections.singletonList(newOwnedBook);
         assertEquals(user.getOwnedBooks(), ownedBooks);
     }
 
@@ -115,7 +115,7 @@ public class UserTests {
         List<BorrowedBook> borrowedBooks = Arrays.asList(new BorrowedBook("9780545010221", "Available",null),
                 new BorrowedBook("9780545012222", "Available",null));
         user.setBorrowedBooks(borrowedBooks);
-        assertEquals(user.getOwnedBooks(), borrowedBooks);
+        assertEquals(user.getBorrowedBooks(), borrowedBooks);
     }
 
     @Test
@@ -126,8 +126,8 @@ public class UserTests {
 
         BorrowedBook newBorrowedBook = new BorrowedBook("9780545013333", "Available",null);
         user.addBorrowedBook(newBorrowedBook);
-        List<BorrowedBook> borrowedBooks = Arrays.asList(newBorrowedBook);
-        assertEquals(user.getOwnedBooks(), borrowedBooks);
+        List<BorrowedBook> borrowedBooks = Collections.singletonList(newBorrowedBook);
+        assertEquals(user.getBorrowedBooks(), borrowedBooks);
     }
 
     @Test
@@ -142,7 +142,7 @@ public class UserTests {
         BorrowedBook returnedBorrowedBook = new BorrowedBook("9780545012222", "Available",null);
         user.removeBorrowedBook(returnedBorrowedBook);
         borrowedBooks.remove(returnedBorrowedBook);
-        assertEquals(user.getOwnedBooks(), borrowedBooks);
+        assertEquals(user.getBorrowedBooks(), borrowedBooks);
     }
 
     @Test

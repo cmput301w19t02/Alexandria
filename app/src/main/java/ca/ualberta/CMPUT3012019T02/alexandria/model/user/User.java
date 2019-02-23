@@ -19,6 +19,9 @@ public class User {
         if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Id cannot be null or empty");
         }
+        if (profile == null) {
+            throw new IllegalArgumentException("Profile cannot be null or empty");
+        }
 
         this.id = id;
         this.profile = profile;
@@ -54,10 +57,18 @@ public class User {
     }
 
     public void addOwnedBook(OwnedBook ownedBook) {
+        if (ownedBook == null) {
+            throw new IllegalArgumentException("Owned book cannot be null");
+        }
+
         this.ownedBooks.add(ownedBook);
     }
 
     public void removeOwnedBook(OwnedBook ownedBook) {
+        if (ownedBook == null) {
+            throw new IllegalArgumentException("Owned book cannot be null");
+        }
+
         this.ownedBooks.remove(ownedBook);
     }
 
@@ -70,10 +81,18 @@ public class User {
     }
 
     public void addBorrowedBook(BorrowedBook borrowedBook) {
+        if (borrowedBook == null) {
+            throw new IllegalArgumentException("Borrowed book cannot be null");
+        }
+
         this.borrowedBooks.add(borrowedBook);
     }
 
     public void removeBorrowedBook(BorrowedBook borrowedBook) {
+        if (borrowedBook == null) {
+            throw new IllegalArgumentException("Borrowed book cannot be null");
+        }
+
         this.borrowedBooks.remove(borrowedBook);
     }
 
@@ -82,6 +101,10 @@ public class User {
     }
 
     public void setProfile(UserProfile profile) {
+        if (profile == null) {
+            throw new IllegalArgumentException("Profile cannot be null or empty");
+        }
+
         this.profile = profile;
     }
 
@@ -106,10 +129,18 @@ public class User {
     }
 
     public void addBlockedUser(String blockedUser) {
+        if (blockedUser == null || blockedUser.trim().isEmpty()) {
+            throw new IllegalArgumentException("Blocked user cannot be null or empty");
+        }
+
         this.blockedUsers.add(blockedUser);
     }
 
     public void removeBlockedUser(String blockedUser) {
+        if (blockedUser == null || blockedUser.trim().isEmpty()) {
+            throw new IllegalArgumentException("Blocked user cannot be null or empty");
+        }
+        
         this.blockedUsers.remove(blockedUser);
     }
 
