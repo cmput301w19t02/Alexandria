@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activity.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/user_profile"
-        android:orderInCategory="300"
-        android:title="User"
-        android:icon="@drawable/user_profile"
-        app:showAsAction="ifRoom"></item>
+        android:id="@+id/edit_profile"
+        android:title="@string/edit_profile"
+        app:showAsAction="never">
+    </item>
+
+    <item
+        android:id="@+id/blocked_users"
+        android:title="@string/blocked_users"
+        app:showAsAction="never">
+    </item>
 
 </menu>

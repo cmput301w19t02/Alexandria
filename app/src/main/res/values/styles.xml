@@ -8,4 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Toolbar theme   -->
+    <style name="CustomToolbarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:background">@color/colorSecondary</item>
+    </style>
+
+    <!-- Popup menu theme   -->
+    <style name="CustomPopupStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:background">@color/colorBackground</item>
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownVerticalOffset">-5dp</item>
+    </style>
+
 </resources>

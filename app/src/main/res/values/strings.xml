@@ -3,4 +3,11 @@
     <string name="nav_exchange">Exchange</string>
     <string name="nav_library">Library</string>
     <string name="nav_messages">Messages</string>
+    <string name="titleUserProfie">User Profile</string>
+    <string name="titleHint">SetTitleById</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="blocked_users">Blocked Users</string>
+    <string name="image_desc">User Logo</string>
+    <string name="titleEditProfile">Edit Profile</string>
+    <string name="titleBlockedUsers">Blocked Users</string>
 </resources>

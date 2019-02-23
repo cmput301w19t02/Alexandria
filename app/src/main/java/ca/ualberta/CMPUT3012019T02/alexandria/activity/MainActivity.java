@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
@@ -48,12 +48,13 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.toolbar_main, menu);
         return true;
     }
 
@@ -64,10 +65,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.user_profile) {
             // open profile
-            //Intent startNewActivity = new Intent(this, AddMeasurementActivity.class);
-            //startActivity(startNewActivity);
+            Intent startOpenMyProfile = new Intent(this, MyProfile.class);
+            startActivity(startOpenMyProfile);
 
-            Toast.makeText(MainActivity.this, "Action clicked", Toast.LENGTH_LONG).show();
             return true;
         }
 
