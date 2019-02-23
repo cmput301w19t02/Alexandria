@@ -7,7 +7,7 @@ import java.util.Date;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 
 public class MessageTests {
-    //positive constructor tests 
+    // positive constructor tests 
     @Test
     public void constructorTest() {
         Date date = new Date();
@@ -18,7 +18,7 @@ public class MessageTests {
         Assert.assertEquals(date, message.getDate());
         Assert.assertEquals("johndoe@email.com", message.getSender());
     }
-    //negative constructor tests
+    // negative constructor tests
     @Test(expected = IllegalArgumentException.class)
     public void emptyTypeConstructorTest() {
         new Message("", "TEST content", "unread", new Date(),"johndoe@email.com"); 
@@ -63,6 +63,17 @@ public class MessageTests {
     public void nullSenderConstructorTest(){
         new Message("text", "TEST content", "unread", new Date(), null);
     }
+    // positive setType
+    @Test
+    public void setTypeTest(){
+        Message message = new Message("text", "TEST content", "unread", new Date(), "johndoe@email.com");
+        message.setType("image");
+        Assert.assertEquals("image", message.getType());
+        message.setType("location");
+        Assert.assertEquals("location", message.getType());
+        message.setType("text");
+        Assert.assertEquals("text", message.getType());
+    }
     // negative setType 
     @Test(expected = IllegalArgumentException.class)
     public void emptySetTypeTest(){
@@ -81,6 +92,13 @@ public class MessageTests {
         Message message = new Message("text", "TEST content", "unread", new Date(), "johndoe@email.com");
         message.setType("ardvark");
     }
+    // positive setContent
+    @Test
+    public void setContentTest(){
+        Message message = new Message("text", "TEST content", "unread", new Date(), "johndoe@email.com");
+        message.setContent("Different content");
+        Assert.assertEquals("Different content", message.getContent());
+    }
     // negative setContent
     @Test(expected = IllegalArgumentException.class)
     public void emptySetContentTest(){
@@ -92,6 +110,14 @@ public class MessageTests {
     public void nullSetContentTest(){
         Message message = new Message("text", "TEST content", "unread", new Date(), "johndoe@email.com");
         message.setContent(null);
+    }
+    // positive setStatus
+    @Test
+    public void setStatusTest(){
+        Message message = new Message("text", "TEST content", "unread", new Date(), "johndoe@email.com");
+        Assert.assertEquals("unread", message.getStatus());
+        message.setType("read");
+        Assert.assertEquals("read", message.getStatus());
     }
     // negative setStatus
     @Test(expected = IllegalArgumentException.class)
@@ -111,11 +137,25 @@ public class MessageTests {
         Message message = new Message("text", "TEST content", "unread", new Date(), "johndoe@email.com");
         message.setStatus("ardvark");
     }
+    // positive setDate
+    @Test
+    public void setDateTest() {
+        Date date = new Date();
+        Message message = new Message("text","TEST content","unread", date, "johndoe@email.com");
+        Assert.assertEquals(date, message.getDate());
+    }
     // negative setDate
     @Test(expected = IllegalArgumentException.class)
     public void nullSetDateTest(){
         Message message = new Message("text", "TEST content", "unread", new Date(), "johndoe@email.com");
         message.setDate(null);
+    }
+    // positive setSender
+    @Test
+    public void setSenderTest() {
+        Message message = new Message("text","TEST content","unread", new Date(), "johndoe@email.com");
+        message.setSender("janesomeone@email.com")
+        Assert.assertEquals("janesomeone@email.com", message.getSender());
     }
     // negative setSender
     @Test(expected = IllegalArgumentException.class)
