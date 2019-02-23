@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria;
+package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -23,6 +23,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
 /**
  * A login screen that offers login via email/password.
