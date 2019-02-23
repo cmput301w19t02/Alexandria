@@ -15,57 +15,57 @@ import static org.junit.Assert.assertEquals;
 public class ChatRoomTests {
 
     @Test
-    public void constructorTest(){
+    public void constructorTest() {
         ChatRoom chatRoom = new ChatRoom("6588a715-1651-4d44-94bc-ee0a40176a93");
-        assertEquals("6588a715-1651-4d44-94bc-ee0a40176a93",chatRoom.getId());
+        assertEquals("6588a715-1651-4d44-94bc-ee0a40176a93", chatRoom.getId());
     }
 
     @Test
-    public void setIdTest(){
+    public void setIdTest() {
         ChatRoom chatRoom = new ChatRoom("6588a715-1651-4d44-94bc-ee0a40176a93");
         chatRoom.setId("1aa825b3-6f00-42cf-8a32-805a483329dc");
-        assertEquals("1aa825b3-6f00-42cf-8a32-805a483329dc",chatRoom.getId());
+        assertEquals("1aa825b3-6f00-42cf-8a32-805a483329dc", chatRoom.getId());
     }
 
     @Test
-    public void setMessagesTest(){
+    public void setMessagesTest() {
         ChatRoom chatRoom = new ChatRoom("6588a715-1651-4d44-94bc-ee0a40176a93");
         List<Message> messages = new ArrayList<>();
-        messages.add(new TextMessage("Hello","read",new Date(),"johnsmith"));
+        messages.add(new TextMessage("Hello", "read", new Date(), "johnsmith"));
         chatRoom.setMessages(messages);
-        assertEquals(messages,chatRoom.getMessages());
+        assertEquals(messages, chatRoom.getMessages());
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void unmodifiableGetMessagesTest(){
+    public void unmodifiableGetMessagesTest() {
         ChatRoom chatRoom = new ChatRoom("6588a715-1651-4d44-94bc-ee0a40176a93");
-        chatRoom.getMessages().add(new TextMessage("Hello","Read",new Date(),"johnsmith"));
+        chatRoom.getMessages().add(new TextMessage("Hello", "read", new Date(), "johnsmith"));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void nullIdConstructorTest(){
+    public void nullIdConstructorTest() {
         new ChatRoom(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void emptyIdConstructorTest(){
+    public void emptyIdConstructorTest() {
         new ChatRoom("");
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void nullSetIdTest(){
+    public void nullSetIdTest() {
         ChatRoom chatRoom = new ChatRoom("6588a715-1651-4d44-94bc-ee0a40176a93");
         chatRoom.setId(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void emptySetIdTest(){
+    public void emptySetIdTest() {
         ChatRoom chatRoom = new ChatRoom("6588a715-1651-4d44-94bc-ee0a40176a93");
         chatRoom.setId("");
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void nullSetMessagesTest(){
+    public void nullSetMessagesTest() {
         ChatRoom chatRoom = new ChatRoom("6588a715-1651-4d44-94bc-ee0a40176a93");
         chatRoom.setMessages(null);
     }

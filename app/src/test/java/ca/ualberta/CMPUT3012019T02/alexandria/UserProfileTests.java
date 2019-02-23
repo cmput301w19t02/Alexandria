@@ -80,4 +80,41 @@ public class UserProfileTests {
     public void emptyEmailConstructorTest() {
         new UserProfile("John Smith", "", "7801234567", null);
     }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullSetNameTest() {
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        userProfile.setName(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void emptySetNameTest() {
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        userProfile.setName("");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullSetEmailTest() {
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        userProfile.setEmail(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void emptySetEmailTest() {
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        userProfile.setEmail("");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullSetPhoneTest() {
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        userProfile.setPhone(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void emptySetPhoneTest() {
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        userProfile.setPhone("");
+    }
 }
