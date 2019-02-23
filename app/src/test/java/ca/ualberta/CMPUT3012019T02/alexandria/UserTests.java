@@ -280,4 +280,29 @@ public class UserTests {
         User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
         user.setProfile(null);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullSetBlockedUsers() {
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        user.setBlockedUsers(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullSetBorrowedBooks() {
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        user.setBorrowedBooks(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullSetChatRooms() {
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        user.setChatRooms(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullSetOwnedBooks() {
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        user.setOwnedBooks(null);
+    }
+
 }

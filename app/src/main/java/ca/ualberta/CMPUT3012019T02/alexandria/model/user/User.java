@@ -37,6 +37,10 @@ public class User {
     }
 
     public void setChatRooms(Map<String, String> chatRooms) {
+        if (chatRooms == null){
+            throw new IllegalArgumentException("Chat Rooms cannot be null");
+        }
+
         this.chatRooms = chatRooms;
     }
 
@@ -53,6 +57,10 @@ public class User {
     }
 
     public void setOwnedBooks(List<OwnedBook> ownedBooks) {
+        if (ownedBooks == null){
+            throw new IllegalArgumentException("Owned Books cannot be null");
+        }
+
         this.ownedBooks = ownedBooks;
     }
 
@@ -77,6 +85,10 @@ public class User {
     }
 
     public void setBorrowedBooks(List<BorrowedBook> borrowedBooks) {
+        if (borrowedBooks == null){
+            throw new IllegalArgumentException("Borrowed Books cannot be null");
+        }
+
         this.borrowedBooks = borrowedBooks;
     }
 
@@ -125,6 +137,10 @@ public class User {
     }
 
     public void setBlockedUsers(List<String> blockedUsers) {
+        if (blockedUsers == null) {
+            throw new IllegalArgumentException("Blocked Users cannot be null or empty");
+        }
+
         this.blockedUsers = blockedUsers;
     }
 
