@@ -20,7 +20,7 @@ public abstract class Message {
         if (content == null || content.isEmpty()) {
             throw new IllegalArgumentException("Content cannot be null or empty");
         }
-        if (status == null || type.isEmpty()) {
+        if (status == null || status.isEmpty()) {
             throw new IllegalArgumentException("Status cannot be null or empty");
         }
         if (!status.equals("read") && !status.equals("unread")){

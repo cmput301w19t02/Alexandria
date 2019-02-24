@@ -14,7 +14,7 @@ public class TextMessageTests {
     public void constructorTest() {
         Date date = new Date();
         TextMessage message = new TextMessage("TEST content", "unread", date, "johndoe@email.com");
-        assertEquals("TEST content", message.getContent());
+        assertEquals("TEST content", message.getText());
         assertEquals("unread", message.getStatus());
         assertEquals(date, message.getDate());
         assertEquals("johndoe@email.com", message.getSender());

@@ -6,8 +6,10 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.Location;
 
 public class LocationMessage extends Message {
 
-    public LocationMessage(String content, String status, Date date, String sender) {
-        super("Location", content, status, date, sender);
+    public LocationMessage(Location location, String status, Date date, String sender) {
+        // TODO Finish implementation
+        super("location", "temp", status, date, sender);
+        this.setLocation(location);
     }
 
     public Location getLocation() {
@@ -19,5 +21,4 @@ public class LocationMessage extends Message {
         // TODO Finish implementation
         throw new UnsupportedOperationException();
     }
-
 }
