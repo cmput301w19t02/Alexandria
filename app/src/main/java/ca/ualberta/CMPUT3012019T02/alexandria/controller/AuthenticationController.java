@@ -7,6 +7,8 @@ public class AuthenticationController {
 
     private static AuthenticationController instance;
 
+    private AuthenticationController(){ }
+
     public static AuthenticationController getInstance() {
         if (instance == null) {
             instance = new AuthenticationController();
