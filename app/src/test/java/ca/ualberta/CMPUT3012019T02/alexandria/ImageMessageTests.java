@@ -53,9 +53,7 @@ public class ImageMessageTests {
     // positive setImage
     @Test
     public void setImageTest(){
-        //Bitmap picture = Bitmap.createBitmap(32,32, Bitmap.Config.ARGB_8888);
         ImageMessage message = new ImageMessage("image_url", "unread", new Date(), "johndoe@email.com");
-        //Bitmap picture2 = Bitmap.createBitmap(34,34, Bitmap.Config.ARGB_8888);
         message.setImage("new_image_url");
         assertEquals("new_image_url", message.getImage());
     }
