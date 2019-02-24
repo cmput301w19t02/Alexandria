@@ -35,7 +35,6 @@ public class TextMessageTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void nullImageConstructorTest() {
-        Bitmap picture = Bitmap.createBitmap(32,32, Bitmap.Config.ARGB_8888);
         new ImageMessage(null, "unread", new Date(),"johndoe@email.com");
     }
 

@@ -6,18 +6,24 @@ import java.util.Date;
 
 public class ImageMessage extends Message {
 
-    public ImageMessage(String content, String status, Date date, String sender) {
+    public ImageMessage(Bitmap content, String status, Date date, String sender) {
+        if (!(content instanceof Bitmap.class)) {
+            throw new IllegalArgumentException("Content needs to be a Bitmap object");
+        }
+
         super("image", content, status, date, sender);
     }
 
     public Bitmap getImage() {
-        // TODO Finish implementation
-        throw new UnsupportedOperationException();
+        return this.content;
     }
 
     public void setImage(Bitmap image) {
-        // TODO Finish implementation
-        throw new UnsupportedOperationException();
+        if (!(image instanceof Bitmap.class)) {
+            throw new IllegalArgumentException("Content needs to be a Bitmap object");
+        }
+
+        this.content = image;
     }
 
 }
