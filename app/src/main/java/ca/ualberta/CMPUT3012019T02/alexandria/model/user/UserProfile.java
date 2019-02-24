@@ -10,6 +10,16 @@ public class UserProfile {
     private Bitmap picture;
 
     public UserProfile(String name, String email, String phone, Bitmap picture) {
+        if (name ==null || name.isEmpty()){
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }
+        if(email == null || email.isEmpty()){
+            throw new IllegalArgumentException("Email cannot be null or empty");
+        }
+        if(phone == null || phone.isEmpty()){
+            throw new IllegalArgumentException("Phone cannot be null or empty");
+        }
+
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -21,6 +31,10 @@ public class UserProfile {
     }
 
     public void setName(String name) {
+        if (name ==null || name.isEmpty()){
+            throw new IllegalArgumentException("Name cannot be null or empty");
+        }
+
         this.name = name;
     }
 
@@ -29,6 +43,10 @@ public class UserProfile {
     }
 
     public void setEmail(String email) {
+        if(email == null || email.isEmpty()){
+            throw new IllegalArgumentException("Email cannot be null or empty");
+        }
+
         this.email = email;
     }
 
@@ -37,6 +55,10 @@ public class UserProfile {
     }
 
     public void setPhone(String phone) {
+        if(phone == null || phone.isEmpty()){
+            throw new IllegalArgumentException("Phone cannot be null or empty");
+        }
+
         this.phone = phone;
     }
 
