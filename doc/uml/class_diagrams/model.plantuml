@@ -1,0 +1,217 @@
+@startuml
+
+' skinparam classAttributeIconSize 0
+
+title __MODEL's Class Diagram__\n
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+
+        package ca.ualberta.CMPUT3012019T02.alexandria.model.message {
+
+            abstract class Message {
+                - type : String
+                - content : String
+                - status : String
+                - date : Date
+                - sender : String
+                + Message(String type, String content, String status, Date date, String sender)
+                + getType() : String
+                + getContent() : String
+                + setContent(String content) : void
+                + getStatus() : String
+                + setStatus(String status) : void
+                + getDate() : Date
+                + setDate(Date date) : void
+                + getSender() : String
+                + setSender(String sender) : void
+            }
+
+            class ImageMessage {
+                + ImageMessage(String content, String status, Date date, String sender)
+                + getImage() : Bitmap
+                + setImage(Bitmap image) : void
+            }
+
+            class LocationMessage {
+                + LocationMessage(String content, String status, Date date, String sender)
+                + getLocation() : Location
+                + setLocation(Location location) : void
+            }
+
+            class TextMessage {
+                + TextMessage(String content, String status, Date date, String sender)
+                + getText() : String
+                + setText(String text) : void
+            }
+
+        }
+
+        package ca.ualberta.CMPUT3012019T02.alexandria.user {
+
+            class User {
+                - chatRooms : Map<String, String>
+                - ownedBooks : List<OwnedBook>
+                - borrowedBooks : List<BorrowedBook>
+                - id : String
+                - blockedUsers : List<String>
+                + User(String id, UserProfile profile)
+                + getChatRooms() : Map<String, String>
+                + setChatRooms(Map<String, String> chatRooms) : void
+                + addChatRoom(String user, String uuid) : void
+                + removeChatRoom(String user) : void
+                + getOwnedBooks() : List<OwnedBook>
+                + setOwnedBooks(List<OwnedBook> ownedBooks) : void
+                + addOwnedBook(OwnedBook ownedBook) : void
+                + removeOwnedBook(OwnedBook ownedBook) : void
+                + getBorrowedBooks() : List<BorrowedBook>
+                + setBorrowedBooks(List<BorrowedBook> borrowedBooks) : void
+                + addBorrowedBook(BorrowedBook borrowedBook) : void
+                + removeBorrowedBook(BorrowedBook borrowedBook) : void
+                + getProfile() : UserProfile
+                + setProfile(UserProfile userProfile) : void
+                + getId() : String
+                + setId(String id) : void
+                + getBlockedUsers() : List<String>
+                + setBlockedUsers(List<String> blockedUsers) : void
+                + addBlockedUser(String blockedUser) : void
+                + removeBlockedUser(String blockedUser) : void
+            }
+
+            class UserProfile {
+                - name : String
+                - email : String
+                - phone : String
+                - picture : Bitmap
+                + UserProfile(String name, String email, String phone, Bitmap picture)
+                + getName() : String
+                + setName(String name) : void
+                + getEmail() : String
+                + setEmail(String email) : void
+                + getPhone() : String
+                + setPhone(String phone) : void
+                + getPicture() : Bitmap
+                + setPicture(Bitmap picture) : void
+            }
+
+            class BorrowedBook {
+                - isbn : String
+                - status : String
+                - owner : String
+                + BorrowedBook(String isbn, String status, String owner)
+                + getIsbn() : String
+                + setIsbn(String isbn) : void
+                + getStatus() : String
+                + setStatus(String status) : void
+                + getOwner() : String
+                + setOwner(String owner) : void
+            }
+
+            class OwnedBook {
+                - isbn : String
+                - usersRequesting : List<String>
+                - images : List<Bitmap>
+                - status : String
+                - userBorrowing : String
+                + OwnedBook(String isbn, String status, String userBorrowing)
+                + getIsbn() : String
+                + setIsbn(String isbn) : void
+                + getUsersRequesting() : List<String>
+                + setUsersRequesting(List<String> usersRequesting) : void
+                + addUserRequesting(String userRequesting) : void
+                + removeUserRequesting(String userRequesting) : void
+                + getImages() : List<Bitmap>
+                + setImages(List<Bitmap> images) : void
+                + addImage(Bitmap image) : void
+                + removeImage(Bitmap image) : void
+                + getStatus() : String
+                + setStatus(String status) : void
+                + getUserBorrowing() : String
+                + setUserBorrowing(String userBorrowing) : void
+            }
+
+        }
+
+        class Book {
+            - isbn : String
+            - image : Bitmap
+            - title : String
+            - author : String
+            - date : Date
+            - availableOwners : List<String>
+            + Book(String isbn, Bitmap image, String title, String author, Date date)
+            + getIsbn() : String
+            + setIsbn(String isbn) : void
+            + getImage() : Bitmap
+            + setImage(Bitmap image) : void
+            + getTitle() : String
+            + setTitle(String title) : void
+            + getAuthor() : String
+            + setAuthor(String author) : void
+            + getDate() : Date
+            + setDate(Date date) : void
+            + getAvailableOwners() : List<String>
+            + setAvailableOwners(List<String> availableOwners) : void
+            + addAvailableOwners(String availableOwner) : void
+            + removeAvailableOwners(String availableOwner) : void
+        }
+
+        class ChatRoom {
+            ~ messages : List<Message>
+            ~ id : String
+            + ChatRoom(String id)
+            + getMessages() : List<Message>
+            + setMessages(List<Message> messages) : void
+            + addMessage(Message message) : void
+            + removeMessage(Message message) : void
+            + getId() : String
+            + setId(String id) : void
+        }
+
+        class Location {
+            - latitude : double
+            - longitude : double
+            + Location(double latitude, double longitude)
+            + getLatitude() : double
+            + setLatitude(double latitude) : void
+            + getLongitude() : double
+            + setLongitude(double longitude) : void
+        }
+
+    }
+
+}
+
+' class Bitmap
+
+User "1" o-up- "1" UserProfile
+User "1" o-down- "*" OwnedBook
+User "1" o-down- "*" BorrowedBook
+User "2" -left- "*" ChatRoom : participates in >
+User "*" o-right- "*" User : blocked >
+
+' UserProfile "*" o-down- "1" Bitmap
+
+OwnedBook "*" -- "1" User : borrowed by >
+OwnedBook "*" -- "*" User : requested by >
+OwnedBook "*" -down- "1" Book : references >
+
+BorrowedBook "*" -- "1" User : owned by >
+BorrowedBook "*" -down- "1" Book : references >
+
+Book "*" -up- "*" User : available from >
+
+ChatRoom "1" *-down- "*" Message
+
+ImageMessage -up-|> Message
+' ImageMessage "*" o-up- "1" Bitmap
+
+LocationMessage -up-|> Message
+LocationMessage "1" o-- "1" Location
+
+TextMessage -up-|> Message
+
+Message "*" -right- "1" User : sent by >
+
+@enduml
