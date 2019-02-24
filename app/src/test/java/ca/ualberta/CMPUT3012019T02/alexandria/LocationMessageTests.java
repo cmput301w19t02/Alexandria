@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.Date;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.model.Location;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.LocationMessage;
 
 import static org.junit.Assert.assertEquals;
@@ -13,7 +14,7 @@ public class LocationMessageTests {
     @Test
     public void constructorTest() {
         Date date = new Date();
-        Location location = new Location(5,4); 
+        Location location = new Location(5,4);
         LocationMessage message = new LocationMessage(location, "unread", date, "johndoe@email.com");
         assertEquals(location, message.getLocation());
         assertEquals("unread", message.getStatus());
@@ -37,7 +38,6 @@ public class LocationMessageTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void nullLocationConstructorTest() {
-        Location location = new Location(5,4); 
         new LocationMessage(null, "unread", new Date(), "johndoe@email.com");
     }
 
@@ -61,7 +61,7 @@ public class LocationMessageTests {
 
     // positive setLocation
     @Test
-    public void setTextTest() {
+    public void setLocationTest() {
         Location location = new Location(5,4); 
         LocationMessage message = new LocationMessage(location, "unread", new Date(), "johndoe@email.com");
         Location location2 = new Location(6,3);
@@ -69,16 +69,8 @@ public class LocationMessageTests {
         assertEquals(location2, message.getLocation());
     }
 
-    // negative setLocation
     @Test(expected = IllegalArgumentException.class)
-    public void emptySetTextTest() {
-        Location location = new Location(5,4); 
-        LocationMessage message = new LocationMessage(location, "unread", new Date(), "johndoe@email.com");
-        message.setLocation("");
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void nullSetTextTest() {
+    public void nullSetLocationTest() {
         Location location = new Location(5,4); 
         LocationMessage message = new LocationMessage(location, "unread", new Date(), "johndoe@email.com");
         message.setLocation(null);
