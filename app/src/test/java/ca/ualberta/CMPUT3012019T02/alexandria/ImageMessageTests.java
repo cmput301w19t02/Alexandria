@@ -3,32 +3,32 @@ package ca.ualberta.CMPUT3012019T02.alexandria;
 import org.junit.Test;
 
 import java.util.Date;
-import android.graphics.Bitmap;
-import static org.junit.Assert.assertEquals;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.message.ImageMessage;
+
+import static org.junit.Assert.assertEquals;
 
 public class ImageMessageTests {
     // positive constructor tests 
     @Test
     public void constructorTest() {
         Date date = new Date();
-        ImageMessage message = new ImageMessage("image_url","unread", date, "johndoe@email.com");
-        assertEquals("image_url", message.getImage());
+        ImageMessage message = new ImageMessage("gs://image_url","unread", date, "johndoe@email.com");
+        assertEquals("gs://image_url", message.getImageUrl());
         assertEquals("unread", message.getStatus());
         assertEquals(date, message.getDate());
         assertEquals("johndoe@email.com", message.getSender());
-        assertEquals("text", message.getType());
+        assertEquals("image", message.getType());
     }
     // negative constructor tests
     @Test(expected = IllegalArgumentException.class)
     public void emptyStatusConstructorTest() {
-        new ImageMessage("image_url", "", new Date(),"johndoe@email.com");
+        new ImageMessage("gs://image_url", "", new Date(),"johndoe@email.com");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void emptySenderConstructorTest() {
-        new ImageMessage("image_url", "unread", new Date(),"");
+        new ImageMessage("gs://image_url", "unread", new Date(),"");
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -38,29 +38,29 @@ public class ImageMessageTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void nullStatusConstructorTest(){
-        new ImageMessage("image_url", null, new Date(),"johndoe@email.com");
+        new ImageMessage("gs://image_url", null, new Date(),"johndoe@email.com");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullDateConstructorTest(){
-        new ImageMessage("image_url", "unread", null,"johndoe@email.com");
+        new ImageMessage("gs://image_url", "unread", null,"johndoe@email.com");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullSenderConstructorTest(){
-        new ImageMessage("image_url", "unread", new Date(), null);
+        new ImageMessage("gs://image_url", "unread", new Date(), null);
     }
     // positive setImage
     @Test
     public void setImageTest(){
-        ImageMessage message = new ImageMessage("image_url", "unread", new Date(), "johndoe@email.com");
-        message.setImage("new_image_url");
-        assertEquals("new_image_url", message.getImage());
+        ImageMessage message = new ImageMessage("gs://image_url", "unread", new Date(), "johndoe@email.com");
+        message.setImageUrl("gs://new_image_url");
+        assertEquals("gs://new_image_url", message.getImageUrl());
     }
     // negative setImage
     @Test(expected = IllegalArgumentException.class)
     public void nullSetImageTest(){
-        ImageMessage message = new ImageMessage("image_url", "unread", new Date(), "johndoe@email.com");
-        message.setImage(null);
+        ImageMessage message = new ImageMessage("gs://image_url", "unread", new Date(), "johndoe@email.com");
+        message.setImageUrl(null);
     }
 }
