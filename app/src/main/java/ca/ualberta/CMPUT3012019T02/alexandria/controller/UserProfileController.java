@@ -1,8 +1,11 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
 public class UserProfileController {
+    private FirebaseDatabase database;
 
     private static UserProfileController instance;
 
