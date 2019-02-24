@@ -1,16 +1,17 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.model.ChatRoom;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 
-public class UserProfileController {
+public class ChatController {
 
-    private static ChatRoom instance;
+    private static ChatController instance;
 
     private ChatController() { }
 
     public static ChatController getInstance() {
         if (instance == null) {
-            instance = new ChatRoom();
+            instance = new ChatController();
         }
         return instance;
     }
