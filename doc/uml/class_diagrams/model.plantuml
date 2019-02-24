@@ -181,49 +181,6 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
 
     }
 
-    ' package ca.ualberta.CMPUT3012019T02.alexandria.controller {
-
-    '     class AuthenticationController {
-    '         - auth : FirebaseAuth
-    '         {static} - instance : AuthenticationController
-    '         - AuthenticationController()
-    '         {static} + getInstance() : AuthenticationController
-    '         + authenticate(String username, String password) : boolean
-    '         + deauthenticate() : void
-    '         + createUser(String username, String password) : boolean
-    '         + getMyId() : String
-    '     }
-
-    '     class BookController {
-    '         {static} - instance : BookController
-    '         - BookController()
-    '         {static} + getInstance() : BookController
-    '         + getBook(String isbn) : Book
-    '         + getMyBorrowedBooks() : ArrayList<Book>
-    '         + getMyOwnedBooks() : ArrayList<Book>
-    '         + getOwnedBooks(String id) : ArrayList<Book>
-    '         + updateMyBorrowedBooks(Book book) : void
-    '         + updateMyOwnedBooks(Book book) : void
-    '         + updateBook(String isbn, Book newBook) : void
-    '     }
-
-    '     class UserProfileController {
-    '         {static} - instance : UserProfileController
-    '         - UserProfileController()
-    '         {static} + getInstance() : UserProfileController
-    '         + getUserProfile(String id) : UserProfile
-    '         + getMyProfile() : UserProfile
-    '         + updateMyProfile(UserProfile userProfile) : void
-    '     }
-
-    '     class ChatController {
-    '         {static} - instance : ChatController
-    '         - ChatController()
-    '         {static} + getInstance() : ChatController
-    '     }
-
-    ' }
-
 }
 
 ' class Bitmap
@@ -256,19 +213,5 @@ LocationMessage "1" o-- "1" Location
 TextMessage -up-|> Message
 
 Message "*" -right- "1" User : sent by >
-
-' AuthenticationController "1" -down- "*" User : manages >
-
-' UserProfileController "1" -down- "*" UserProfile : manages >
-' UserProfileController "1" -up- "1" AuthenticationController : interfaces with >
-
-' BookController "1" -down- "*" BorrowedBook : manages >
-' BookController "1" -down- "*" OwnedBook : manages >
-' BookController "1" -down- "*" Book : manages >
-' BookController "1" -up- "1" AuthenticationController : interfaces with >
-
-' ChatController "1" -down- "*" ChatRoom : manages >
-' ChatController "1" -down- "*" Message : manages >
-' ChatController "1" -up- "1" AuthenticationController : interfaces with >
 
 @enduml

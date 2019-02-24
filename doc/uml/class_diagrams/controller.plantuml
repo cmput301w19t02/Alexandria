@@ -43,6 +43,9 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
             {static} - instance : ChatController
             - ChatController()
             {static} + getInstance() : ChatController
+            + getChatRoom(String id) : ChatRoom 
+            + updateMessages() : ChatRoom 
+            + postMessage(Message message) : void
         }
 
     }
