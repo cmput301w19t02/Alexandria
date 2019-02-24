@@ -26,6 +26,10 @@ public class ChatRoom {
     }
 
     public void setMessages(List<Message> messages) {
+        if (messages == null) {
+            throw new IllegalArgumentException("Messages cannot be null");
+        }
+
         this.messages = messages;
     }
 

@@ -19,6 +19,9 @@ public class User {
         if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Id cannot be null or empty");
         }
+        if (profile == null) {
+            throw new IllegalArgumentException("Profile cannot be null or empty");
+        }
 
         this.id = id;
         this.profile = profile;
@@ -34,6 +37,10 @@ public class User {
     }
 
     public void setChatRooms(Map<String, String> chatRooms) {
+        if (chatRooms == null){
+            throw new IllegalArgumentException("Chat Rooms cannot be null");
+        }
+
         this.chatRooms = chatRooms;
     }
 
@@ -50,14 +57,26 @@ public class User {
     }
 
     public void setOwnedBooks(List<OwnedBook> ownedBooks) {
+        if (ownedBooks == null){
+            throw new IllegalArgumentException("Owned Books cannot be null");
+        }
+
         this.ownedBooks = ownedBooks;
     }
 
     public void addOwnedBook(OwnedBook ownedBook) {
+        if (ownedBook == null) {
+            throw new IllegalArgumentException("Owned book cannot be null");
+        }
+
         this.ownedBooks.add(ownedBook);
     }
 
     public void removeOwnedBook(OwnedBook ownedBook) {
+        if (ownedBook == null) {
+            throw new IllegalArgumentException("Owned book cannot be null");
+        }
+
         this.ownedBooks.remove(ownedBook);
     }
 
@@ -66,14 +85,26 @@ public class User {
     }
 
     public void setBorrowedBooks(List<BorrowedBook> borrowedBooks) {
+        if (borrowedBooks == null){
+            throw new IllegalArgumentException("Borrowed Books cannot be null");
+        }
+
         this.borrowedBooks = borrowedBooks;
     }
 
     public void addBorrowedBook(BorrowedBook borrowedBook) {
+        if (borrowedBook == null) {
+            throw new IllegalArgumentException("Borrowed book cannot be null");
+        }
+
         this.borrowedBooks.add(borrowedBook);
     }
 
     public void removeBorrowedBook(BorrowedBook borrowedBook) {
+        if (borrowedBook == null) {
+            throw new IllegalArgumentException("Borrowed book cannot be null");
+        }
+
         this.borrowedBooks.remove(borrowedBook);
     }
 
@@ -82,6 +113,10 @@ public class User {
     }
 
     public void setProfile(UserProfile profile) {
+        if (profile == null) {
+            throw new IllegalArgumentException("Profile cannot be null or empty");
+        }
+
         this.profile = profile;
     }
 
@@ -102,14 +137,26 @@ public class User {
     }
 
     public void setBlockedUsers(List<String> blockedUsers) {
+        if (blockedUsers == null) {
+            throw new IllegalArgumentException("Blocked Users cannot be null or empty");
+        }
+
         this.blockedUsers = blockedUsers;
     }
 
     public void addBlockedUser(String blockedUser) {
+        if (blockedUser == null || blockedUser.trim().isEmpty()) {
+            throw new IllegalArgumentException("Blocked user cannot be null or empty");
+        }
+
         this.blockedUsers.add(blockedUser);
     }
 
     public void removeBlockedUser(String blockedUser) {
+        if (blockedUser == null || blockedUser.trim().isEmpty()) {
+            throw new IllegalArgumentException("Blocked user cannot be null or empty");
+        }
+        
         this.blockedUsers.remove(blockedUser);
     }
 
