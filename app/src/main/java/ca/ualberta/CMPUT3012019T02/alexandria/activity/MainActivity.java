@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -64,10 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.user_profile) {
             // open profile
-            //Intent startNewActivity = new Intent(this, AddMeasurementActivity.class);
-            //startActivity(startNewActivity);
-
-            Toast.makeText(MainActivity.this, "Action clicked", Toast.LENGTH_LONG).show();
+            Intent startMyProfileActivity = new Intent(this, MyProfileActivity.class);
+            startActivity(startMyProfileActivity);
             return true;
         }
 

@@ -39,5 +39,10 @@ public class LoginActivity extends AppCompatActivity {
         return password.length() >= 8;
     }
 
+    public void loadInfo() {
+        //TODO Implement
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
 }
 

@@ -16,4 +16,10 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="titleBlockedUsers">Blocked Users</string>
+    <string name="titleUserProfile">Profile</string>
+    <string name="image_desc">User Logo</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="blocked_users">Blocked Users</string>
+    <string name="titleEditProfile">Edit Profile</string>
 </resources>
