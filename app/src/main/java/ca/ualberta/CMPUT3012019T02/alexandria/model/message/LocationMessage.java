@@ -6,18 +6,22 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.Location;
 
 public class LocationMessage extends Message {
 
-    public LocationMessage(String content, String status, Date date, String sender) {
-        super("Location", content, status, date, sender);
+    public LocationMessage(Location content, String status, Date date, String sender) {
+        if (!(content instanceof Location.class)) {
+            throw new IllegalArgumentException("location content needs to be a Location object");
+        }
+
+        super("location", content, status, date, sender);
     }
 
     public Location getLocation() {
-        // TODO Finish implementation
-        throw new UnsupportedOperationException();
+        return this.content;
     }
 
     public void setLocation(Location location) {
-        // TODO Finish implementation
-        throw new UnsupportedOperationException();
+        if (!(content instanceof Location.class)) {
+            throw new IllegalArgumentException("location content needs to be a Location object");
+        }
+        this.content = location;
     }
-
 }
