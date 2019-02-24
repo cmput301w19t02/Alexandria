@@ -3,6 +3,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -12,65 +13,52 @@ import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Code taken from https://www.youtube.com/watch?v=jpaHMcQDaDg on 02/24/2019
+ */
 
-    private TextView mTextMessage;
-    private Toolbar toolbar;
+public class MainActivity extends AppCompatActivity
+        implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.nav_exchange:
-                    mTextMessage.setText(R.string.nav_exchange);
-                    return true;
-                case R.id.nav_library:
-                    mTextMessage.setText(R.string.nav_library);
-                    return true;
-                case R.id.nav_messages:
-                    mTextMessage.setText(R.string.nav_messages);
-                    return true;
-            }
-            return false;
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(this);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        loadFragment(new ExchangeFragment());
+
+    }
+
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null){
+            getSupportFragmentManager()
+                    .beginTransaction().replace(R.id.fragment_container,fragment).commit();
+            return  true;
+        }
+        return false;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        return true;
-    }
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here
-        int id = item.getItemId();
+        Fragment fragment = null;
 
-        if (id == R.id.user_profile) {
-            // open profile
-            //Intent startNewActivity = new Intent(this, AddMeasurementActivity.class);
-            //startActivity(startNewActivity);
-
-            Toast.makeText(MainActivity.this, "Action clicked", Toast.LENGTH_LONG).show();
-            return true;
+        switch(menuItem.getItemId()) {
+            case R.id.nav_exchange:
+                fragment = new ExchangeFragment();
+                break;
+            case R.id.nav_library:
+                fragment = new LibraryFragment();
+                break;
+            case R.id.nav_messages:
+                fragment = new MessagesFragment();
+                break;
         }
 
-        return super.onOptionsItemSelected(item);
+        return loadFragment(fragment);
     }
 }

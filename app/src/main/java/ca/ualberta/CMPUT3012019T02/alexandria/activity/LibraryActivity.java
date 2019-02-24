@@ -6,6 +6,7 @@ import android.view.View;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
+//TODO MOVE METHODS TO LIBRARY FRAGMENT
 public class LibraryActivity extends AppCompatActivity {
 
     private enum Page {ALL, AVAILABLE, LOANED}
