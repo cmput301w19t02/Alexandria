@@ -8,12 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.fragment.ExchangeFragment;
+import ca.ualberta.CMPUT3012019T02.alexandria.fragment.Exchange.ExchangeFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.LibraryFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
 
 /**
- * Code taken from https://www.youtube.com/watch?v=jpaHMcQDaDg on 02/24/2019
+ * Code for bottom navigation bar
+ * taken from https://www.youtube.com/watch?v=jpaHMcQDaDg on 02/24/2019
  */
 
 public class MainActivity extends AppCompatActivity
