@@ -54,14 +54,14 @@ public class BorrowedBookTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void emptySetIsbnTest() {
-        BorrowedBook BorrowedBook = new BorrowedBook("9780545010221", "Available", "johndoe@email.com");
-        BorrowedBook.setIsbn("");
+        BorrowedBook book = new BorrowedBook("9780545010221", "Available", "johndoe@email.com");
+        book.setIsbn("");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullSetIsbnTest() {
-        BorrowedBook BorrowedBook = new BorrowedBook("9780545010221", "Available", "johndoe@email.com");
-        BorrowedBook.setIsbn(null);
+        BorrowedBook book = new BorrowedBook("9780545010221", "Available", "johndoe@email.com");
+        book.setIsbn(null);
     }
 
     @Test
@@ -73,14 +73,14 @@ public class BorrowedBookTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void emptySetStatusTest() {
-        BorrowedBook BorrowedBook = new BorrowedBook("9780545010221", "Available", "johndoe@email.com");
-        BorrowedBook.setStatus("");
+        BorrowedBook book = new BorrowedBook("9780545010221", "Available", "johndoe@email.com");
+        book.setStatus("");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullSetStatusTest() {
-        BorrowedBook BorrowedBook = new BorrowedBook("9780545010221", "Available", "johndoe@email.com");
-        BorrowedBook.setStatus(null);
+        BorrowedBook book = new BorrowedBook("9780545010221", "Available", "johndoe@email.com");
+        book.setStatus(null);
     }
 
     @Test
@@ -92,13 +92,13 @@ public class BorrowedBookTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void emptySetOwnerTest() {
-        BorrowedBook BorrowedBook = new BorrowedBook("9780545010221", "Available", "johndoe@email.com");
-        BorrowedBook.setOwner("");
+        BorrowedBook book = new BorrowedBook("9780545010221", "Available", "johndoe@email.com");
+        book.setOwner("");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullSetOwnerTest() {
-        BorrowedBook BorrowedBook = new BorrowedBook("9780545010221", "Available", "johndoe@email.com");
-        BorrowedBook.setOwner(null);
+        BorrowedBook book = new BorrowedBook("9780545010221", "Available", "johndoe@email.com");
+        book.setOwner(null);
     }
 }
