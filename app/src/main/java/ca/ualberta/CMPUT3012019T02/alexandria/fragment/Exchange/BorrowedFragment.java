@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.fragment;
+package ca.ualberta.CMPUT3012019T02.alexandria.fragment.Exchange;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,12 +10,15 @@ import android.view.ViewGroup;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
-public class ExchangeFragment extends Fragment {
+/**
+ * Fragment for filtering book list that has the status of Borrowed
+ */
 
+public class BorrowedFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_exchange,null);
+        return inflater.inflate(R.layout.fragment_exchange_borrowed,null);
     }
 }
