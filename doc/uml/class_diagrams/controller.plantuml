@@ -16,8 +16,10 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
             + createUser(String username, String password) : boolean
             + getMyId() : String
         }
+        note top: "Used for keeping track of authentication\ndata and communicate authentication\ninformation with firebase"
 
         class BookController {
+            - database : FirebaseDatabase
             {static} - instance : BookController
             - BookController()
             {static} + getInstance() : BookController
@@ -29,8 +31,10 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
             + updateMyOwnedBooks(Book book) : void
             + updateBook(String isbn, Book newBook) : void
         }
+        note top: "Used for keeping track of book transaction\ndata and communicate book transaction\ninformation with firebase"
 
         class UserProfileController {
+             - database : FirebaseDatabase
             {static} - instance : UserProfileController
             - UserProfileController()
             {static} + getInstance() : UserProfileController
@@ -38,8 +42,10 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
             + getMyProfile() : UserProfile
             + updateMyProfile(UserProfile userProfile) : void
         }
+        note top: "Used for keeping track of user profile\ndata and communicate user profile\ninformation with firebase"
 
         class ChatController {
+            - database : FirebaseDatabase
             {static} - instance : ChatController
             - ChatController()
             {static} + getInstance() : ChatController
@@ -47,6 +53,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
             + updateMessages() : ChatRoom 
             + postMessage(Message message) : void
         }
+        note top: "Used for keeping track of chat\ndata and communicate chat\ninformation with firebase"
 
     }
 
