@@ -31,8 +31,8 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
 
             class ImageMessage {
                 + ImageMessage(String content, String status, Date date, String sender)
-                + getImage() : Bitmap
-                + setImage(Bitmap image) : void
+                + getImageUrl() : String
+                + setImageUrl(String imageUrl) : void
             }
             note bottom: "Used to store message data for message\ncontaining an image"
 
