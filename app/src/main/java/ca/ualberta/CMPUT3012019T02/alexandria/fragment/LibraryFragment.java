@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.activity;
+package ca.ualberta.CMPUT3012019T02.alexandria.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

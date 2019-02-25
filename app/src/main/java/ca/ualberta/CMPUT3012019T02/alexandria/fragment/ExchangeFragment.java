@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.activity;
+package ca.ualberta.CMPUT3012019T02.alexandria.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,12 +10,12 @@ import android.view.ViewGroup;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
-public class MessagesFragment extends Fragment {
+public class ExchangeFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_messages,null);
+        return inflater.inflate(R.layout.fragment_exchange,null);
     }
 }

@@ -5,13 +5,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.fragment.ExchangeFragment;
+import ca.ualberta.CMPUT3012019T02.alexandria.fragment.LibraryFragment;
+import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
 
 /**
  * Code taken from https://www.youtube.com/watch?v=jpaHMcQDaDg on 02/24/2019
