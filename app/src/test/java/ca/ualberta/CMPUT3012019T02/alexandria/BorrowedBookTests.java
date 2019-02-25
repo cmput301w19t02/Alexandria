@@ -65,9 +65,9 @@ public class BorrowedBookTests {
     }
 
     @Test
-    public void setStatusTest() {
+    public void setOwnerTest() {
         BorrowedBook book = new BorrowedBook("9780545010221", "Available", "johndoe@email.com");
-        book.setIsbn("janesmith@email.com");
+        book.setOwner("janesmith@email.com");
         assertEquals("janesmith@email.com",book.getOwner());
     }
 
@@ -84,9 +84,9 @@ public class BorrowedBookTests {
     }
 
     @Test
-    public void setOwnerTest() {
+    public void setStatusTest() {
         BorrowedBook book = new BorrowedBook("9780545010221", "Available", "johndoe@email.com");
-        book.setIsbn("Requested");
+        book.setStatus("Requested");
         assertEquals("Requested",book.getStatus());
     }
 
