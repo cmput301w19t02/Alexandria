@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorMaroon">#451020</color>
+    <color name="colorDarkMaroon">#350a17</color>
     <color name="colorRed">#8E0D28</color>
     <color name="colorBeige">#F4ECD6</color>
     <color name="colorOrange">#CA934C</color>

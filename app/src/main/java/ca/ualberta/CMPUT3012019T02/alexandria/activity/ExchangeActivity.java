@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
+//TODO MOVE METHODS TO EXCHANGE FRAGMENT
 public class ExchangeActivity {
 
     private enum Page {BORROWED, ACCEPTED, REQUESTED}

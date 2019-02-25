@@ -5,6 +5,7 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 
+//TODO MOVE METHODS TO SEARCH FRAGMENT
 public class SearchActivity {
     private List<Book> searchResult;
 
