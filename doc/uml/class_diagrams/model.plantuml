@@ -27,25 +27,28 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
                 + getSender() : String
                 + setSender(String sender) : void
             }
+            note top: "Used to store message data"
 
             class ImageMessage {
                 + ImageMessage(String content, String status, Date date, String sender)
                 + getImage() : Bitmap
                 + setImage(Bitmap image) : void
             }
+            note bottom: "Used to store message data for message\ncontaining an image"
 
             class LocationMessage {
                 + LocationMessage(String content, String status, Date date, String sender)
                 + getLocation() : Location
                 + setLocation(Location location) : void
             }
+            note bottom: "Used to store message data for message\ncontaining a location"
 
             class TextMessage {
                 + TextMessage(String content, String status, Date date, String sender)
                 + getText() : String
                 + setText(String text) : void
             }
-
+            note bottom: "Used to store message data for message\ncontaining text"
         }
 
         package ca.ualberta.CMPUT3012019T02.alexandria.user {
@@ -78,6 +81,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
                 + addBlockedUser(String blockedUser) : void
                 + removeBlockedUser(String blockedUser) : void
             }
+            note left: "Used to store data about a specific user"
 
             class UserProfile {
                 - name : String
@@ -94,6 +98,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
                 + getPicture() : Bitmap
                 + setPicture(Bitmap picture) : void
             }
+            note left: "Used to store profile data about a specific user"
 
             class BorrowedBook {
                 - isbn : String
@@ -107,6 +112,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
                 + getOwner() : String
                 + setOwner(String owner) : void
             }
+            note left: "Used to store data about a borrowed book"
 
             class OwnedBook {
                 - isbn : String
@@ -130,6 +136,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
                 + getUserBorrowing() : String
                 + setUserBorrowing(String userBorrowing) : void
             }
+            note right: "Used to store data about an owned book"
 
         }
 
@@ -156,6 +163,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
             + addAvailableOwners(String availableOwner) : void
             + removeAvailableOwners(String availableOwner) : void
         }
+        note right: "Used to store data about a book title"
 
         class ChatRoom {
             ~ messages : List<Message>
@@ -168,6 +176,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
             + getId() : String
             + setId(String id) : void
         }
+        note right: "Used to keep track of that chat rooms\na user is in"
 
         class Location {
             - latitude : double
@@ -178,6 +187,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
             + getLongitude() : double
             + setLongitude(double longitude) : void
         }
+        note left: "Used to store data about an exchange location"
 
     }
 
