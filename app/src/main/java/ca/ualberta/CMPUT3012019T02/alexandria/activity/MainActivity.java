@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.fragment.Exchange.ExchangeFragment;
+import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.ExchangeFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.LibraryFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
 

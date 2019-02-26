@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.fragment.Exchange;
+package ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,8 +21,6 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.SectionsPageAdapter;
 
 public class ExchangeFragment extends Fragment {
 
-    private ViewPager mViewPager;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -30,7 +28,7 @@ public class ExchangeFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_exchange,null);
 
-        mViewPager = rootView.findViewById(R.id.exchange_pager);
+        ViewPager mViewPager = rootView.findViewById(R.id.exchange_pager);
         setupViewPager(mViewPager);
 
         TabLayout tabLayout = rootView.findViewById(R.id.exchange_tabs);
