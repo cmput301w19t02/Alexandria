@@ -15,7 +15,7 @@ public class AddNewBookActivity extends AppCompatActivity {
     private String author = "";
     private String isbn = "";
     private Date date;
-    private Bitmap image;
+    private String image;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

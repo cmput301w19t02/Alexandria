@@ -1,6 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity.viewmybook;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import java.util.Date;
@@ -13,7 +12,7 @@ public class EditBookActivity extends AddNewBookActivity {
     private String author;
     private String isbn;
     private Date date;
-    private Bitmap image;
+    private String image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
