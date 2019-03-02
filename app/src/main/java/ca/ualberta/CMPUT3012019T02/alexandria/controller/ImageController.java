@@ -111,7 +111,7 @@ public class ImageController {
     /**
      * Add an image to the database and get its unique id for later retrieval
      * @param image the image to add
-     * @param imageUploadCallback
+     * @param imageUploadCallback callback interface for handling the success/failure of this operation
      */
     public void addImage(Bitmap image, ImageUploadCallback imageUploadCallback) {
         String imageId = UUID.randomUUID().toString();
@@ -121,6 +121,7 @@ public class ImageController {
     /**
      * Get an image from the database
      * @param imageId the unique id of the image in the database
+     * @param imageDownloadCallback callback interface for handling the success/failure of this operation
      * @return a bitmap of the image
      */
     public void getImage(String imageId, final ImageDownloadCallback imageDownloadCallback) {
@@ -164,8 +165,9 @@ public class ImageController {
      * Update an image in the database
      * @param imageId the unique id of the image in the database
      * @param image the new image to be associated with the imageId
+     * @param imageUploadCallback callback interface for handling the success/failure of this operation
      */
-    public void updateImage(final String imageId, final Bitmap image, final ImageUploadCallback callback) {
+    public void updateImage(final String imageId, final Bitmap image, final ImageUploadCallback imageUploadCallback) {
         // Based off of https://firebase.google.com/docs/storage/android/upload-files#upload_from_data_in_memory
 
         StorageReference imageReference = getImageReference(imageId);
@@ -181,7 +183,7 @@ public class ImageController {
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
                 tasks.remove(uploadTask);
-                callback.onFailure(exception);
+                imageUploadCallback.onFailure(exception);
             }
 
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -190,7 +192,7 @@ public class ImageController {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 tasks.remove(uploadTask);
-                callback.onSuccess(imageId);
+                imageUploadCallback.onSuccess(imageId);
             }
 
         });
@@ -200,6 +202,7 @@ public class ImageController {
     /**
      * Remove an image from the database
      * @param imageId the unique id of the image in the database
+     * @param imageDeletionCallback callback interface for handling the success/failure of this operation
      */
     public void deleteImage(String imageId, final ImageDeletionCallback imageDeletionCallback) {
         // Based off of https://firebase.google.com/docs/storage/android/delete-files#delete_a_file
