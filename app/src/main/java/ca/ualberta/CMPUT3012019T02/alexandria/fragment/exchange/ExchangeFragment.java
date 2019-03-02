@@ -5,12 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.fragment.SearchFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.SectionsPageAdapter;
 
 /**
@@ -19,7 +22,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.SectionsPageAdapter;
  * code for tabs adapted from https://youtu.be/bNpWGI_hGGg at 02/25/2019
  */
 
-public class ExchangeFragment extends Fragment {
+public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
     @Nullable
     @Override
@@ -34,8 +37,16 @@ public class ExchangeFragment extends Fragment {
         TabLayout tabLayout = rootView.findViewById(R.id.exchange_tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        Button mButton = rootView.findViewById(R.id.exchange_search);
+        mButton.setOnClickListener(this);
+
         return rootView;
     }
+
+    /**
+     * Sets up tabs in the Fragment
+     * @param viewPager
+     */
 
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapter adapter = new SectionsPageAdapter(getChildFragmentManager());
@@ -45,5 +56,16 @@ public class ExchangeFragment extends Fragment {
         viewPager.setAdapter(adapter);
     }
 
-    public void onSearch(View view){}
+    /**
+     * Switches Fragments and adds the current to back stack
+     * @param v
+     */
+    @Override
+    public void onClick(View v) {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container,
+                new SearchFragment(), "Search Fragment");
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 }
