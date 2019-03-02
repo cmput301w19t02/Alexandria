@@ -8,12 +8,12 @@ public class ImageMessage extends Message {
         super("image", content, status, date, sender);
     }
 
-    public String getImageUrl() {
+    public String getImage() {
         return getContent();
     }
 
-    public void setImageUrl(String imageUrl) {
-        setContent(imageUrl);
+    public void setImage(String imageId) {
+        setContent(imageId);
     }
 
 }
