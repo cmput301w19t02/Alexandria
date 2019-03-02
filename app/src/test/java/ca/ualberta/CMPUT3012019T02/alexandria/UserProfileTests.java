@@ -37,7 +37,7 @@ public class UserProfileTests {
     @Test
     public void setPictureTest() {
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
-        Bitmap picture = Bitmap.createBitmap(32,32, Bitmap.Config.ARGB_8888);
+        String picture = "16bb3894-be95-4108-9b9d-c6f5283a7920";
         userProfile.setPicture(picture);
         assertEquals(userProfile.getPicture(), picture);
     }

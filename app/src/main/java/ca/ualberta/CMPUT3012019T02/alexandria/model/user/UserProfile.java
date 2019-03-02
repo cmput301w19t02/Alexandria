@@ -1,16 +1,14 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.user;
 
-import android.graphics.Bitmap;
-
 public class UserProfile {
 
     private String name;
     private String email;
     private String phone;
-    private Bitmap picture;
+    private String picture;
 
-    public UserProfile(String name, String email, String phone, Bitmap picture) {
-        if (name ==null || name.isEmpty()){
+    public UserProfile(String name, String email, String phone, String picture) {
+        if (name == null || name.isEmpty()){
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
         if(email == null || email.isEmpty()){
@@ -31,7 +29,7 @@ public class UserProfile {
     }
 
     public void setName(String name) {
-        if (name ==null || name.isEmpty()){
+        if (name == null || name.isEmpty()){
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
 
@@ -62,11 +60,11 @@ public class UserProfile {
         this.phone = phone;
     }
 
-    public Bitmap getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(Bitmap picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 

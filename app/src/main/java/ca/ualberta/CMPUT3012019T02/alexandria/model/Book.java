@@ -1,7 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model;
 
-import android.graphics.Bitmap;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -10,13 +8,13 @@ import java.util.List;
 public class Book {
 
     private String isbn;
-    private Bitmap image;
+    private String imageId;
     private String title;
     private String author;
     private Date date;
     private List<String> availableOwners;
 
-    public Book(String isbn, Bitmap image, String title, String author, Date date) {
+    public Book(String isbn, String imageId, String title, String author, Date date) {
         if (isbn == null || isbn.trim().isEmpty()) {
             throw new IllegalArgumentException("Isbn cannot be null or empty");
         }
@@ -28,7 +26,7 @@ public class Book {
         }
 
         this.isbn = isbn;
-        this.image = image;
+        this.imageId = imageId;
         this.title = title;
         this.author = author;
         this.date = date;
@@ -48,12 +46,12 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public Bitmap getImage() {
-        return image;
+    public String getImage() {
+        return imageId;
     }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
+    public void setImage(String imageId) {
+        this.imageId = imageId;
     }
 
     public String getTitle() {

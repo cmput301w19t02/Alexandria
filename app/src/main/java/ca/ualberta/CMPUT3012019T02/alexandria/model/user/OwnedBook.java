@@ -1,7 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.user;
 
-import android.graphics.Bitmap;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +8,7 @@ public class OwnedBook {
 
     private String isbn;
     private List<String> usersRequesting;
-    private List<Bitmap> images;
+    private List<String> images;
     private String status;
     private String userBorrowing;
 
@@ -55,20 +53,20 @@ public class OwnedBook {
         this.usersRequesting.remove(userRequesting);
     }
 
-    public List<Bitmap> getImages() {
+    public List<String> getImages() {
         return Collections.unmodifiableList(images);
     }
 
-    public void setImages(List<Bitmap> images) {
+    public void setImages(List<String> images) {
         this.images = images;
     }
 
-    public void addImage(Bitmap image) {
-        this.images.add(image);
+    public void addImage(String imageId) {
+        this.images.add(imageId);
     }
 
-    public void removeImage(Bitmap image) {
-        this.images.remove(image);
+    public void removeImage(String imageId) {
+        this.images.remove(imageId);
     }
 
     public String getStatus() {

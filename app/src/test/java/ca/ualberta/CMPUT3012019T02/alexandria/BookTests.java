@@ -1,7 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria;
 
-import android.graphics.Bitmap;
-
 import org.junit.Test;
 
 import java.util.Date;
@@ -14,11 +12,11 @@ public class BookTests {
 
     @Test
     public void constructorTest() {
-        Bitmap image = Bitmap.createBitmap(32, 32, Bitmap.Config.ARGB_8888);
+        String imageId = "16bb3894-be95-4108-9b9d-c6f5283a7920";
         Date date = new Date();
-        Book book = new Book("9780545010221", image, "Harry Potter", "J. K. Rowling", new Date());
+        Book book = new Book("9780545010221", imageId, "Harry Potter", "J. K. Rowling", new Date());
         assertEquals("9780545010221", book.getIsbn());
-        assertEquals(image, book.getImage());
+        assertEquals(imageId, book.getImage());
         assertEquals("Harry Potter", book.getTitle());
         assertEquals("J. K. Rowling", book.getAuthor());
         assertEquals(date, book.getDate());
@@ -34,9 +32,9 @@ public class BookTests {
     @Test
     public void setImageTest() {
         Book book = new Book("9780545010221", null, "Harry Potter", "J. K. Rowling", new Date());
-        Bitmap image = Bitmap.createBitmap(32, 32, Bitmap.Config.ARGB_8888);
-        book.setImage(image);
-        assertEquals(image, book.getImage());
+        String imageId = "16bb3894-be95-4108-9b9d-c6f5283a7920";
+        book.setImage(imageId);
+        assertEquals(imageId, book.getImage());
     }
 
     @Test
