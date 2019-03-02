@@ -70,7 +70,6 @@ public class AuthenticationControllerTests {
 
         String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
         String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
-        String email = username + "@example.com";
         CompletableFuture<Void> future = controller.authenticate(username, password);
 
         future.get(5, TimeUnit.SECONDS);
@@ -84,7 +83,6 @@ public class AuthenticationControllerTests {
 
         String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
         String password = "bad password";
-        String email = username + "@example.com";
         CompletableFuture<Void> future = controller.authenticate(username, password);
 
         future.get(5, TimeUnit.SECONDS);
@@ -96,7 +94,6 @@ public class AuthenticationControllerTests {
 
         String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
         String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
-        String email = username + "@example.com";
         CompletableFuture<Void> future = controller.authenticate(username, password);
 
         future.get(5, TimeUnit.SECONDS);
@@ -114,7 +111,6 @@ public class AuthenticationControllerTests {
 
         String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
         String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
-        String email = username + "@example.com";
         CompletableFuture<Void> future = controller.authenticate(username, password);
 
         future.get(5, TimeUnit.SECONDS);
