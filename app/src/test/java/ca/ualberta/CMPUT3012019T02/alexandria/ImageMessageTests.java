@@ -13,8 +13,8 @@ public class ImageMessageTests {
     @Test
     public void constructorTest() {
         Date date = new Date();
-        ImageMessage message = new ImageMessage("gs://image_url","unread", date, "johndoe@email.com");
-        assertEquals("gs://image_url", message.getImageUrl());
+        ImageMessage message = new ImageMessage("16bb3894-be95-4108-9b9d-c6f5283a7920","unread", date, "johndoe@email.com");
+        assertEquals("16bb3894-be95-4108-9b9d-c6f5283a7920", message.getImage());
         assertEquals("unread", message.getStatus());
         assertEquals(date, message.getDate());
         assertEquals("johndoe@email.com", message.getSender());
@@ -53,14 +53,14 @@ public class ImageMessageTests {
     // positive setImage
     @Test
     public void setImageTest(){
-        ImageMessage message = new ImageMessage("gs://image_url", "unread", new Date(), "johndoe@email.com");
-        message.setImageUrl("gs://new_image_url");
-        assertEquals("gs://new_image_url", message.getImageUrl());
+        ImageMessage message = new ImageMessage("16bb3894-be95-4108-9b9d-c6f5283a7920", "unread", new Date(), "johndoe@email.com");
+        message.setImage("16bb3894-be95-4108-9b9d-c6f5283a7920");
+        assertEquals("16bb3894-be95-4108-9b9d-c6f5283a7920", message.getImage());
     }
     // negative setImage
     @Test(expected = IllegalArgumentException.class)
     public void nullSetImageTest(){
         ImageMessage message = new ImageMessage("gs://image_url", "unread", new Date(), "johndoe@email.com");
-        message.setImageUrl(null);
+        message.setImage(null);
     }
 }
