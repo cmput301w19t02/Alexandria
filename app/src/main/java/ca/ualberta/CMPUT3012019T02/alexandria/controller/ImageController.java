@@ -9,96 +9,27 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * This class manages the addition, retrieval, and modification of images in Firebase Storage
  */
 public class ImageController {
 
-    /* Callbacks for various asynchronous actions */
-
-    /**
-     * This interface handles what is done after successful or failed Firebase Storage
-     * image data upload. It is an asynchronous callback.
-     */
-    public interface ImageUploadCallback {
-
-        /**
-         * Handles unsuccessful upload of an image
-         * @param exception the exception that caused the failure
-         */
-        void onFailure(@NonNull Exception exception);
-
-        /**
-         * Handles the image after successful upload
-         * @param imageId the unique id of the image
-         */
-        void onSuccess(String imageId);
-
-    }
-
-    /**
-     * This interface handles what is done after successful or failed Firebase Storage
-     * image data download. It is an asynchronous callback.
-     */
-    public interface ImageDownloadCallback {
-
-        /**
-         * Handles unsuccessful download of an image
-         * @param exception the exception that caused the failure
-         */
-        void onFailure(@NonNull Exception exception);
-
-        /**
-         * Handles the image after successful download
-         * @param image the image as a bitmap
-         */
-        void onSuccess(Bitmap image);
-
-    }
-
-    /**
-     * This interface handles what is done after successful or failed Firebase Storage
-     * image data deletion. It is an asynchronous callback.
-     */
-    public interface ImageDeletionCallback {
-
-        /**
-         * Handles unsuccessful deletion of an image
-         * @param exception the exception that caused the failure
-         */
-        void onFailure(@NonNull Exception exception);
-
-        /**
-         * Handles the successful deletion of an image
-         */
-        void onSuccess();
-
-    }
-
-
-    /* ImageController code */
-
-
     private final String IMAGE_FORMAT = "png";
 
     private StorageReference storage;
-    private List<StorageTask> tasks;
 
     private static ImageController instance;
 
     private ImageController() {
         this.storage = FirebaseStorage.getInstance().getReference().child("images");
-        tasks = new ArrayList<>();
     }
 
     public static ImageController getInstance() {
@@ -111,23 +42,31 @@ public class ImageController {
     /**
      * Add an image to the database and get its unique id for later retrieval
      * @param image the image to add
-     * @param imageUploadCallback callback interface for handling the success/failure of this operation
+     * @return a CompletableFuture that returns the image id
      */
-    public void addImage(Bitmap image, ImageUploadCallback imageUploadCallback) {
-        String imageId = UUID.randomUUID().toString();
-        updateImage(imageId, image, imageUploadCallback);
+    public CompletableFuture<String> addImage(Bitmap image) {
+        final String imageId = UUID.randomUUID().toString();
+        final CompletableFuture<String> future = new CompletableFuture<>();
+        updateImage(imageId, image).thenRun(new Runnable() {
+            @Override
+            public void run() {
+                future.complete(imageId);
+            }
+        });
+        return future;
     }
 
     /**
      * Get an image from the database
      * @param imageId the unique id of the image in the database
-     * @param imageDownloadCallback callback interface for handling the success/failure of this operation
-     * @return a bitmap of the image
+     * @return a CompletableFuture that returns the image bitmap
      */
-    public void getImage(String imageId, final ImageDownloadCallback imageDownloadCallback) {
+    public CompletableFuture<Bitmap> getImage(String imageId) {
         // Based off of https://firebase.google.com/docs/storage/android/download-files#download_to_a_local_file
 
         StorageReference imageReference = getImageReference(imageId);
+
+        final CompletableFuture<Bitmap> future = new CompletableFuture<>();
 
         try {
 
@@ -139,9 +78,8 @@ public class ImageController {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     // Local temp file has been created
-                    tasks.remove(fileDownloadTask);
                     Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                    imageDownloadCallback.onSuccess(bitmap);
+                    future.complete(bitmap);
                 }
 
             }).addOnFailureListener(new OnFailureListener() {
@@ -149,25 +87,25 @@ public class ImageController {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
                     // Handle any errors
-                    tasks.remove(fileDownloadTask);
-                    imageDownloadCallback.onFailure(exception);
+                    future.completeExceptionally(exception);
                 }
 
             });
-            tasks.add(fileDownloadTask);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return future;
     }
 
     /**
      * Update an image in the database
      * @param imageId the unique id of the image in the database
      * @param image the new image to be associated with the imageId
-     * @param imageUploadCallback callback interface for handling the success/failure of this operation
+     * @return a CompletableFuture signifying this operation's success/failture
      */
-    public void updateImage(final String imageId, final Bitmap image, final ImageUploadCallback imageUploadCallback) {
+    public CompletableFuture<Void> updateImage(String imageId, Bitmap image) {
         // Based off of https://firebase.google.com/docs/storage/android/upload-files#upload_from_data_in_memory
 
         StorageReference imageReference = getImageReference(imageId);
@@ -176,36 +114,39 @@ public class ImageController {
         image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] data = byteArrayOutputStream.toByteArray();
 
+        final CompletableFuture<Void> future = new CompletableFuture<>();
+
         final UploadTask uploadTask = imageReference.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-                tasks.remove(uploadTask);
-                imageUploadCallback.onFailure(exception);
-            }
-
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                tasks.remove(uploadTask);
-                imageUploadCallback.onSuccess(imageId);
+                future.complete(null);
+            }
+
+        }).addOnFailureListener(new OnFailureListener() {
+
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                future.completeExceptionally(exception);
             }
 
         });
-        tasks.add(uploadTask);
+
+        return future;
     }
 
     /**
      * Remove an image from the database
      * @param imageId the unique id of the image in the database
-     * @param imageDeletionCallback callback interface for handling the success/failure of this operation
+     * @return a CompletableFuture signifying this operation's success/failture
      */
-    public void deleteImage(String imageId, final ImageDeletionCallback imageDeletionCallback) {
+    public CompletableFuture<Void> deleteImage(String imageId) {
         // Based off of https://firebase.google.com/docs/storage/android/delete-files#delete_a_file
+
+        final CompletableFuture<Void> future = new CompletableFuture<>();
 
         StorageReference imageReference = getImageReference(imageId);
         imageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -213,7 +154,7 @@ public class ImageController {
             @Override
             public void onSuccess(Void aVoid) {
                 // File deleted successfully
-                imageDeletionCallback.onSuccess();
+                future.complete(aVoid);
             }
 
         }).addOnFailureListener(new OnFailureListener() {
@@ -221,20 +162,12 @@ public class ImageController {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Uh-oh, an error occurred!
-                imageDeletionCallback.onFailure(exception);
+                future.completeExceptionally(exception);
             }
 
         });
-    }
 
-    /**
-     * Cancels all download and upload tasks for images
-     */
-    public void cancelUploadDownloadTasks() {
-        for (StorageTask task : tasks) {
-            task.cancel();
-        }
-        tasks.clear();
+        return future;
     }
 
     /**
