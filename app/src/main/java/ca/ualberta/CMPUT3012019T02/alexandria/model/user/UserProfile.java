@@ -6,8 +6,17 @@ public class UserProfile {
     private String email;
     private String phone;
     private String picture;
+    private String username;
 
-    public UserProfile(String name, String email, String phone, String picture) {
+    /**
+     * No args constructor to maintain compatibility
+     * with Firebase deserializer
+     * DO NOT USE
+     */
+    @Deprecated
+    public UserProfile(){}
+
+    public UserProfile(String name, String email, String phone, String picture, String username) {
         if (name == null || name.isEmpty()){
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
@@ -17,11 +26,15 @@ public class UserProfile {
         if(phone == null || phone.isEmpty()){
             throw new IllegalArgumentException("Phone cannot be null or empty");
         }
+        if(username == null || username.isEmpty()){
+            throw new IllegalArgumentException("Username cannot be null or empty");
+        }
 
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.picture = picture;
+        this.username = username;
     }
 
     public String getName() {
@@ -68,4 +81,14 @@ public class UserProfile {
         this.picture = picture;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        if(username == null || username.isEmpty()){
+            throw new IllegalArgumentException("Username cannot be null or empty");
+        }
+        this.username = username;
+    }
 }
