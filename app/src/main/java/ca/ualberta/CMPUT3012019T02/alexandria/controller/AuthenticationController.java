@@ -2,25 +2,23 @@ package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
 import android.support.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java9.util.concurrent.CompletableFuture;
 
-
 public class AuthenticationController {
+
     private FirebaseAuth auth;
     private FirebaseDatabase database;
 
     private static AuthenticationController instance;
 
-    private AuthenticationController(){
+    private AuthenticationController() {
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
     }
@@ -51,34 +49,23 @@ public class AuthenticationController {
      * @return a CompletableFuture signifying this operation's success/failure
      */
     public CompletableFuture<Void> authenticate(String username, final String password) {
-        final CompletableFuture<Void> resultFuture = new CompletableFuture<>();
-        database.getReference().child("usernameToEmail").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    auth.signInWithEmailAndPassword((String) dataSnapshot.getValue(),password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                resultFuture.complete(null);
-                            }
-                            else{
-                                resultFuture.completeExceptionally(task.getException());
-                            }
-                        }
-                    });
-                }
-                else{
-                    resultFuture.completeExceptionally(new IllegalArgumentException("Username does not exist"));
-                }
-            }
+        final CompletableFuture<Void> future = new CompletableFuture<>();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                resultFuture.completeExceptionally(databaseError.toException());
+        CompletableFuture<String> emailFuture = getUserEmail(username);
+        emailFuture.thenAccept(email -> auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                future.complete(null);
+            } else {
+                future.completeExceptionally(task.getException());
             }
+        }));
+
+        emailFuture.exceptionally(throwable -> {
+            future.completeExceptionally(throwable);
+            return null;
         });
-        return resultFuture;
+
+        return future;
     }
 
     /**
@@ -98,45 +85,36 @@ public class AuthenticationController {
     public CompletableFuture<Void> createUser(final String username, final String email, final String password) {
         final CompletableFuture<Void> resultFuture = new CompletableFuture<>();
 
-            database.getReference().child("usernameToEmail").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(!dataSnapshot.exists()){
-                        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> authTask) {
-                                if(authTask.isSuccessful()){
-                                    database.getReference().child("usernameToEmail").child(username).setValue(email)
-                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> databaseTask) {
-                                                    if(databaseTask.isSuccessful()){
-                                                        resultFuture.complete(null);
-                                                    }
-                                                    else{
-                                                        database.getReference().child("usernameToEmail").child(username).removeValue();
-                                                        resultFuture.completeExceptionally(databaseTask.getException());
-                                                    }
-                                                }
-                                            });
+        database.getReference().child("usernameToEmail").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(authTask -> {
+                        if (authTask.isSuccessful()) {
+                            database.getReference().child("usernameToEmail").child(username).setValue(email).addOnCompleteListener(databaseTask -> {
+                                if (databaseTask.isSuccessful()) {
+                                    resultFuture.complete(null);
                                 }
-                                else {
+                                else{
                                     database.getReference().child("usernameToEmail").child(username).removeValue();
-                                    resultFuture.completeExceptionally(authTask.getException());
+                                    resultFuture.completeExceptionally(databaseTask.getException());
                                 }
-                            }
-                        });
-                    }
-                    else {
-                        resultFuture.completeExceptionally(new IllegalArgumentException("Username already exists"));
-                    }
+                            });
+                        } else {
+                            database.getReference().child("usernameToEmail").child(username).removeValue();
+                            resultFuture.completeExceptionally(authTask.getException());
+                        }
+                    });
+                } else {
+                    resultFuture.completeExceptionally(new IllegalArgumentException("Username already exists"));
                 }
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    resultFuture.completeExceptionally(databaseError.toException());
-                }
-            });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                resultFuture.completeExceptionally(databaseError.toException());
+            }
+        });
 
         return resultFuture;
     }
@@ -148,4 +126,37 @@ public class AuthenticationController {
     public String getMyId() {
         return auth.getUid();
     }
+
+    /**
+     * Gets the user's email address
+     * @param username the user's username
+     */
+    public CompletableFuture<String> getUserEmail(String username) {
+
+        final CompletableFuture<String> future = new CompletableFuture<>();
+
+        DatabaseReference emailReference = database.getReference().child("usernameToEmail").child(username);
+        emailReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+
+                    String email = (String) dataSnapshot.getValue();
+                    future.complete(email);
+
+                } else {
+                    future.completeExceptionally(new IllegalArgumentException("Username does not exist"));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                future.completeExceptionally(databaseError.toException());
+            }
+
+        });
+
+        return future;
+    }
+
 }
