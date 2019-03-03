@@ -1,6 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity.viewmybook;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import java.util.Date;
@@ -13,7 +12,7 @@ public class EditBookActivity extends AddNewBookActivity {
     private String author;
     private String isbn;
     private Date date;
-    private String imageId;
+    private String image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +22,7 @@ public class EditBookActivity extends AddNewBookActivity {
 
     @Override
     public void addBook() {
-        book = new Book(isbn, imageId, title, author, date);
+        book = new Book(isbn, image, title, author, date);
         // TODO: implement
         // make sure the old book is deleted from the user profile
         throw new UnsupportedOperationException("Not implemented");
