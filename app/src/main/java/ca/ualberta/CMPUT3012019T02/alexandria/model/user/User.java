@@ -9,8 +9,8 @@ import java.util.Map;
 public class User {
 
     private Map<String, String> chatRooms;
-    private List<OwnedBook> ownedBooks;
-    private List<BorrowedBook> borrowedBooks;
+    private HashMap<String, OwnedBook> ownedBooks;
+    private HashMap<String, BorrowedBook> borrowedBooks;
     private UserProfile profile;
     private String id;
     private List<String> blockedUsers;
@@ -27,8 +27,8 @@ public class User {
         this.profile = profile;
 
         chatRooms = new HashMap<>();
-        ownedBooks = new ArrayList<>();
-        borrowedBooks = new ArrayList<>();
+        ownedBooks = new HashMap<>();
+        borrowedBooks = new HashMap<>();
         blockedUsers = new ArrayList<>();
     }
 
@@ -52,11 +52,11 @@ public class User {
         this.chatRooms.remove(user);
     }
 
-    public List<OwnedBook> getOwnedBooks() {
-        return Collections.unmodifiableList(ownedBooks);
+    public Map<String, OwnedBook> getOwnedBooks() {
+        return Collections.unmodifiableMap(ownedBooks);
     }
 
-    public void setOwnedBooks(List<OwnedBook> ownedBooks) {
+    public void setOwnedBooks(HashMap<String, OwnedBook> ownedBooks) {
         if (ownedBooks == null){
             throw new IllegalArgumentException("Owned Books cannot be null");
         }
@@ -69,7 +69,7 @@ public class User {
             throw new IllegalArgumentException("Owned book cannot be null");
         }
 
-        this.ownedBooks.add(ownedBook);
+        this.ownedBooks.put(ownedBook.getIsbn(), ownedBook);
     }
 
     public void removeOwnedBook(OwnedBook ownedBook) {
@@ -77,14 +77,14 @@ public class User {
             throw new IllegalArgumentException("Owned book cannot be null");
         }
 
-        this.ownedBooks.remove(ownedBook);
+        this.ownedBooks.remove(ownedBook.getIsbn());
     }
 
-    public List<BorrowedBook> getBorrowedBooks() {
-        return Collections.unmodifiableList(borrowedBooks);
+    public Map<String, BorrowedBook> getBorrowedBooks() {
+        return Collections.unmodifiableMap(borrowedBooks);
     }
 
-    public void setBorrowedBooks(List<BorrowedBook> borrowedBooks) {
+    public void setBorrowedBooks(HashMap<String, BorrowedBook> borrowedBooks) {
         if (borrowedBooks == null){
             throw new IllegalArgumentException("Borrowed Books cannot be null");
         }
@@ -97,7 +97,7 @@ public class User {
             throw new IllegalArgumentException("Borrowed book cannot be null");
         }
 
-        this.borrowedBooks.add(borrowedBook);
+        this.borrowedBooks.put(borrowedBook.getIsbn(), borrowedBook);
     }
 
     public void removeBorrowedBook(BorrowedBook borrowedBook) {
@@ -105,7 +105,7 @@ public class User {
             throw new IllegalArgumentException("Borrowed book cannot be null");
         }
 
-        this.borrowedBooks.remove(borrowedBook);
+        this.borrowedBooks.remove(borrowedBook.getIsbn());
     }
 
     public UserProfile getProfile() {
