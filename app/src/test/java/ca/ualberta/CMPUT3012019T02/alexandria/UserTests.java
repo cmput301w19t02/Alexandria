@@ -19,7 +19,7 @@ public class UserTests {
     @Test
     public void constructorTest(){
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
-        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
         assertEquals(user.getProfile(), userProfile);
         assertEquals(user.getId(), id);
@@ -28,9 +28,9 @@ public class UserTests {
     @Test
     public void setProfileTest() {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
-        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
-        UserProfile newUserProfile = new UserProfile("Alexa Smith","alex@example.com","7801112233",null);
+        UserProfile newUserProfile = new UserProfile("Alexa Smith","alex@example.com","7801112233",null,"johnsmith");
         user.setProfile(newUserProfile);
         assertEquals(user.getProfile(), newUserProfile);
     }
@@ -38,7 +38,7 @@ public class UserTests {
     @Test
     public void setBlockedUsersTest() {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
-        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
         List<String> blockedUsers = Arrays.asList("userId1", "userId2", "userId3", "userId4", "userId5");
         user.setBlockedUsers(blockedUsers);
@@ -48,7 +48,7 @@ public class UserTests {
     @Test
     public void addBlockedUsersTest() {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
-        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
 
         String blockedUser6 = "userId6";
@@ -60,7 +60,7 @@ public class UserTests {
     @Test
     public void removeBlockedUsersTest() {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
-        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
         List<String> blockedUsers = new ArrayList<>();
         blockedUsers.add("userId1");
@@ -77,7 +77,7 @@ public class UserTests {
     @Test
     public void setOwnedBooksTest() {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
-        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
         List<OwnedBook> ownedBooks = Arrays.asList(new OwnedBook("9780545010221", "Available",null),
                 new OwnedBook("9780545012222", "Available",null));
@@ -88,7 +88,7 @@ public class UserTests {
     @Test
     public void addOwnedBooksTest() {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
-        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
 
         OwnedBook newOwnedBook = new OwnedBook("9780545013333", "Available",null);
@@ -100,7 +100,7 @@ public class UserTests {
     @Test
     public void removeOwnedBooksTest() {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
-        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
         List<OwnedBook> ownedBooks = Arrays.asList(new OwnedBook("9780545010221", "Available",null),
                 new OwnedBook("9780545012222", "Available",null));
@@ -115,7 +115,7 @@ public class UserTests {
     @Test
     public void setBorrowedBooksTest() {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
-        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
         List<BorrowedBook> borrowedBooks = Arrays.asList(new BorrowedBook("9780545010221", "Available",null),
                 new BorrowedBook("9780545012222", "Available",null));
@@ -126,7 +126,7 @@ public class UserTests {
     @Test
     public void addBorrowedBooksTest() {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
-        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
 
         BorrowedBook newBorrowedBook = new BorrowedBook("9780545013333", "Available",null);
@@ -138,7 +138,7 @@ public class UserTests {
     @Test
     public void removeBorrowedBooksTest() {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
-        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
         List<BorrowedBook> borrowedBooks = Arrays.asList(new BorrowedBook("9780545010221", "Available",null),
                 new BorrowedBook("9780545012222", "Available",null));
@@ -153,7 +153,7 @@ public class UserTests {
     @Test
     public void setCharRoomTest() {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
-        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
 
         HashMap<String,String> chatRooms = new HashMap<>();
@@ -166,7 +166,7 @@ public class UserTests {
     @Test
     public void addCharRoomTest() {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
-        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
 
         user.addChatRoom("userId", "6588a715-1651-4d44-94bc-ee0a40176a93");
@@ -176,7 +176,7 @@ public class UserTests {
     @Test
     public void removeCharRoomTest() {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
-        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null);
+        UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
 
         HashMap<String,String> chatRooms = new HashMap<>();
@@ -190,31 +190,31 @@ public class UserTests {
 
     @Test(expected = UnsupportedOperationException.class)
     public void unmodifiableGetBlockedUsersTest() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith","john@example.com","7801234567",null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith"));
         user.getBlockedUsers().add("janesmith");
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void unmodifiableGetBorrowedBooksTest() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith","john@example.com","7801234567",null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith"));
         user.getBorrowedBooks().clear();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void unmodifiableGetChatRoomsTest() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith","john@example.com","7801234567",null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith"));
         user.getChatRooms().clear();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void unmodifiableGetOwnedBooksTest() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith","john@example.com","7801234567",null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith"));
         user.getOwnedBooks().clear();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullIdConstructorTest() {
-        new User(null, new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        new User(null, new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -224,84 +224,84 @@ public class UserTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void emptyIdConstructorTest() {
-        new User("", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        new User("", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullSetUserIdTest() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.setId(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void emptySetUserIdTest() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.setId("");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullAddOwnedBook() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.addOwnedBook(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullRemoveOwnedBook() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.removeOwnedBook(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullAddBorrowedBook() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.addBorrowedBook(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullRemoveBorrowedBook() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.removeBorrowedBook(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullAddBlockedUserd() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.addBlockedUser(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullRemoveBlockedUserd() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.removeBlockedUser(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullSetProfile() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.setProfile(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullSetBlockedUsers() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.setBlockedUsers(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullSetBorrowedBooks() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.setBorrowedBooks(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullSetChatRooms() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.setChatRooms(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullSetOwnedBooks() {
-        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null));
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.setOwnedBooks(null);
     }
 
