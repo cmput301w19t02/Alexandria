@@ -6,4 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".activity.BlockedUsersActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/blocked_users_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp"
+        android:background="@color/colorMaroon"
+        android:elevation="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/CustomPopupStyle">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/blocked_users"
+            android:textColor="@color/colorYellow"
+            android:textSize="24sp" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/blocked_users_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp" />
+
 </android.support.constraint.ConstraintLayout>
