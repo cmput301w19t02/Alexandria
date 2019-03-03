@@ -21,19 +21,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-light"
-            android:text="@string/nav_library"
+            android:text="Search"
             android:textColor="@color/colorYellow"
             android:textSize="24sp" />
-
-        <android.support.v7.widget.AppCompatImageButton
-            android:id="@+id/profile_button_library"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_profile"
-            android:tint="@color/colorYellow" />
 
     </android.support.v7.widget.Toolbar>
 
