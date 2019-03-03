@@ -15,7 +15,7 @@ public class AddNewBookActivity extends AppCompatActivity {
     private String author = "";
     private String isbn = "";
     private Date date;
-    private Bitmap image;
+    private String imageId;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +49,7 @@ public class AddNewBookActivity extends AppCompatActivity {
     }
 
     public void addBook() {
-        book = new Book(isbn, image, title, author, date);
+        book = new Book(isbn, imageId, title, author, date);
         // TODO: implement
         throw new UnsupportedOperationException("Not implemented");
     }

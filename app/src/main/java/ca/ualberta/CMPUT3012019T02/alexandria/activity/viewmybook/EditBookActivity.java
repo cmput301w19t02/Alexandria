@@ -13,7 +13,7 @@ public class EditBookActivity extends AddNewBookActivity {
     private String author;
     private String isbn;
     private Date date;
-    private Bitmap image;
+    private String imageId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class EditBookActivity extends AddNewBookActivity {
 
     @Override
     public void addBook() {
-        book = new Book(isbn, image, title, author, date);
+        book = new Book(isbn, imageId, title, author, date);
         // TODO: implement
         // make sure the old book is deleted from the user profile
         throw new UnsupportedOperationException("Not implemented");
