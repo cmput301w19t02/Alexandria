@@ -34,8 +34,6 @@ public class MainActivity extends AppCompatActivity
         loadFragment(new ExchangeFragment());
     }
 
-
-
     private boolean loadFragment(Fragment fragment) {
         if (fragment != null){
             getSupportFragmentManager()
