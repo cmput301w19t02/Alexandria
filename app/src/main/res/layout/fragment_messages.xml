@@ -35,7 +35,7 @@
             android:tint="@color/colorYellow"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:onClick="setProfileButtonClick"/>
+            android:onClick="onProfileButtonClick"/>
 
     </android.support.v7.widget.Toolbar>
 
