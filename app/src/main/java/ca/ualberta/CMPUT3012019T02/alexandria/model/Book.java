@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import java9.util.concurrent.CompletableFuture;
-
 public class Book {
 
     private String isbn;
@@ -18,23 +16,6 @@ public class Book {
     private List<String> availableOwners;
 
     public Book(String isbn, String imageId, String title, String author, String description, Date date) {
-        CompletableFuture<String> maturityFuture = CompletableFuture.supplyAsync(() -> {
-            if(true) {
-                throw new IllegalArgumentException("Age can not be negative");
-            }
-            else if(false){
-                return "Adult";
-            } else {
-                return "Child";
-            }
-        }).handle((res, ex) -> {
-            if(ex != null) {
-                System.out.println("Oops! We have an exception - " + ex.getMessage());
-                return "Unknown!";
-            }
-            return res;
-        });
-
         if (isbn == null || isbn.trim().isEmpty()) {
             throw new IllegalArgumentException("Isbn cannot be null or empty");
         }
