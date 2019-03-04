@@ -15,6 +15,14 @@ public class Book {
     private Date date;
     private List<String> availableOwners;
 
+    /**
+     * No args constructor to maintain compatibility
+     * with Firebase deserializer
+     * DO NOT USE
+     */
+    @Deprecated
+    public Book() {}
+
     public Book(String isbn, String imageId, String title, String author, String description, Date date) {
         if (isbn == null || isbn.trim().isEmpty()) {
             throw new IllegalArgumentException("Isbn cannot be null or empty");

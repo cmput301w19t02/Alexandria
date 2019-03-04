@@ -1,11 +1,13 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.ExchangeFragment;
@@ -30,7 +32,6 @@ public class MainActivity extends AppCompatActivity
         navigation.setOnNavigationItemSelectedListener(this);
 
         loadFragment(new ExchangeFragment());
-
     }
 
     private boolean loadFragment(Fragment fragment) {
@@ -60,5 +61,15 @@ public class MainActivity extends AppCompatActivity
         }
 
         return loadFragment(fragment);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    protected void onProfileButtonClick(View view) {
+        Intent startProfileActivity = new Intent(this, MyProfileActivity.class);
+        startActivity(startProfileActivity);
     }
 }

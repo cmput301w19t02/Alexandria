@@ -4,37 +4,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class OwnedBook {
+public class OwnedBook extends UserBook {
 
-    private String isbn;
     private List<String> usersRequesting;
     private List<String> images;
     private String status;
     private String userBorrowing;
 
-    public OwnedBook(String isbn, String status, String userBorrowing) {
-        if (isbn == null || isbn.trim().isEmpty()) {
-            throw new IllegalArgumentException("Isbn cannot be null or empty");
-        }
+    public OwnedBook() {
+        super(null);
+    }
 
-        this.isbn = isbn;
+    public OwnedBook(String isbn, String status, String userBorrowing) {
+        super(isbn);
+
         this.status = status;
         this.userBorrowing = userBorrowing;
 
         usersRequesting = new ArrayList<>();
         images = new ArrayList<>();
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        if (isbn == null || isbn.trim().isEmpty()) {
-            throw new IllegalArgumentException("Isbn cannot be null or empty");
-        }
-
-        this.isbn = isbn;
     }
 
     public List<String> getUsersRequesting() {

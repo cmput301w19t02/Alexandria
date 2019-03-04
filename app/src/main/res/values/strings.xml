@@ -17,4 +17,18 @@
         completions."
     </string>
     <string name="search_hint">Author, Title, or ISBN</string>
+    <string name="nav_profile">Profile</string>
+    <!-- Strings related to user profile -->
+    <string name="image_desc">User Logo</string>
+    <string name="profile_username">Username</string>
+    <string name="profile_name">Full Name</string>
+    <string name="profile_email">Email</string>
+    <!-- Strings related to edit profile -->
+    <string name="edit_profile_name">Full Name</string>
+    <string name="edit_profile_username">Username</string>
+    <string name="edit_profile_password">Password</string>
+    <string name="edit_profile_email">Email</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="blocked_users">Blocked Users</string>
+    <string name="edit_profile_save">Save Changes</string>
 </resources>
