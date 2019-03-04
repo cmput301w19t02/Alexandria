@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
     }
 
-    protected void setProfileButtonClick(View view) {
+    protected void onProfileButtonClick(View view) {
         Intent startProfileActivity = new Intent(this, MyProfileActivity.class);
         startActivity(startProfileActivity);
     }

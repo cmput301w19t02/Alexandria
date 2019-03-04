@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-public class    Book {
+public class Book {
 
     private String isbn;
     private String imageId;
