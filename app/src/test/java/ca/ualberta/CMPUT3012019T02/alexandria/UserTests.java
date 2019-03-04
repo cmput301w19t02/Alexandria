@@ -117,8 +117,8 @@ public class UserTests {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
-        List<BorrowedBook> borrowedBooks = Arrays.asList(new BorrowedBook("9780545010221", "Available",null),
-                new BorrowedBook("9780545012222", "Available",null));
+        List<BorrowedBook> borrowedBooks = Arrays.asList(new BorrowedBook("9780545010221", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"),
+                new BorrowedBook("9780545012222", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
         user.setBorrowedBooks(borrowedBooks);
         assertEquals(user.getBorrowedBooks(), borrowedBooks);
     }
@@ -129,7 +129,7 @@ public class UserTests {
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
 
-        BorrowedBook newBorrowedBook = new BorrowedBook("9780545013333", "Available",null);
+        BorrowedBook newBorrowedBook = new BorrowedBook("9780545013333", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1");
         user.addBorrowedBook(newBorrowedBook);
         List<BorrowedBook> borrowedBooks = Collections.singletonList(newBorrowedBook);
         assertEquals(user.getBorrowedBooks(), borrowedBooks);
@@ -140,11 +140,11 @@ public class UserTests {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
-        List<BorrowedBook> borrowedBooks = Arrays.asList(new BorrowedBook("9780545010221", "Available",null),
-                new BorrowedBook("9780545012222", "Available",null));
+        List<BorrowedBook> borrowedBooks = Arrays.asList(new BorrowedBook("9780545010221", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"),
+                new BorrowedBook("9780545012222", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
         user.setBorrowedBooks(borrowedBooks);
 
-        BorrowedBook returnedBorrowedBook = new BorrowedBook("9780545012222", "Available",null);
+        BorrowedBook returnedBorrowedBook = new BorrowedBook("9780545012222", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1");
         user.removeBorrowedBook(returnedBorrowedBook);
         borrowedBooks.remove(returnedBorrowedBook);
         assertEquals(user.getBorrowedBooks(), borrowedBooks);
