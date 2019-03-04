@@ -44,7 +44,9 @@
                 android:layout_marginRight="8dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_profile"
-                android:tint="@color/colorYellow" />
+                android:tint="@color/colorYellow"
+                android:onClick="setProfileButtonClick"/>
+
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
