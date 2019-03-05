@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,7 +33,8 @@ public class AcceptedFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_exchange_accepted,null);
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.accepted_recycler);
-        BookRecyclerViewAdapter bookAdapter = new BookRecyclerViewAdapter(getContext(), acceptedBooks);
+        BookRecyclerViewAdapter bookAdapter =
+                new BookRecyclerViewAdapter(getContext(), acceptedBooks);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(bookAdapter);
 
@@ -44,18 +46,24 @@ public class AcceptedFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //TODO setup data retrieval from Firebase
+        //TODO setup data retrieval from Firebase, and remove placeholder lists
+        Bitmap aBitmap = Bitmap.createBitmap(32, 32, Bitmap.Config.ARGB_8888);
         acceptedBooks = new ArrayList<>();
         acceptedBooks.add(new BookList
-                (1, "Test Title", "Test Author", "Test ISBN", 3));
+                (aBitmap, "Test Title",
+                        "Test Author", "Test ISBN", "accepted"));
         acceptedBooks.add(new BookList
-                (1, "Test Title 2", "Test Author", "Test ISBN", 3));
+                (aBitmap, "Test Title 2",
+                        "Test Author", "Test ISBN", "accepted"));
         acceptedBooks.add(new BookList
-                (1, "Test Title 3", "Test Author", "Test ISBN", 3));
+                (aBitmap, "Test Title 3",
+                        "Test Author", "Test ISBN", "accepted"));
         acceptedBooks.add(new BookList
-                (1, "Test Title 4", "Test Author", "Test ISBN", 3));
+                (aBitmap, "Test Title 4", "" +
+                        "Test Author", "Test ISBN", "accepted"));
         acceptedBooks.add(new BookList
-                (1, "Test Title 5", "Test Author", "Test ISBN", 3));
+                (aBitmap, "Test Title 5",
+                        "Test Author", "Test ISBN", "accepted"));
 
     }
 }

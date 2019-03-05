@@ -44,18 +44,26 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookRecyclerVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
 
-        //TODO implement setImageResource, expects int
-        //myViewHolder.ivCover.setImageResource(mBookList.get(position).getCover());
+        myViewHolder.ivCover.setImageBitmap(mBookList.get(position).getCover());
         myViewHolder.tvTitle.setText(mBookList.get(position).getTitle());
         myViewHolder.tvAuthor.setText(mBookList.get(position).getAuthor());
         myViewHolder.tvISBN.setText(mBookList.get(position).getIsbn());
 
         switch (mBookList.get(position).getStatus()) {
-            case 1: myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_available); break;
-            case 2: myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_requested); break;
-            case 3: myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_accepted); break;
-            case 4: myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_borrowed); break;
-            default: throw new RuntimeException("Status out of bounds");
+            case "available":
+                myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_available);
+                break;
+            case "requested":
+                myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_requested);
+                break;
+            case "accepted":
+                myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_accepted);
+                break;
+            case "borrowed":
+                myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_borrowed);
+                break;
+            default:
+                throw new RuntimeException("Status out of bounds");
         }
 
 

@@ -1,33 +1,36 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model;
 
-import android.net.Uri;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import android.graphics.Bitmap;
+
+/**
+ * Model Class for BookRecyclerViewAdapter
+ */
 
 public class BookList {
-    private int cover;
+    private Bitmap cover;
     private String title;
     private String author;
     private String isbn;
-    private int status;
+    private String status;
 
     public BookList() {
     }
 
-    public BookList(int cover, String title, String author, String isbn, int status) {
+    public BookList(Bitmap cover, String title, String author, String isbn, String status) {
         this.cover = cover;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
-        this.status = status; //1 available, 2 requested, 3 accepted, 4 borrowed
+        this.status = status;
     }
 
 
-    public int getCover() {
+    public Bitmap getCover() {
         return cover;
     }
 
-    public void setCover(int cover) {
+    public void setCover(Bitmap cover) {
         this.cover = cover;
     }
 
@@ -55,11 +58,11 @@ public class BookList {
         this.isbn = isbn;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
