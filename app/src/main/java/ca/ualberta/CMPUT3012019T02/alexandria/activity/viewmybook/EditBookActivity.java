@@ -11,6 +11,7 @@ public class EditBookActivity extends AddNewBookActivity {
     private String title ;
     private String author;
     private String isbn;
+    private String description;
     private Date date;
     private String image;
 
@@ -22,7 +23,7 @@ public class EditBookActivity extends AddNewBookActivity {
 
     @Override
     public void addBook() {
-        book = new Book(isbn, image, title, author, date);
+        book = new Book(isbn, image, title, author, description, date);
         // TODO: implement
         // make sure the old book is deleted from the user profile
         throw new UnsupportedOperationException("Not implemented");
