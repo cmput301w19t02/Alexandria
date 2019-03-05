@@ -4,21 +4,58 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookRecyclerViewAdapter;
 
 /**
  * Fragment for filtering book list that has the status of Accepted
  */
 
 public class AcceptedFragment extends Fragment {
+
+    private List<BookList> acceptedBooks;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_exchange_accepted,null);
+        View rootView = inflater.inflate(R.layout.fragment_exchange_accepted,null);
+
+        RecyclerView mRecyclerView = rootView.findViewById(R.id.accepted_recycler);
+        BookRecyclerViewAdapter bookAdapter = new BookRecyclerViewAdapter(getContext(), acceptedBooks);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(bookAdapter);
+
+        return rootView;
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //TODO setup data retrieval from Firebase
+        acceptedBooks = new ArrayList<>();
+        acceptedBooks.add(new BookList
+                (1, "Test Title", "Test Author", "Test ISBN", 3));
+        acceptedBooks.add(new BookList
+                (1, "Test Title 2", "Test Author", "Test ISBN", 3));
+        acceptedBooks.add(new BookList
+                (1, "Test Title 3", "Test Author", "Test ISBN", 3));
+        acceptedBooks.add(new BookList
+                (1, "Test Title 4", "Test Author", "Test ISBN", 3));
+        acceptedBooks.add(new BookList
+                (1, "Test Title 5", "Test Author", "Test ISBN", 3));
+
     }
 }

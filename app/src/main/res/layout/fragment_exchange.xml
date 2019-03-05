@@ -43,9 +43,9 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:background="@android:color/transparent"
+                android:onClick="onProfileButtonClick"
                 android:src="@drawable/ic_profile"
-                android:tint="@color/colorYellow"
-                android:onClick="onProfileButtonClick"/>
+                android:tint="@color/colorYellow" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -83,7 +83,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="16dp"
         android:background="@color/colorWhite"
         android:drawableStart="@drawable/ic_search"
         android:drawableLeft="@drawable/ic_search"
@@ -101,10 +101,10 @@
         android:id="@+id/exchange_pager"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="56dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/exchange_search" />
 
