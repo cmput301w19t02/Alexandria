@@ -65,8 +65,6 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookRecyclerVi
             default:
                 throw new RuntimeException("Status out of bounds");
         }
-
-
     }
 
     @Override
@@ -93,6 +91,4 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookRecyclerVi
 
         }
     }
-
-
 }

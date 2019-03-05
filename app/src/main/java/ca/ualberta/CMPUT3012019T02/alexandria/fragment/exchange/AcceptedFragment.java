@@ -59,7 +59,7 @@ public class AcceptedFragment extends Fragment {
                 (aBitmap, "Test Title 3",
                         "Test Author", "Test ISBN", "accepted"));
         acceptedBooks.add(new BookList
-                (aBitmap, "Test Title 4", "" +
+                (aBitmap, "Test Title 4",
                         "Test Author", "Test ISBN", "accepted"));
         acceptedBooks.add(new BookList
                 (aBitmap, "Test Title 5",
