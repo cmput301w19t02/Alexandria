@@ -34,19 +34,17 @@ public class ChatController {
         return instance;
     }
 
-    // MessageFragment necessary methods
-
-    private <T extends Map<String, String>> CompletableFuture<T> getChatRoomsList(String id) {
+    // MessageFragment necessary methods (chat rooms displayed to user)
+    private <T extends List<String>> CompletableFuture<T> getChatRoomsList(String id) {
         // TODO: Finish implementation
         // gets all chat data from Firebase
         final CompletableFuture<Void> resultFuture = new CompletableFuture<>();
 
-        database.getReference().child("users").child(id).child("chatrooms").addListenerForSingleValueEvent(new ValueEventListener() {
+        database.getReference().child("users").child(id).child("chatroomlist").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                Map<String, String> chatRooms = user.getChatRooms();
-                resultFuture.complete(chatRooms);
+                List<String> chatRoomList = dataSnapshot.getValue();
+                resultFuture.complete(chatRoomList);
             }
 
             @Override
@@ -58,7 +56,7 @@ public class ChatController {
         return resultFuture;
     }
 
-    // ChatActivity necessary methods
+    // ChatActivity necessary methods (actually talking to someone)
     public CompletableFuture<Void> getMessages() {
         // TODO: Finish implementation
         // gets the new messages data stored in Firebase
