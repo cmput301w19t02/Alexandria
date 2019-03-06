@@ -111,7 +111,6 @@ public class UserController {
                                     }
                                 });
                             } else {
-                                database.getReference().child("usernameToEmail").child(username).removeValue();
                                 resultFuture.completeExceptionally(authTask.getException());
                             }
                         });

@@ -1,15 +1,17 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.user;
 
-public class BorrowedBook {
+public class BorrowedBook extends UserBook {
 
-    private String isbn;
     private String status;
     private String owner;
 
+    public BorrowedBook() {
+        super(null);
+    }
+
     public BorrowedBook(String isbn, String status, String owner) {
-        if (isbn == null || isbn.trim().isEmpty()) {
-            throw new IllegalArgumentException("Isbn cannot be null or empty");
-        }
+        super(isbn);
+
         if (status == null || status.trim().isEmpty()) {
             throw new IllegalArgumentException("Status cannot be null or empty");
         }
@@ -17,21 +19,8 @@ public class BorrowedBook {
             throw new IllegalArgumentException("Owner cannot be null or empty");
         }
         
-        this.isbn = isbn;
         this.status = status;
         this.owner = owner;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        if (isbn == null || isbn.trim().isEmpty()) {
-            throw new IllegalArgumentException("Isbn cannot be null or empty");
-        }
-
-        this.isbn = isbn;
     }
 
     public String getStatus() {

@@ -30,10 +30,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_profile"
-            android:tint="@color/colorYellow" />
+            android:tint="@color/colorYellow"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:onClick="onProfileButtonClick"/>
 
     </android.support.v7.widget.Toolbar>
 
