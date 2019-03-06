@@ -17,8 +17,15 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserBook;
 import java9.util.concurrent.CompletableFuture;
 
+/**
+ * This class specifies a type of book that is store under user data.
+ * It provides class type, data path in database, and a generic type indicator for deserializing
+ * data from the database into the given type.
+ * @param <T> the type of book.
+ */
 class UserBookType<T extends UserBook> {
 
+    // Predefined type definitions: BORROWED for BorrowedBook, OWNED for OwnedBook
     public static final UserBookType<BorrowedBook> BORROWED = new UserBookType<>("borrowedBooks", BorrowedBook.class, new GenericTypeIndicator<HashMap<String, BorrowedBook>>() { });
     public static final UserBookType<OwnedBook> OWNED = new UserBookType<>("ownedBooks", OwnedBook.class, new GenericTypeIndicator<HashMap<String, OwnedBook>>() { });
 
@@ -151,7 +158,7 @@ public class BookController {
     }
 
     /**
-     * Delete a book in the database, or add one if it does not exist
+     * Delete a book in the database
      * @param isbn of the book to delete
      * @return a CompletableFuture signifying the success/failure of this operation
      */
