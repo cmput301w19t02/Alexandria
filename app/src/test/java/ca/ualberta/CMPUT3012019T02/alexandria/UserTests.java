@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
@@ -79,8 +80,9 @@ public class UserTests {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
-        List<OwnedBook> ownedBooks = Arrays.asList(new OwnedBook("9780545010221", "Available",null),
-                new OwnedBook("9780545012222", "Available",null));
+        HashMap<String, OwnedBook> ownedBooks = new HashMap<>();
+        ownedBooks.put("9780545010221", new OwnedBook("9780545010221", "Available",null));
+        ownedBooks.put("9780545012222", new OwnedBook("9780545012222", "Available",null));
         user.setOwnedBooks(ownedBooks);
         assertEquals(user.getOwnedBooks(), ownedBooks);
     }
@@ -93,7 +95,7 @@ public class UserTests {
 
         OwnedBook newOwnedBook = new OwnedBook("9780545013333", "Available",null);
         user.addOwnedBook(newOwnedBook);
-        List<OwnedBook> ownedBooks = Collections.singletonList(newOwnedBook);
+        Map<String, OwnedBook> ownedBooks = Collections.singletonMap(newOwnedBook.getIsbn(), newOwnedBook);
         assertEquals(user.getOwnedBooks(), ownedBooks);
     }
 
@@ -102,13 +104,14 @@ public class UserTests {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
-        List<OwnedBook> ownedBooks = Arrays.asList(new OwnedBook("9780545010221", "Available",null),
-                new OwnedBook("9780545012222", "Available",null));
+        HashMap<String, OwnedBook> ownedBooks = new HashMap<>();
+        ownedBooks.put("9780545010221", new OwnedBook("9780545010221", "Available",null));
+        ownedBooks.put("9780545012222", new OwnedBook("9780545012222", "Available",null));
         user.setOwnedBooks(ownedBooks);
 
         OwnedBook lostOwnedBook = new OwnedBook("9780545012222", "Available",null);
         user.removeOwnedBook(lostOwnedBook);
-        ownedBooks.remove(lostOwnedBook);
+        ownedBooks.remove(lostOwnedBook.getIsbn());
         assertEquals(user.getOwnedBooks(), ownedBooks);
     }
 
@@ -117,8 +120,9 @@ public class UserTests {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
-        List<BorrowedBook> borrowedBooks = Arrays.asList(new BorrowedBook("9780545010221", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"),
-                new BorrowedBook("9780545012222", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
+        HashMap<String, BorrowedBook> borrowedBooks = new HashMap<>();
+        borrowedBooks.put("9780545010221", new BorrowedBook("9780545010221", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
+        borrowedBooks.put("9780545012222", new BorrowedBook("9780545012222", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
         user.setBorrowedBooks(borrowedBooks);
         assertEquals(user.getBorrowedBooks(), borrowedBooks);
     }
@@ -131,7 +135,7 @@ public class UserTests {
 
         BorrowedBook newBorrowedBook = new BorrowedBook("9780545013333", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1");
         user.addBorrowedBook(newBorrowedBook);
-        List<BorrowedBook> borrowedBooks = Collections.singletonList(newBorrowedBook);
+        Map<String, BorrowedBook> borrowedBooks = Collections.singletonMap(newBorrowedBook.getIsbn(), newBorrowedBook);
         assertEquals(user.getBorrowedBooks(), borrowedBooks);
     }
 
@@ -140,13 +144,14 @@ public class UserTests {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
-        List<BorrowedBook> borrowedBooks = Arrays.asList(new BorrowedBook("9780545010221", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"),
-                new BorrowedBook("9780545012222", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
+        HashMap<String, BorrowedBook> borrowedBooks = new HashMap<>();
+        borrowedBooks.put("9780545010221", new BorrowedBook("9780545010221", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
+        borrowedBooks.put("9780545012222", new BorrowedBook("9780545012222", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
         user.setBorrowedBooks(borrowedBooks);
 
         BorrowedBook returnedBorrowedBook = new BorrowedBook("9780545012222", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1");
         user.removeBorrowedBook(returnedBorrowedBook);
-        borrowedBooks.remove(returnedBorrowedBook);
+        borrowedBooks.remove(returnedBorrowedBook.getIsbn());
         assertEquals(user.getBorrowedBooks(), borrowedBooks);
     }
 
