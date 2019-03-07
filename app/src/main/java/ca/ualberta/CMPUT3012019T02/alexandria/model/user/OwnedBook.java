@@ -8,17 +8,19 @@ public class OwnedBook extends UserBook {
 
     private List<String> usersRequesting;
     private List<String> images;
-    private String status;
     private String userBorrowing;
 
+    /**
+     * @deprecated Do not use. This constructor is for automatic object creation using Firebase only.
+     */
+    @Deprecated
     public OwnedBook() {
-        super(null);
+        super(null, null);
     }
 
     public OwnedBook(String isbn, String status, String userBorrowing) {
-        super(isbn);
+        super(isbn, status);
 
-        this.status = status;
         this.userBorrowing = userBorrowing;
 
         usersRequesting = new ArrayList<>();
@@ -55,14 +57,6 @@ public class OwnedBook extends UserBook {
 
     public void removeImage(String imageId) {
         this.images.remove(imageId);
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getUserBorrowing() {

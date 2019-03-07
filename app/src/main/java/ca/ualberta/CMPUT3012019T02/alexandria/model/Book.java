@@ -33,7 +33,7 @@ public class Book {
         if (author == null || author.trim().isEmpty()) {
             throw new IllegalArgumentException("Author cannot be null or empty");
         }
-        if (description==null || description.trim().isEmpty()) {
+        if (description == null || description.trim().isEmpty()) {
             throw new IllegalArgumentException("Description cannot be null or empty");
         }
 
@@ -42,7 +42,7 @@ public class Book {
         this.title = title;
         this.author = author;
         this.date = date;
-        this.description =description;
+        this.description = description;
 
         availableOwners = new ArrayList<>();
     }
@@ -59,11 +59,11 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public String getImage() {
+    public String getImageId() {
         return imageId;
     }
 
-    public void setImage(String imageId) {
+    public void setImageId(String imageId) {
         this.imageId = imageId;
     }
 
@@ -125,5 +125,13 @@ public class Book {
         }
 
         this.description = description;
+    }
+
+    public boolean equals(Book book) {
+        return  this.isbn.equals(book.getIsbn()) &&
+                this.imageId.equals(book.getImageId()) &&
+                this.title.equals(book.getTitle()) &&
+                this.author.equals(book.getAuthor()) &&
+                this.description.equals(book.getDescription());
     }
 }
