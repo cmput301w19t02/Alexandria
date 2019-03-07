@@ -9,6 +9,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 
@@ -19,7 +21,7 @@ public class ImageControllerTests {
     private final String TEST_IMAGE_3 = "0c815f8b-6fb9-4721-b278-97cfdb3e9482"; // does not need to exist in database
 
     @Test
-    public void testGetImage() throws ExecutionException, InterruptedException, IOException {
+    public void testGetImage() throws ExecutionException, InterruptedException, IOException, TimeoutException {
 
         ImageController imageController = ImageController.getInstance();
 
@@ -29,7 +31,7 @@ public class ImageControllerTests {
                         .openConnection().getInputStream());
 
         // Gets TEST_IMAGE_1 through the ImageController
-        Bitmap actual = imageController.getImage(TEST_IMAGE_1).get();
+        Bitmap actual = imageController.getImage(TEST_IMAGE_1).get(5, TimeUnit.SECONDS);
 
         // Confirm they are the same
         Assert.assertTrue(expected.sameAs(actual));
@@ -37,7 +39,7 @@ public class ImageControllerTests {
     }
 
     @Test
-    public void testAddImage() throws ExecutionException, InterruptedException {
+    public void testAddImage() throws ExecutionException, InterruptedException, TimeoutException {
 
         // Depends on ImageController#getImage() working correctly.
 
@@ -45,19 +47,19 @@ public class ImageControllerTests {
 
         // Create a new image and add it to the database
         Bitmap expected = Bitmap.createBitmap(32, 32, Bitmap.Config.ARGB_8888);
-        String imageId = imageController.addImage(expected).get();
+        String imageId = imageController.addImage(expected).get(5, TimeUnit.SECONDS);
 
         // Fetch the image from the database and verify it is the same
-        Bitmap actual = imageController.getImage(imageId).get();
+        Bitmap actual = imageController.getImage(imageId).get(5, TimeUnit.SECONDS);
         Assert.assertTrue(expected.sameAs(actual));
 
         // Clean up
-        imageController.deleteImage(imageId).get();
+        imageController.deleteImage(imageId).get(5, TimeUnit.SECONDS);
 
     }
 
     @Test
-    public void testUpdateImage() throws ExecutionException, InterruptedException {
+    public void testUpdateImage() throws ExecutionException, InterruptedException, TimeoutException {
 
         // Depends on ImageController#getImage() working correctly.
 
@@ -65,19 +67,19 @@ public class ImageControllerTests {
         ImageController imageController = ImageController.getInstance();
 
         // Update an image in the database
-        imageController.updateImage(TEST_IMAGE_3, expected).get();
+        imageController.updateImage(TEST_IMAGE_3, expected).get(5, TimeUnit.SECONDS);
 
         // Fetch the image from the database and verify it is the same
-        Bitmap actual = imageController.getImage(TEST_IMAGE_3).get();
+        Bitmap actual = imageController.getImage(TEST_IMAGE_3).get(5, TimeUnit.SECONDS);
         Assert.assertTrue(expected.sameAs(actual));
 
         // Clean up
-        imageController.deleteImage(TEST_IMAGE_3).get();
+        imageController.deleteImage(TEST_IMAGE_3).get(5, TimeUnit.SECONDS);
 
     }
 
     @Test(expected = ExecutionException.class)
-    public void testDeleteImage() throws ExecutionException, InterruptedException {
+    public void testDeleteImage() throws ExecutionException, InterruptedException, TimeoutException {
 
         // Depends ImageController#addImage() and ImageController#getImage() working correctly
 
@@ -85,13 +87,13 @@ public class ImageControllerTests {
         ImageController imageController = ImageController.getInstance();
 
         // Add an image to the database
-        String imageId = imageController.addImage(bitmap).get();
+        String imageId = imageController.addImage(bitmap).get(5, TimeUnit.SECONDS);
 
         // Delete it
-        imageController.deleteImage(imageId).get();
+        imageController.deleteImage(imageId).get(5, TimeUnit.SECONDS);
 
         // Check if it exists
-        imageController.getImage(imageId).get();
+        imageController.getImage(imageId).get(5, TimeUnit.SECONDS);
 
     }
 }
