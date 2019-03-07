@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class User {
 
-    private Map<String, String> chatRooms;
+    private List<String> chatRoomList;
     private HashMap<String, OwnedBook> ownedBooks;
     private HashMap<String, BorrowedBook> borrowedBooks;
     private UserProfile profile;
@@ -26,30 +26,30 @@ public class User {
         this.id = id;
         this.profile = profile;
 
-        chatRooms = new HashMap<>();
+        chatRoomList = new ArrayList<String>();
         ownedBooks = new HashMap<>();
         borrowedBooks = new HashMap<>();
         blockedUsers = new ArrayList<>();
     }
 
-    public Map<String, String> getChatRooms() {
-        return Collections.unmodifiableMap(chatRooms);
+    public List<String> getChatRooms() {
+        return chatRoomList;
     }
 
-    public void setChatRooms(Map<String, String> chatRooms) {
+    public void setChatRooms(List<String> chatRooms) {
         if (chatRooms == null){
             throw new IllegalArgumentException("Chat Rooms cannot be null");
         }
 
-        this.chatRooms = chatRooms;
+        this.chatRoomList = chatRooms;
     }
 
-    public void addChatRoom(String user, String uuid) {
-        this.chatRooms.put(user,uuid);
+    public void addChatRoom(String uuid) {
+        this.chatRoomList.add(uuid);
     }
 
     public void removeChatRoom(String user) {
-        this.chatRooms.remove(user);
+        this.chatRoomList.remove(user);
     }
 
     public Map<String, OwnedBook> getOwnedBooks() {

@@ -9,6 +9,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,17 +38,27 @@ public class ChatController {
 
     // MessageFragment necessary methods
 
-    private <T extends Map<String, String>> CompletableFuture<T> getChatRoomsList(String id) {
+    /**
+     * Gets a chat room ids from database as a list of strings.
+     * @param id
+     * @return List of id strings
+     */
+    public List<String> getChatRoomList(String id){
+        return getChatRoomsListPrivate(id);
+    }
+    private CompletableFuture<List<String>> getChatRoomsListPrivate(String id) {
         // TODO: Finish implementation
-        // gets all chat data from Firebase
-        final CompletableFuture<Void> resultFuture = new CompletableFuture<>();
+        // gets list of my chat rooms
+        final CompletableFuture<User> resultFuture = new CompletableFuture<>();
 
-        database.getReference().child("users").child(id).child("chatrooms").addListenerForSingleValueEvent(new ValueEventListener() {
+        database.getReference().child("users").child(id).child("chatRoomList").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                Map<String, String> chatRooms = user.getChatRooms();
-                resultFuture.complete(chatRooms);
+                List<String> chatRoomIds = new ArrayList<String>();
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    chatRoomIds.add(childSnapshot.getValue(String.class));
+                }
+                resultFuture.complete(chatRoomIds);
             }
 
             @Override
@@ -58,44 +70,57 @@ public class ChatController {
         return resultFuture;
     }
 
-    // ChatActivity necessary methods
-    public CompletableFuture<Void> getMessages() {
-        // TODO: Finish implementation
-        // gets the new messages data stored in Firebase
-        throw new UnsupportedOperationException();
+    /**
+     * Adds new chat room to both me and the person I want to message. Also checks if there is
+     * already a chat between the two.
+     * @param senderId my user id
+     * @param recieverId the person I want to message's id
+     */
+    public CompletableFuture<Void> addChatRoom(String senderId, String recieverId){
+        final CompletableFuture<User> resultFuture = new CompletableFuture<>();
+        addChatRoomPrivate(senderId, recieverId);
+        return resultFuture;
     }
 
-    public void postMessage(Message message) {
-        // TODO: Finish implementation
-        // adds new messages to chatroom in Firebase
-        throw new UnsupportedOperationException();
+    private CompletableFuture<Void> addChatRoomPrivate(String senderId, String recieverId){
+        final CompletableFuture<User> resultFuture = new CompletableFuture<>();
+        DatabaseReference senderRef = database.getReference().child("users").child(senderId).child("chatRoomList");
+        DatabaseReference recieverRef = database.getReference().child("users").child(recieverId).child("chatRoomList");
+
+
+        // TODO: generate a unique identifier for chat room, following a specific schema
+        String chatId1 = "chat" + senderId + "_" + recieverId;
+        String chatId2 = "chat" + recieverId + "_" + senderId;
+        boolean checkChatId1 = checkChatRoomExists(senderRef, recieverRef, chatId1);
+        boolean checkChatId2 = checkChatRoomExists(senderRef, recieverRef, chatId2);
+        //check if a chat room is shared between the two ids
+        if (checkChatId1 || checkChatId2) {
+
+        } else {
+
+        }
+
+        // add chat room to both ids
+
+    }
+
+    private boolean checkChatRoomExists(DatabaseReference ref1, DatabaseReference ref2, String chatRoomId){
+        ref1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /* My User ID */
 
-
     private String getMyUserId() {
         return UserController.getInstance().getMyId();
     }
-
-
-    /* Database Referencing */
-
-    // TODO: Change theses to chat references
-    private DatabaseReference getBookDatabaseReference(@NonNull String isbn) {
-        return database.child("books").child(isbn);
-    }
-
-    private DatabaseReference getUserDatabaseReference(@NonNull String id) {
-        return database.child("users").child(id);
-    }
-
-    private DatabaseReference getUserBooksReference(@NonNull UserBookType userBookType, @NonNull String id) {
-        return getUserDatabaseReference(id).child(userBookType.getDataPath());
-    }
-
-    private DatabaseReference getUserBookReference(@NonNull UserBookType userBookType, @NonNull String id, @NonNull String isbn) {
-        return getUserBooksReference(userBookType, id).child(isbn);
-    }
-
 }
