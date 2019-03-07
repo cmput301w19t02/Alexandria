@@ -4,8 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -15,7 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
+import java9.util.concurrent.CompletableFuture;
 
 /**
  * This class manages the addition, retrieval, and modification of images in Firebase Storage
@@ -44,15 +42,10 @@ public class ImageController {
      * @param image the image to add
      * @return a CompletableFuture that returns the image id
      */
-    public CompletableFuture<String> addImage(Bitmap image) {
+    public CompletableFuture<String> addImage(@NonNull Bitmap image) {
         final String imageId = UUID.randomUUID().toString();
         final CompletableFuture<String> future = new CompletableFuture<>();
-        updateImage(imageId, image).thenRun(new Runnable() {
-            @Override
-            public void run() {
-                future.complete(imageId);
-            }
-        });
+        updateImage(imageId, image).thenRun(() -> future.complete(imageId));
         return future;
     }
 
@@ -61,7 +54,7 @@ public class ImageController {
      * @param imageId the unique id of the image in the database
      * @return a CompletableFuture that returns the image bitmap
      */
-    public CompletableFuture<Bitmap> getImage(String imageId) {
+    public CompletableFuture<Bitmap> getImage(@NonNull String imageId) {
         // Based off of https://firebase.google.com/docs/storage/android/download-files#download_to_a_local_file
 
         StorageReference imageReference = getImageReference(imageId);
@@ -73,24 +66,11 @@ public class ImageController {
             final File localFile = File.createTempFile("images", IMAGE_FORMAT);
 
             final FileDownloadTask fileDownloadTask = imageReference.getFile(localFile);
-            fileDownloadTask.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    // Local temp file has been created
-                    Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                    future.complete(bitmap);
-                }
-
-            }).addOnFailureListener(new OnFailureListener() {
-
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle any errors
-                    future.completeExceptionally(exception);
-                }
-
-            });
+            fileDownloadTask.addOnSuccessListener(taskSnapshot -> {
+                // Local temp file has been created
+                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                future.complete(bitmap);
+            }).addOnFailureListener(future::completeExceptionally);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -105,7 +85,7 @@ public class ImageController {
      * @param image the new image to be associated with the imageId
      * @return a CompletableFuture signifying this operation's success/failture
      */
-    public CompletableFuture<Void> updateImage(String imageId, Bitmap image) {
+    public CompletableFuture<Void> updateImage(@NonNull String imageId, @NonNull Bitmap image) {
         // Based off of https://firebase.google.com/docs/storage/android/upload-files#upload_from_data_in_memory
 
         StorageReference imageReference = getImageReference(imageId);
@@ -117,23 +97,10 @@ public class ImageController {
         final CompletableFuture<Void> future = new CompletableFuture<>();
 
         final UploadTask uploadTask = imageReference.putBytes(data);
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                future.complete(null);
-            }
-
-        }).addOnFailureListener(new OnFailureListener() {
-
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-                future.completeExceptionally(exception);
-            }
-
-        });
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+            future.complete(null);
+        }).addOnFailureListener(future::completeExceptionally);
 
         return future;
     }
@@ -149,23 +116,9 @@ public class ImageController {
         final CompletableFuture<Void> future = new CompletableFuture<>();
 
         StorageReference imageReference = getImageReference(imageId);
-        imageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-
-            @Override
-            public void onSuccess(Void aVoid) {
-                // File deleted successfully
-                future.complete(aVoid);
-            }
-
-        }).addOnFailureListener(new OnFailureListener() {
-
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Uh-oh, an error occurred!
-                future.completeExceptionally(exception);
-            }
-
-        });
+        imageReference.delete()
+                .addOnSuccessListener(future::complete)
+                .addOnFailureListener(future::completeExceptionally);
 
         return future;
     }
@@ -175,7 +128,7 @@ public class ImageController {
      * @param imageId the unique id of the image in the database
      * @return a reference to the image
      */
-    public StorageReference getImageReference(String imageId) {
+    private StorageReference getImageReference(@NonNull String imageId) {
         return storage.child(imageId + "." + IMAGE_FORMAT);
     }
 
