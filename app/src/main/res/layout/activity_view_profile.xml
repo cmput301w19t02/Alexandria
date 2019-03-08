@@ -82,12 +82,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_image" />
 
-    <android.support.v4.view.ViewPager
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/view_user_books_recycler"
         android:layout_width="match_parent"
-        android:layout_height="397dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="396dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
 

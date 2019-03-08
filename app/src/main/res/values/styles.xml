@@ -10,6 +10,28 @@
         <item name="android:buttonStyle">@style/ButtonColor</item>
     </style>
 
+    <!-- Alert Builder Theme-->
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColorPrimary">@color/colorHint</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:windowTitleStyle">@style/DialogTitle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+    <!-- Alert Title Theme-->
+    <style name="DialogTitle" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textSize">21sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+    <!-- Alert Builder Buttons text colour to red-->
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/colorRed</item>
+    </style>
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/colorRed</item>
+    </style>
+
     <!-- Might cause button style to be unchangeable, delete if necessary -->
     <style name="ButtonColor" parent="@android:style/Widget.Button">
         <item name="fontFamily">sans-serif-medium</item>

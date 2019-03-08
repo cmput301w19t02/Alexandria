@@ -3,26 +3,56 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookRecyclerViewAdapter;
 
 public class ViewUserProfileActivity extends AppCompatActivity {
+
+    private List<BookList> ownedBooks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
 
-        // toolbar
+        //TODO setup data retrieval from Firebase, and remove placeholder lists
+        Bitmap aBitmap = Bitmap.createBitmap(32, 32, Bitmap.Config.ARGB_8888);
+        ownedBooks = new ArrayList<>();
+        ownedBooks.add(new BookList
+                (aBitmap, "Test Title",
+                        "Test Author", "Test ISBN", "accepted"));
+        ownedBooks.add(new BookList
+                (aBitmap, "Test Title 2",
+                        "Test Author", "Test ISBN", "accepted"));
+        ownedBooks.add(new BookList
+                (aBitmap, "Test Title 3",
+                        "Test Author", "Test ISBN", "accepted"));
+        ownedBooks.add(new BookList
+                (aBitmap, "Test Title 4",
+                        "Test Author", "Test ISBN", "accepted"));
+        ownedBooks.add(new BookList
+                (aBitmap, "Test Title 5",
+                        "Test Author", "Test ISBN", "accepted"));
+
+        // Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.view_profile_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
@@ -34,6 +64,13 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        // Recycler View
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.view_user_books_recycler);
+        BookRecyclerViewAdapter bookAdapter =
+                new BookRecyclerViewAdapter(this, ownedBooks);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(bookAdapter);
     }
 
     @Override
@@ -48,19 +85,18 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.message_user_option:
-                // edit activity
+                // opem messages view
                 Toast.makeText(this , "Open messages", Toast.LENGTH_LONG).show();
                 break;
             case R.id.block_user_option:
                 Toast.makeText(this , "Block user implement", Toast.LENGTH_LONG).show();
 
-                AlertDialog.Builder blockAlert = new AlertDialog.Builder(ViewUserProfileActivity.this);
+                AlertDialog.Builder blockAlert = new AlertDialog.Builder(ViewUserProfileActivity.this, R.style.AlertDialogTheme);
 
                 blockAlert.setCancelable(true);
                 blockAlert.setTitle("Block User?");
-                blockAlert.setMessage("Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
-                        "sed do eiusmod tempor incididunt ut labore et dolore magna wirl aliqua. " +
-                        "Up exlaborum incididunt quis nostrud exercitatn.");
+                String blockMessage = "Are you sure you want to block " +  "Joe123 Example";
+                blockAlert.setMessage(blockMessage);
 
                 blockAlert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                     @Override
@@ -68,9 +104,8 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
-
                 Context context = this;
-                blockAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                blockAlert.setPositiveButton("BLOCK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // block user
