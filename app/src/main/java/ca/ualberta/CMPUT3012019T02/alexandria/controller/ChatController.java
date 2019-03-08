@@ -88,34 +88,64 @@ public class ChatController {
         DatabaseReference recieverRef = database.getReference().child("users").child(recieverId).child("chatRoomList");
 
 
-        // TODO: generate a unique identifier for chat room, following a specific schema
+        // TODO: generate a unique identifier for chat room, following a specific schema/ordering
         String chatId1 = "chat" + senderId + "_" + recieverId;
         String chatId2 = "chat" + recieverId + "_" + senderId;
-        boolean checkChatId1 = checkChatRoomExists(senderRef, recieverRef, chatId1);
-        boolean checkChatId2 = checkChatRoomExists(senderRef, recieverRef, chatId2);
-        //check if a chat room is shared between the two ids
-        if (checkChatId1 || checkChatId2) {
+        CompletableFuture<String> checkSendChatId1 = checkChatRoomExists(senderRef, chatId1);
+        CompletableFuture<String> checkSendChatId2 = checkChatRoomExists(senderRef, chatId2);
+        CompletableFuture<String> checkReciChatId1 = checkChatRoomExists(senderRef, chatId1);
+        CompletableFuture<String> checkReciChatId2 = checkChatRoomExists(senderRef, chatId2);
+        boolean check1 = checkSendChatId1.equals("true");
+        boolean check2 = checkSendChatId2.equals("true");
+        boolean check3 = checkReciChatId1.equals("true");
+        boolean check4 = checkReciChatId2.equals("true");
 
+        if (check1 || check2 || check3 || check4) {
+            // check if a chat room is shared between the two ids
+            // add the chat room to the missing one
         } else {
+            // if a chat room is in neither id lists
+            // add chat room to both ids
 
         }
-
-        // add chat room to both ids
-
+        return resultFuture.complete();
     }
 
-    private boolean checkChatRoomExists(DatabaseReference ref1, DatabaseReference ref2, String chatRoomId){
-        ref1.addListenerForSingleValueEvent(new ValueEventListener() {
+    /**
+     * A check if a chat room exists at databaseReference.child(userId).child("chatRoomList")
+     * @param ref
+     * @param chatRoomId
+     * @return boolean, true for the chat room exists in both database references, false if not
+     */
+    private CompletableFuture<String> checkChatRoomExists(DatabaseReference ref, String chatRoomId){
+        final CompletableFuture<String> resultFuture = new CompletableFuture<>();
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                if (dataSnapshot.exists()) {
+                    // check list
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()){
+                        String key = childSnapshot.getKey();
+                        String idFromList = childSnapshot.child(key).getValue(String.class);
+                        if (chatRoomId.equals(idFromList)){
+                            resultFuture.complete("true");
+                        }
+                    }
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                resultFuture.completeExceptionally(databaseError.toException());
             }
         });
+        String chatRoomExists = resultFuture.get();
+        if (chatRoomExists.equals("true") ){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /* My User ID */
