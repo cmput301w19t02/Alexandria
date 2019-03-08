@@ -11,12 +11,19 @@ public class Book {
     private String imageId;
     private String title;
     private String author;
+    private String description;
     private Date date;
     private List<String> availableOwners;
 
+    /**
+     * No args constructor to maintain compatibility
+     * with Firebase deserializer
+     * DO NOT USE
+     */
+    @Deprecated
     public Book() {}
 
-    public Book(String isbn, String imageId, String title, String author, Date date) {
+    public Book(String isbn, String imageId, String title, String author, String description, Date date) {
         if (isbn == null || isbn.trim().isEmpty()) {
             throw new IllegalArgumentException("Isbn cannot be null or empty");
         }
@@ -26,12 +33,16 @@ public class Book {
         if (author == null || author.trim().isEmpty()) {
             throw new IllegalArgumentException("Author cannot be null or empty");
         }
+        if (description==null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Description cannot be null or empty");
+        }
 
         this.isbn = isbn;
         this.imageId = imageId;
         this.title = title;
         this.author = author;
         this.date = date;
+        this.description =description;
 
         availableOwners = new ArrayList<>();
     }
@@ -104,4 +115,15 @@ public class Book {
         this.availableOwners.remove(avaliableOwner);
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        if (description==null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Description cannot be null or empty");
+        }
+
+        this.description = description;
+    }
 }
