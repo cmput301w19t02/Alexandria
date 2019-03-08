@@ -40,16 +40,17 @@ public class ChatController {
 
     /**
      * Gets a chat room ids from database as a list of strings.
-     * @param id
-     * @return List of id strings
+     * @param id a string that is the id of the current user
+     * @return a CompletableFuture with Map type of
      */
-    public List<String> getChatRoomList(String id){
+    public CompletableFuture<Map<String, Object>> getChatRoomList(String id){
         return getChatRoomsListPrivate(id);
     }
-    private CompletableFuture<List<String>> getChatRoomsListPrivate(String id) {
+
+    private CompletableFuture<Map<String, Object>> getChatRoomsListPrivate(String id) {
         // TODO: Finish implementation
         // gets list of my chat rooms
-        final CompletableFuture<User> resultFuture = new CompletableFuture<>();
+        final CompletableFuture<Map<String, Object>> resultFuture = new CompletableFuture<>();
 
         database.getReference().child("users").child(id).child("chatRoomList").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -58,7 +59,7 @@ public class ChatController {
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                     chatRoomIds.add(childSnapshot.getValue(String.class));
                 }
-                resultFuture.complete(chatRoomIds);
+                resultFuture.complete();
             }
 
             @Override
@@ -77,38 +78,43 @@ public class ChatController {
      * @param recieverId the person I want to message's id
      */
     public CompletableFuture<Void> addChatRoom(String senderId, String recieverId){
-        final CompletableFuture<User> resultFuture = new CompletableFuture<>();
-        addChatRoomPrivate(senderId, recieverId);
-        return resultFuture;
+        return addChatRoomPrivate(senderId, recieverId);
     }
 
     private CompletableFuture<Void> addChatRoomPrivate(String senderId, String recieverId){
-        final CompletableFuture<User> resultFuture = new CompletableFuture<>();
-        DatabaseReference senderRef = database.getReference().child("users").child(senderId).child("chatRoomList");
-        DatabaseReference recieverRef = database.getReference().child("users").child(recieverId).child("chatRoomList");
+        final CompletableFuture<Void> resultFuture = new CompletableFuture<>(); // might not be necessary
+
+        DatabaseReference senderListRef = database.getReference().child("users").child(senderId).child("chatRoomList");
+        DatabaseReference recieverListRef = database.getReference().child("users").child(recieverId).child("chatRoomList");
+        DatabaseReference chatroomsRef = database.getReference().child("chatrooms");
 
 
         // TODO: generate a unique identifier for chat room, following a specific schema/ordering
         String chatId1 = "chat" + senderId + "_" + recieverId;
         String chatId2 = "chat" + recieverId + "_" + senderId;
-        CompletableFuture<String> checkSendChatId1 = checkChatRoomExists(senderRef, chatId1);
-        CompletableFuture<String> checkSendChatId2 = checkChatRoomExists(senderRef, chatId2);
-        CompletableFuture<String> checkReciChatId1 = checkChatRoomExists(senderRef, chatId1);
-        CompletableFuture<String> checkReciChatId2 = checkChatRoomExists(senderRef, chatId2);
+        CompletableFuture<String> checkSendChatId1 = checkChatRoomExists(senderListRef, chatId1);
+        CompletableFuture<String> checkSendChatId2 = checkChatRoomExists(senderListRef, chatId2);
+        CompletableFuture<String> checkReciChatId1 = checkChatRoomExists(recieverListRef, chatId1);
+        CompletableFuture<String> checkReciChatId2 = checkChatRoomExists(recieverListRef, chatId2);
+        CompletableFuture<String> checkChatRoomListId1 = checkChatRoomExists(chatroomsRef, chatId1);
+        CompletableFuture<String> checkChatRoomListId2 = checkChatRoomExists(chatroomsRef, chatId2);
         boolean check1 = checkSendChatId1.equals("true");
         boolean check2 = checkSendChatId2.equals("true");
         boolean check3 = checkReciChatId1.equals("true");
         boolean check4 = checkReciChatId2.equals("true");
-
-        if (check1 || check2 || check3 || check4) {
+        boolean checkList1 = checkChatRoomListId1.equals("true");
+        boolean checkList2 = checkChatRoomListId2.equals("true");
+        if (check1 || check2 || check3 || check4 || checkList1 || checkList2) {
             // check if a chat room is shared between the two ids
             // add the chat room to the missing one
         } else {
             // if a chat room is in neither id lists
             // add chat room to both ids
-
+            senderListRef.push().setValue(chatId1);
+            recieverListRef.push().setValue(chatId1);
+            chatroomsRef.push().setValue(chatId1);
         }
-        return resultFuture.complete();
+        return resultFuture;
     }
 
     /**
@@ -125,14 +131,23 @@ public class ChatController {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     // check list
+                    boolean doesExists = false;
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()){
                         String key = childSnapshot.getKey();
                         String idFromList = childSnapshot.child(key).getValue(String.class);
                         if (chatRoomId.equals(idFromList)){
-                            resultFuture.complete("true");
+                            doesExists = true;
                         }
                     }
+                    if (!doesExists){
+                        resultFuture.complete("false");
+                    } else {
+                        resultFuture.complete("true");
+                    }
+                } else {
+                    resultFuture.complete("false");
                 }
+
             }
 
             @Override
@@ -140,17 +155,6 @@ public class ChatController {
                 resultFuture.completeExceptionally(databaseError.toException());
             }
         });
-        String chatRoomExists = resultFuture.get();
-        if (chatRoomExists.equals("true") ){
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /* My User ID */
-
-    private String getMyUserId() {
-        return UserController.getInstance().getMyId();
+        return resultFuture;
     }
 }
