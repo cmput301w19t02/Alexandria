@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.model.ChatRoomItem;
+
 public class User {
 
-    private List<String> chatRoomList;
+    private HashMap<String, ChatRoomItem> chatRoomList;
     private HashMap<String, OwnedBook> ownedBooks;
     private HashMap<String, BorrowedBook> borrowedBooks;
     private UserProfile profile;
@@ -26,17 +28,17 @@ public class User {
         this.id = id;
         this.profile = profile;
 
-        chatRoomList = new ArrayList<String>();
+        chatRoomList = new HashMap<>();
         ownedBooks = new HashMap<>();
         borrowedBooks = new HashMap<>();
         blockedUsers = new ArrayList<>();
     }
 
-    public List<String> getChatRooms() {
-        return chatRoomList;
+    public Map<String, ChatRoomItem> getChatRooms() {
+        return Collections.unmodifiableMap(chatRoomList);
     }
 
-    public void setChatRooms(List<String> chatRooms) {
+    public void setChatRooms(HashMap<String, ChatRoomItem> chatRooms) {
         if (chatRooms == null){
             throw new IllegalArgumentException("Chat Rooms cannot be null");
         }
@@ -44,8 +46,8 @@ public class User {
         this.chatRoomList = chatRooms;
     }
 
-    public void addChatRoom(String uuid) {
-        this.chatRoomList.add(uuid);
+    public void addChatRoom(String uuid, ChatRoomItem chatRoomItem) {
+        this.chatRoomList.put(uuid, chatRoomItem);
     }
 
     public void removeChatRoom(String user) {

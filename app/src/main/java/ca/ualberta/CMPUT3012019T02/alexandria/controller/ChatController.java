@@ -14,11 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.User;
 import java9.util.concurrent.CompletableFuture;
-
-import ca.ualberta.CMPUT3012019T02.alexandria.model.ChatRoom;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 
 public class ChatController {
     private FirebaseDatabase database;
@@ -43,12 +39,14 @@ public class ChatController {
      * @param id a string that is the id of the current user
      * @return a CompletableFuture with Map type of
      */
+    /** THESE TWO METHODS MIGHT NOT BE NECESSARY since we can get the chat room list data straight
+     * from the data base in message fragment.
     public CompletableFuture<Map<String, Object>> getChatRoomList(String id){
         return getChatRoomsListPrivate(id);
     }
 
     private CompletableFuture<Map<String, Object>> getChatRoomsListPrivate(String id) {
-        // TODO: Finish implementation
+        // TODO: Finish implementation, somehow send a map with future
         // gets list of my chat rooms
         final CompletableFuture<Map<String, Object>> resultFuture = new CompletableFuture<>();
 
@@ -70,7 +68,7 @@ public class ChatController {
 
         return resultFuture;
     }
-
+    */
     /**
      * Adds new chat room to both me and the person I want to message. Also checks if there is
      * already a chat between the two.
