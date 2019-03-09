@@ -12,6 +12,8 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 
 public class BookControllerTests {
 
+    /* Test methods for adding/removing books */
+
     @Test
     public void testGetBook() throws InterruptedException, ExecutionException, TimeoutException {
         BookController bookController = BookController.getInstance();
@@ -20,6 +22,13 @@ public class BookControllerTests {
         Book actual = bookController.getBook("9780547928227").get(5, TimeUnit.SECONDS);
 
         Assert.assertTrue(expected.equals(actual));
+    }
+
+    @Test(expected = ExecutionException.class)
+    public void testGetNonExistingBook() throws InterruptedException, ExecutionException, TimeoutException {
+        BookController bookController = BookController.getInstance();
+        bookController.deleteBook("0000000000000").get(5, TimeUnit.SECONDS); // Shouldn't exist, but delete it anyway to make sure
+        bookController.getBook("0000000000000").get(5, TimeUnit.SECONDS); // Should throw an ExecutionException due to book not existing
     }
 
     @Test
@@ -36,6 +45,16 @@ public class BookControllerTests {
 
         // Clean up
         bookController.deleteBook("0000000000000").get(5, TimeUnit.SECONDS);
+    }
+
+    @Test(expected = ExecutionException.class)
+    public void testAddDuplicateBook() throws InterruptedException, ExecutionException, TimeoutException {
+        // Depends on BookController#getBook() working correctly
+
+        BookController bookController = BookController.getInstance();
+
+        Book existing = new Book("9780547928227", "ac543736-b355-4eac-b9b8-a11165f0aa43", "The Hobbit", "J.R.R. Tolkien", "Bilbo Baggins is a hobbit who enjoys a comfortable, unambitious life, rarely traveling further than the pantry of his hobbit-hole in Bag End. But his contentment is disturbed when the wizard, Gandalf, and a company of thirteen dwarves arrive on his doorstep one day to whisk him away on an unexpected journey ‘there and back again’. They have a plot to raid the treasure hoard of Smaug the Magnificent, a large and very dangerous dragon.", null);
+        bookController.addBook(existing).get(5, TimeUnit.SECONDS); // Should throw an ExecutionException due to the book already existing
     }
 
     @Test
@@ -65,7 +84,7 @@ public class BookControllerTests {
         BookController bookController = BookController.getInstance();
 
         bookController.deleteBook("0000000000000").get(5, TimeUnit.SECONDS);
-        bookController.getBook("0000000000000").get(5, TimeUnit.SECONDS);
+        bookController.getBook("0000000000000").get(5, TimeUnit.SECONDS); // Should throw an ExecutionException due to the book not existing
     }
 
 }
