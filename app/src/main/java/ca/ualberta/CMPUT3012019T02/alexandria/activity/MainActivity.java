@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity
                     loadFragment(fragment);
                     navigation.getMenu().getItem(1).setChecked(true);
                     break;
+                default:
+                    throw new RuntimeException("Fragment name is incorrect");
             }
         } else {
             loadFragment(new ExchangeFragment());
