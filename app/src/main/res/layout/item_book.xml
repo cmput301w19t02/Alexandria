@@ -3,7 +3,8 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
-    android:background="@drawable/border">
+    android:background="@drawable/border"
+    android:id="@+id/item_book">
 
     <ImageView
         android:layout_width="48dp"
