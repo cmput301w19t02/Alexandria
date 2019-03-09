@@ -31,7 +31,20 @@ public class MainActivity extends AppCompatActivity
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
 
-        loadFragment(new ExchangeFragment());
+        Intent intent = getIntent();
+        if (intent.hasExtra("fragment_name")) {
+            String fragment_name = intent.getStringExtra("fragment_name");
+            Fragment fragment = null;
+            switch(fragment_name) {
+                case "message":
+                    fragment = new MessagesFragment();
+                    loadFragment(fragment);
+                    navigation.getMenu().getItem(2).setChecked(true);
+                    break;
+            }
+        } else {
+            loadFragment(new ExchangeFragment());
+        }
     }
 
     private boolean loadFragment(Fragment fragment) {

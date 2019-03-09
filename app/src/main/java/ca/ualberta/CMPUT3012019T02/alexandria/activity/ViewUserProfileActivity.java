@@ -68,7 +68,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         // Recycler View
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.view_user_books_recycler);
         BookRecyclerViewAdapter bookAdapter =
-                new BookRecyclerViewAdapter(this, ownedBooks);
+                new BookRecyclerViewAdapter(this, ownedBooks, "UserBookFragment");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(bookAdapter);
     }
@@ -85,8 +85,10 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.message_user_option:
-                // opem messages view
-                Toast.makeText(this , "Open messages", Toast.LENGTH_LONG).show();
+                Intent intentMain = new Intent(this, MainActivity.class);
+                String fragment_name = "message";
+                intentMain.putExtra("fragment_name", fragment_name);
+                startActivity(intentMain);
                 break;
             case R.id.block_user_option:
                 Toast.makeText(this , "Block user implement", Toast.LENGTH_LONG).show();
