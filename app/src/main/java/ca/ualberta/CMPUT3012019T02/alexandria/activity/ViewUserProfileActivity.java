@@ -121,7 +121,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
 
                 break;
             default:
-                // unknown error
+                throw new RuntimeException("Unknown option");
         }
         return super.onOptionsItemSelected(item);
     }
