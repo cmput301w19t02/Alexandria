@@ -66,11 +66,11 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         });
 
         // Recycler View
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.view_user_books_recycler);
-        BookRecyclerViewAdapter bookAdapter =
-                new BookRecyclerViewAdapter(this, ownedBooks, "UserBookFragment");
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(bookAdapter);
+        //RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.view_user_books_recycler);
+        //BookRecyclerViewAdapter bookAdapter =
+        //        new BookRecyclerViewAdapter(this, ownedBooks, "UserBookFragment");
+        //mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //mRecyclerView.setAdapter(bookAdapter);
     }
 
     @Override
