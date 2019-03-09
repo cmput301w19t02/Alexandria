@@ -34,7 +34,7 @@ public class AcceptedFragment extends Fragment {
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.accepted_recycler);
         BookRecyclerViewAdapter bookAdapter =
-                new BookRecyclerViewAdapter(getContext(), acceptedBooks);
+                new BookRecyclerViewAdapter(getContext(), acceptedBooks,"UserBookFragment");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(bookAdapter);
 
