@@ -14,7 +14,7 @@ import android.widget.Button;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.SearchFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.SectionsPageAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.TabsAdapter;
 
 /**
  * Created as a fragment by MainActivity
@@ -49,7 +49,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
      */
 
     private void setupViewPager(ViewPager viewPager) {
-        SectionsPageAdapter adapter = new SectionsPageAdapter(getChildFragmentManager());
+        TabsAdapter adapter = new TabsAdapter(getChildFragmentManager());
         adapter.addFragment(new BorrowedFragment(), "Borrowed");
         adapter.addFragment(new AcceptedFragment(), "Accepted");
         adapter.addFragment(new RequestedFragment(),"Requested");

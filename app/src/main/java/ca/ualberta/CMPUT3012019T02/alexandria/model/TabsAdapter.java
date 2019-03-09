@@ -12,13 +12,13 @@ import java.util.List;
  * Model for setting up fragment tabs in activities
  */
 
-public class SectionsPageAdapter extends FragmentPagerAdapter {
+public class TabsAdapter extends FragmentPagerAdapter {
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
 
 
-    public SectionsPageAdapter(FragmentManager fm) {
+    public TabsAdapter(FragmentManager fm) {
         super(fm);
     }
 
