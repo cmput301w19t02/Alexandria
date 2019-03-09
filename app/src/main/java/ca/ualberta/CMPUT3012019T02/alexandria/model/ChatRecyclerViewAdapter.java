@@ -44,7 +44,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
 
                 //bundle.putParcelable("user_pic", mChatRoomList.get(mViewHolder.getAdapterPosition()).getUserPic());
                 bundle.putString("chatId", mChatRoomList.get(mViewHolder.getAdapterPosition()).getChatRoomId());
-                bundle.putString("recieverId", mChatRoomList.get(mViewHolder.getAdapterPosition()).getRecieverId());
+                bundle.putString("recieverId", mChatRoomList.get(mViewHolder.getAdapterPosition()).getUser2Id());
 
                 intent.putExtra("bundle", bundle);
                 startActivity(intent);
@@ -58,7 +58,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
     public void onBindViewHolder(@NonNull ChatViewHolder myViewHolder, int position) {
 
         //myViewHolder.ivChatUserPic.setImageBitmap(mChatRoomList.get(position).getUserPic());
-        myViewHolder.tvChatRecieverUsername.setText(mChatRoomList.get(position).getRecieverUsername());
+        myViewHolder.tvChatRecieverUsername.setText(mChatRoomList.get(position).getUser2Name());
         // TODO: add image from res folder for read status
         /**
         if (!mChatRoomList.get(position).getReadStatus()){

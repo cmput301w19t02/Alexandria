@@ -1,16 +1,18 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.message;
 
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class Message {
 
+    private String id;
     private String type;
     private String content;
     private String status;
-    private Date date;
+    private String date;
     private String sender;
 
-    public Message(String type, String content, String status, Date date, String sender) {
+    public Message(String type, String content, String status, String date, String sender) {
         if (type == null || type.isEmpty()) {
             throw new IllegalArgumentException("Type cannot be null or empty");
         }
@@ -38,6 +40,26 @@ public abstract class Message {
         this.status = status;
         this.date = date;
         this.sender = sender;
+    }
+
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> res = new HashMap<>();
+        res.put("id", id);
+        res.put("type", type);
+        res.put("status", status);
+        res.put("date", date);
+        res.put("sender", sender);
+        res.put("content", content);
+
+        return res;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getType() {
@@ -82,11 +104,11 @@ public abstract class Message {
         this.status = status;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         if (date == null) {
             throw new IllegalArgumentException("Date cannot be null");
         }

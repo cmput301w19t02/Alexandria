@@ -26,20 +26,26 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.ChatRoomItem;
 
 public class MessagesFragment extends Fragment {
 
-    private List<ChatRoomItem> chatRoomList = new ArrayList<ChatRoomItem>();
+    private List<ChatRoomItem> chatRoomList = new ArrayList<>();
+    private DatabaseReference myRef;
+    private ValueEventListener chatListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        //TODO: add data to chatRooms list
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child("users")
-                                                .child(UserController.getInstance().getMyId());
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef = FirebaseDatabase.getInstance().getReference().child("users").child(UserController.getInstance().getMyId());
+
+        // adding current users' chatRooms to chatRoomList
+        chatListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()){
-                    ChatRoomItem chatRoom = childSnapshot.getValue(ChatRoomItem);
-                    chatRoomList.add()
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        ChatRoomItem chatRoom = childSnapshot.getValue(ChatRoomItem.class);
+                        chatRoomList.add(chatRoom);
+                    }
+                } else {
+                    myRef.removeEventListener(this);
                 }
             }
 
@@ -47,7 +53,9 @@ public class MessagesFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 throw new RuntimeException("Could not load data from database " + databaseError);
             }
-        });
+        };
+
+        myRef.addValueEventListener(chatListener);
     }
 
     @Nullable
@@ -62,6 +70,13 @@ public class MessagesFragment extends Fragment {
         mRecyclerView.setAdapter(chatAdapter);
 
         return rootView;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        myRef.removeEventListener(chatListener);
     }
 
 }
