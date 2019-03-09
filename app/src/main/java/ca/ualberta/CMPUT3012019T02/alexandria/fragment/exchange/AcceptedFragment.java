@@ -16,7 +16,7 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.UserBookRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookRecyclerViewAdapter;
 
 /**
  * Fragment for filtering book list that has the status of Accepted
@@ -33,8 +33,8 @@ public class AcceptedFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_exchange_accepted,null);
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.accepted_recycler);
-        UserBookRecyclerViewAdapter bookAdapter =
-                new UserBookRecyclerViewAdapter(getContext(), acceptedBooks);
+        BookRecyclerViewAdapter bookAdapter =
+                new BookRecyclerViewAdapter(getContext(), acceptedBooks,"UserBookFragment");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(bookAdapter);
 

@@ -3,6 +3,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria.model;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
@@ -21,14 +22,17 @@ import ca.ualberta.CMPUT3012019T02.alexandria.fragment.UserBookFragment;
  *  Code implemented from https://youtu.be/T_QfRU-A3s4 on 03/04/2019
  */
 
-public class UserBookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder> {
+public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder> {
 
     private Context mContext;
     private List<BookList> mBookList;
+    private String destination;
 
-    public UserBookRecyclerViewAdapter(Context mContext, List<BookList> mBookList) {
+    public BookRecyclerViewAdapter(Context mContext,
+                                   List<BookList> mBookList, String destination) {
         this.mContext = mContext;
         this.mBookList = mBookList;
+        this.destination = destination;
     }
 
     @NonNull
@@ -50,7 +54,7 @@ public class UserBookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHo
             public void onClick(View v) {
 
                 //bundles data for fragment switching
-                UserBookFragment frag = new UserBookFragment();
+                Fragment frag = setDestination(destination);
                 Bundle b = new Bundle();
 
                 b.putParcelable("cover", mBookList.get(mViewHolder.getAdapterPosition()).getCover());
@@ -103,5 +107,18 @@ public class UserBookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHo
     @Override
     public int getItemCount() {
         return mBookList.size();
+    }
+
+    //Allows Conditional Destination to Fragments, Add to cases as needed
+    private Fragment setDestination(String destination){
+
+        switch (destination){
+            case "UserBookFragment":
+                UserBookFragment frag = new UserBookFragment();
+                return frag;
+            default:
+                throw new RuntimeException("Fragment Not Defined");
+        }
+
     }
 }

@@ -4,7 +4,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria.model;
 import android.graphics.Bitmap;
 
 /**
- * Model Class for Recyclers using BookList
+ * Model Class for BookRecyclerViewAdapter
  */
 
 public class BookList {
