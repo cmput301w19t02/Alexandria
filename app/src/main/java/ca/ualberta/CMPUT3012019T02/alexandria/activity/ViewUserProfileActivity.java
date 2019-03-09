@@ -26,13 +26,14 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.BookRecyclerViewAdapter;
 
 public class ViewUserProfileActivity extends AppCompatActivity {
 
-    private List<BookList> ownedBooks;
+    //private List<BookList> ownedBooks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
 
+        /*
         //TODO setup data retrieval from Firebase, and remove placeholder lists
         Bitmap aBitmap = Bitmap.createBitmap(32, 32, Bitmap.Config.ARGB_8888);
         ownedBooks = new ArrayList<>();
@@ -51,6 +52,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         ownedBooks.add(new BookList
                 (aBitmap, "Test Title 5",
                         "Test Author", "Test ISBN", "accepted"));
+        */
 
         // Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.view_profile_toolbar);
