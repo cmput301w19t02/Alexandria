@@ -65,6 +65,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
             }
         });
 
+        //TODO implement book list
         // Recycler View
         //RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.view_user_books_recycler);
         //BookRecyclerViewAdapter bookAdapter =
@@ -83,7 +84,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
+            //TODO make use of actual user name
             case R.id.message_user_option:
                 Intent intentMain = new Intent(this, MainActivity.class);
                 String fragment_name = "message";
