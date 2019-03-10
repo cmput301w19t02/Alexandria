@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.database.DatabaseReference;
@@ -14,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.model.ChatRoomItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 import java9.util.concurrent.CompletableFuture;
 
 public class ChatController {
@@ -86,10 +89,28 @@ public class ChatController {
         DatabaseReference recieverListRef = database.getReference().child("users").child(recieverId).child("chatRoomList");
         DatabaseReference chatroomsRef = database.getReference().child("chatrooms");
 
+        CompletableFuture<UserProfile> user1Future = UserController.getInstance().getUserProfile(senderId);
+        CompletableFuture<UserProfile> user2Future = UserController.getInstance().getUserProfile(recieverId);
+
+        UserProfile user1 = user1Future.get();
+        UserProfile user2 = user2Future.get();
+
+        String user1Name = user1.getUsername();
+        String user2Name = user2.getUsername();
+
+        String chatId1 = "chat" + senderId + "_" + recieverId;
+        ChatRoomItem chatRoomItem = new ChatRoomItem(chatId1, senderId, user1Name, recieverId, user2Name, false);
+
+        senderListRef.child(chatId1).child("chatId").setValue(chatRoomItem.getChatRoomId());
+        senderListRef.child(chatId1).child("user1Id").setValue(chatRoomItem.getUser1Id());
+        senderListRef.child(chatId1).child("user1Name").setValue(chatRoomItem.getUser1Name());
+        senderListRef.child(chatId1).child("user2Id").setValue(chatRoomItem.getUser2Id());
+        senderListRef.child(chatId1).child("user2Name").setValue(chatRoomItem.getUser2Name());
+        senderListRef.child(chatId1).child("readStatus").setValue(chatRoomItem.getReadStatus());
 
         // TODO: generate a unique identifier for chat room, following a specific schema/ordering
-        String chatId1 = "chat" + senderId + "_" + recieverId;
-        String chatId2 = "chat" + recieverId + "_" + senderId;
+        // String chatId2 = "chat" + recieverId + "_" + senderId;
+        /** TODO: check if chat already exists between the two users
         CompletableFuture<String> checkSendChatId1 = checkChatRoomExists(senderListRef, chatId1);
         CompletableFuture<String> checkSendChatId2 = checkChatRoomExists(senderListRef, chatId2);
         CompletableFuture<String> checkReciChatId1 = checkChatRoomExists(recieverListRef, chatId1);
@@ -110,8 +131,11 @@ public class ChatController {
             // add chat room to both ids
             senderListRef.push().setValue(chatId1);
             recieverListRef.push().setValue(chatId1);
-            chatroomsRef.push().setValue(chatId1);
+            chatroomsRef.child().setValue(chatId1);
         }
+        */
+
+
         return resultFuture;
     }
 
@@ -155,4 +179,5 @@ public class ChatController {
         });
         return resultFuture;
     }
+
 }

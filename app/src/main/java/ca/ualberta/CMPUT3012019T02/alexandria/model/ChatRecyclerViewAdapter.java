@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ChatRoomActivity;
 
 public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder> {
 
@@ -47,7 +48,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
                 bundle.putString("recieverId", mChatRoomList.get(mViewHolder.getAdapterPosition()).getUser2Id());
 
                 intent.putExtra("bundle", bundle);
-                startActivity(intent);
+                mContext.startActivity(intent);
             }
         });
 

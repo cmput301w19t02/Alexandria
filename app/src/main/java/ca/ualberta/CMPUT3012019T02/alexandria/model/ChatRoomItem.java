@@ -17,11 +17,14 @@ public class ChatRoomItem {
     public ChatRoomItem() {
     }
     // TODO: Checks on setters for tests
-    public ChatRoomItem(String user2Id, String chatRoomId, boolean readStatus, String user2Name) {
-        this.user2Id = user2Id;
+    public ChatRoomItem(String chatRoomId, String user1Id, String user1Name,
+                        String user2Id, String user2Name, boolean readStatus) {
         this.chatRoomId = chatRoomId;
-        this.readStatus = readStatus;
+        this.user1Id=user1Id;
+        this.user1Name= user1Name;
+        this.user2Id = user2Id;
         this.user2Name = user2Name;
+        this.readStatus = readStatus;
     }
 
     @Exclude
