@@ -20,13 +20,16 @@
         app:popupTheme="@style/CustomPopupStyle">
 
         <TextView
+            android:id="@+id/reciever_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-light"
             android:text="@string/joe_message"
             android:textColor="@color/colorYellow"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            tools:layout_editor_absoluteX="135dp"
+            tools:layout_editor_absoluteY="12dp" />
 
     </android.support.v7.widget.Toolbar>
 
@@ -45,8 +48,16 @@
             android:src="@drawable/ic_add_photo"
             android:onClick="onAddPhotoClick"/>
 
+        <ImageView
+            android:id="@+id/image_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/add_location_description"
+            android:onClick="onAddLocationClick"
+            android:src="@drawable/ic_add_location" />
+
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/edit_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -56,14 +67,6 @@
             android:inputType="textLongMessage"
             android:textColor="@color/colorBlack"
             android:textSize="19sp" />
-
-        <ImageView
-            android:id="@+id/image_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/add_location_description"
-            android:src="@drawable/ic_add_location"
-            android:onClick="onAddLocationClick"/>
 
         <ImageView
             android:id="@+id/image_send"
@@ -77,6 +80,7 @@
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/message_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"

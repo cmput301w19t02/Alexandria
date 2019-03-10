@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class TextMessage extends Message {
 
-    public TextMessage(String content, String status, String/*Date*/ date, String sender) {
+    public TextMessage(String content, String status, String date, String sender) {
         super("text", content, status, date, sender);
     }
 

@@ -7,13 +7,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.model.ChatRoomItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
@@ -35,43 +29,6 @@ public class ChatController {
         return instance;
     }
 
-    // MessageFragment necessary methods
-
-    /**
-     * Gets a chat room ids from database as a list of strings.
-     * @param id a string that is the id of the current user
-     * @return a CompletableFuture with Map type of
-     */
-    /** THESE TWO METHODS MIGHT NOT BE NECESSARY since we can get the chat room list data straight
-     * from the data base in message fragment.
-    public CompletableFuture<Map<String, Object>> getChatRoomList(String id){
-        return getChatRoomsListPrivate(id);
-    }
-
-    private CompletableFuture<Map<String, Object>> getChatRoomsListPrivate(String id) {
-        // TODO: Finish implementation, somehow send a map with future
-        // gets list of my chat rooms
-        final CompletableFuture<Map<String, Object>> resultFuture = new CompletableFuture<>();
-
-        database.getReference().child("users").child(id).child("chatRoomList").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<String> chatRoomIds = new ArrayList<String>();
-                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    chatRoomIds.add(childSnapshot.getValue(String.class));
-                }
-                resultFuture.complete();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                resultFuture.completeExceptionally(databaseError.toException());
-            }
-        });
-
-        return resultFuture;
-    }
-    */
     /**
      * Adds new chat room to both me and the person I want to message. Also checks if there is
      * already a chat between the two.
@@ -92,11 +49,13 @@ public class ChatController {
         CompletableFuture<UserProfile> user1Future = UserController.getInstance().getUserProfile(senderId);
         CompletableFuture<UserProfile> user2Future = UserController.getInstance().getUserProfile(recieverId);
 
-        UserProfile user1 = user1Future.get();
-        UserProfile user2 = user2Future.get();
+        //UserProfile user1 = user1Future.getNow();
+        //UserProfile user2 = user2Future.getNow();
 
-        String user1Name = user1.getUsername();
-        String user2Name = user2.getUsername();
+        String user1Name = "Joe";
+        String user2Name = "Sandy";
+        //String user1Name = user1.getUsername();
+        //String user2Name = user2.getUsername();
 
         String chatId1 = "chat" + senderId + "_" + recieverId;
         ChatRoomItem chatRoomItem = new ChatRoomItem(chatId1, senderId, user1Name, recieverId, user2Name, false);

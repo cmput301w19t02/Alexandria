@@ -3,24 +3,52 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.connection.util.StringListReader;
+
+import java.util.List;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.MessageRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.message.TextMessage;
 
 public class ChatRoomActivity extends AppCompatActivity {
+
+    private DatabaseReference messagesRef;
+    private ValueEventListener messagesListener;
+
+    private List<Message> messageList;
+    private String chatId;
+    private String recieverId;
+    private String senderId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
+
 
         // toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.ChatRoom_toolbar);
@@ -34,6 +62,61 @@ public class ChatRoomActivity extends AppCompatActivity {
                 finish();
             }
         });
+        // TODO: get data from Firebase and set onClickListener
+        // messages
+        messagesRef = FirebaseDatabase.getInstance().getReference().child("chatMessages").child(chatId);
+        messagesListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()){
+                        Message message = childSnapshot.getValue(Message.class);
+                        messageList.add(message);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                throw new RuntimeException("Could not load data from database " + databaseError);
+            }
+        };
+        messagesRef.addValueEventListener(messagesListener);
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getBundleExtra("bundle");
+        chatId = bundle.getString("chatId");
+        recieverId = bundle.getString("recieverId");
+        senderId = UserController.getInstance().getMyId();
+
+        ImageView sendButton = (ImageView)findViewById(R.id.image_send);
+
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText input = (EditText)findViewById(R.id.edit_message);
+                String inputText = input.getText().toString();
+                onSendMessageClick(inputText, senderId, messagesRef);
+                input.setText("");
+            }
+        });
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        // TODO: set adapter for list view, fill with data from Firebase listeners
+        RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.message_recycler);
+        MessageRecyclerViewAdapter adapter = new MessageRecyclerViewAdapter(this, messageList);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        messagesRef.removeEventListener(messagesListener);
     }
 
     @Override
@@ -97,8 +180,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         Toast.makeText(this , "Add Location", Toast.LENGTH_LONG).show();
     }
 
-    protected void onSendMessageClick(View view) {
-        //TODO implement function
-        Toast.makeText(this , "Send", Toast.LENGTH_LONG).show();
+    protected void onSendMessageClick(String inputText, String senderId, DatabaseReference ref) {
+        TextMessage message = new TextMessage(inputText, "unread", "", senderId);
+        ref.push().setValue(message);
     }
 }
