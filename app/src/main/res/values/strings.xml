@@ -18,12 +18,12 @@
     </string>
     <string name="search_hint">Author, Title, or ISBN</string>
     <string name="nav_profile">Profile</string>
-    <!-- Strings related to user profile -->
+    <!-- Strings related to my profile -->
     <string name="image_desc">User Logo</string>
     <string name="profile_username">Username</string>
     <string name="profile_name">Full Name</string>
     <string name="profile_email">Email</string>
-    <!-- Strings related to edit profile -->
+    <!-- Strings related to edit my profile -->
     <string name="edit_profile_name">Full Name</string>
     <string name="edit_profile_username">Username</string>
     <string name="edit_profile_password">Password</string>
@@ -31,4 +31,11 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="blocked_users">Blocked Users</string>
     <string name="edit_profile_save">Save Changes</string>
+    <!-- Strings related to view user profile -->
+    <string name="set_username">Set Username</string>
+    <string name="name_background_desc">background</string>
+    <string name="view_user_name">Full Name</string>
+    <string name="view_user_available_books">Available Books</string>
+    <string name="message_user_title">Message</string>
+    <string name="block_user_title">Block User</string>
 </resources>

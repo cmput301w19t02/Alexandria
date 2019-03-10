@@ -31,7 +31,28 @@ public class MainActivity extends AppCompatActivity
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
 
-        loadFragment(new ExchangeFragment());
+        // get a specific fragment to show, otherwise, shows exchange tab be default
+        Intent intent = getIntent();
+        if (intent.hasExtra("fragment_name")) {
+            String fragment_name = intent.getStringExtra("fragment_name");
+            Fragment fragment = null;
+            switch(fragment_name) {
+                case "message":
+                    fragment = new MessagesFragment();
+                    loadFragment(fragment);
+                    navigation.getMenu().getItem(2).setChecked(true);
+                    break;
+                case "library":
+                    fragment = new LibraryFragment();
+                    loadFragment(fragment);
+                    navigation.getMenu().getItem(1).setChecked(true);
+                    break;
+                default:
+                    throw new RuntimeException("Fragment name is incorrect");
+            }
+        } else {
+            loadFragment(new ExchangeFragment());
+        }
     }
 
     private boolean loadFragment(Fragment fragment) {
