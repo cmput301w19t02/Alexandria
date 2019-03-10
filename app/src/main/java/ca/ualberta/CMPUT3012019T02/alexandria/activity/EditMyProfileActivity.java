@@ -8,15 +8,23 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
+/**
+ * Edit current user profile activity
+ * sets edit text boxes to current value as in user profile
+ * allows to enter new values and save them.
+ * If new values are valid saves them
+ */
 public class EditMyProfileActivity extends AppCompatActivity {
 
+    private UserController userController;
     private UserProfile myUserProfile;
 
     private EditText editText_name;
     private EditText editText_username;
-    private EditText editText_password;
+    // private EditText editText_password;
     private EditText editText_email;
 
     @Override
@@ -50,7 +58,7 @@ public class EditMyProfileActivity extends AppCompatActivity {
 
         editText_name = (EditText) findViewById(R.id.editText_name);
         editText_username = (EditText) findViewById(R.id.editText_username);
-        editText_password = (EditText) findViewById(R.id.editText_password);
+        //editText_password = (EditText) findViewById(R.id.editText_password);
         editText_email = (EditText) findViewById(R.id.editText_email);
         //ImageView image_avatar = (ImageView) findViewById(R.id.user_image);
 
@@ -65,9 +73,34 @@ public class EditMyProfileActivity extends AppCompatActivity {
         //image_avatar. set image
     }
 
+    /** //TODO make use
+     * get userProfile of the current user from the database
+     */
+    private void getCurrentUserProfile() {
+        userController = UserController.getInstance();
+        myUserProfile = null;
+        userController.getMyProfile().handleAsync((result, error) -> {
+            if(error == null) {
+                // Set a class variable
+                myUserProfile = result;
+            }
+            else {
+                // Show error message
+                Toast.makeText(this , "Profile is not recognize", Toast.LENGTH_LONG).show();
+                myUserProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown");
+            }
+            return null;
+        });
+    }
+
+    /**
+     * attempts to set editTexts to values entered, if no error
+     * saves userProfile, otherwise, shows an error
+     * @param view View
+     */
     //TODO add avatar change options etc
     protected void onSaveButtonClick(View view) {
-        //TODO password save + change
+        //TODO decide if to have password
 
         String newUsername = editText_username.getText().toString();
         String newName = editText_name.getText().toString();
@@ -79,6 +112,7 @@ public class EditMyProfileActivity extends AppCompatActivity {
             myUserProfile.setName(newName);
             // password set
             myUserProfile.setEmail(newEmail);
+            // TODO update on firebase userprofile
             Toast.makeText(this , "Changes Saved", Toast.LENGTH_LONG).show();
             finish();
         } catch (IllegalArgumentException e) {

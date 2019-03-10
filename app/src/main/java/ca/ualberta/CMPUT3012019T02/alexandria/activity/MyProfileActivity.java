@@ -10,15 +10,38 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
+/**
+ * Activity for my profile of a current user
+ * Shows its name, username, email address,
+ * provides navigation to blocked users activity
+ * and edit my profile activity
+ */
 public class MyProfileActivity extends AppCompatActivity {
 
+    private UserController userController;
     private UserProfile myUserProfile;
+
+    //TODO Remove when user is able to login
+    private void logIn() {
+        String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
+        String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
+        userController.authenticate(username, password).handleAsync((result,error)->{
+            if(error == null){
+                if (userController.isAuthenticated()) {
+                    System.out.println("Authenticated!");
+                }
+            }
+            return null;
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +61,34 @@ public class MyProfileActivity extends AppCompatActivity {
             }
         });
 
-        //TODO get user details from firebase
-        myUserProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
+        // TODO make uses of loggen in user whem it is done
+        //getCurrentUserProfile();
+        myUserProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown"); //TODO temp
     }
 
+    /**
+     * get userProfile of the current user from the database
+     */
+    private void getCurrentUserProfile() {
+        userController = UserController.getInstance();
+        myUserProfile = null;
+        userController.getMyProfile().handleAsync((result, error) -> {
+            if(error == null) {
+                // Set a class variable
+                myUserProfile = result;
+            }
+            else {
+                // Show error message
+                Toast.makeText(this , "Profile is not recognize", Toast.LENGTH_LONG).show();
+                myUserProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown");
+            }
+            return null;
+        });
+    }
+
+    /**
+     * sets  user details as in user profile
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -62,7 +109,6 @@ public class MyProfileActivity extends AppCompatActivity {
         textView_name.setText(name);
         textView_email.setText(email);
         //image_avatar. set image
-
     }
 
     @Override
@@ -75,7 +121,7 @@ public class MyProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
+            //menu switch
             case R.id.edit_profile:
                 // edit activity
                 Intent startEditProfile = new Intent(this, EditMyProfileActivity.class);
