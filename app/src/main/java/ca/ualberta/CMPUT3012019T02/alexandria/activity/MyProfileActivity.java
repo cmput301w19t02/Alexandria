@@ -8,10 +8,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
 public class MyProfileActivity extends AppCompatActivity {
+
+    private UserProfile myUserProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +37,32 @@ public class MyProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //TODO get user details from firebase
+        myUserProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //TODO set image as in the profile if exists
+
+        TextView textView_username = (TextView) findViewById(R.id.textView_username);
+        TextView textView_name = (TextView) findViewById(R.id.textView_name);
+        TextView textView_email = (TextView) findViewById(R.id.textView_email);
+        //ImageView image_avatar = (ImageView) findViewById(R.id.user_image);
+
+        String username = myUserProfile.getUsername();
+        String name = myUserProfile.getName();
+        String email = myUserProfile.getEmail();
+        //String avatarID = myUserProfile.getPicture();
+
+        textView_username.setText(username);
+        textView_name.setText(name);
+        textView_email.setText(email);
+        //image_avatar. set image
+
     }
 
     @Override
