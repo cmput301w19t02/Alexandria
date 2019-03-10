@@ -120,6 +120,9 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                 blockAlert.show();
 
                 break;
+            case R.id.user_profile_setting:
+                // open menu
+                break;
             default:
                 throw new RuntimeException("Unknown option");
         }
