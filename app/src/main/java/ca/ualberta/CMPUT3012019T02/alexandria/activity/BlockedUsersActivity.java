@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -26,5 +27,11 @@ public class BlockedUsersActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    //TODO remove when there is a straight pass to view user
+    protected void onJoeTestClick(View view) {
+        Intent startProfileActivity = new Intent(this, ViewUserProfileActivity.class);
+        startActivity(startProfileActivity);
     }
 }
