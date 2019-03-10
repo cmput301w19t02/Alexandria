@@ -141,6 +141,7 @@
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:paddingTop="11dp"
-        android:paddingBottom="11dp"/>
+        android:paddingBottom="11dp"
+        android:onClick="onSaveButtonClick"/>
 
 </android.support.constraint.ConstraintLayout>
