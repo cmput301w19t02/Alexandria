@@ -53,8 +53,11 @@ public class MyProfileActivity extends AppCompatActivity {
                 Intent startBlockedUsers = new Intent(this, BlockedUsersActivity.class);
                 startActivity(startBlockedUsers);
                 break;
+            case R.id.profile_setting:
+                // open menu
+                break;
             default:
-                // unknown error
+                throw new RuntimeException("Unknown option");
         }
         return super.onOptionsItemSelected(item);
     }

@@ -7,7 +7,7 @@
     tools:context=".activity.ChatRoomActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/edit_my_profile_toolbar"
+        android:id="@+id/ChatRoom_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentEnd="true"
@@ -31,6 +31,7 @@
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:orientation="horizontal"
@@ -41,7 +42,8 @@
             android:id="@+id/image_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_photo" />
+            android:src="@drawable/ic_add_photo"
+            android:onClick="onAddPhotoClick"/>
 
         <EditText
             android:id="@+id/editText2"
@@ -60,16 +62,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/add_location_description"
-            android:src="@drawable/ic_add_location" />
+            android:src="@drawable/ic_add_location"
+            android:onClick="onAddLocationClick"/>
 
         <ImageView
             android:id="@+id/image_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/send_description"
-            android:src="@drawable/ic_send" />
+            android:src="@drawable/ic_send"
+            android:onClick="onSendMessageClick"/>
 
 
     </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_my_profile_toolbar" />
 
 </android.support.constraint.ConstraintLayout>
