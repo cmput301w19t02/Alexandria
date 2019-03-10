@@ -26,22 +26,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
  */
 public class MyProfileActivity extends AppCompatActivity {
 
-    private UserController userController;
     private UserProfile myUserProfile;
-
-    //TODO Remove when user is able to login
-    private void logIn() {
-        String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
-        String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
-        userController.authenticate(username, password).handleAsync((result,error)->{
-            if(error == null){
-                if (userController.isAuthenticated()) {
-                    System.out.println("Authenticated!");
-                }
-            }
-            return null;
-        });
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +55,7 @@ public class MyProfileActivity extends AppCompatActivity {
      * get userProfile of the current user from the database
      */
     private void getCurrentUserProfile() {
-        userController = UserController.getInstance();
+        UserController userController = UserController.getInstance();
         myUserProfile = null;
         userController.getMyProfile().handleAsync((result, error) -> {
             if(error == null) {
