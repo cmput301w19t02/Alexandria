@@ -9,11 +9,8 @@ public class BorrowedBook extends UserBook {
     }
 
     public BorrowedBook(String isbn, String status, String owner) {
-        super(isbn, null);
+        super(isbn, status);
 
-        if (status == null || status.trim().isEmpty()) {
-            throw new IllegalArgumentException("Status cannot be null or empty");
-        }
         if (owner == null || owner.trim().isEmpty()) {
             throw new IllegalArgumentException("Owner cannot be null or empty");
         }
