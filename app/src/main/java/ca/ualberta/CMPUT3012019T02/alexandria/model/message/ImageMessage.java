@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class ImageMessage extends Message {
 
-    public ImageMessage(String content, String status, Date date, String sender) {
+    public ImageMessage(String content, String status, String /*Date*/date, String sender) {
         super("image", content, status, date, sender);
     }
 

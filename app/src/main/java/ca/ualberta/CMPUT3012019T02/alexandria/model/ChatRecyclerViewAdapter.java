@@ -43,6 +43,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
                 Intent intent = new Intent(viewGroup.getContext(), ChatRoomActivity.class);
                 Bundle bundle = new Bundle();
 
+                //TODO UNCOMMENT
                 //bundle.putParcelable("user_pic", mChatRoomList.get(mViewHolder.getAdapterPosition()).getUserPic());
                 bundle.putString("chatId", mChatRoomList.get(mViewHolder.getAdapterPosition()).getChatRoomId());
                 bundle.putString("recieverId", mChatRoomList.get(mViewHolder.getAdapterPosition()).getUser2Id());
