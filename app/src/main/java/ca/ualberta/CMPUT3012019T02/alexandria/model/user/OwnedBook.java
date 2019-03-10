@@ -11,11 +11,23 @@ public class OwnedBook extends UserBook {
     private String userBorrowing;
 
     /**
-     * @deprecated Do not use. This constructor is for automatic object creation using Firebase only.
+     * No args constructor to maintain compatibility with Firebase deserializer
+     * DO NOT USE
+     * @deprecated
      */
     @Deprecated
     public OwnedBook() {
         super(null, null);
+        usersRequesting = new ArrayList<>();
+        images = new ArrayList<>();
+    }
+
+    public OwnedBook(String isbn) {
+        super(isbn, "available");
+
+        userBorrowing = null;
+        usersRequesting = new ArrayList<>();
+        images = new ArrayList<>();
     }
 
     public OwnedBook(String isbn, String status, String userBorrowing) {

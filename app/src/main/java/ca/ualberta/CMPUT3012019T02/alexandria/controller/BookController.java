@@ -22,13 +22,6 @@ import java9.util.concurrent.CompletableFuture;
  */
 public class BookController {
 
-    /*
-        Notes:
-        Finish transactions
-        Make tests
-        What if data changes in the middle of a transaction?
-     */
-
     private DatabaseReference database;
 
     private static BookController instance;
@@ -138,6 +131,9 @@ public class BookController {
     /* Book transaction methods */
 
 
+    // TODO: transaction methods for next project part
+
+
     // From the perspective of a borrower
 
     /**
@@ -150,10 +146,14 @@ public class BookController {
         final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
             try {
 
+                if (getMyUserId().equals(id)) {
+                    throw new IllegalArgumentException("You can not request a book from yourself");
+                }
+
                 OwnedBook ownedBook = getUserOwnedBook(id, isbn).get();
 
                 // If the owned book status is not available or requested, then it's not able to be requested.
-                if (!(ownedBook.getStatus() == "available" || ownedBook.getStatus() == "requested")) {
+                if (!(ownedBook.getStatus().equals("available") || ownedBook.getStatus().equals("requested"))) {
                     throw new IllegalStateException("The book is not available to be requested from this owner");
                 }
                 // Otherwise, proceed with the request
