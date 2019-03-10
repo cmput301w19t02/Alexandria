@@ -21,7 +21,9 @@ public class Book {
      * DO NOT USE
      */
     @Deprecated
-    public Book() {}
+    public Book() {
+        availableOwners = new ArrayList<>();
+    }
 
     public Book(String isbn, String imageId, String title, String author, String description, Date date) {
         if (isbn == null || isbn.trim().isEmpty()) {

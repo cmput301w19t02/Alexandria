@@ -10,6 +10,9 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
@@ -158,13 +161,14 @@ public class BookController {
                 }
                 // Otherwise, proceed with the request
 
-                // Set the status and add the current user to the collection of users requesting the book
-                ownedBook.setStatus("requested");
-                ownedBook.addUserRequesting(getMyUserId());
-
                 // Create and add a borrowed book to the current user's collection
                 BorrowedBook borrowedBook = new BorrowedBook(isbn, "requested", id);
                 addMyBorrowedBook(borrowedBook).get();
+
+                // Set the status and add the current user to the collection of users requesting the book
+                ownedBook.setStatus("requested");
+                ownedBook.addUserRequesting(getMyUserId());
+                updateUserOwnedBook(id, ownedBook).get();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -359,7 +363,8 @@ public class BookController {
     // Owned
 
     private CompletableFuture<Void> addUserOwnedBook(@NonNull String id, @NonNull OwnedBook ownedBook) {
-        return addUserBook("ownedBooks", OwnedBook.class, id, ownedBook);
+        return addUserBook("ownedBooks", OwnedBook.class, id, ownedBook).thenCombine(
+            addAvailableOwner(id, ownedBook.getIsbn()), (aVoid, aVoid2) -> null);
     }
 
     /**
@@ -382,10 +387,18 @@ public class BookController {
     }
 
     private CompletableFuture<Void> updateUserOwnedBook(@NonNull String id, @NonNull OwnedBook ownedBook) {
-        return updateUserBook("ownedBooks", id, ownedBook);
+       CompletableFuture<Void> updateUserBookFuture = updateUserBook("ownedBooks", id, ownedBook);
+       CompletableFuture<Void> updateAvailableOwnerFuture;
+       if (ownedBook.getStatus().equals("available") || ownedBook.getStatus().equals("requested")) {
+           updateAvailableOwnerFuture = addAvailableOwner(id, ownedBook.getIsbn());
+       } else {
+           updateAvailableOwnerFuture = removeAvailableOwner(id, ownedBook.getIsbn());
+       }
+       return updateUserBookFuture.thenCombine(updateAvailableOwnerFuture, ((aVoid, aVoid2) -> null));
+
     }
     private CompletableFuture<Void> deleteUserOwnedBook(@NonNull String id, @NonNull String isbn) {
-        return deleteUserBook("ownedBooks", id, isbn);
+        return deleteUserBook("ownedBooks", id, isbn).thenCombine(removeAvailableOwner(id, isbn), ((aVoid, aVoid2) -> null));
     }
 
 
@@ -472,6 +485,46 @@ public class BookController {
                 .addOnFailureListener(future::completeExceptionally);
 
         return future;
+    }
+
+
+    /* Updating Available Book Owners */
+
+
+    private CompletableFuture<Void> addAvailableOwner(String id, String isbn) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                Book book = getBook(isbn).get(5, TimeUnit.SECONDS);
+                if (book.getAvailableOwners().contains(id)) {
+                    return;
+                }
+                book.addAvailableOwners(id);
+                updateBook(book).get(5, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private CompletableFuture<Void> removeAvailableOwner(String id, String isbn) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                Book book = getBook(isbn).get(5, TimeUnit.SECONDS);
+                book.removeAvailableOwners(id);
+                updateBook(book).get(5, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
     }
 
 
