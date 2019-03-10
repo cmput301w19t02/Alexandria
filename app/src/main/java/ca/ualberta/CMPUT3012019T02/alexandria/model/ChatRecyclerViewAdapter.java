@@ -49,8 +49,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
                 bundle.putString("recieverId", mChatRoomList.get(mViewHolder.getAdapterPosition()).getUser2Id());
 
                 intent.putExtra("bundle", bundle);
-                //TODO UNCOMMENT
-                //startActivity(intent);
+                mContext.startActivity(intent);
             }
         });
 
