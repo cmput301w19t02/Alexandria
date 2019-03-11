@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.model;
+package ca.ualberta.CMPUT3012019T02.alexandria.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,8 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ChatRoomActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.ChatViewHolder;
 
 /**
  * Recycler View adapter for the chat room list in MessageFragment. Sets up an on click listener
@@ -25,6 +27,12 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
     private Context mContext;
     private List<ChatRoomItem> mChatRoomList;
 
+    /**
+     * Instantiates a new Chat recycler view adapter.
+     *
+     * @param mContext      the application context
+     * @param mChatRoomList the chat room list
+     */
     public ChatRecyclerViewAdapter(Context mContext, List<ChatRoomItem> mChatRoomList) {
         this.mContext = mContext;
         this.mChatRoomList = mChatRoomList;
@@ -90,6 +98,11 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
         return mChatRoomList.size();
     }
 
+    /**
+     * Update chat room list.
+     *
+     * @param newList the new list
+     */
     public void updateChatRoomList(List<ChatRoomItem> newList){
         mChatRoomList = newList;
     }

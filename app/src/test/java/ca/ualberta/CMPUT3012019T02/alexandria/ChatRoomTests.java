@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.ChatRoom;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoom;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.TextMessage;
 
@@ -31,7 +31,7 @@ public class ChatRoomTests {
     public void setMessagesTest() {
         ChatRoom chatRoom = new ChatRoom("6588a715-1651-4d44-94bc-ee0a40176a93");
         List<Message> messages = new ArrayList<>();
-        messages.add(new TextMessage("Hello", "read", new Date(), "johnsmith"));
+        messages.add(new TextMessage("Hello", "read", new Date().toString(), "johnsmith"));
         chatRoom.setMessages(messages);
         assertEquals(messages, chatRoom.getMessages());
     }
@@ -39,7 +39,7 @@ public class ChatRoomTests {
     @Test(expected = UnsupportedOperationException.class)
     public void unmodifiableGetMessagesTest() {
         ChatRoom chatRoom = new ChatRoom("6588a715-1651-4d44-94bc-ee0a40176a93");
-        chatRoom.getMessages().add(new TextMessage("Hello", "read", new Date(), "johnsmith"));
+        chatRoom.getMessages().add(new TextMessage("Hello", "read", new Date().toString(), "johnsmith"));
     }
 
     @Test(expected = IllegalArgumentException.class)

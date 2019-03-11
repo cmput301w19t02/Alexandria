@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.model;
+package ca.ualberta.CMPUT3012019T02.alexandria.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,17 +10,24 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.MessageViewHolder;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 
 
 /**
- *
+ * The Message recycler view adapter.
  */
 public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     private Context mContext;
     private List<Message> mMessageList;
 
+    /**
+     * Instantiates a new Message recycler view adapter.
+     *
+     * @param mContext     the application context
+     * @param mMessageList the message list
+     */
     public MessageRecyclerViewAdapter(Context mContext, List<Message> mMessageList) {
         this.mContext = mContext;
         this.mMessageList = mMessageList;
@@ -51,6 +58,11 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageView
         return mMessageList.size();
     }
 
+    /**
+     * Update message list.
+     *
+     * @param messageList the new message list
+     */
     public void updateMessageList(List<Message> messageList){
         mMessageList = messageList;
     }

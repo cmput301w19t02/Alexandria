@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria;
+package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -8,8 +8,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;

@@ -30,6 +30,10 @@ public class ImageController {
         this.storage = FirebaseStorage.getInstance().getReference().child("images");
     }
 
+    /**
+     * Gets the singleton instance of this controller
+     * @return instance of ImageController
+     */
     public static ImageController getInstance() {
         if (instance == null) {
             instance = new ImageController();

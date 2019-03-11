@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.model;
+package ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom;
 
 import java.util.ArrayList;
 import java.util.Collections;

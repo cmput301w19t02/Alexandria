@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria;
+package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
 import org.junit.Assert;
 import org.junit.Rule;

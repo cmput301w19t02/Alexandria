@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.model;
+package ca.ualberta.CMPUT3012019T02.alexandria.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,20 +14,27 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.fragment.SearchFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.UserBookFragment;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.BookViewHolder;
 
 /**
- *  Set up RecyclerView for book lists that direct to UserBookFragment
- *  Code implemented from https://youtu.be/T_QfRU-A3s4 on 03/04/2019
+ * Set up RecyclerView for book lists that direct to UserBookFragment
+ * Code based on code from https://youtu.be/T_QfRU-A3s4 on 03/04/2019
  */
-
 public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder> {
 
     private Context mContext;
     private List<BookList> mBookList;
     private String destination;
 
+    /**
+     * Instantiates a new Book recycler view adapter.
+     *
+     * @param mContext    the application context
+     * @param mBookList   the book list
+     * @param destination the destination
+     */
     public BookRecyclerViewAdapter(Context mContext,
                                    List<BookList> mBookList, String destination) {
         this.mContext = mContext;

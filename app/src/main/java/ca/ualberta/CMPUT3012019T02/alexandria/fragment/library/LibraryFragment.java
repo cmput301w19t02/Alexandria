@@ -9,13 +9,9 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.AcceptedFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.BorrowedFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.RequestedFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.TabsAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.adapter.TabsAdapter;
 
 /**
  * Created as a fragment by MainActivity

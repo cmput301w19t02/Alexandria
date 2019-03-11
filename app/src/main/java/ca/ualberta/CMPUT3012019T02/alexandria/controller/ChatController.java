@@ -1,18 +1,20 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.ChatRoomItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 import java9.util.concurrent.CompletableFuture;
 
+/**
+ * The controller for chat functionality
+ */
 public class ChatController {
     private FirebaseDatabase database;
 
@@ -22,6 +24,10 @@ public class ChatController {
         database = FirebaseDatabase.getInstance();
     }
 
+    /**
+     * Gets the singleton instance of this controller
+     * @return instance of ChatController
+     */
     public static ChatController getInstance() {
         if (instance == null) {
             instance = new ChatController();
@@ -32,8 +38,10 @@ public class ChatController {
     /**
      * Adds new chat room to both me and the person I want to message. Also checks if there is
      * already a chat between the two.
-     * @param senderId my user id
+     *
+     * @param senderId   my user id
      * @param recieverId the person I want to message's id
+     * @return the completable future
      */
     public CompletableFuture<Void> addChatRoom(String senderId, String recieverId){
         return addChatRoomPrivate(senderId, recieverId);

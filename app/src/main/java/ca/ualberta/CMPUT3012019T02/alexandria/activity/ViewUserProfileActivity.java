@@ -23,6 +23,9 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
+/**
+ * The shows the a user's profile.
+ */
 public class ViewUserProfileActivity extends AppCompatActivity {
 
     //private List<BookList> ownedBooks;

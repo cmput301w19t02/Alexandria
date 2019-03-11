@@ -30,7 +30,7 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.MessageRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.adapter.MessageRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.TextMessage;
 
