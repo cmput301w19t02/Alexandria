@@ -44,4 +44,10 @@
     <string name="view_user_available_books">Available Books</string>
     <string name="message_user_title">Message</string>
     <string name="block_user_title">Block User</string>
+    <!-- Strings related to chat room -->
+    <string name="joe_message">Joe Message</string>
+    <string name="add_location_description">add_location</string>
+    <string name="send_description">send_button</string>
+    <string name="view_profile_title">View Profile</string>
+    <string name="message_hint">Type your message</string>
 </resources>
