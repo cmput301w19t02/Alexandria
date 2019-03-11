@@ -8,7 +8,7 @@ public class BorrowedBook extends UserBook {
 
     /**
      * No args constructor to maintain compatibility with Firebase deserializer
-     * TO BE USED BY BOOK CONTROLLER ONLY
+     * TO BE USED BY FIREBASE ONLY
      */
     @Deprecated
     public BorrowedBook() {
