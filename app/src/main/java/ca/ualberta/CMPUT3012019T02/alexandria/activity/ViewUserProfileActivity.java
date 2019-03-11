@@ -41,7 +41,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_profile);
 
         Bundle extras = getIntent().getExtras();
-        if(extras == null) {
+        if (extras == null) {
             userID = null;
         } else {
             userID = extras.getString("USER_ID");
@@ -82,7 +82,20 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         });
 
         //TODO temp
-        userProfile = new UserProfile("Joe Example","john@example.com","7801234567",null,"joe_username");
+        //getCurrentUserProfile();
+        //userProfile = new UserProfile("Joe Example","john@example.com","7801234567",null,"joe_username");
+        UserController userController = UserController.getInstance();
+        userController.getUserProfile(userID).handleAsync((result, error) -> {
+            if(error == null) {
+                // Update ui here
+            }
+            else {
+                // Show error message
+                Toast.makeText(this , "Profile is not recognized", Toast.LENGTH_LONG).show();
+                userProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown");
+            }
+            return null;
+        });
 
         //TODO implement book list
         // Recycler View
@@ -121,7 +134,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
     private void getCurrentUserProfile() {
         UserController userController = UserController.getInstance();
         userProfile = null;
-        userController.getMyProfile().handleAsync((result, error) -> {
+        userController.getUserProfile(userID).handleAsync((result, error) -> {
             if(error == null) {
                 // Set a class variable
                 userProfile = result;
