@@ -12,6 +12,8 @@ public abstract class Message {
     private String date;
     private String sender;
 
+    public Message(){}
+
     public Message(String type, String content, String status, String date, String sender) {
         if (type == null || type.isEmpty()) {
             throw new IllegalArgumentException("Type cannot be null or empty");

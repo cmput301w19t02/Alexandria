@@ -1,12 +1,12 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.ChatRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.ChatRoomItem;
 
@@ -61,14 +60,6 @@ public class MessagesFragment extends Fragment {
             }
         };
         chatRoomListRef.addValueEventListener(chatListener);
-        if (chatRoomList.isEmpty()){
-            Log.d("MESSAGE_FRAGMENT", "Chat Room List is empty");
-        } else {
-            Log.d("MESSAGE_FRAGMENT", "Chat Room List is NOT empty");
-        }
-        for (ChatRoomItem i : chatRoomList) {
-            Log.d("MESSAGE_FRAGMENT","########## chatRoom List"+ i.getUser1Id());
-        }
     }
 
     @Nullable
@@ -81,8 +72,6 @@ public class MessagesFragment extends Fragment {
         adapter = new ChatRecyclerViewAdapter(getContext(), chatRoomList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(adapter);
-        adapter.updateChatRoomList(chatRoomList);
-        adapter.notifyDataSetChanged();
 
         return rootView;
     }
@@ -90,8 +79,17 @@ public class MessagesFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        adapter.updateChatRoomList(chatRoomList);
-        adapter.notifyDataSetChanged();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adapter.updateChatRoomList(chatRoomList);
+                adapter.notifyDataSetChanged();
+            }
+        }, 2000);
+        //adapter.updateChatRoomList(chatRoomList);
+        //adapter.notifyDataSetChanged();
     }
 
     @Override

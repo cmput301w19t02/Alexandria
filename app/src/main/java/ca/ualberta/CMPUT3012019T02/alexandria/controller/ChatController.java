@@ -60,7 +60,7 @@ public class ChatController {
         String chatId1 = "chat" + senderId + "_" + recieverId;
         ChatRoomItem chatRoomItem = new ChatRoomItem(chatId1, senderId, user1Name, recieverId, user2Name, false);
 
-        senderListRef.child(chatId1).child("chatId").setValue(chatRoomItem.getChatRoomId());
+        senderListRef.child(chatId1).child("chatId").setValue(chatRoomItem.getChatId());
         senderListRef.child(chatId1).child("user1Id").setValue(chatRoomItem.getUser1Id());
         senderListRef.child(chatId1).child("user1Name").setValue(chatRoomItem.getUser1Name());
         senderListRef.child(chatId1).child("user2Id").setValue(chatRoomItem.getUser2Id());

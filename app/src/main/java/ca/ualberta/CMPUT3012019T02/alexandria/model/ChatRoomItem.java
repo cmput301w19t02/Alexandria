@@ -11,7 +11,7 @@ public class ChatRoomItem {
     private String user1Name;
     private String user2Id;
     private String user2Name;
-    private String chatRoomId;
+    private String chatId;
     private boolean readStatus;
 
     public ChatRoomItem() {
@@ -19,9 +19,9 @@ public class ChatRoomItem {
     // TODO: Checks on setters for tests
     public ChatRoomItem(String chatRoomId, String user1Id, String user1Name,
                         String user2Id, String user2Name, boolean readStatus) {
-        this.chatRoomId = chatRoomId;
+        this.chatId = chatRoomId;
         this.user1Id = user1Id;
-        this.user1Name= user1Name;
+        this.user1Name = user1Name;
         this.user2Id = user2Id;
         this.user2Name = user2Name;
         this.readStatus = readStatus;
@@ -30,7 +30,7 @@ public class ChatRoomItem {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> res = new HashMap<>();
-        res.put("chatRoomId", chatRoomId);
+        res.put("chatRoomId", chatId);
         res.put("user1Id", user1Id);
         res.put("user1Name",user1Name);
         res.put("user2Id", user2Id);
@@ -41,6 +41,7 @@ public class ChatRoomItem {
     }
 
     // TODO: Checks on setters for tests
+
     public String getUser1Id() {
         return user1Id;
     }
@@ -73,12 +74,12 @@ public class ChatRoomItem {
         this.user2Name = user2Name;
     }
 
-    public String getChatRoomId() {
-        return chatRoomId;
+    public String getChatId() {
+        return chatId;
     }
 
-    public void setChatRoomId(String chatRoomId) {
-        this.chatRoomId = chatRoomId;
+    public void setChatId(String chatRoomId) {
+        this.chatId = chatRoomId;
     }
 
     public boolean getReadStatus() {
