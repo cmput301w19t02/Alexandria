@@ -6,6 +6,9 @@ import java.util.Date;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 
+/**
+ * The Edit book activity.
+ */
 public class EditBookActivity extends AddNewBookActivity {
     private Book book;
     private String title ;
@@ -29,6 +32,9 @@ public class EditBookActivity extends AddNewBookActivity {
         throw new UnsupportedOperationException("Not implemented");
     }
 
+    /**
+     * Delete book.
+     */
     public void deleteBook() {
         // TODO: implement
         throw new UnsupportedOperationException("Not implemented");

@@ -26,10 +26,10 @@ import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
 
 /**
+ * The main screen that opens when the application opens
  * Code for bottom navigation bar
- * taken from https://www.youtube.com/watch?v=jpaHMcQDaDg on 02/24/2019
+ * based on https://www.youtube.com/watch?v=jpaHMcQDaDg on 02/24/2019
  */
-
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener, BookListProvider {
 
@@ -170,6 +170,11 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
     }
 
+    /**
+     * Handles on profile button click
+     *
+     * @param view the button clicked
+     */
     protected void onProfileButtonClick(View view) {
         Intent startProfileActivity = new Intent(this, MyProfileActivity.class);
         startActivity(startProfileActivity);

@@ -24,6 +24,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
+    /**
+     * Signs the user in using username and password
+     *
+     * @param view the signin button
+     */
     public void signIn(View view) {
         AppCompatEditText usernameField = findViewById(R.id.login_usernname_field);
         AppCompatEditText passwordField = findViewById(R.id.login_password_field);
@@ -52,6 +57,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Navigates to sign up.
+     *
+     * @param view the sign up button
+     */
     public void navigateToSignUp(View view) {
         Intent startSignUpActivity = new Intent(this, SignUpActivity.class);
         startActivity(startSignUpActivity);

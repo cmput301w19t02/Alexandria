@@ -25,9 +25,9 @@ public class User {
      * if is empty
      * Initializes HashMaps and blocked user list
      *
-     * @throws IllegalArgumentException ID and profile cannot be null
-     * @param id user id
+     * @param id      user id
      * @param profile user profile
+     * @throws IllegalArgumentException ID and profile cannot be null
      */
     public User(String id, UserProfile profile) {
         if (id == null || id.trim().isEmpty()) {
@@ -46,10 +46,20 @@ public class User {
         blockedUsers = new ArrayList<>();
     }
 
+    /**
+     * Gets chat rooms.
+     *
+     * @return the chat rooms
+     */
     public Map<String, String> getChatRooms() {
         return Collections.unmodifiableMap(chatRooms);
     }
 
+    /**
+     * Sets chat rooms.
+     *
+     * @param chatRooms the chat rooms
+     */
     public void setChatRooms(Map<String, String> chatRooms) {
         if (chatRooms == null){
             throw new IllegalArgumentException("Chat Rooms cannot be null");
@@ -58,15 +68,31 @@ public class User {
         this.chatRooms = chatRooms;
     }
 
+    /**
+     * Add chat room.
+     *
+     * @param user the user id of the other user
+     * @param uuid the uuid
+     */
     public void addChatRoom(String user, String uuid) {
         this.chatRooms.put(user,uuid);
     }
 
+    /**
+     * Remove chat room.
+     *
+     * @param user the user id of the other user
+     */
     public void removeChatRoom(String user) {
         this.chatRooms.remove(user);
     }
 
 
+    /**
+     * Gets owned books.
+     *
+     * @return the owned books
+     */
     public Map<String, OwnedBook> getOwnedBooks() {
         return Collections.unmodifiableMap(ownedBooks);
     }
@@ -75,8 +101,8 @@ public class User {
      * Sets owned books of the user to the parameter passed,
      * if it is null throws an error
      *
-     * @throws IllegalArgumentException Owned books cannot be null
      * @param ownedBooks list of owned books
+     * @throws IllegalArgumentException Owned books cannot be null
      */
     public void setOwnedBooks(HashMap<String, OwnedBook> ownedBooks) {
         if (ownedBooks == null){
@@ -90,8 +116,8 @@ public class User {
      * adds an owned book to the user,
      * if it is null throws an error
      *
-     * @throws IllegalArgumentException Owned book cannot be null
      * @param ownedBook owned book
+     * @throws IllegalArgumentException Owned book cannot be null
      */
     public void addOwnedBook(OwnedBook ownedBook) {
         if (ownedBook == null) {
@@ -102,11 +128,11 @@ public class User {
     }
 
     /**
-     * removes an owned book from the user,
+     * Removes an owned book from the user,
      * if the book is null throws an error
      *
-     * @throws IllegalArgumentException Owned book cannot be null
      * @param ownedBook owned book
+     * @throws IllegalArgumentException Owned book cannot be null
      */
     public void removeOwnedBook(OwnedBook ownedBook) {
         if (ownedBook == null) {
@@ -117,6 +143,11 @@ public class User {
         this.ownedBooks.remove(ownedBook.getIsbn());
     }
 
+    /**
+     * Gets borrowed books.
+     *
+     * @return the borrowed books
+     */
     public Map<String, BorrowedBook> getBorrowedBooks() {
         return Collections.unmodifiableMap(borrowedBooks);
     }
@@ -125,8 +156,8 @@ public class User {
      * Sets borrowed books of the user to the parameter passed,
      * if it is null throws an error
      *
-     * @throws IllegalArgumentException Borrowed books cannot be null
      * @param borrowedBooks list of borrowed books
+     * @throws IllegalArgumentException Borrowed books cannot be null
      */
     public void setBorrowedBooks(HashMap<String, BorrowedBook> borrowedBooks) {
         if (borrowedBooks == null){
@@ -137,8 +168,9 @@ public class User {
     }
 
     /**
-     * adds a borrowed book to the user,
+     * Adds a borrowed book to the user,
      * if it is null throws an error
+     *
      * @param borrowedBook borrowed book
      */
     public void addBorrowedBook(BorrowedBook borrowedBook) {
@@ -150,11 +182,11 @@ public class User {
     }
 
     /**
-     * removes a borrowed book from the user,
+     * Removes a borrowed book from the user,
      * if the book is null throws an error
      *
-     * @throws IllegalArgumentException Borrowed book cannot be null
      * @param borrowedBook borrowed book
+     * @throws IllegalArgumentException Borrowed book cannot be null
      */
     public void removeBorrowedBook(BorrowedBook borrowedBook) {
         if (borrowedBook == null) {
@@ -165,7 +197,8 @@ public class User {
     }
 
     /**
-     * returns profile of the user
+     * Returns profile of the user
+     *
      * @return UserProfile profile
      */
     public UserProfile getProfile() {
@@ -173,11 +206,11 @@ public class User {
     }
 
     /**
-     * sets user profile to the profile passed,
+     * Sets user profile to the profile passed,
      * if it is null throws an error
      *
-     * @throws IllegalArgumentException Profile cannot be null or empty
      * @param profile user profile
+     * @throws IllegalArgumentException Profile cannot be null or empty
      */
     public void setProfile(UserProfile profile) {
         if (profile == null) {
@@ -188,7 +221,7 @@ public class User {
     }
 
     /**
-     * returns the id of the user
+     * Returns the id of the user
      *
      * @return String id
      */
@@ -197,7 +230,8 @@ public class User {
     }
 
     /**
-     * sets id of the user
+     * Sets id of the user
+     *
      * @param id id
      */
     public void setId(String id) {
@@ -209,20 +243,20 @@ public class User {
     }
 
     /**
-     * returns a list of IDs of users blocked
+     * Returns a list of IDs of users blocked
      *
-     * @return List<String> blocked users id's
+     * @return List<String>  blocked users id's
      */
     public List<String> getBlockedUsers() {
         return Collections.unmodifiableList(blockedUsers);
     }
 
     /**
-     * sets the list of blocked users to the value passed,
+     * Sets the list of blocked users to the value passed,
      * if it is null or empty throws an error
      *
-     * @throws IllegalArgumentException Blocked Users cannot be null or empty
      * @param blockedUsers blocked user id
+     * @throws IllegalArgumentException Blocked Users cannot be null or empty
      */
     public void setBlockedUsers(List<String> blockedUsers) {
         if (blockedUsers == null) {
@@ -233,11 +267,11 @@ public class User {
     }
 
     /**
-     * add an id of the blocked user to the list of the users blocked,
+     * Add an id of the blocked user to the list of the users blocked,
      * if the string is null or empty throws an error
      *
-     * @throws IllegalArgumentException Blocked user cannot be null or empty
      * @param blockedUser blocked user id
+     * @throws IllegalArgumentException Blocked user cannot be null or empty
      */
     public void addBlockedUser(String blockedUser) {
         if (blockedUser == null || blockedUser.trim().isEmpty()) {
@@ -252,11 +286,11 @@ public class User {
     }
 
     /**
-     * removes a blocked user from the list if it is there,
+     * Removes a blocked user from the list if it is there,
      * if the passed value is empty or null throws an errror
      *
-     * @throws IllegalArgumentException Blocked user cannot be null or empty
      * @param blockedUser blocked user
+     * @throws IllegalArgumentException Blocked user cannot be null or empty
      */
     public void removeBlockedUser(String blockedUser) {
         if (blockedUser == null || blockedUser.trim().isEmpty()) {
@@ -271,7 +305,7 @@ public class User {
     }
 
     /**
-     * checks if the given user appears in the black list
+     * Checks if the given user appears in the black list
      *
      * @param blockedUser blocked user
      * @return boolean user is blocked

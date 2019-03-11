@@ -17,6 +17,9 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import java9.util.concurrent.CompletableFuture;
 
+/**
+ * The sign up screen
+ */
 public class SignUpActivity extends AppCompatActivity {
 
     private UserController userController = UserController.getInstance();
@@ -29,10 +32,20 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
     }
 
+    /**
+     * Goes back to login screen
+     *
+     * @param view the back button
+     */
     public void goBack(View view) {
         finish();
     }
 
+    /**
+     * Adds photo from camera
+     *
+     * @param view the add photo button
+     */
     public void addPhoto(View view) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -40,6 +53,11 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Signs the user up using provided credentials
+     *
+     * @param view the sign up button
+     */
     public void signUp(View view) {
         AppCompatEditText nameField = findViewById(R.id.sign_up_name_field);
         AppCompatEditText usernameField = findViewById(R.id.sign_up_usernname_field);

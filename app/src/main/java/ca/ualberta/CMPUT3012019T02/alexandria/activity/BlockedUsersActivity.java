@@ -1,13 +1,15 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
+/**
+ * The Blocked users activity.
+ */
 public class BlockedUsersActivity extends AppCompatActivity {
 
     @Override

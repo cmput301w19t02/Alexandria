@@ -14,7 +14,7 @@ import android.widget.Button;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.SearchFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.TabsAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.adapter.TabsAdapter;
 
 /**
  * Created as a fragment by MainActivity
