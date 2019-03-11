@@ -93,8 +93,8 @@ public class ViewUserProfileActivity extends AppCompatActivity {
 
         //TODO set image as in the profile if exists
 
-        TextView textView_username = (TextView) findViewById(R.id.textView_username);
-        TextView textView_name = (TextView) findViewById(R.id.textView_name);
+        TextView textView_username = (TextView) findViewById(R.id.view_profile_username);
+        TextView textView_name = (TextView) findViewById(R.id.view_profile_name);
         //ImageView image_avatar = (ImageView) findViewById(R.id.user_image);
 
         username = userProfile.getUsername();

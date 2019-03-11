@@ -20,7 +20,7 @@
         app:popupTheme="@style/CustomPopupStyle">
 
         <TextView
-            android:id="@+id/textView_username"
+            android:id="@+id/view_profile_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -55,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view_profile_toolbar" />
 
     <TextView
-        android:id="@+id/textView_name"
+        android:id="@+id/view_profile_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -69,7 +69,6 @@
         app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
     <TextView
-        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
