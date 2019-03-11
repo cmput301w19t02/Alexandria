@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
@@ -40,11 +39,11 @@ public class SearchFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_search,null);
+        View rootView = inflater.inflate(R.layout.fragment_search, null);
         RecyclerView mRecyclerView = rootView.findViewById(R.id.search_recycler);
 
         BookRecyclerViewAdapter bookAdapter =
-                new BookRecyclerViewAdapter(getContext(), searchBooks,"UserBookFragment");
+                new BookRecyclerViewAdapter(getContext(), searchBooks, "UserBookFragment");
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(bookAdapter);
@@ -56,32 +55,41 @@ public class SearchFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
                     // search firebase for the string
-                    try {
-                        results = searchController.searchBooks(s.toString());
-                        ArrayList<Book> books = results.get();
-                        for (int i = 0; i < books.size(); i++) {
-                            Book book = books.get(i);
+                    results = searchController.searchBooks(s.toString());
+                    results.handleAsync((books, error) -> {
+                        if (error == null) {
+                            for (int i = 0; i < books.size(); i++) {
+                                Book book = books.get(i);
 
-                            CompletableFuture<Bitmap> imageResult = imageController.getImage(book.getImageId());
+                                CompletableFuture<Bitmap> imageResult = imageController.getImage(book.getImageId());
 
-                            Bitmap image = imageResult.get();
-
-                            searchBooks.add(new BookList
-                                    (image, book.getTitle(), book.getAuthor(),
-                                            book.getIsbn()));
+                                imageResult.handleAsync((image,imageError)->{
+                                    if(imageError==null) {
+                                        searchBooks.add(new BookList
+                                                (image, book.getTitle(), book.getAuthor(),
+                                                        book.getIsbn()));
+                                        bookAdapter.notifyDataSetChanged();
+                                    }
+                                    else{
+                                        imageError.printStackTrace();
+                                    }
+                                    return null;
+                                });
+                            }
+                        } else {
+                            error.printStackTrace();
                         }
-                    } catch (ExecutionException e) {
-                        System.out.println("Error: failed to execute get in search: " + e);
-                    } catch (InterruptedException e) {
-                        System.out.println("Error: interrupted get in search: " + e);
-                    }
+                        return null;
+                    });
                 }
 
             }
 
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
         });
 
         return rootView;
