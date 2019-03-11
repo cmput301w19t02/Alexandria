@@ -3,12 +3,9 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,13 +14,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
 public class ViewUserProfileActivity extends AppCompatActivity {
@@ -94,9 +86,10 @@ public class ViewUserProfileActivity extends AppCompatActivity {
 
                 username = userProfile.getUsername();
                 name = userProfile.getName();
-
-                textView_username.setText(username);
-                textView_name.setText(name);
+                runOnUiThread(() -> {
+                    textView_username.setText(username);
+                    textView_name.setText(name);
+                });
             }
             else {
                 // Show error message
