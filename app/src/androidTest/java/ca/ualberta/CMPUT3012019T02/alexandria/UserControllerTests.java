@@ -25,7 +25,7 @@ import java9.util.concurrent.CompletableFuture;
 public class UserControllerTests {
 
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
     public void testCreateUser() throws InterruptedException, ExecutionException, TimeoutException {
@@ -73,18 +73,6 @@ public class UserControllerTests {
         String username = "test_" + UUID.randomUUID().toString().replace('-', '_');
         String password = UUID.randomUUID().toString();
         CompletableFuture<Void> future = controller.createUser("John Smith", null, "7801234567", null, username, password);
-
-        future.get(5, TimeUnit.SECONDS);
-    }
-
-    @Test(expected = ExecutionException.class)
-    public void testCreateUserInvalidPhone() throws InterruptedException, ExecutionException, TimeoutException {
-        UserController controller = UserController.getInstance();
-
-        String username = "test_" + UUID.randomUUID().toString().replace('-', '_');
-        String password = UUID.randomUUID().toString();
-        String email = username + "@example.com";
-        CompletableFuture<Void> future = controller.createUser("John Smith", email, null, null, username, password);
 
         future.get(5, TimeUnit.SECONDS);
     }
