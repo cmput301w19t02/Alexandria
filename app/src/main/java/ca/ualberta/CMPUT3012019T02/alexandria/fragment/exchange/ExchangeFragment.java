@@ -18,10 +18,9 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.TabsAdapter;
 
 /**
  * Created as a fragment by MainActivity
- * Creates tab fragments
+ * Creates tab fragments, BorrowedFragment, AcceptedFragment,RequestedFragment
  * code for tabs adapted from https://youtu.be/bNpWGI_hGGg at 02/25/2019
  */
-
 public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
     @Nullable
@@ -45,7 +44,7 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
 
     /**
      * Sets up tabs in the Fragment
-     * @param viewPager
+     * @param viewPager the child fragment view that allows swipe
      */
 
     private void setupViewPager(ViewPager viewPager) {
@@ -57,8 +56,8 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     * Switches Fragments and adds the current to back stack
-     * @param v
+     * Switches to the search fragment and adds the current to back stack
+     * @param v the Fragment itself
      */
     @Override
     public void onClick(View v) {

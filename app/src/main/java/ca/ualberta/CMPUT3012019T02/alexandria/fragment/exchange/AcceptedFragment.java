@@ -26,6 +26,10 @@ public class AcceptedFragment extends Fragment {
 
     private List<BookList> acceptedBooks;
 
+    /**
+     * Sets up the RecyclerView for the Fragment
+     * {@inheritDoc}
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -33,15 +37,18 @@ public class AcceptedFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_exchange_accepted,null);
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.accepted_recycler);
-        BookRecyclerViewAdapter bookAdapter =
-                new BookRecyclerViewAdapter(getContext(), acceptedBooks,"UserBookFragment");
+        BookRecyclerViewAdapter bookAdapter = new BookRecyclerViewAdapter(
+                getContext(), acceptedBooks,"UserBookFragment");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(bookAdapter);
 
         return rootView;
     }
 
-
+    /**
+     * Temporary creation of lists until the firebase connection is made
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
