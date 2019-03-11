@@ -88,7 +88,7 @@ public class MessagesFragment extends Fragment {
                 adapter.notifyDataSetChanged();
                 handler.postDelayed(this, 2000);
             }
-        }, 2000);
+        }, 500);
         //adapter.updateChatRoomList(chatRoomList);
         //adapter.notifyDataSetChanged();
     }
