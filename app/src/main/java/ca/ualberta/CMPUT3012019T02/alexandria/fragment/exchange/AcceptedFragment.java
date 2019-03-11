@@ -63,7 +63,7 @@ public class AcceptedFragment extends Fragment {
                         "Test Author", "Test ISBN", "accepted", "eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
         acceptedBooks.add(new BookList
                 (aBitmap, "Test Title 5",
-                        "Test Author", "Test ISBN", "accepted", "DONT USE"));
+                        "Test Author", "Test ISBN", "accepted", "tfTIZpx1Y2QwnhBwJeODmem0Mhk2"));
 
     }
 }

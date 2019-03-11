@@ -16,12 +16,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.MyProfileActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 
 /**
  * Implements UserBookRecyclerView
@@ -93,6 +92,22 @@ public class UserBookFragment extends Fragment {
         tvAuthor.setText(author);
         tvIsbn.setText(isbn);
         tvOwner.setText(owner);
+
+        UserController userController = UserController.getInstance();
+        userController.getUserProfile(owner).handleAsync((result, error) -> {
+            if(error == null) {
+                // Update ui here
+                String name = result.getName();
+                getActivity().runOnUiThread(() -> {
+                    tvOwner.setText(name);
+                });
+            }
+            else {
+                // Show error message
+                throw new NullPointerException("user profile not obtained");
+            }
+            return null;
+        });
 
         //TODO implement firebase lookup for user profile pic
         ivCover.setImageBitmap(cover);
@@ -172,11 +187,6 @@ public class UserBookFragment extends Fragment {
         Intent intentViewOwner = new Intent(getActivity(), ViewUserProfileActivity.class);
         intentViewOwner.putExtra("USER_ID", owner);
         startActivity(intentViewOwner);
-    }
-
-    protected void onProfileButtonClick(View view) {
-        Intent startProfileActivity = new Intent(getActivity(), MyProfileActivity.class);
-        startActivity(startProfileActivity);
     }
 
     //TODO implement firebase status switching

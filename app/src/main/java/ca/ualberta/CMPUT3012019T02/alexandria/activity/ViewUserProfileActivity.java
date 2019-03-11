@@ -73,31 +73,6 @@ public class ViewUserProfileActivity extends AppCompatActivity {
             }
         });
 
-        //TODO temp
-        //getCurrentUserProfile();
-        //userProfile = new UserProfile("Joe Example","john@example.com","7801234567",null,"joe_username");
-        UserController userController = UserController.getInstance();
-        userController.getUserProfile(userID).handleAsync((result, error) -> {
-            if(error == null) {
-                // Update ui here
-                userProfile = result;
-                TextView textView_username = (TextView) findViewById(R.id.view_profile_username);
-                TextView textView_name = (TextView) findViewById(R.id.view_profile_name);
-
-                username = userProfile.getUsername();
-                name = userProfile.getName();
-                runOnUiThread(() -> {
-                    textView_username.setText(username);
-                    textView_name.setText(name);
-                });
-            }
-            else {
-                // Show error message
-                Toast.makeText(this , "Profile is not recognized", Toast.LENGTH_LONG).show();
-                userProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown");
-            }
-            return null;
-        });
 
         //TODO implement book list
         // Recycler View
@@ -111,35 +86,25 @@ public class ViewUserProfileActivity extends AppCompatActivity {
     /**
      * sets user info to the page
      */
-   /* @Override
+    @Override
     public void onResume() {
         super.onResume();
 
-        //TODO set image as in the profile if exists
-
-        TextView textView_username = (TextView) findViewById(R.id.view_profile_username);
-        TextView textView_name = (TextView) findViewById(R.id.view_profile_name);
-        //ImageView image_avatar = (ImageView) findViewById(R.id.user_image);
-
-        username = userProfile.getUsername();
-        name = userProfile.getName();
-        //String avatarID = userProfile.getPicture();
-
-        textView_username.setText(username);
-        textView_name.setText(name);
-        //image_avatar. set image
-    }
-*/
-    /** //TODO make use
-     * get userProfile of the current user from the database
-     */
-    private void getCurrentUserProfile() {
         UserController userController = UserController.getInstance();
-        userProfile = null;
         userController.getUserProfile(userID).handleAsync((result, error) -> {
             if(error == null) {
-                // Set a class variable
+                // Update ui here
+                //TODO update image
                 userProfile = result;
+                TextView textView_username = (TextView) findViewById(R.id.view_profile_username);
+                TextView textView_name = (TextView) findViewById(R.id.view_profile_name);
+
+                username = userProfile.getUsername();
+                name = userProfile.getName();
+                runOnUiThread(() -> {
+                    textView_username.setText(username);
+                    textView_name.setText(name);
+                });
             }
             else {
                 // Show error message
