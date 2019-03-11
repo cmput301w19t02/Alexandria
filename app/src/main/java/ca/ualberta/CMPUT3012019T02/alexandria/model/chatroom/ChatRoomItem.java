@@ -179,7 +179,7 @@ public class ChatRoomItem {
      * @param chatRoomId the chat room id
      */
     public void setChatId(String chatRoomId) {
-        if (chatRoomId == null || chatId.isEmpty()) {
+        if (chatRoomId == null || chatRoomId.isEmpty()) {
             throw new IllegalArgumentException("Type cannot be null or empty");
         }
         this.chatId = chatRoomId;
