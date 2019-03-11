@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/user_profile_setting"
+        android:icon="@drawable/ic_ellipses"
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/message_user_option"
+                android:title="@string/message_user_title" />
+
+            <item
+                android:id="@+id/block_user_option"
+                android:title="@string/block_user_title" />
+        </menu>
+    </item>
+
+</menu>
