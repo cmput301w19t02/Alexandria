@@ -2,108 +2,160 @@
 
 title __CONTROLLER's Class Diagram__\n
 
-package ca.ualberta.CMPUT3012019T02.alexandria {
-
+  package ca.ualberta.CMPUT3012019T02.alexandria {
     package ca.ualberta.CMPUT3012019T02.alexandria.controller {
-
-        class AuthenticationController {
-            - auth : FirebaseAuth
-            {static} - instance : AuthenticationController
-            - AuthenticationController()
-            {static} + getInstance() : AuthenticationController
-            + authenticate(String username, String password) : boolean
-            + deauthenticate() : void
-            + createUser(String username, String password) : boolean
-            + getMyId() : String
-        }
-        note top: "Used for keeping track of authentication\ndata and communicate authentication\ninformation with firebase"
-
-        class BookController {
-            - database : FirebaseDatabase
-            {static} - instance : BookController
-            - BookController()
-            {static} + getInstance() : BookController
-            + getBook(String isbn) : Book
-            + getMyBorrowedBooks() : ArrayList<Book>
-            + getMyOwnedBooks() : ArrayList<Book>
-            + getOwnedBooks(String id) : ArrayList<Book>
-            + updateMyBorrowedBooks(Book book) : void
-            + updateMyOwnedBooks(Book book) : void
-            + updateBook(String isbn, Book newBook) : void
-        }
-        note top: "Used for keeping track of book transaction\ndata and communicate book transaction\ninformation with firebase"
-
-        class UserProfileController {
-             - database : FirebaseDatabase
-            {static} - instance : UserProfileController
-            - UserProfileController()
-            {static} + getInstance() : UserProfileController
-            + getUserProfile(String id) : UserProfile
-            + getMyProfile() : UserProfile
-            + updateMyProfile(UserProfile userProfile) : void
-        }
-        note top: "Used for keeping track of user profile\ndata and communicate user profile\ninformation with firebase"
-
-        class ChatController {
-            - database : FirebaseDatabase
-            {static} - instance : ChatController
-            - ChatController()
-            {static} + getInstance() : ChatController
-            + getChatRoom(String id) : ChatRoom 
-            + updateMessages() : ChatRoom 
-            + postMessage(Message message) : void
-        }
-        note top: "Used for keeping track of chat\ndata and communicate chat\ninformation with firebase"
-
+      class BookController {
+          - database : DatabaseReference
+          {static} - instance : BookController
+          - BookController()
+          {static} + getInstance()
+          + addBook()
+          + getBook()
+          + updateBook()
+          + deleteBook()
+          + requestBook()
+          + cancelRequest()
+          + returnBook()
+          + acceptBookRequest()
+          + declineBookRequest()
+          + exchangeBook()
+          - addMyBorrowedBook()
+          + getMyBorrowedBook()
+          + getMyBorrowedBooks()
+          - updateMyBorrowedBook()
+          - deleteMyBorrowedBook()
+          + addMyOwnedBook()
+          + getMyOwnedBook()
+          + getMyOwnedBooks()
+          + updateMyOwnedBook()
+          + deleteMyOwnedBook()
+          - addUserBorrowedBook()
+          + getUserBorrowedBook()
+          + getUserBorrowedBooks()
+          - updateUserBorrowedBook()
+          - deleteUserBorrowedBook()
+          - addUserOwnedBook()
+          + getUserOwnedBook()
+          + getUserOwnedBooks()
+          - updateUserOwnedBook()
+          - deleteUserOwnedBook()
+          - addUserBook()
+          - getUserBook()
+          - getUserBooks()
+          - updateUserBook()
+          - deleteUserBook()
+          - updateUserBook()
+          - addAvailableOwner()
+          - removeAvailableOwner()
+          - getMyUserId()
+          - getBookDatabaseReference()
+          - getUserDatabaseReference()
+          - getUserBooksReference()
+          - getUserBookReference()
+      }
     }
+  }
+  
 
-
-    package ca.ualberta.CMPUT3012019T02.alexandria.model {
-
-        class BorrowedBook { 
-            See MODEL's class diagram
-        }
-
-        class OwnedBook { 
-            See MODEL's class diagram
-        }
-
-        class Book { 
-            See MODEL's class diagram
-        }
-
-        class User { 
-            See MODEL's class diagram
-        }
-
-        class UserProfile { 
-            See MODEL's class diagram
-        }
-
-        class ChatRoom { 
-            See MODEL's class diagram
-        }
-
-        class Message { 
-            See MODEL's class diagram
-        }
-
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+      class BookParser {
+          {static} + UserBooksToBookList()
+      }
     }
+  }
+  
 
-}
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+      class ChatController {
+          - database : FirebaseDatabase
+          {static} - instance : ChatController
+          - ChatController()
+          {static} + getInstance()
+          + addChatRoom()
+          - addChatRoomPrivate()
+          - checkChatRoomExists()
+      }
+    }
+  }
+  
 
-AuthenticationController "1" -down- "*" User : manages >
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+      class ImageController {
+          - IMAGE_FORMAT : String
+          - storage : StorageReference
+          {static} - instance : ImageController
+          - ImageController()
+          {static} + getInstance()
+          + addImage()
+          + getImage()
+          + updateImage()
+          + deleteImage()
+          - getImageReference()
+      }
+    }
+  }
+  
 
-UserProfileController "1" -down- "*" UserProfile : manages >
-UserProfileController "1" -up- "1" AuthenticationController : interfaces with >
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+      class SearchController {
+          - client : Client
+          - index : Index
+          - gson : Gson
+          {static} - instance : SearchController
+          - SearchController()
+          {static} + getInstance()
+          + searchBooks()
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+      class UserController {
+          - auth : FirebaseAuth
+          - database : FirebaseDatabase
+          {static} - instance : UserController
+          - UserController()
+          {static} + getInstance()
+          + isAuthenticated()
+          + authenticate()
+          + deauthenticate()
+          + createUser()
+          + getMyId()
+          - getUserEmail()
+          + getUserProfile()
+          + getMyProfile()
+          + updateMyProfile()
+      }
+    }
+  }
+  
+UserController "1" -down- "*" User : manages >
+UserController "1" -down- "*" UserProfile : manages >
 
 BookController "1" -down- "*" BorrowedBook : manages >
 BookController "1" -down- "*" OwnedBook : manages >
 BookController "1" -down- "*" Book : manages >
-BookController "1" -right- "1" AuthenticationController : interfaces with >
+BookController "1" -right- "1" UserController : interfaces with >
 
 ChatController "1" -down- "*" ChatRoom : manages >
 ChatController "1" -down- "*" Message : manages >
-ChatController "1" -left- "1" AuthenticationController : interfaces with >
+ChatController "1" -left- "1" UserController : interfaces with >
+
+BookParser "1" -- "1" BookController
+BookParser "1" -- "1" UserController
+BookParser "1" -- "1" ImageController
+
+right footer
+
+
+PlantUML diagram partly generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
 
 @enduml
