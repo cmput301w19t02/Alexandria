@@ -49,30 +49,6 @@ public class MyProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        // TODO make uses of loggen in user whem it is done
-        //getCurrentUserProfile();
-        myUserProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown"); //TODO temp
-    }
-
-    /**
-     * get userProfile of the current user from the database
-     */
-    private void getCurrentUserProfile() {
-        UserController userController = UserController.getInstance();
-        myUserProfile = null;
-        userController.getMyProfile().handleAsync((result, error) -> {
-            if(error == null) {
-                // Set a class variable
-                myUserProfile = result;
-            }
-            else {
-                // Show error message
-                Toast.makeText(this , "Profile is not recognize", Toast.LENGTH_LONG).show();
-                myUserProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown");
-            }
-            return null;
-        });
     }
 
     /**
@@ -129,6 +105,9 @@ public class MyProfileActivity extends AppCompatActivity {
                 // Show error message
                 Toast.makeText(this , "Profile is not recognized", Toast.LENGTH_LONG).show();
                 myUserProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown");
+                textView_name.setText(myUserProfile.getName());
+                textView_username.setText(myUserProfile.getUsername());
+                textView_email.setText(myUserProfile.getEmail());
             }
             return null;
         });
