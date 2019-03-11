@@ -84,6 +84,9 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         //mRecyclerView.setAdapter(bookAdapter);
     }
 
+    /**
+     * sets user info to the page
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -130,6 +133,12 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Menu switch, shows warning for blocking user,
+     * takes to messaging activity
+     * @param item item selected
+     * @return boolean
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
