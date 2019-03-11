@@ -43,6 +43,7 @@
                 android:id="@+id/user_book_owner"
                 android:textColor="@color/colorBlack"
                 android:background="@color/colorBeige"
+                android:textAllCaps="false"
                 />
         </LinearLayout>
 
