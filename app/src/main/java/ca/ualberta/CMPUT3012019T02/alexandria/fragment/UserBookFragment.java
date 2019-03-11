@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -16,10 +18,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 
 /**
@@ -93,13 +97,38 @@ public class UserBookFragment extends Fragment {
         tvIsbn.setText(isbn);
         tvOwner.setText(owner);
 
+        // sets owner name and avatar
         UserController userController = UserController.getInstance();
         userController.getUserProfile(owner).handleAsync((result, error) -> {
             if(error == null) {
                 // Update ui here
                 String name = result.getName();
+                String photoId = result.getPicture();
                 getActivity().runOnUiThread(() -> {
                     tvOwner.setText(name);
+
+                    // sets owner image if there is one
+                    ImageController imageController = ImageController.getInstance();
+                    imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
+                        if (errorImage == null) {
+                            Bitmap bitmap = resultImage;
+
+                            if (bitmap != null) {
+                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
+
+                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);
+                                drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                drawable.setAntiAlias(true);
+
+                                getActivity().runOnUiThread(() -> {
+                                    ivOwnerPic.setImageDrawable(drawable);
+                                });
+                            }
+                        } else {
+                            showError(errorImage.getMessage());
+                        }
+                        return null;
+                    });
                 });
             }
             else {
@@ -111,6 +140,14 @@ public class UserBookFragment extends Fragment {
 
         //TODO implement firebase lookup for user profile pic
         ivCover.setImageBitmap(cover);
+    }
+
+    /**
+     * throws and error in toast
+     * @param message error message
+     */
+    private void showError(String message) {
+        Toast.makeText(getView().getContext(), "Error: " + message, Toast.LENGTH_LONG).show();
     }
 
     //sets bottom Status bar text and icon

@@ -33,11 +33,11 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:layout_marginBottom="8dp">
+
             <ImageButton
-                android:layout_width="32dp"
-                android:layout_height="32dp"
                 android:id="@+id/user_book_owner_pic"
-                android:onClick="onProfileButtonClick"/>
+                android:layout_width="48dp"
+                android:layout_height="48dp" />
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
