@@ -21,12 +21,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
 public class ViewUserProfileActivity extends AppCompatActivity {
 
     //private List<BookList> ownedBooks;
+    private String username;
+    private String name;
+    private UserProfile userProfile;
 
     private String userID;
 
@@ -76,6 +81,9 @@ public class ViewUserProfileActivity extends AppCompatActivity {
             }
         });
 
+        //TODO temp
+        userProfile = new UserProfile("Joe Example","john@example.com","7801234567",null,"joe_username");
+
         //TODO implement book list
         // Recycler View
         //RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.view_user_books_recycler);
@@ -85,6 +93,48 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         //mRecyclerView.setAdapter(bookAdapter);
     }
 
+    /**
+     * sets user info to the page
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //TODO set image as in the profile if exists
+
+        TextView textView_username = (TextView) findViewById(R.id.view_profile_username);
+        TextView textView_name = (TextView) findViewById(R.id.view_profile_name);
+        //ImageView image_avatar = (ImageView) findViewById(R.id.user_image);
+
+        username = userProfile.getUsername();
+        name = userProfile.getName();
+        //String avatarID = userProfile.getPicture();
+
+        textView_username.setText(username);
+        textView_name.setText(name);
+        //image_avatar. set image
+    }
+
+    /** //TODO make use
+     * get userProfile of the current user from the database
+     */
+    private void getCurrentUserProfile() {
+        UserController userController = UserController.getInstance();
+        userProfile = null;
+        userController.getMyProfile().handleAsync((result, error) -> {
+            if(error == null) {
+                // Set a class variable
+                userProfile = result;
+            }
+            else {
+                // Show error message
+                Toast.makeText(this , "Profile is not recognized", Toast.LENGTH_LONG).show();
+                userProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown");
+            }
+            return null;
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -92,6 +142,12 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Menu switch, shows warning for blocking user,
+     * takes to messaging activity
+     * @param item item selected
+     * @return boolean
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -109,7 +165,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
 
                 blockAlert.setCancelable(true);
                 blockAlert.setTitle("Block User?");
-                String blockMessage = "Are you sure you want to block " +  "Joe123 Example";
+                String blockMessage = "Are you sure you want to block " +  name;
                 blockAlert.setMessage(blockMessage);
 
                 blockAlert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
