@@ -63,6 +63,7 @@ public class MyProfileActivity extends AppCompatActivity {
         TextView textView_email = (TextView) findViewById(R.id.textView_email);
         ImageView image_avatar = (ImageView) findViewById(R.id.user_image);
 
+        // sets user's strings
         UserController userController = UserController.getInstance();
         userController.getMyProfile().handleAsync((result, error) -> {
             if(error == null) {
@@ -78,6 +79,7 @@ public class MyProfileActivity extends AppCompatActivity {
                     textView_name.setText(name);
                     textView_email.setText(email);
 
+                    // sets user image
                     ImageController imageController = ImageController.getInstance();
                     imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
                         if (errorImage == null) {
@@ -103,7 +105,7 @@ public class MyProfileActivity extends AppCompatActivity {
             }
             else {
                 // Show error message
-                Toast.makeText(this , "Profile is not recognized", Toast.LENGTH_LONG).show();
+                showError("Profile is not recognized");
                 myUserProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown");
                 textView_name.setText(myUserProfile.getName());
                 textView_username.setText(myUserProfile.getUsername());
@@ -113,6 +115,10 @@ public class MyProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * shos error toast
+     * @param message error message
+     */
     private void showError(String message) {
         Toast.makeText(this, "Error: " + message, Toast.LENGTH_LONG).show();
     }
@@ -124,6 +130,11 @@ public class MyProfileActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * ellipses menu switch
+     * @param item item clicked
+     * @return boolean
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

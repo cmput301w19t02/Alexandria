@@ -27,5 +27,6 @@ public class BlockedUsersActivity extends AppCompatActivity {
                 finish();
             }
         });
+        // ToDo display blocked user
     }
 }

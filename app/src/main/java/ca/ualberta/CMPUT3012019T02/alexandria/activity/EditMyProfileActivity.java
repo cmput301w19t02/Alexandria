@@ -45,17 +45,20 @@ public class EditMyProfileActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {   // back button
                 finish();
             }
         });
     }
 
+    /**
+     * Sets user details on the profile page
+     */
     @Override
     public void onResume() {
         super.onResume();
 
-        //TODO password save + change
+        //TODO password
 
         editText_name = (EditText) findViewById(R.id.editText_name);
         editText_username = (EditText) findViewById(R.id.editText_username);
@@ -63,6 +66,7 @@ public class EditMyProfileActivity extends AppCompatActivity {
         editText_email = (EditText) findViewById(R.id.editText_email);
         ImageView image_avatar = (ImageView) findViewById(R.id.user_image);
 
+        // sets user info
         userController = UserController.getInstance();
         userController.getMyProfile().handleAsync((result, error) -> {
             if(error == null) {
@@ -78,6 +82,7 @@ public class EditMyProfileActivity extends AppCompatActivity {
                     editText_username.setText(name);
                     editText_email.setText(email);
 
+                    // sets user image if any
                     ImageController imageController = ImageController.getInstance();
                     imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
                         if (errorImage == null) {
@@ -103,7 +108,7 @@ public class EditMyProfileActivity extends AppCompatActivity {
             }
             else {
                 // Show error message
-                Toast.makeText(this , "Profile is not recognized", Toast.LENGTH_LONG).show();
+                showError("Profile is not recognized");
                 myUserProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown");
                 editText_name.setText(myUserProfile.getName());
                 editText_username.setText(myUserProfile.getUsername());
@@ -113,6 +118,10 @@ public class EditMyProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * shows toast of an error
+     * @param message error message
+     */
     private void showError(String message) {
         Toast.makeText(this, "Error: " + message, Toast.LENGTH_LONG).show();
     }
@@ -131,10 +140,11 @@ public class EditMyProfileActivity extends AppCompatActivity {
         //String newPassword = editText_password.getText().toString();
         String newEmail = editText_email.getText().toString();
 
+        // checks error on editTexts
         try {
             myUserProfile.setUsername(newUsername);
             myUserProfile.setName(newName);
-            // password set
+            // todo password set
             myUserProfile.setEmail(newEmail);
             userController.updateMyProfile(myUserProfile);
             Toast.makeText(this , "Changes Saved", Toast.LENGTH_LONG).show();
