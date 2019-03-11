@@ -28,10 +28,4 @@ public class BlockedUsersActivity extends AppCompatActivity {
             }
         });
     }
-
-    //TODO remove when there is a straight pass to view user
-    protected void onJoeTestClick(View view) {
-        Intent startProfileActivity = new Intent(this, ViewUserProfileActivity.class);
-        startActivity(startProfileActivity);
-    }
 }
