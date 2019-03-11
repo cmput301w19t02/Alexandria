@@ -1,8 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
-import android.util.Log;
-
-import com.algolia.search.saas.AlgoliaException;
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
 import com.algolia.search.saas.Query;
@@ -75,6 +72,7 @@ public class SearchController {
                                 Book book = gson.fromJson(jsonArray.getString(i),Book.class);
                                 books.add(book);
                             }
+                            resultFuture.complete(books);
                         } catch (JSONException e) {
                             resultFuture.completeExceptionally(e);
                         }
@@ -84,7 +82,6 @@ public class SearchController {
                     }
                 });
 
-        resultFuture.complete(books);
         return resultFuture;
     }
 
