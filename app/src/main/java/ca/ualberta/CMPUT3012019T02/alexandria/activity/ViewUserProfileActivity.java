@@ -143,8 +143,6 @@ public class ViewUserProfileActivity extends AppCompatActivity {
             }
             return null;
         });
-
-
     }
 
     private void showError(String message) {
