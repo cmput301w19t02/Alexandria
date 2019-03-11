@@ -38,6 +38,12 @@ public class BookList {
         this.owner = owner;
     }
 
+    public BookList(Bitmap cover, String title, String author, String isbn) {
+        this.cover = cover;
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+    }
 
     /**
      * gets Bitmap cover of the book
