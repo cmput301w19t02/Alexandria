@@ -28,10 +28,19 @@ public class ViewUserProfileActivity extends AppCompatActivity {
 
     //private List<BookList> ownedBooks;
 
+    private String userID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras == null) {
+            userID = null;
+        } else {
+            userID = extras.getString("USER_ID");
+        }
 
         /*
         //TODO setup data retrieval from Firebase, and remove placeholder lists

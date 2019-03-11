@@ -36,7 +36,8 @@
             <ImageButton
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:id="@+id/user_book_owner_pic"/>
+                android:id="@+id/user_book_owner_pic"
+                android:onClick="onProfileButtonClick"/>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

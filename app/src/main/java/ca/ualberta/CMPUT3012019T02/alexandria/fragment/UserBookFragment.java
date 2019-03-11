@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,9 +14,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.MyProfileActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
 
 /**
  * Implements UserBookRecyclerView
@@ -40,6 +44,11 @@ public class UserBookFragment extends Fragment {
         setBookInfo(rootView);
         setStatusBar(rootView);
         setButtons(rootView);
+
+        rootView.findViewById(R.id.user_book_owner).setOnClickListener(mListener);
+        rootView.findViewById(R.id.user_book_owner_pic).setOnClickListener(mListener);
+        rootView.findViewById(R.id.user_book_button_temp).setOnClickListener(mListener);
+        rootView.findViewById(R.id.user_book_button).setOnClickListener(mListener);
 
         return rootView;
     }
@@ -145,7 +154,14 @@ public class UserBookFragment extends Fragment {
     //TODO implement Activity Switching
     //switch to the book owner's profile
     private void onClickUser() {
+        Intent intentViewOwner = new Intent(getActivity(), ViewUserProfileActivity.class);
+        intentViewOwner.putExtra("USER_ID", owner);
+        startActivity(intentViewOwner);
+    }
 
+    protected void onProfileButtonClick(View view) {
+        Intent startProfileActivity = new Intent(getActivity(), MyProfileActivity.class);
+        startActivity(startProfileActivity);
     }
 
     //TODO implement firebase status switching
