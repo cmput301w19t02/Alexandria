@@ -15,13 +15,20 @@ import java.util.ArrayList;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import java9.util.concurrent.CompletableFuture;
 
+/**
+ * The type Search controller.
+ */
 public class SearchController {
 
     private Client client;
     private Index index;
     private Gson gson;
     private static SearchController instance;
+    /**
+     * The Books.
+     */
     ArrayList<Book> books = new ArrayList<>();
+
 
     private SearchController() {
         client = new Client("9ETLQT0YZC", "7c5462a00988e4152996bac591236760");
