@@ -26,6 +26,10 @@ public class AcceptedFragment extends Fragment {
 
     private List<BookList> acceptedBooks;
 
+    /**
+     * Sets up the RecyclerView for the Fragment
+     * {@inheritDoc}
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -33,15 +37,18 @@ public class AcceptedFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_exchange_accepted,null);
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.accepted_recycler);
-        BookRecyclerViewAdapter bookAdapter =
-                new BookRecyclerViewAdapter(getContext(), acceptedBooks,"UserBookFragment");
+        BookRecyclerViewAdapter bookAdapter = new BookRecyclerViewAdapter(
+                getContext(), acceptedBooks,"UserBookFragment");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(bookAdapter);
 
         return rootView;
     }
 
-
+    /**
+     * Temporary creation of lists until the firebase connection is made
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,19 +58,19 @@ public class AcceptedFragment extends Fragment {
         acceptedBooks = new ArrayList<>();
         acceptedBooks.add(new BookList
                 (aBitmap, "Test Title",
-                        "Test Author", "Test ISBN", "accepted", "Phteven"));
+                        "Test Author", "Test ISBN", "accepted", "AQiv4J6BTsX5kYHgLChH7xFlir02"));
         acceptedBooks.add(new BookList
                 (aBitmap, "Test Title 2",
-                        "Test Author", "Test ISBN", "accepted",null));
+                        "Test Author", "Test ISBN", "accepted","ZvLVXXLOoWTZ7o6xmW6fT4PP0Wj1"));
         acceptedBooks.add(new BookList
                 (aBitmap, "Test Title 3",
-                        "Test Author", "Test ISBN", "accepted", "Jimmy"));
+                        "Test Author", "Test ISBN", "accepted", "bJyo1fjcj0aYJejnJSfz6tugpca2"));
         acceptedBooks.add(new BookList
                 (aBitmap, "Test Title 4",
-                        "Test Author", "Test ISBN", "accepted", "Jeff"));
+                        "Test Author", "Test ISBN", "accepted", "eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
         acceptedBooks.add(new BookList
                 (aBitmap, "Test Title 5",
-                        "Test Author", "Test ISBN", "accepted", "Cool David"));
+                        "Test Author", "Test ISBN", "accepted", "tfTIZpx1Y2QwnhBwJeODmem0Mhk2"));
 
     }
 }

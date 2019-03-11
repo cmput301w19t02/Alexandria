@@ -32,7 +32,7 @@
     </android.support.v7.widget.Toolbar>
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/view_user_usernameBackground"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="46dp"
@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view_profile_toolbar" />
 
     <ImageView
-        android:id="@+id/user_image"
+        android:id="@+id/view_user_image"
         android:layout_width="105dp"
         android:layout_height="105dp"
         android:layout_marginStart="11dp"
@@ -64,9 +64,9 @@
         android:text="Joe Example"
         android:textColor="@color/colorBeige"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintStart_toEndOf="@+id/user_image"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+        app:layout_constraintBottom_toBottomOf="@+id/view_user_usernameBackground"
+        app:layout_constraintStart_toEndOf="@+id/view_user_image"
+        app:layout_constraintTop_toTopOf="@+id/view_user_usernameBackground" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -80,7 +80,7 @@
         android:textStyle="bold"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_image" />
+        app:layout_constraintTop_toBottomOf="@+id/view_user_image" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -1,11 +1,16 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +18,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 
 /**
  * Implements UserBookRecyclerView
@@ -36,10 +45,28 @@ public class UserBookFragment extends Fragment {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_user_book,null);
 
+        // toolbar
+        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStack();
+            }
+        });
+
         extractData();
         setBookInfo(rootView);
         setStatusBar(rootView);
         setButtons(rootView);
+
+        rootView.findViewById(R.id.user_book_owner).setOnClickListener(mListener);
+        rootView.findViewById(R.id.user_book_owner_pic).setOnClickListener(mListener);
+        rootView.findViewById(R.id.user_book_button_temp).setOnClickListener(mListener);
+        rootView.findViewById(R.id.user_book_button).setOnClickListener(mListener);
 
         return rootView;
     }
@@ -70,8 +97,57 @@ public class UserBookFragment extends Fragment {
         tvIsbn.setText(isbn);
         tvOwner.setText(owner);
 
+        // sets owner name and avatar
+        UserController userController = UserController.getInstance();
+        userController.getUserProfile(owner).handleAsync((result, error) -> {
+            if(error == null) {
+                // Update ui here
+                String name = result.getName();
+                String photoId = result.getPicture();
+                getActivity().runOnUiThread(() -> {
+                    tvOwner.setText(name);
+
+                    // sets owner image if there is one
+                    ImageController imageController = ImageController.getInstance();
+                    imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
+                        if (errorImage == null) {
+                            Bitmap bitmap = resultImage;
+
+                            if (bitmap != null) {
+                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
+
+                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);
+                                drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                drawable.setAntiAlias(true);
+
+                                getActivity().runOnUiThread(() -> {
+                                    ivOwnerPic.setImageDrawable(drawable);
+                                });
+                            }
+                        } else {
+                            showError(errorImage.getMessage());
+                        }
+                        return null;
+                    });
+                });
+            }
+            else {
+                // Show error message
+                throw new NullPointerException("user profile not obtained");
+            }
+            return null;
+        });
+
         //TODO implement firebase lookup for user profile pic
         ivCover.setImageBitmap(cover);
+    }
+
+    /**
+     * throws and error in toast
+     * @param message error message
+     */
+    private void showError(String message) {
+        Toast.makeText(getView().getContext(), "Error: " + message, Toast.LENGTH_LONG).show();
     }
 
     //sets bottom Status bar text and icon
@@ -145,7 +221,9 @@ public class UserBookFragment extends Fragment {
     //TODO implement Activity Switching
     //switch to the book owner's profile
     private void onClickUser() {
-
+        Intent intentViewOwner = new Intent(getActivity(), ViewUserProfileActivity.class);
+        intentViewOwner.putExtra("USER_ID", owner);
+        startActivity(intentViewOwner);
     }
 
     //TODO implement firebase status switching
