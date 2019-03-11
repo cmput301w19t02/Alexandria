@@ -15,6 +15,8 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.user.User;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class UserTests {
     @Test
@@ -193,6 +195,20 @@ public class UserTests {
         assertEquals(user.getChatRooms(), chatRooms);
     }
 
+    @Test
+    public void isBlockedUserNegativeTest() {
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith"));
+        user.addBlockedUser("userID");
+        assertFalse(user.isBlockedUser("janesmith"));
+    }
+
+    @Test
+    public void isBlockedUserPositiveTest() {
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith"));
+        user.addBlockedUser("userID");
+        assertTrue(user.isBlockedUser("userID"));
+    }
+
     @Test(expected = UnsupportedOperationException.class)
     public void unmodifiableGetBlockedUsersTest() {
         User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith"));
@@ -308,6 +324,12 @@ public class UserTests {
     public void nullSetOwnedBooks() {
         User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.setOwnedBooks(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void removeUnexistentBlockedUser() {
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
+        user.removeBlockedUser("test");
     }
 
 }
