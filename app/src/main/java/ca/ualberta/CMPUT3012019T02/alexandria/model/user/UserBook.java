@@ -61,7 +61,7 @@ public abstract class UserBook {
      */
     @Deprecated
     public void setStatus(String status) {
-        List<String> validStatuses = Arrays.asList("available", "requested", "accepted", "exchanged");
+        List<String> validStatuses = Arrays.asList("available", "requested", "accepted", "borrowed");
         if (!validStatuses.contains(status)) {
             throw new IllegalArgumentException("Invalid status");
         }
