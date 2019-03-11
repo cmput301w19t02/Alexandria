@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -12,15 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookParser;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.BookListProvider;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookRecyclerViewAdapter;
 
@@ -32,6 +28,7 @@ public class AcceptedFragment extends Fragment {
 
     private List<BookList> bookListings = new ArrayList<>();
     private BookRecyclerViewAdapter bookAdapter;
+    private BookListProvider bookListProvider;
 
     /**
      * Sets up the RecyclerView for the Fragment
@@ -53,55 +50,40 @@ public class AcceptedFragment extends Fragment {
         return rootView;
     }
 
-    /**
-     * Temporary creation of lists until the firebase connection is made
-     * {@inheritDoc}
-     */
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        BookController bookController = BookController.getInstance();
-        bookController.getMyBorrowedBooks().thenAcceptAsync(stringBorrowedBookHashMap -> {
-            try {
-
-                // Gets accepted book list items
-                List<BookList> bookLists = BookParser.UserBooksToBookList(stringBorrowedBookHashMap).get(5, TimeUnit.SECONDS);
-                bookListings.clear();
-                for (BookList bookList : bookLists) {
-                    if (bookList.getStatus().equals("accepted")) {
-                        bookListings.add(bookList);
-                    }
-                }
-
-                // Sort by alphabetical order of book titles
-                Collections.sort(bookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (TimeoutException e) {
-                e.printStackTrace();
-            }
-        });
-
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            this.bookListProvider = (BookListProvider) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement BookListProvider");
+        }
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
 
+        // TODO: dynamic loading/updating of books
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                List<BookList> books = bookListProvider.getBorrowedBookList();
+                bookListings.clear();
+                for (BookList book : books) {
+                    if (book.getStatus().equals("accepted")) {
+                        bookListings.add(book);
+                    }
+                }
                 bookAdapter.setmBookList(bookListings);
                 bookAdapter.notifyDataSetChanged();
                 handler.postDelayed(this, 2000);
             }
         }, 2000);
-
     }
-
 }
+
+
+
+
