@@ -15,7 +15,7 @@ public class LocationMessageTests {
     public void constructorTest() {
         Date date = new Date();
         Location location = new Location(5,4);
-        LocationMessage message = new LocationMessage(location, "unread", date, "johndoe@email.com");
+        LocationMessage message = new LocationMessage(location, "unread", date.toString(), "johndoe@email.com");
         assertEquals(location, message.getLocation());
         assertEquals("unread", message.getStatus());
         assertEquals(date, message.getDate());
@@ -27,24 +27,24 @@ public class LocationMessageTests {
     @Test(expected = IllegalArgumentException.class)
     public void emptyStatusConstructorTest() {
         Location location = new Location(5,4); 
-        new LocationMessage(location, "", new Date(), "johndoe@email.com");
+        new LocationMessage(location, "", new Date().toString(), "johndoe@email.com");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void emptySenderConstructorTest() {
         Location location = new Location(5,4); 
-        new LocationMessage(location, "unread", new Date(), "");
+        new LocationMessage(location, "unread", new Date().toString(), "");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullLocationConstructorTest() {
-        new LocationMessage(null, "unread", new Date(), "johndoe@email.com");
+        new LocationMessage(null, "unread", new Date().toString(), "johndoe@email.com");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullStatusConstructorTest() {
         Location location = new Location(5,4); 
-        new LocationMessage(location, null, new Date(), "johndoe@email.com");
+        new LocationMessage(location, null, new Date().toString(), "johndoe@email.com");
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -56,14 +56,14 @@ public class LocationMessageTests {
     @Test(expected = IllegalArgumentException.class)
     public void nullSenderConstructorTest() {
         Location location = new Location(5,4); 
-        new LocationMessage(location, "unread", new Date(), null);
+        new LocationMessage(location, "unread", new Date().toString(), null);
     }
 
     // positive setLocation
     @Test
     public void setLocationTest() {
         Location location = new Location(5,4); 
-        LocationMessage message = new LocationMessage(location, "unread", new Date(), "johndoe@email.com");
+        LocationMessage message = new LocationMessage(location, "unread", new Date().toString(), "johndoe@email.com");
         Location location2 = new Location(6,3);
         message.setLocation(location2);
         assertEquals(location2, message.getLocation());
@@ -72,7 +72,7 @@ public class LocationMessageTests {
     @Test(expected = IllegalArgumentException.class)
     public void nullSetLocationTest() {
         Location location = new Location(5,4); 
-        LocationMessage message = new LocationMessage(location, "unread", new Date(), "johndoe@email.com");
+        LocationMessage message = new LocationMessage(location, "unread", new Date().toString(), "johndoe@email.com");
         message.setLocation(null);
     }
 }
