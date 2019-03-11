@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.ExchangeFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.LibraryFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
@@ -22,6 +23,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
 
+    private UserController userController = UserController.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity
         if (intent.hasExtra("fragment_name")) {
             String fragment_name = intent.getStringExtra("fragment_name");
             Fragment fragment = null;
-            switch(fragment_name) {
+            switch (fragment_name) {
                 case "message":
                     fragment = new MessagesFragment();
                     loadFragment(fragment);
@@ -55,11 +57,23 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(!userController.isAuthenticated()) {
+            Intent startLoginActivity = new Intent(this, LoginActivity.class);
+            startActivity(startLoginActivity);
+        }
+        else{
+            System.out.println("Already logged in");
+        }
+    }
+
     private boolean loadFragment(Fragment fragment) {
-        if (fragment != null){
+        if (fragment != null) {
             getSupportFragmentManager()
-                    .beginTransaction().replace(R.id.fragment_container,fragment).commit();
-            return  true;
+                    .beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            return true;
         }
         return false;
     }
@@ -69,7 +83,7 @@ public class MainActivity extends AppCompatActivity
 
         Fragment fragment = null;
 
-        switch(menuItem.getItemId()) {
+        switch (menuItem.getItemId()) {
             case R.id.nav_exchange:
                 fragment = new ExchangeFragment();
                 break;

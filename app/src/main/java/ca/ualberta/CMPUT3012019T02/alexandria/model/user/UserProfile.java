@@ -23,9 +23,6 @@ public class UserProfile {
         if(email == null || email.isEmpty()){
             throw new IllegalArgumentException("Email cannot be null or empty");
         }
-        if(phone == null || phone.isEmpty()){
-            throw new IllegalArgumentException("Phone cannot be null or empty");
-        }
         if(username == null || username.isEmpty()){
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
@@ -66,10 +63,6 @@ public class UserProfile {
     }
 
     public void setPhone(String phone) {
-        if(phone == null || phone.isEmpty()){
-            throw new IllegalArgumentException("Phone cannot be null or empty");
-        }
-
         this.phone = phone;
     }
 

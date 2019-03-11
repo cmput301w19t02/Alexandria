@@ -31,6 +31,10 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="blocked_users">Blocked Users</string>
     <string name="edit_profile_save">Save Changes</string>
+    <!-- String related to sign up -->
+    <string name="sign_up">Sign Up</string>
+    <!-- String related to login -->
+    <string name="login">Login</string>
     <!-- Strings related to view user profile -->
     <string name="set_username">Set Username</string>
     <string name="name_background_desc">background</string>
