@@ -11,7 +11,7 @@ import android.view.View;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.ExchangeFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.fragment.LibraryFragment;
+import ca.ualberta.CMPUT3012019T02.alexandria.fragment.library.LibraryFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
 
 /**
