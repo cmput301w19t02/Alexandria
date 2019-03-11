@@ -1,7 +1,8 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange;
 
-import android.graphics.Bitmap;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.BookListProvider;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
 
@@ -24,7 +26,9 @@ import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
 
 public class RequestedFragment extends Fragment {
 
-    private List<BookList> requestedBooks;
+    private List<BookList> bookListings = new ArrayList<>();
+    private BookRecyclerViewAdapter bookAdapter;
+    private BookListProvider bookListProvider;
 
     /**
      * Sets up the RecyclerView for the Fragment
@@ -34,40 +38,50 @@ public class RequestedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.fragment_exchange_requested,null);
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.requested_recycler);
-        BookRecyclerViewAdapter bookAdapter = new BookRecyclerViewAdapter(
-                getContext(), requestedBooks,"UserBookFragment");
+        bookAdapter = new BookRecyclerViewAdapter(
+                getContext(), bookListings,"UserBookFragment");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(bookAdapter);
 
         return rootView;
     }
 
-    /**
-     * Temporary creation of lists until the firebase connection is made
-     * {@inheritDoc}
-     */
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            this.bookListProvider = (BookListProvider) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement BookListProvider");
+        }
+    }
 
-        //TODO setup data retrieval from Firebase, and remove placeholder lists
-        Bitmap aBitmap = Bitmap.createBitmap(32, 32, Bitmap.Config.ARGB_8888);
-        requestedBooks= new ArrayList<>();
-        requestedBooks.add(new BookList
-                (aBitmap, "Test Title",
-                        "Test Author", "Test ISBN", "requested", "ZvLVXXLOoWTZ7o6xmW6fT4PP0Wj1"));
-        requestedBooks.add(new BookList
-                (aBitmap, "Test Title 2",
-                        "Test Author", "Test ISBN", "requested","bJyo1fjcj0aYJejnJSfz6tugpca2"));
-        requestedBooks.add(new BookList
-                (aBitmap, "Test Title 3",
-                        "Test Author", "Test ISBN", "requested", "eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
-        requestedBooks.add(new BookList
-                (aBitmap, "Test Title 4",
-                        "Test Author", "Test ISBN", "requested", "AQiv4J6BTsX5kYHgLChH7xFlir02"));
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        // TODO: dynamic loading/updating of books
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                List<BookList> books = bookListProvider.getBorrowedBookList();
+                bookListings.clear();
+                for (BookList book : books) {
+                    if (book.getStatus().equals("requested")) {
+                        bookListings.add(book);
+                    }
+                }
+                bookAdapter.setmBookList(bookListings);
+                bookAdapter.notifyDataSetChanged();
+                handler.postDelayed(this, 2000);
+            }
+        }, 2000);
     }
 }
+
+

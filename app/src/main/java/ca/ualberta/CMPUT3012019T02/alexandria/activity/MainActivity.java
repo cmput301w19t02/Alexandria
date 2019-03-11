@@ -9,11 +9,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookParser;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.ExchangeFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.library.LibraryFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
 
 /**
  * The main screen that opens when the application opens
@@ -21,14 +31,18 @@ import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
  * based on https://www.youtube.com/watch?v=jpaHMcQDaDg on 02/24/2019
  */
 public class MainActivity extends AppCompatActivity
-        implements BottomNavigationView.OnNavigationItemSelectedListener {
+        implements BottomNavigationView.OnNavigationItemSelectedListener, BookListProvider {
 
     private UserController userController = UserController.getInstance();
+    private List<BookList> borrowedBookListings = new ArrayList<>();
+    private List<BookList> ownedBookListings = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        userController.deauthenticate(); // show login page on every app startup
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
@@ -65,8 +79,61 @@ public class MainActivity extends AppCompatActivity
             startActivity(startLoginActivity);
         }
         else{
-            System.out.println("Already logged in");
+//            System.out.println("Already logged in");
+            BookController bookController = BookController.getInstance();
+            bookController.getMyBorrowedBooks().thenAcceptAsync(stringBorrowedBookHashMap -> {
+                try {
+
+                    System.out.println("Loading borrowed books");
+                    // Gets accepted book list items
+                    List<BookList> bookLists = BookParser.UserBooksToBookList(stringBorrowedBookHashMap).get(5, TimeUnit.SECONDS);
+
+                    borrowedBookListings.clear();
+                    borrowedBookListings.addAll(bookLists);
+
+                    // Sort by alphabetical order of book titles
+                    Collections.sort(borrowedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
+                    System.out.println("Loading borrowed books");
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                }
+            }).exceptionally(throwable -> {
+                throwable.printStackTrace();
+                return null;
+            });
+
+            bookController.getMyOwnedBooks().thenAcceptAsync(stringOwnedBookHashMap -> {
+                try {
+
+                    System.out.println("Loading owned books");
+                    // Gets accepted book list items
+                    List<BookList> bookLists = BookParser.UserBooksToBookList(stringOwnedBookHashMap).get(5, TimeUnit.SECONDS);
+
+                    ownedBookListings.clear();
+                    ownedBookListings.addAll(bookLists);
+
+                    // Sort by alphabetical order of book titles
+                    Collections.sort(ownedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
+                    System.out.println("Finished loading owned books");
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                }
+            }).exceptionally(throwable -> {
+                throwable.printStackTrace();
+                return null;
+            });
         }
+
     }
 
     private boolean loadFragment(Fragment fragment) {
@@ -111,5 +178,15 @@ public class MainActivity extends AppCompatActivity
     protected void onProfileButtonClick(View view) {
         Intent startProfileActivity = new Intent(this, MyProfileActivity.class);
         startActivity(startProfileActivity);
+    }
+
+    @Override
+    public List<BookList> getBorrowedBookList() {
+        return borrowedBookListings;
+    }
+
+    @Override
+    public List<BookList> getOwnedBookList() {
+        return ownedBookListings;
     }
 }
