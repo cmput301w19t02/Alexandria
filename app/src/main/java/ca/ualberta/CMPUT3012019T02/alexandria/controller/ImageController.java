@@ -70,11 +70,11 @@ public class ImageController {
             final File localFile = File.createTempFile("images", IMAGE_FORMAT);
 
             final FileDownloadTask fileDownloadTask = imageReference.getFile(localFile);
-//            fileDownloadTask.addOnSuccessListener(taskSnapshot -> {
+            fileDownloadTask.addOnSuccessListener(taskSnapshot -> {
             // Local temp file has been created
-            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-            future.complete(bitmap);
-//            }).addOnFailureListener(future::completeExceptionally);
+                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                future.complete(bitmap);
+            }).addOnFailureListener(future::completeExceptionally);
 
         } catch (IOException e) {
             e.printStackTrace();
