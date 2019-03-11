@@ -1,0 +1,214 @@
+@startuml
+
+title __ACTIVITY's Class Diagram__\n
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+      class BlockedUsersActivity {
+          # onCreate()
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+      interface BookListProvider {
+          {abstract} + getBorrowedBookList()
+          {abstract} + getOwnedBookList()
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+      class ChatRoomActivity {
+          - messagesRef : DatabaseReference
+          - messagesListener : ValueEventListener
+          - messageList : List<Message>
+          - chatId : String
+          - recieverId : String
+          - senderId : String
+          # onCreate()
+          + onStart()
+          + onStop()
+          + onCreateOptionsMenu()
+          + onOptionsItemSelected()
+          # onAddPhotoClick()
+          # onAddLocationClick()
+          # onSendMessageClick()
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+      class EditMyProfileActivity {
+          - editText_name : EditText
+          - editText_username : EditText
+          - editText_email : EditText
+          # onCreate()
+          + onResume()
+          - showError()
+          # onSaveButtonClick()
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+      class LoginActivity {
+          # onCreate()
+          + signIn()
+          + navigateToSignUp()
+          - showError()
+          - validateUsername()
+          - validatePassword()
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+      class MainActivity {
+          - borrowedBookListings : List<BookList>
+          - ownedBookListings : List<BookList>
+          # onCreate()
+          # onStart()
+          - loadFragment()
+          + onNavigationItemSelected()
+          # onResume()
+          # onProfileButtonClick()
+          + getBorrowedBookList()
+          + getOwnedBookList()
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+      class MyProfileActivity {
+          # onCreate()
+          + onResume()
+          - showError()
+          + onCreateOptionsMenu()
+          + onOptionsItemSelected()
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+      class SignUpActivity {
+          - photoId : String
+          # onCreate()
+          + goBack()
+          + addPhoto()
+          + signUp()
+          # onActivityResult()
+          - showError()
+          - validateUsername()
+          - validateName()
+          - validateEmail()
+          - validatePassword()
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+      class ViewUserProfileActivity {
+          - username : String
+          - name : String
+          - photoId : String
+          - userID : String
+          # onCreate()
+          + onResume()
+          - showError()
+          + onCreateOptionsMenu()
+          + onOptionsItemSelected()
+      }
+    }
+  }
+  
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+      package ca.ualberta.CMPUT3012019T02.alexandria.activity.viewmybook {
+        class AddNewBookActivity {
+            - title : String
+            - author : String
+            - isbn : String
+            - description : String
+            - date : Date
+            - image : String
+            # onCreate()
+            + validateTitle()
+            + validateAuthor()
+            + validateISBN()
+            + addPhoto()
+            + scanISBN()
+            + addBook()
+        }
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+      package ca.ualberta.CMPUT3012019T02.alexandria.activity.viewmybook {
+        class EditBookActivity {
+            - title : String
+            - author : String
+            - isbn : String
+            - description : String
+            - date : Date
+            - image : String
+            # onCreate()
+            + addBook()
+            + deleteBook()
+        }
+      }
+    }
+  }
+  
+
+  AddNewBookActivity -up-|> AppCompatActivity
+  AddNewBookActivity o-- Book
+  EditBookActivity -up-|> AddNewBookActivity
+  EditBookActivity o-- Book
+  BlockedUsersActivity -up-|> AppCompatActivity
+  ChatRoomActivity -up-|> AppCompatActivity
+  EditMyProfileActivity -up-|> AppCompatActivity
+  EditMyProfileActivity o-- "1" UserController
+  EditMyProfileActivity o-- "1" UserProfile
+  LoginActivity -up-|> AppCompatActivity
+  LoginActivity o-- "1" UserController
+  MainActivity -up-|> OnNavigationItemSelectedListener
+  MainActivity -up-|> BookListProvider
+  MainActivity -up-|> AppCompatActivity
+  MainActivity o-- "1" UserController
+  MyProfileActivity -up-|> AppCompatActivity
+  MyProfileActivity o-- UserProfile
+  SignUpActivity -up-|> AppCompatActivity
+  SignUpActivity o-- "1" UserController
+  SignUpActivity o-- "1" ImageController
+  ViewUserProfileActivity -up-|> AppCompatActivity
+  ViewUserProfileActivity o-- UserProfile
+
+
+right footer
+
+
+PlantUML diagram partly generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml
