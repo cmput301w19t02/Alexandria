@@ -1,227 +1,468 @@
 @startuml
 
-' skinparam classAttributeIconSize 0
-
 title __MODEL's Class Diagram__\n
 
-package ca.ualberta.CMPUT3012019T02.alexandria {
-
+  package ca.ualberta.CMPUT3012019T02.alexandria {
     package ca.ualberta.CMPUT3012019T02.alexandria.model {
-
-        package ca.ualberta.CMPUT3012019T02.alexandria.model.message {
-
-            abstract class Message {
-                - type : String
-                - content : String
-                - status : String
-                - date : Date
-                - sender : String
-                + Message(String type, String content, String status, Date date, String sender)
-                + getType() : String
-                + getContent() : String
-                + setContent(String content) : void
-                + getStatus() : String
-                + setStatus(String status) : void
-                + getDate() : Date
-                + setDate(Date date) : void
-                + getSender() : String
-                + setSender(String sender) : void
-            }
-            note top: "Used to store message data"
-
-            class ImageMessage {
-                + ImageMessage(String content, String status, Date date, String sender)
-                + getImageUrl() : String
-                + setImageUrl(String imageUrl) : void
-            }
-            note bottom: "Used to store message data for message\ncontaining an image"
-
-            class LocationMessage {
-                + LocationMessage(String content, String status, Date date, String sender)
-                + getLocation() : Location
-                + setLocation(Location location) : void
-            }
-            note bottom: "Used to store message data for message\ncontaining a location"
-
-            class TextMessage {
-                + TextMessage(String content, String status, Date date, String sender)
-                + getText() : String
-                + setText(String text) : void
-            }
-            note bottom: "Used to store message data for message\ncontaining text"
-        }
-
-        package ca.ualberta.CMPUT3012019T02.alexandria.user {
-
-            class User {
-                - chatRooms : Map<String, String>
-                - ownedBooks : List<OwnedBook>
-                - borrowedBooks : List<BorrowedBook>
-                - id : String
-                - blockedUsers : List<String>
-                + User(String id, UserProfile profile)
-                + getChatRooms() : Map<String, String>
-                + setChatRooms(Map<String, String> chatRooms) : void
-                + addChatRoom(String user, String uuid) : void
-                + removeChatRoom(String user) : void
-                + getOwnedBooks() : List<OwnedBook>
-                + setOwnedBooks(List<OwnedBook> ownedBooks) : void
-                + addOwnedBook(OwnedBook ownedBook) : void
-                + removeOwnedBook(OwnedBook ownedBook) : void
-                + getBorrowedBooks() : List<BorrowedBook>
-                + setBorrowedBooks(List<BorrowedBook> borrowedBooks) : void
-                + addBorrowedBook(BorrowedBook borrowedBook) : void
-                + removeBorrowedBook(BorrowedBook borrowedBook) : void
-                + getProfile() : UserProfile
-                + setProfile(UserProfile userProfile) : void
-                + getId() : String
-                + setId(String id) : void
-                + getBlockedUsers() : List<String>
-                + setBlockedUsers(List<String> blockedUsers) : void
-                + addBlockedUser(String blockedUser) : void
-                + removeBlockedUser(String blockedUser) : void
-            }
-            note left: "Used to store data about a specific user"
-
-            class UserProfile {
-                - name : String
-                - email : String
-                - phone : String
-                - picture : Bitmap
-                + UserProfile(String name, String email, String phone, Bitmap picture)
-                + getName() : String
-                + setName(String name) : void
-                + getEmail() : String
-                + setEmail(String email) : void
-                + getPhone() : String
-                + setPhone(String phone) : void
-                + getPicture() : Bitmap
-                + setPicture(Bitmap picture) : void
-            }
-            note left: "Used to store profile data about a specific user"
-
-            class BorrowedBook {
-                - isbn : String
-                - status : String
-                - owner : String
-                + BorrowedBook(String isbn, String status, String owner)
-                + getIsbn() : String
-                + setIsbn(String isbn) : void
-                + getStatus() : String
-                + setStatus(String status) : void
-                + getOwner() : String
-                + setOwner(String owner) : void
-            }
-            note left: "Used to store data about a borrowed book"
-
-            class OwnedBook {
-                - isbn : String
-                - usersRequesting : List<String>
-                - images : List<Bitmap>
-                - status : String
-                - userBorrowing : String
-                + OwnedBook(String isbn, String status, String userBorrowing)
-                + getIsbn() : String
-                + setIsbn(String isbn) : void
-                + getUsersRequesting() : List<String>
-                + setUsersRequesting(List<String> usersRequesting) : void
-                + addUserRequesting(String userRequesting) : void
-                + removeUserRequesting(String userRequesting) : void
-                + getImages() : List<Bitmap>
-                + setImages(List<Bitmap> images) : void
-                + addImage(Bitmap image) : void
-                + removeImage(Bitmap image) : void
-                + getStatus() : String
-                + setStatus(String status) : void
-                + getUserBorrowing() : String
-                + setUserBorrowing(String userBorrowing) : void
-            }
-            note right: "Used to store data about an owned book"
-
-        }
-
-        class Book {
-            - isbn : String
-            - image : Bitmap
-            - title : String
-            - author : String
-            - date : Date
-            - availableOwners : List<String>
-            + Book(String isbn, Bitmap image, String title, String author, Date date)
-            + getIsbn() : String
-            + setIsbn(String isbn) : void
-            + getImage() : Bitmap
-            + setImage(Bitmap image) : void
-            + getTitle() : String
-            + setTitle(String title) : void
-            + getAuthor() : String
-            + setAuthor(String author) : void
-            + getDate() : Date
-            + setDate(Date date) : void
-            + getAvailableOwners() : List<String>
-            + setAvailableOwners(List<String> availableOwners) : void
-            + addAvailableOwners(String availableOwner) : void
-            + removeAvailableOwners(String availableOwner) : void
-        }
-        note right: "Used to store data about a book title"
-
-        class ChatRoom {
-            ~ messages : List<Message>
-            ~ id : String
-            + ChatRoom(String id)
-            + getMessages() : List<Message>
-            + setMessages(List<Message> messages) : void
-            + addMessage(Message message) : void
-            + removeMessage(Message message) : void
-            + getId() : String
-            + setId(String id) : void
-        }
-        note right: "Used to keep track of that chat rooms\na user is in"
-
-        class Location {
-            - latitude : double
-            - longitude : double
-            + Location(double latitude, double longitude)
-            + getLatitude() : double
-            + setLatitude(double latitude) : void
-            + getLongitude() : double
-            + setLongitude(double longitude) : void
-        }
-        note left: "Used to store data about an exchange location"
-
+      class Book {
+          - isbn : String
+          - imageId : String
+          - title : String
+          - author : String
+          - description : String
+          - date : Date
+          - availableOwners : List<String>
+          + Book()
+          + Book()
+          + getIsbn()
+          + setIsbn()
+          + getImageId()
+          + setImageId()
+          + getTitle()
+          + setTitle()
+          + getAuthor()
+          + setAuthor()
+          + getDate()
+          + setDate()
+          + getAvailableOwners()
+          + setAvailableOwners()
+          + addAvailableOwners()
+          + removeAvailableOwners()
+          + getDescription()
+          + setDescription()
+          + equals()
+      }
     }
+  }
+  
 
-}
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      class BookList {
+          - cover : Bitmap
+          - title : String
+          - author : String
+          - isbn : String
+          - status : String
+          - owner : String
+          + BookList()
+          + BookList()
+          + getCover()
+          + setCover()
+          + getTitle()
+          + setTitle()
+          + getAuthor()
+          + setAuthor()
+          + getIsbn()
+          + setIsbn()
+          + getStatus()
+          + setStatus()
+          + getOwner()
+          + setOwner()
+      }
+    }
+  }
+  
 
-' class Bitmap
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      class BookRecyclerViewAdapter {
+          - mContext : Context
+          - mBookList : List<BookList>
+          - destination : String
+          + BookRecyclerViewAdapter()
+          + onCreateViewHolder()
+          + onBindViewHolder()
+          + getItemCount()
+          - dataBundler()
+          + setmBookList()
+          - setDestination()
+      }
+    }
+  }
+  
 
-User "1" o-up- "1" UserProfile
-User "1" o-down- "*" OwnedBook
-User "1" o-down- "*" BorrowedBook
-User "2" -left- "*" ChatRoom : participates in >
-User "*" o-right- "*" User : blocked >
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      class BookViewHolder {
+          + itemBook : LinearLayout
+          + ivCover : ImageView
+          + tvTitle : TextView
+          + tvAuthor : TextView
+          + tvISBN : TextView
+          + ivStatus : ImageView
+          + BookViewHolder()
+      }
+    }
+  }
+  
 
-' UserProfile "*" o-down- "1" Bitmap
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      class ChatRecyclerViewAdapter {
+          - mContext : Context
+          - mChatRoomList : List<ChatRoomItem>
+          + ChatRecyclerViewAdapter()
+          + onCreateViewHolder()
+          + onBindViewHolder()
+          + getItemCount()
+          + updateChatRoomList()
+      }
+    }
+  }
+  
 
-OwnedBook "*" -- "1" User : borrowed by >
-OwnedBook "*" -- "*" User : requested by >
-OwnedBook "*" -down- "1" Book : references >
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      class ChatRoom {
+          - messages : List<Message>
+          - id : String
+          + ChatRoom()
+          + getMessages()
+          + setMessages()
+          + addMessage()
+          + removeMessage()
+          + getId()
+          + setId()
+      }
+    }
+  }
+  
 
-BorrowedBook "*" -- "1" User : owned by >
-BorrowedBook "*" -down- "1" Book : references >
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      class ChatRoomItem {
+          - user1Id : String
+          - user1Name : String
+          - user2Id : String
+          - user2Name : String
+          - chatId : String
+          - readStatus : boolean
+          + ChatRoomItem()
+          + ChatRoomItem()
+          + toMap()
+          + getUser1Id()
+          + setUser1Id()
+          + getUser1Name()
+          + setUser1Name()
+          + getUser2Id()
+          + setUser2Id()
+          + getUser2Name()
+          + setUser2Name()
+          + getChatId()
+          + setChatId()
+          + getReadStatus()
+          + setReadStatus()
+      }
+    }
+  }
+  
 
-Book "*" -up- "*" User : available from >
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      class ChatViewHolder {
+          + itemChat : LinearLayout
+          + tvChatRecieverUsername : TextView
+          + ivChatUserPic : ImageView
+          + ivReadStatus : ImageView
+          + ChatViewHolder()
+      }
+    }
+  }
+  
 
-ChatRoom "1" *-down- "*" Message
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      class Location {
+          - latitude : double
+          - longitude : double
+          + Location()
+          + getLatitude()
+          + setLatitude()
+          + getLongitude()
+          + setLongitude()
+      }
+    }
+  }
+  
 
-ImageMessage -up-|> Message
-' ImageMessage "*" o-up- "1" Bitmap
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      class MessageRecyclerViewAdapter {
+          - mContext : Context
+          - mMessageList : List<Message>
+          + MessageRecyclerViewAdapter()
+          + onCreateViewHolder()
+          + onBindViewHolder()
+          + getItemCount()
+          + updateMessageList()
+      }
+    }
+  }
+  
 
-LocationMessage -up-|> Message
-LocationMessage "1" o-- "1" Location
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      class MessageViewHolder {
+          + itemMessage : LinearLayout
+          + tvContent : TextView
+          + tvSenderUsername : TextView
+          + MessageViewHolder()
+      }
+    }
+  }
+  
 
-TextMessage -up-|> Message
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      class TabsAdapter {
+          - mFragmentList : List<Fragment>
+          - mFragmentTitleList : List<String>
+          + TabsAdapter()
+          + addFragment()
+          + getPageTitle()
+          + getItem()
+          + getCount()
+      }
+    }
+  }
+  
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      package ca.ualberta.CMPUT3012019T02.alexandria.model.message {
+        class ImageMessage {
+            + ImageMessage()
+            + getImage()
+            + setImage()
+        }
+      }
+    }
+  }
+  
 
-Message "*" -right- "1" User : sent by >
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      package ca.ualberta.CMPUT3012019T02.alexandria.model.message {
+        class LocationMessage {
+            + LocationMessage()
+            + getLocation()
+            + setLocation()
+        }
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      package ca.ualberta.CMPUT3012019T02.alexandria.model.message {
+        abstract class Message {
+            - id : String
+            - type : String
+            - content : String
+            - status : String
+            - date : String
+            - sender : String
+            + Message()
+            + Message()
+            + toMap()
+            + getId()
+            + setId()
+            + getType()
+            + setType()
+            + getContent()
+            + setContent()
+            + getStatus()
+            + setStatus()
+            + getDate()
+            + setDate()
+            + getSender()
+            + setSender()
+        }
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      package ca.ualberta.CMPUT3012019T02.alexandria.model.message {
+        class TextMessage {
+            + TextMessage()
+            + TextMessage()
+            + getText()
+            + setText()
+        }
+      }
+    }
+  }
+  
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+        class BorrowedBook {
+            + BorrowedBook()
+            + BorrowedBook()
+        }
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+        class OwnedBook {
+            - usersRequesting : List<String>
+            - images : List<String>
+            - userBorrowing : String
+            + OwnedBook()
+            + OwnedBook()
+            + OwnedBook()
+            + getUsersRequesting()
+            + setUsersRequesting()
+            + addUserRequesting()
+            + removeUserRequesting()
+            + getImages()
+            + setImages()
+            + addImage()
+            + removeImage()
+            + getUserBorrowing()
+            + setUserBorrowing()
+        }
+      }
+    }
+  }
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+        class User {
+            - chatRooms : Map<String, String>
+            - ownedBooks : HashMap<String, OwnedBook>
+            - borrowedBooks : HashMap<String, BorrowedBook>
+            - id : String
+            - blockedUsers : List<String>
+            + User()
+            + getChatRooms()
+            + setChatRooms()
+            + addChatRoom()
+            + removeChatRoom()
+            + getOwnedBooks()
+            + setOwnedBooks()
+            + addOwnedBook()
+            + removeOwnedBook()
+            + getBorrowedBooks()
+            + setBorrowedBooks()
+            + addBorrowedBook()
+            + removeBorrowedBook()
+            + getProfile()
+            + setProfile()
+            + getId()
+            + setId()
+            + getBlockedUsers()
+            + setBlockedUsers()
+            + addBlockedUser()
+            + removeBlockedUser()
+            + isBlockedUser()
+        }
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+        abstract class UserBook {
+            - isbn : String
+            - status : String
+            - owner : String
+            ~ UserBook()
+            + getIsbn()
+            + setIsbn()
+            + getStatus()
+            + setStatus()
+            + getOwner()
+            + setOwner()
+        }
+      }
+    }
+  }
+  
+
+  package ca.ualberta.CMPUT3012019T02.alexandria {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model {
+      package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+        class UserProfile {
+            - name : String
+            - email : String
+            - phone : String
+            - picture : String
+            - username : String
+            + UserProfile()
+            + UserProfile()
+            + getName()
+            + setName()
+            + getEmail()
+            + setEmail()
+            + getPhone()
+            + setPhone()
+            + getPicture()
+            + setPicture()
+            + getUsername()
+            + setUsername()
+        }
+      }
+    }
+  }
+  
+
+  BorrowedBook -up-|> UserBook
+  OwnedBook -up-|> UserBook
+
+  User "1" o-up- "1" UserProfile
+  User "1" o-down- "*" OwnedBook
+  User "1" o-down- "*" BorrowedBook
+  User "2" -left- "*" ChatRoom : participates in >
+  User "*" o-right- "*" User : blocked >
+
+  OwnedBook "*" -- "1" User : borrowed by >
+  OwnedBook "*" -- "*" User : requested by >
+  OwnedBook "*" -down- "1" Book : references >
+
+  BorrowedBook "*" -- "1" User : owned by >
+  BorrowedBook "*" -down- "1" Book : references >
+
+  Book "*" -up- "*" User : available from >
+
+  ChatRoom "1" *-down- "*" Message
+
+  ImageMessage -up-|> Message
+
+  LocationMessage -up-|> Message
+  LocationMessage "1" o-- "1" Location
+
+  TextMessage -up-|> Message
+
+  Message "*" -right- "1" User : sent by >
+
+  BookRecyclerViewAdapter -up-|> Adapter
+  BookViewHolder -up-|> ViewHolder
+  ChatRecyclerViewAdapter -up-|> Adapter
+  ChatViewHolder -up-|> ViewHolder
+  MessageRecyclerViewAdapter -up-|> Adapter
+  MessageViewHolder -up-|> ViewHolder
+  TabsAdapter -up-|> FragmentPagerAdapter
+
+  BookList "*" -- "1" Book
+  BookList "*" -- "1" UserBook
+
+right footer
+
+
+PlantUML diagram partly generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
 
 @enduml
