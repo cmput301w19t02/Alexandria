@@ -363,8 +363,15 @@ public class BookController {
     // Owned
 
     private CompletableFuture<Void> addUserOwnedBook(@NonNull String id, @NonNull OwnedBook ownedBook) {
-        return addUserBook("ownedBooks", OwnedBook.class, id, ownedBook).thenCombine(
-            addAvailableOwner(id, ownedBook.getIsbn()), (aVoid, aVoid2) -> null);
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        addUserBook("ownedBooks", OwnedBook.class, id, ownedBook).thenRun(() -> addAvailableOwner(id, ownedBook.getIsbn()).thenRun(() -> future.complete(null)).exceptionally(throwable -> {
+            future.completeExceptionally(throwable);
+            return null;
+        })).exceptionally(throwable -> {
+            future.completeExceptionally(throwable);
+            return null;
+        });
+        return future;
     }
 
     /**
@@ -387,15 +394,24 @@ public class BookController {
     }
 
     private CompletableFuture<Void> updateUserOwnedBook(@NonNull String id, @NonNull OwnedBook ownedBook) {
-       CompletableFuture<Void> updateUserBookFuture = updateUserBook("ownedBooks", id, ownedBook);
-       CompletableFuture<Void> updateAvailableOwnerFuture;
-       if (ownedBook.getStatus().equals("available") || ownedBook.getStatus().equals("requested")) {
-           updateAvailableOwnerFuture = addAvailableOwner(id, ownedBook.getIsbn());
-       } else {
-           updateAvailableOwnerFuture = removeAvailableOwner(id, ownedBook.getIsbn());
-       }
-       return updateUserBookFuture.thenCombine(updateAvailableOwnerFuture, ((aVoid, aVoid2) -> null));
-
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        updateUserBook("ownedBooks", id, ownedBook).thenRun(() -> {
+           if (ownedBook.getStatus().equals("available") || ownedBook.getStatus().equals("requested")) {
+               addAvailableOwner(id, ownedBook.getIsbn()).thenRun(() -> future.complete(null)).exceptionally(throwable -> {
+                   future.completeExceptionally(throwable);
+                   return null;
+               });
+           } else {
+               removeAvailableOwner(id, ownedBook.getIsbn()).thenRun(() -> future.complete(null)).exceptionally(throwable -> {
+                   future.completeExceptionally(throwable);
+                   return null;
+               });
+           }
+        }).exceptionally(throwable -> {
+            future.completeExceptionally(throwable);
+            return null;
+        });
+        return future;
     }
     private CompletableFuture<Void> deleteUserOwnedBook(@NonNull String id, @NonNull String isbn) {
         return deleteUserBook("ownedBooks", id, isbn).thenCombine(removeAvailableOwner(id, isbn), ((aVoid, aVoid2) -> null));
@@ -492,39 +508,39 @@ public class BookController {
 
 
     private CompletableFuture<Void> addAvailableOwner(String id, String isbn) {
-        return CompletableFuture.runAsync(() -> {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        CompletableFuture.runAsync(() -> {
             try {
                 Book book = getBook(isbn).get(5, TimeUnit.SECONDS);
                 if (book.getAvailableOwners().contains(id)) {
+                    future.complete(null);
                     return;
                 }
                 book.addAvailableOwners(id);
                 updateBook(book).get(5, TimeUnit.SECONDS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (TimeoutException e) {
-                e.printStackTrace();
+                future.complete(null);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
             }
         });
+        return future;
     }
 
     private CompletableFuture<Void> removeAvailableOwner(String id, String isbn) {
-        return CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+
+        CompletableFuture.runAsync(() -> {
             try {
                 Book book = getBook(isbn).get(5, TimeUnit.SECONDS);
                 book.removeAvailableOwners(id);
                 updateBook(book).get(5, TimeUnit.SECONDS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (TimeoutException e) {
-                e.printStackTrace();
+                future.complete(null);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
             }
-            return null;
         });
+
+        return future;
     }
 
 
