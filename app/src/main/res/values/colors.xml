@@ -8,5 +8,6 @@
     <color name="colorYellow">#F3E49B</color>
     <color name="colorWhite">#FFFF</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorGrey">#5D5D55</color>
     <color name="colorHint">#91908E</color>
 </resources>
