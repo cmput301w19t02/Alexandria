@@ -31,6 +31,8 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="blocked_users">Blocked Users</string>
     <string name="edit_profile_save">Save Changes</string>
+    <!--Strings for User Book -->
+    <string name="user_book_button_temp">Set Status Borrowed</string>
     <!-- Strings related to view user profile -->
     <string name="set_username">Set Username</string>
     <string name="name_background_desc">background</string>

@@ -13,16 +13,19 @@ public class BookList {
     private String author;
     private String isbn;
     private String status;
+    private String owner;
 
     public BookList() {
     }
 
-    public BookList(Bitmap cover, String title, String author, String isbn, String status) {
+    public BookList(Bitmap cover, String title, String author,
+                    String isbn, String status, String owner) {
         this.cover = cover;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
         this.status = status;
+        this.owner = owner;
     }
 
 
@@ -66,4 +69,7 @@ public class BookList {
         this.status = status;
     }
 
+    public String getOwner() { return owner; }
+
+    public void setOwner(String owner) { this.owner = owner; }
 }

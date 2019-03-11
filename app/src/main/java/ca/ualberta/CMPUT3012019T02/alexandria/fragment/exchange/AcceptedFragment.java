@@ -51,19 +51,19 @@ public class AcceptedFragment extends Fragment {
         acceptedBooks = new ArrayList<>();
         acceptedBooks.add(new BookList
                 (aBitmap, "Test Title",
-                        "Test Author", "Test ISBN", "accepted"));
+                        "Test Author", "Test ISBN", "accepted", "Phteven"));
         acceptedBooks.add(new BookList
                 (aBitmap, "Test Title 2",
-                        "Test Author", "Test ISBN", "accepted"));
+                        "Test Author", "Test ISBN", "accepted",null));
         acceptedBooks.add(new BookList
                 (aBitmap, "Test Title 3",
-                        "Test Author", "Test ISBN", "accepted"));
+                        "Test Author", "Test ISBN", "accepted", "Jimmy"));
         acceptedBooks.add(new BookList
                 (aBitmap, "Test Title 4",
-                        "Test Author", "Test ISBN", "accepted"));
+                        "Test Author", "Test ISBN", "accepted", "Jeff"));
         acceptedBooks.add(new BookList
                 (aBitmap, "Test Title 5",
-                        "Test Author", "Test ISBN", "accepted"));
+                        "Test Author", "Test ISBN", "accepted", "Cool David"));
 
     }
 }

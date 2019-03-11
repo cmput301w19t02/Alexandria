@@ -46,23 +46,13 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
                 .inflate(R.layout.item_book, viewGroup, false);
         BookViewHolder mViewHolder = new BookViewHolder(mView);
 
-
-
         //list click to switch fragments
         mViewHolder.itemBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //bundles data for fragment switching
                 Fragment frag = setDestination(destination);
-                Bundle b = new Bundle();
-
-                b.putParcelable("cover", mBookList.get(mViewHolder.getAdapterPosition()).getCover());
-                b.putString("title", mBookList.get(mViewHolder.getAdapterPosition()).getTitle());
-                b.putString("author", mBookList.get(mViewHolder.getAdapterPosition()).getAuthor());
-                b.putString("isbn", mBookList.get(mViewHolder.getAdapterPosition()).getIsbn());
-
-                frag.setArguments(b);
+                frag.setArguments(dataBundler(mViewHolder));
 
                 //switch fragments with bundled data
                 FragmentTransaction fragmentTransaction =
@@ -109,6 +99,20 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
         return mBookList.size();
     }
 
+    //bundles data for fragment switching
+    private Bundle dataBundler(BookViewHolder mViewHolder) {
+        Bundle b = new Bundle();
+
+        b.putParcelable("cover", mBookList.get(mViewHolder.getAdapterPosition()).getCover());
+        b.putString("title", mBookList.get(mViewHolder.getAdapterPosition()).getTitle());
+        b.putString("author", mBookList.get(mViewHolder.getAdapterPosition()).getAuthor());
+        b.putString("isbn", mBookList.get(mViewHolder.getAdapterPosition()).getIsbn());
+        b.putString("status", mBookList.get(mViewHolder.getAdapterPosition()).getStatus());
+        b.putString("owner", mBookList.get(mViewHolder.getAdapterPosition()).getOwner());
+
+        return b;
+    }
+
     //Allows Conditional Destination to Fragments, Add to cases as needed
     private Fragment setDestination(String destination){
 
@@ -119,6 +123,5 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
             default:
                 throw new RuntimeException("Fragment Not Defined");
         }
-
     }
 }
