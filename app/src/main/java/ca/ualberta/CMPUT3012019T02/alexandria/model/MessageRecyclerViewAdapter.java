@@ -53,4 +53,8 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageView
     public int getItemCount() {
         return mMessageList.size();
     }
+
+    public void updateMessageList(){
+
+    }
 }

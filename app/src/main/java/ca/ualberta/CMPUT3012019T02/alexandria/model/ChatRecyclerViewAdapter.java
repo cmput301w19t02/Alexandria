@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,10 +46,12 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
 
                 //TODO UNCOMMENT
                 //bundle.putParcelable("user_pic", mChatRoomList.get(mViewHolder.getAdapterPosition()).getUserPic());
-                bundle.putString("chatId", mChatRoomList.get(mViewHolder.getAdapterPosition()).getChatRoomId());
+                //bundle.putString("chatId", mChatRoomList.get(mViewHolder.getAdapterPosition()).getChatRoomId());
+                bundle.putString("chatId", "Testasdf1234");
                 bundle.putString("recieverId", mChatRoomList.get(mViewHolder.getAdapterPosition()).getUser2Id());
-
                 intent.putExtra("bundle", bundle);
+
+                Log.d("CHAT_ADAPTER", "chatRoomID: "+ mChatRoomList.get(mViewHolder.getAdapterPosition()).getChatRoomId());
                 mContext.startActivity(intent);
             }
         });
@@ -79,5 +82,9 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
     @Override
     public int getItemCount() {
         return mChatRoomList.size();
+    }
+
+    public void updateChatRoomList(List<ChatRoomItem> newList){
+        mChatRoomList = newList;
     }
 }

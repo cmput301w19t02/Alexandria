@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -62,8 +63,14 @@ public class ChatRoomActivity extends AppCompatActivity {
                 finish();
             }
         });
-        // TODO: get data from Firebase and set onClickListener
+
         // messages
+        Intent intent = getIntent();
+        Bundle bundle = intent.getBundleExtra("bundle");
+        chatId = bundle.getString("chatId");
+        recieverId = bundle.getString("recieverId");
+        senderId = UserController.getInstance().getMyId();
+
         messagesRef = FirebaseDatabase.getInstance().getReference().child("chatMessages").child(chatId);
         messagesListener = new ValueEventListener() {
             @Override
@@ -83,14 +90,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         };
         messagesRef.addValueEventListener(messagesListener);
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra("bundle");
-        chatId = bundle.getString("chatId");
-        recieverId = bundle.getString("recieverId");
-        senderId = UserController.getInstance().getMyId();
-
         ImageView sendButton = (ImageView)findViewById(R.id.image_send);
-
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +111,9 @@ public class ChatRoomActivity extends AppCompatActivity {
         MessageRecyclerViewAdapter adapter = new MessageRecyclerViewAdapter(this, messageList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);
+
+        adapter.updateMessageList(messageList);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

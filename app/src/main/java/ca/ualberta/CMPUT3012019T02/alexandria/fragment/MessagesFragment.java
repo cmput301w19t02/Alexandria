@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,13 +28,18 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.ChatRoomItem;
 public class MessagesFragment extends Fragment {
 
     private List<ChatRoomItem> chatRoomList = new ArrayList<>();
-    private DatabaseReference myRef;
+    private DatabaseReference chatRoomListRef;
     private ValueEventListener chatListener;
+    private ChatRecyclerViewAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        myRef = FirebaseDatabase.getInstance().getReference().child("users").child(UserController.getInstance().getMyId());
+
+        //myRef = FirebaseDatabase.getInstance().getReference().child("users").child(UserController.getInstance().getMyId());
+        // TODO remove when getMyId is working
+        chatRoomListRef = FirebaseDatabase.getInstance().getReference()
+                .child("users").child("eQgZfhN2Yng9TPHcXvfBZs5ZKxj1").child("chatRoomList");
 
         // adding current users' chatRooms to chatRoomList
         chatListener = new ValueEventListener() {
@@ -45,7 +51,7 @@ public class MessagesFragment extends Fragment {
                         chatRoomList.add(chatRoom);
                     }
                 } else {
-                    myRef.removeEventListener(this);
+                    chatRoomListRef.removeEventListener(this);
                 }
             }
 
@@ -54,8 +60,15 @@ public class MessagesFragment extends Fragment {
                 throw new RuntimeException("Could not load data from database " + databaseError);
             }
         };
-
-        myRef.addValueEventListener(chatListener);
+        chatRoomListRef.addValueEventListener(chatListener);
+        if (chatRoomList.isEmpty()){
+            Log.d("MESSAGE_FRAGMENT", "Chat Room List is empty");
+        } else {
+            Log.d("MESSAGE_FRAGMENT", "Chat Room List is NOT empty");
+        }
+        for (ChatRoomItem i : chatRoomList) {
+            Log.d("MESSAGE_FRAGMENT","########## chatRoom List"+ i.getUser1Id());
+        }
     }
 
     @Nullable
@@ -65,18 +78,27 @@ public class MessagesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_messages, null);
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.chat_recycler);
-        ChatRecyclerViewAdapter chatAdapter = new ChatRecyclerViewAdapter(getContext(), chatRoomList);
+        adapter = new ChatRecyclerViewAdapter(getContext(), chatRoomList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(chatAdapter);
+        mRecyclerView.setAdapter(adapter);
+        adapter.updateChatRoomList(chatRoomList);
+        adapter.notifyDataSetChanged();
 
         return rootView;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        adapter.updateChatRoomList(chatRoomList);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        myRef.removeEventListener(chatListener);
+        chatRoomListRef.removeEventListener(chatListener);
     }
 
 }

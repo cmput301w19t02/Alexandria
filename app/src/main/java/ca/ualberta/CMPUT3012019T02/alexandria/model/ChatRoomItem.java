@@ -20,7 +20,7 @@ public class ChatRoomItem {
     public ChatRoomItem(String chatRoomId, String user1Id, String user1Name,
                         String user2Id, String user2Name, boolean readStatus) {
         this.chatRoomId = chatRoomId;
-        this.user1Id=user1Id;
+        this.user1Id = user1Id;
         this.user1Name= user1Name;
         this.user2Id = user2Id;
         this.user2Name = user2Name;
