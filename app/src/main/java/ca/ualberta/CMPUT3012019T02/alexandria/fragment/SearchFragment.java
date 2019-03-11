@@ -18,14 +18,13 @@ import android.widget.EditText;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
-import java9.util.concurrent.CompletableFuture;
-
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookRecyclerViewAdapter;
+import java9.util.concurrent.CompletableFuture;
 
 public class SearchFragment extends Fragment {
 
