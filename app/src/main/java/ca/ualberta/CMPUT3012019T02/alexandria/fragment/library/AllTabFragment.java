@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange;
+package ca.ualberta.CMPUT3012019T02.alexandria.fragment.library;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -19,12 +19,11 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookRecyclerViewAdapter;
 
 /**
- * Fragment for filtering book list that has the status of Accepted
+ * Fragment for listing all own books
  */
+public class AllTabFragment extends Fragment {
 
-public class AcceptedFragment extends Fragment {
-
-    private List<BookList> acceptedBooks;
+    private List<BookList> allMyBooks;
 
     /**
      * Sets up the RecyclerView for the Fragment
@@ -34,11 +33,11 @@ public class AcceptedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_exchange_accepted,null);
+        View rootView = inflater.inflate(R.layout.fragment_library_all_tab,null);
 
-        RecyclerView mRecyclerView = rootView.findViewById(R.id.accepted_recycler);
+        RecyclerView mRecyclerView = rootView.findViewById(R.id.all_recycler);
         BookRecyclerViewAdapter bookAdapter = new BookRecyclerViewAdapter(
-                getContext(), acceptedBooks,"UserBookFragment");
+                getContext(), allMyBooks,"UserBookFragment");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(bookAdapter);
 
@@ -55,22 +54,19 @@ public class AcceptedFragment extends Fragment {
 
         //TODO setup data retrieval from Firebase, and remove placeholder lists
         Bitmap aBitmap = Bitmap.createBitmap(32, 32, Bitmap.Config.ARGB_8888);
-        acceptedBooks = new ArrayList<>();
-        acceptedBooks.add(new BookList
+        allMyBooks = new ArrayList<>();
+        allMyBooks.add(new BookList
                 (aBitmap, "Test Title",
-                        "Test Author", "Test ISBN", "accepted", "AQiv4J6BTsX5kYHgLChH7xFlir02"));
-        acceptedBooks.add(new BookList
+                        "Test Author", "Test ISBN", "requested", "ZvLVXXLOoWTZ7o6xmW6fT4PP0Wj1"));
+        allMyBooks.add(new BookList
                 (aBitmap, "Test Title 2",
                         "Test Author", "Test ISBN", "accepted","ZvLVXXLOoWTZ7o6xmW6fT4PP0Wj1"));
-        acceptedBooks.add(new BookList
+        allMyBooks.add(new BookList
                 (aBitmap, "Test Title 3",
-                        "Test Author", "Test ISBN", "accepted", "bJyo1fjcj0aYJejnJSfz6tugpca2"));
-        acceptedBooks.add(new BookList
+                        "Test Author", "Test ISBN", "borrowed", "ZvLVXXLOoWTZ7o6xmW6fT4PP0Wj1"));
+        allMyBooks.add(new BookList
                 (aBitmap, "Test Title 4",
-                        "Test Author", "Test ISBN", "accepted", "eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
-        acceptedBooks.add(new BookList
-                (aBitmap, "Test Title 5",
-                        "Test Author", "Test ISBN", "accepted", "tfTIZpx1Y2QwnhBwJeODmem0Mhk2"));
+                        "Test Author", "Test ISBN", "available", "ZvLVXXLOoWTZ7o6xmW6fT4PP0Wj1"));
 
     }
 }
