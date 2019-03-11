@@ -101,6 +101,10 @@ public class MessagesFragment extends Fragment {
     public void onStart(){
         super.onStart();
 
+        /**
+         * Code adapted from https://stackoverflow.com/questions/37404521/how-to-make-listview-to-refresh-after-every-5-sec-when-data-come-from-a-server
+         */
+
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override

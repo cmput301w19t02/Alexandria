@@ -36,6 +36,21 @@ public class ChatRoomItem {
 // TODO: Checks on setters for tests
     public ChatRoomItem(String chatRoomId, String user1Id, String user1Name,
                         String user2Id, String user2Name, boolean readStatus) {
+        if (chatRoomId == null || chatId.isEmpty()) {
+            throw new IllegalArgumentException("Type cannot be null or empty");
+        }
+        if (user1Id == null || user1Id.isEmpty()) {
+            throw new IllegalArgumentException("Type cannot be null or empty");
+        }
+        if (user1Name == null || user1Name.isEmpty()) {
+            throw new IllegalArgumentException("Type cannot be null or empty");
+        }
+        if (user2Id == null || user2Id.isEmpty()) {
+            throw new IllegalArgumentException("Type cannot be null or empty");
+        }
+        if (user2Name == null || user2Name.isEmpty()) {
+            throw new IllegalArgumentException("Type cannot be null or empty");
+        }
         this.chatId = chatRoomId;
         this.user1Id = user1Id;
         this.user1Name = user1Name;
@@ -80,6 +95,9 @@ public class ChatRoomItem {
      * @param user1Id the user 1 id
      */
     public void setUser1Id(String user1Id) {
+        if (user1Id == null || user1Id.isEmpty()) {
+            throw new IllegalArgumentException("Type cannot be null or empty");
+        }
         this.user1Id = user1Id;
     }
 
@@ -98,6 +116,9 @@ public class ChatRoomItem {
      * @param user1Name the user 1 name
      */
     public void setUser1Name(String user1Name) {
+        if (user1Name == null || user1Name.isEmpty()) {
+            throw new IllegalArgumentException("Type cannot be null or empty");
+        }
         this.user1Name = user1Name;
     }
 
@@ -116,6 +137,9 @@ public class ChatRoomItem {
      * @param user2Id the user 2 id
      */
     public void setUser2Id(String user2Id) {
+        if (user2Id == null || user2Id.isEmpty()) {
+            throw new IllegalArgumentException("Type cannot be null or empty");
+        }
         this.user2Id = user2Id;
     }
 
@@ -134,6 +158,9 @@ public class ChatRoomItem {
      * @param user2Name the user 2 name
      */
     public void setUser2Name(String user2Name) {
+        if (user2Name == null || user2Name.isEmpty()) {
+            throw new IllegalArgumentException("Type cannot be null or empty");
+        }
         this.user2Name = user2Name;
     }
 
@@ -152,6 +179,9 @@ public class ChatRoomItem {
      * @param chatRoomId the chat room id
      */
     public void setChatId(String chatRoomId) {
+        if (chatRoomId == null || chatId.isEmpty()) {
+            throw new IllegalArgumentException("Type cannot be null or empty");
+        }
         this.chatId = chatRoomId;
     }
 

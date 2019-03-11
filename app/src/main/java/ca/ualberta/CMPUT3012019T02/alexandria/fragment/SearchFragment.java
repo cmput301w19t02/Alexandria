@@ -25,6 +25,9 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
 import java9.util.concurrent.CompletableFuture;
 
+/**
+ * The type Search fragment.
+ */
 public class SearchFragment extends Fragment {
 
     private ArrayList<BookList> searchBooks = new ArrayList<BookList>();
@@ -52,6 +55,10 @@ public class SearchFragment extends Fragment {
 
         searchText.addTextChangedListener(new TextWatcher() {
 
+            /**
+             *
+             * @param s the text in the search field
+             */
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
                     // search firebase for the string
