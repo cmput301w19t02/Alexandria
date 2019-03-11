@@ -113,6 +113,10 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
         return b;
     }
 
+    public void setmBookList(List<BookList> bookList) {
+        this.mBookList = bookList;
+    }
+
     //Allows Conditional Destination to Fragments, Add to cases as needed
     private Fragment setDestination(String destination){
 
