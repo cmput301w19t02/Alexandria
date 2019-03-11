@@ -24,6 +24,10 @@ import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.ChatRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.ChatRoomItem;
 
+/**
+ * Fragment that shows a list of clickable chat rooms to chat with another user.
+ * Implements Chat
+ */
 public class MessagesFragment extends Fragment {
 
     private List<ChatRoomItem> chatRoomList = new ArrayList<>();
@@ -31,6 +35,10 @@ public class MessagesFragment extends Fragment {
     private ValueEventListener chatListener;
     private ChatRecyclerViewAdapter adapter;
 
+    /**
+     * set data listener on fragment creation
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -62,6 +70,15 @@ public class MessagesFragment extends Fragment {
         chatRoomListRef.addValueEventListener(chatListener);
     }
 
+    /**
+     * Assigns ChatRecyclerViewAdapter to the chat recycler view, and creates the view
+     *
+     * {@inheritDoc}
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return view of each chat room item in recycler view
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -76,6 +93,10 @@ public class MessagesFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * refreshes the chat room list every 2 seconds, with a .5 second delay on fragment start.
+     * {@inheritDoc}
+     */
     @Override
     public void onStart(){
         super.onStart();

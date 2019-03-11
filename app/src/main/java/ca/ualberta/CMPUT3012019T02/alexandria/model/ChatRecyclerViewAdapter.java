@@ -16,6 +16,10 @@ import java.util.List;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ChatRoomActivity;
 
+/**
+ * Recycler View adapter for the chat room list in MessageFragment. Sets up an on click listener
+ * for each list item to go to the appropriate chat room.
+ */
 public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder> {
 
     private Context mContext;
@@ -48,10 +52,12 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
                 //bundle.putParcelable("user_pic", mChatRoomList.get(mViewHolder.getAdapterPosition()).getUserPic());
                 //bundle.putString("chatId", mChatRoomList.get(mViewHolder.getAdapterPosition()).getChatRoomId());
                 bundle.putString("chatId", "Testasdf1234");
-                bundle.putString("recieverId", mChatRoomList.get(mViewHolder.getAdapterPosition()).getUser2Id());
+                bundle.putString("recieverId", mChatRoomList.get(mViewHolder
+                        .getAdapterPosition()).getUser2Id());
                 intent.putExtra("bundle", bundle);
 
-                Log.d("CHAT_ADAPTER", "chatRoomID: "+ mChatRoomList.get(mViewHolder.getAdapterPosition()).getChatId());
+                Log.d("CHAT_ADAPTER", "chatRoomID: "+ mChatRoomList
+                        .get(mViewHolder.getAdapterPosition()).getChatId());
                 mContext.startActivity(intent);
             }
         });

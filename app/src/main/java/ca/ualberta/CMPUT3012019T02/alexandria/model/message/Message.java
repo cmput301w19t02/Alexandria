@@ -3,6 +3,9 @@ package ca.ualberta.CMPUT3012019T02.alexandria.model.message;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The abstract message class that is used in chat rooms.
+ */
 public abstract class Message {
 
     private String id;
@@ -12,8 +15,21 @@ public abstract class Message {
     private String date;
     private String sender;
 
+    /**
+     * Instantiates a new Message.
+     * Necessary for Firebase.
+     */
     public Message(){}
 
+    /**
+     * Instantiates a new Message.
+     *
+     * @param type    the type
+     * @param content the content
+     * @param status  the status
+     * @param date    the date
+     * @param sender  the sender
+     */
     public Message(String type, String content, String status, String date, String sender) {
         if (type == null || type.isEmpty()) {
             throw new IllegalArgumentException("Type cannot be null or empty");
@@ -44,6 +60,11 @@ public abstract class Message {
         this.sender = sender;
     }
 
+    /**
+     * Maps the object to a hash map to be used to send data to Firebase.
+     *
+     * @return the map
+     */
     public Map<String, Object> toMap(){
         HashMap<String, Object> res = new HashMap<>();
         res.put("id", id);
@@ -56,18 +77,38 @@ public abstract class Message {
         return res;
     }
 
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Sets type.
+     *
+     * @param type the type
+     */
     public void setType(String type) {
         if (type == null || type.isEmpty()) {
             throw new IllegalArgumentException("Type cannot be null or empty");
@@ -79,10 +120,20 @@ public abstract class Message {
         this.type = type;
     }
 
+    /**
+     * Gets content.
+     *
+     * @return the content
+     */
     public String getContent() {
         return content;
     }
 
+    /**
+     * Sets content.
+     *
+     * @param content the content
+     */
     public void setContent(String content) {
         if (content == null || content.isEmpty()) {
             throw new IllegalArgumentException("Content cannot be null or empty");
@@ -91,10 +142,20 @@ public abstract class Message {
         this.content = content;
     }
 
+    /**
+     * Gets status.
+     *
+     * @return the status
+     */
     public String getStatus() {
         return status;
     }
 
+    /**
+     * Sets status.
+     *
+     * @param status the status
+     */
     public void setStatus(String status) {
         if (status == null || status.isEmpty()) {
             throw new IllegalArgumentException("Status cannot be null or empty");
@@ -106,10 +167,20 @@ public abstract class Message {
         this.status = status;
     }
 
+    /**
+     * Gets date.
+     *
+     * @return the date
+     */
     public String getDate() {
         return date;
     }
 
+    /**
+     * Sets date.
+     *
+     * @param date the date
+     */
     public void setDate(String date) {
         if (date == null) {
             throw new IllegalArgumentException("Date cannot be null");
@@ -118,10 +189,20 @@ public abstract class Message {
         this.date = date;
     }
 
+    /**
+     * Gets sender.
+     *
+     * @return the sender
+     */
     public String getSender() {
         return sender;
     }
 
+    /**
+     * Sets sender.
+     *
+     * @param sender the sender
+     */
     public void setSender(String sender) {
         if (sender == null || sender.isEmpty()) {
             throw new IllegalArgumentException("Sender cannot be null or empty");

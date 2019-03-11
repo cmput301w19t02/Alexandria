@@ -34,6 +34,9 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.MessageRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.TextMessage;
 
+/**
+ * This activity is solely for user to user messaging.
+ */
 public class ChatRoomActivity extends AppCompatActivity {
 
     private DatabaseReference messagesRef;
@@ -65,6 +68,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
 
         // messages
+        //TODO REMOVE HARD CODED ID's
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("bundle");
         chatId = bundle.getString("chatId");
@@ -107,7 +111,6 @@ public class ChatRoomActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        // TODO: set adapter for list view, fill with data from Firebase listeners
 
         RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.message_recycler);
         MessageRecyclerViewAdapter adapter = new MessageRecyclerViewAdapter(this, messageList);
@@ -137,6 +140,13 @@ public class ChatRoomActivity extends AppCompatActivity {
         inflater.inflate(R.menu.message_settings, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+    /**
+     * Block the user you are messaging.
+     *
+     * @param item
+     * @return
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -182,16 +192,34 @@ public class ChatRoomActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * On add image message to database.
+     *
+     * @param view the view
+     */
     protected void onAddPhotoClick(View view) {
         //TODO implement function
         Toast.makeText(this , "Add Photo", Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * On add location message to database.
+     *
+     * @param view the view
+     */
     protected void onAddLocationClick(View view) {
         //TODO implement function
         Toast.makeText(this , "Add Location", Toast.LENGTH_LONG).show();
     }
 
+
+    /**
+     * On send message click.
+     *
+     * @param inputText the input text
+     * @param senderId  the sender id
+     * @param ref       the ref
+     */
     protected void onSendMessageClick(String inputText, String senderId, DatabaseReference ref) {
         // TODO move this to chat controller, replace with chat controller methods
         TextMessage message = new TextMessage(inputText, "unread", "", senderId);
