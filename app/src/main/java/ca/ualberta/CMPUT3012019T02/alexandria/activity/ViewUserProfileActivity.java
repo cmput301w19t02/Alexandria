@@ -88,6 +88,15 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         userController.getUserProfile(userID).handleAsync((result, error) -> {
             if(error == null) {
                 // Update ui here
+                userProfile = result;
+                TextView textView_username = (TextView) findViewById(R.id.view_profile_username);
+                TextView textView_name = (TextView) findViewById(R.id.view_profile_name);
+
+                username = userProfile.getUsername();
+                name = userProfile.getName();
+
+                textView_username.setText(username);
+                textView_name.setText(name);
             }
             else {
                 // Show error message
@@ -109,7 +118,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
     /**
      * sets user info to the page
      */
-    @Override
+   /* @Override
     public void onResume() {
         super.onResume();
 
@@ -127,7 +136,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         textView_name.setText(name);
         //image_avatar. set image
     }
-
+*/
     /** //TODO make use
      * get userProfile of the current user from the database
      */
