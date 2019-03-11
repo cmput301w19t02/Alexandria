@@ -19,6 +19,7 @@
         app:popupTheme="@style/CustomPopupStyle">
 
         <ImageView
+            android:id="@+id/sign_up_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:onClick="goBack"

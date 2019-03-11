@@ -78,18 +78,6 @@ public class UserControllerTests {
     }
 
     @Test(expected = ExecutionException.class)
-    public void testCreateUserInvalidPhone() throws InterruptedException, ExecutionException, TimeoutException {
-        UserController controller = UserController.getInstance();
-
-        String username = "test_" + UUID.randomUUID().toString().replace('-', '_');
-        String password = UUID.randomUUID().toString();
-        String email = username + "@example.com";
-        CompletableFuture<Void> future = controller.createUser("John Smith", email, null, null, username, password);
-
-        future.get(5, TimeUnit.SECONDS);
-    }
-
-    @Test(expected = ExecutionException.class)
     public void testCreateUserInvalidUsername() throws InterruptedException, ExecutionException, TimeoutException {
         UserController controller = UserController.getInstance();
 
