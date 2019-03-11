@@ -10,6 +10,9 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
@@ -17,46 +20,10 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserBook;
 import java9.util.concurrent.CompletableFuture;
 
-class UserBookType<T extends UserBook> {
-
-    public static final UserBookType<BorrowedBook> BORROWED = new UserBookType<>("borrowedBooks", BorrowedBook.class, new GenericTypeIndicator<HashMap<String, BorrowedBook>>() { });
-    public static final UserBookType<OwnedBook> OWNED = new UserBookType<>("ownedBooks", OwnedBook.class, new GenericTypeIndicator<HashMap<String, OwnedBook>>() { });
-
-    private String dataPath;
-    private Class<T> genericClass;
-    private GenericTypeIndicator<HashMap<String, T>> hashMapGenericTypeIndicator;
-
-    private UserBookType(String dataPath, Class<T> classType, GenericTypeIndicator<HashMap<String, T>> hashMapGenericTypeIndicator) {
-        this.dataPath = dataPath;
-        this.genericClass = classType;
-        this.hashMapGenericTypeIndicator = hashMapGenericTypeIndicator;
-    }
-
-    public String getDataPath() {
-        return dataPath;
-    }
-
-    public Class<T> getGenericClass() {
-        return genericClass;
-    }
-
-    public GenericTypeIndicator<HashMap<String, T>> getHashMapType() {
-        return hashMapGenericTypeIndicator;
-    }
-
-}
-
 /**
  * This class manages the addition, retrieval, modification, and transactions of books
  */
 public class BookController {
-
-    /*
-        Notes:
-        Finish transactions
-        Make tests
-        What if data changes in the middle of a transaction?
-     */
 
     private DatabaseReference database;
 
@@ -151,7 +118,7 @@ public class BookController {
     }
 
     /**
-     * Delete a book in the database, or add one if it does not exist
+     * Delete a book in the database
      * @param isbn of the book to delete
      * @return a CompletableFuture signifying the success/failure of this operation
      */
@@ -167,6 +134,9 @@ public class BookController {
     /* Book transaction methods */
 
 
+    // TODO: transaction methods for next project part
+
+
     // From the perspective of a borrower
 
     /**
@@ -179,21 +149,26 @@ public class BookController {
         final CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
             try {
 
+                if (getMyUserId().equals(id)) {
+                    throw new IllegalArgumentException("You can not request a book from yourself");
+                }
+
                 OwnedBook ownedBook = getUserOwnedBook(id, isbn).get();
 
                 // If the owned book status is not available or requested, then it's not able to be requested.
-                if (!(ownedBook.getStatus() == "available" || ownedBook.getStatus() == "requested")) {
+                if (!(ownedBook.getStatus().equals("available") || ownedBook.getStatus().equals("requested"))) {
                     throw new IllegalStateException("The book is not available to be requested from this owner");
                 }
                 // Otherwise, proceed with the request
 
-                // Set the status and add the current user to the collection of users requesting the book
-                ownedBook.setStatus("requested");
-                ownedBook.addUserRequesting(getMyUserId());
-
                 // Create and add a borrowed book to the current user's collection
                 BorrowedBook borrowedBook = new BorrowedBook(isbn, "requested", id);
                 addMyBorrowedBook(borrowedBook).get();
+
+                // Set the status and add the current user to the collection of users requesting the book
+                ownedBook.setStatus("requested");
+                ownedBook.addUserRequesting(getMyUserId());
+                updateUserOwnedBook(id, ownedBook).get();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -355,7 +330,7 @@ public class BookController {
     // Borrowed
 
     private CompletableFuture<Void> addUserBorrowedBook(@NonNull String id, @NonNull BorrowedBook borrowedBook) {
-        return addUserBook(UserBookType.BORROWED, id, borrowedBook);
+        return addUserBook("borrowedBooks", BorrowedBook.class, id, borrowedBook);
     }
 
     /**
@@ -365,7 +340,7 @@ public class BookController {
      * @return a BorrowedBook with the same isbn
      */
     public CompletableFuture<BorrowedBook> getUserBorrowedBook(@NonNull String id, @NonNull String isbn) {
-        return getUserBook(UserBookType.BORROWED, id, isbn);
+        return getUserBook("borrowedBooks", BorrowedBook.class, id, isbn);
     }
 
     /**
@@ -374,21 +349,29 @@ public class BookController {
      * @return a HashMap mapping book isbn Strings to BorrowedBook objects
      */
     public CompletableFuture<HashMap<String, BorrowedBook>> getUserBorrowedBooks(@NonNull String id) {
-        return getUserBooks(UserBookType.BORROWED, id);
+        return getUserBooks("borrowedBooks", new GenericTypeIndicator<HashMap<String, BorrowedBook>>() { }, id);
     }
 
     private CompletableFuture<Void> updateUserBorrowedBook(@NonNull String id, @NonNull BorrowedBook borrowedBook) {
-        return updateUserBook(UserBookType.BORROWED, id, borrowedBook);
+        return updateUserBook("borrowedBooks", id, borrowedBook);
     }
     private CompletableFuture<Void> deleteUserBorrowedBook(@NonNull String id, @NonNull String isbn) {
-        return deleteUserBook(UserBookType.BORROWED, id, isbn);
+        return deleteUserBook("borrowedBooks", id, isbn);
     }
 
 
     // Owned
 
     private CompletableFuture<Void> addUserOwnedBook(@NonNull String id, @NonNull OwnedBook ownedBook) {
-        return addUserBook(UserBookType.OWNED, id, ownedBook);
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        addUserBook("ownedBooks", OwnedBook.class, id, ownedBook).thenRun(() -> addAvailableOwner(id, ownedBook.getIsbn()).thenRun(() -> future.complete(null)).exceptionally(throwable -> {
+            future.completeExceptionally(throwable);
+            return null;
+        })).exceptionally(throwable -> {
+            future.completeExceptionally(throwable);
+            return null;
+        });
+        return future;
     }
 
     /**
@@ -398,7 +381,7 @@ public class BookController {
      * @return an OwnedBook with the same isbn
      */
     public CompletableFuture<OwnedBook> getUserOwnedBook(@NonNull String id, @NonNull String isbn) {
-        return getUserBook(UserBookType.OWNED, id, isbn);
+        return getUserBook("ownedBooks", OwnedBook.class, id, isbn);
     }
 
     /**
@@ -407,23 +390,40 @@ public class BookController {
      * @return a HashMap mapping book isbn Strings to OwnedBook objects
      */
     public CompletableFuture<HashMap<String, OwnedBook>> getUserOwnedBooks(@NonNull String id) {
-        return getUserBooks(UserBookType.OWNED, id);
+        return getUserBooks("ownedBooks", new GenericTypeIndicator<HashMap<String, OwnedBook>>() { }, id);
     }
 
     private CompletableFuture<Void> updateUserOwnedBook(@NonNull String id, @NonNull OwnedBook ownedBook) {
-        return updateUserBook(UserBookType.OWNED, id, ownedBook);
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        updateUserBook("ownedBooks", id, ownedBook).thenRun(() -> {
+           if (ownedBook.getStatus().equals("available") || ownedBook.getStatus().equals("requested")) {
+               addAvailableOwner(id, ownedBook.getIsbn()).thenRun(() -> future.complete(null)).exceptionally(throwable -> {
+                   future.completeExceptionally(throwable);
+                   return null;
+               });
+           } else {
+               removeAvailableOwner(id, ownedBook.getIsbn()).thenRun(() -> future.complete(null)).exceptionally(throwable -> {
+                   future.completeExceptionally(throwable);
+                   return null;
+               });
+           }
+        }).exceptionally(throwable -> {
+            future.completeExceptionally(throwable);
+            return null;
+        });
+        return future;
     }
     private CompletableFuture<Void> deleteUserOwnedBook(@NonNull String id, @NonNull String isbn) {
-        return deleteUserBook(UserBookType.OWNED, id, isbn);
+        return deleteUserBook("ownedBooks", id, isbn).thenCombine(removeAvailableOwner(id, isbn), ((aVoid, aVoid2) -> null));
     }
 
 
     /* Methods for querying generic UserBooks */
 
 
-    private <T extends UserBook> CompletableFuture<Void> addUserBook(@NonNull UserBookType<T> userBookType, @NonNull String id, @NonNull T userBook) {
+    private <T extends UserBook> CompletableFuture<Void> addUserBook(@NonNull String userBookPath, @NonNull Class<T> classType, @NonNull String id, @NonNull T userBook) {
         final CompletableFuture<Void> future = new CompletableFuture<>();
-        DatabaseReference userBookReference = getUserBookReference(userBookType, id, userBook.getIsbn());
+        DatabaseReference userBookReference = getUserBookReference(userBookPath, id, userBook.getIsbn());
         userBookReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -432,7 +432,7 @@ public class BookController {
                             .addOnSuccessListener(future::complete)
                             .addOnFailureListener(future::completeExceptionally);
                 } else {
-                    future.completeExceptionally(new IllegalArgumentException("A " + userBookType.getGenericClass().getSimpleName() + " of the same isbn already exists"));
+                    future.completeExceptionally(new IllegalArgumentException("A " + classType.getSimpleName() + " of the same isbn already exists"));
                 }
             }
 
@@ -445,15 +445,15 @@ public class BookController {
         return future;
     }
 
-    private <T extends UserBook> CompletableFuture<T> getUserBook(@NonNull UserBookType<T> userBookType, @NonNull String id, @NonNull String isbn) {
+    private <T extends UserBook> CompletableFuture<T> getUserBook(@NonNull String userBookPath, @NonNull Class<T> classType, @NonNull String id, @NonNull String isbn) {
         final CompletableFuture<T> future = new CompletableFuture<>();
-        getUserBookReference(userBookType, id, isbn).addListenerForSingleValueEvent(new ValueEventListener() {
+        getUserBookReference(userBookPath, id, isbn).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    future.complete(dataSnapshot.getValue(userBookType.getGenericClass()));
+                    future.complete(dataSnapshot.getValue(classType));
                 } else {
-                    future.completeExceptionally(new IllegalArgumentException("No " + userBookType.getGenericClass().getSimpleName() + " exists with the given isbn"));
+                    future.completeExceptionally(new IllegalArgumentException("No " + classType.getSimpleName() + " exists with the given isbn"));
                 }
             }
 
@@ -465,13 +465,13 @@ public class BookController {
         return future;
     }
 
-    private <T extends UserBook> CompletableFuture<HashMap<String, T>> getUserBooks(@NonNull UserBookType<T> userBookType, @NonNull String id) {
+    private <T extends UserBook> CompletableFuture<HashMap<String, T>> getUserBooks(@NonNull String userBookPath, @NonNull GenericTypeIndicator<HashMap<String, T>> genericTypeIndicator, @NonNull String id) {
         final CompletableFuture<HashMap<String, T>> future = new CompletableFuture<>();
-        getUserBooksReference(userBookType, id).addListenerForSingleValueEvent(new ValueEventListener() {
+        getUserBooksReference(userBookPath, id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    future.complete(dataSnapshot.getValue(userBookType.getHashMapType()));
+                    future.complete(dataSnapshot.getValue(genericTypeIndicator));
                 } else {
                     future.complete(new HashMap<>());
                 }
@@ -485,20 +485,60 @@ public class BookController {
         return future;
     }
 
-    private <T extends UserBook> CompletableFuture<Void> updateUserBook(@NonNull UserBookType<T> userBookType, @NonNull String id, @NonNull T userBook) {
-        return updateUserBook(userBookType, id, userBook.getIsbn(), userBook);
+    private <T extends UserBook> CompletableFuture<Void> updateUserBook(@NonNull String userBookPath, @NonNull String id, @NonNull T userBook) {
+        return updateUserBook(userBookPath, id, userBook.getIsbn(), userBook);
     }
 
-    private <T extends UserBook> CompletableFuture<Void> deleteUserBook(@NonNull UserBookType<T> userBookType, @NonNull String id, @NonNull String isbn) {
-        return updateUserBook(userBookType, id, isbn, null);
+    private <T extends UserBook> CompletableFuture<Void> deleteUserBook(@NonNull String userBookPath, @NonNull String id, @NonNull String isbn) {
+        return updateUserBook(userBookPath, id, isbn, null);
     }
 
-    private <T extends UserBook> CompletableFuture<Void> updateUserBook(@NonNull UserBookType<T> userBookType, @NonNull String id, @NonNull String isbn, T userBook) {
+    private <T extends UserBook> CompletableFuture<Void> updateUserBook(@NonNull String userBookPath, @NonNull String id, @NonNull String isbn, T userBook) {
         final CompletableFuture<Void> future = new CompletableFuture<>();
 
-        getUserBookReference(userBookType, id, isbn).setValue(userBook)
+        getUserBookReference(userBookPath, id, isbn).setValue(userBook)
                 .addOnSuccessListener(future::complete)
                 .addOnFailureListener(future::completeExceptionally);
+
+        return future;
+    }
+
+
+    /* Updating Available Book Owners */
+
+
+    private CompletableFuture<Void> addAvailableOwner(String id, String isbn) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        CompletableFuture.runAsync(() -> {
+            try {
+                Book book = getBook(isbn).get(5, TimeUnit.SECONDS);
+                if (book.getAvailableOwners().contains(id)) {
+                    future.complete(null);
+                    return;
+                }
+                book.addAvailableOwners(id);
+                updateBook(book).get(5, TimeUnit.SECONDS);
+                future.complete(null);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            }
+        });
+        return future;
+    }
+
+    private CompletableFuture<Void> removeAvailableOwner(String id, String isbn) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                Book book = getBook(isbn).get(5, TimeUnit.SECONDS);
+                book.removeAvailableOwners(id);
+                updateBook(book).get(5, TimeUnit.SECONDS);
+                future.complete(null);
+            } catch (Exception e) {
+                future.completeExceptionally(e);
+            }
+        });
 
         return future;
     }
@@ -523,12 +563,12 @@ public class BookController {
         return database.child("users").child(id);
     }
 
-    private DatabaseReference getUserBooksReference(@NonNull UserBookType userBookType, @NonNull String id) {
-        return getUserDatabaseReference(id).child(userBookType.getDataPath());
+    private DatabaseReference getUserBooksReference(@NonNull String userBookPath, @NonNull String id) {
+        return getUserDatabaseReference(id).child(userBookPath);
     }
 
-    private DatabaseReference getUserBookReference(@NonNull UserBookType userBookType, @NonNull String id, @NonNull String isbn) {
-        return getUserBooksReference(userBookType, id).child(isbn);
+    private DatabaseReference getUserBookReference(@NonNull String userBookPath, @NonNull String id, @NonNull String isbn) {
+        return getUserBooksReference(userBookPath, id).child(isbn);
     }
 
 }

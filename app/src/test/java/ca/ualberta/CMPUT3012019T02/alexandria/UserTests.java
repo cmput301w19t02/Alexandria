@@ -15,6 +15,8 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.user.User;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class UserTests {
     @Test
@@ -81,8 +83,8 @@ public class UserTests {
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
         HashMap<String, OwnedBook> ownedBooks = new HashMap<>();
-        ownedBooks.put("9780545010221", new OwnedBook("9780545010221", "Available",null));
-        ownedBooks.put("9780545012222", new OwnedBook("9780545012222", "Available",null));
+        ownedBooks.put("9780545010221", new OwnedBook("9780545010221", "available", id, null));
+        ownedBooks.put("9780545012222", new OwnedBook("9780545012222", "available", id, null));
         user.setOwnedBooks(ownedBooks);
         assertEquals(user.getOwnedBooks(), ownedBooks);
     }
@@ -93,7 +95,7 @@ public class UserTests {
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
 
-        OwnedBook newOwnedBook = new OwnedBook("9780545013333", "Available",null);
+        OwnedBook newOwnedBook = new OwnedBook("9780545013333", "available", id, null);
         user.addOwnedBook(newOwnedBook);
         Map<String, OwnedBook> ownedBooks = Collections.singletonMap(newOwnedBook.getIsbn(), newOwnedBook);
         assertEquals(user.getOwnedBooks(), ownedBooks);
@@ -105,11 +107,11 @@ public class UserTests {
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
         HashMap<String, OwnedBook> ownedBooks = new HashMap<>();
-        ownedBooks.put("9780545010221", new OwnedBook("9780545010221", "Available",null));
-        ownedBooks.put("9780545012222", new OwnedBook("9780545012222", "Available",null));
+        ownedBooks.put("9780545010221", new OwnedBook("9780545010221", "available", id, null));
+        ownedBooks.put("9780545012222", new OwnedBook("9780545012222", "available", id, null));
         user.setOwnedBooks(ownedBooks);
 
-        OwnedBook lostOwnedBook = new OwnedBook("9780545012222", "Available",null);
+        OwnedBook lostOwnedBook = new OwnedBook("9780545012222", "available", id, null);
         user.removeOwnedBook(lostOwnedBook);
         ownedBooks.remove(lostOwnedBook.getIsbn());
         assertEquals(user.getOwnedBooks(), ownedBooks);
@@ -121,8 +123,8 @@ public class UserTests {
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
         HashMap<String, BorrowedBook> borrowedBooks = new HashMap<>();
-        borrowedBooks.put("9780545010221", new BorrowedBook("9780545010221", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
-        borrowedBooks.put("9780545012222", new BorrowedBook("9780545012222", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
+        borrowedBooks.put("9780545010221", new BorrowedBook("9780545010221", "available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
+        borrowedBooks.put("9780545012222", new BorrowedBook("9780545012222", "available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
         user.setBorrowedBooks(borrowedBooks);
         assertEquals(user.getBorrowedBooks(), borrowedBooks);
     }
@@ -133,7 +135,7 @@ public class UserTests {
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
 
-        BorrowedBook newBorrowedBook = new BorrowedBook("9780545013333", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1");
+        BorrowedBook newBorrowedBook = new BorrowedBook("9780545013333", "available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1");
         user.addBorrowedBook(newBorrowedBook);
         Map<String, BorrowedBook> borrowedBooks = Collections.singletonMap(newBorrowedBook.getIsbn(), newBorrowedBook);
         assertEquals(user.getBorrowedBooks(), borrowedBooks);
@@ -145,11 +147,11 @@ public class UserTests {
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
         HashMap<String, BorrowedBook> borrowedBooks = new HashMap<>();
-        borrowedBooks.put("9780545010221", new BorrowedBook("9780545010221", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
-        borrowedBooks.put("9780545012222", new BorrowedBook("9780545012222", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
+        borrowedBooks.put("9780545010221", new BorrowedBook("9780545010221", "available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
+        borrowedBooks.put("9780545012222", new BorrowedBook("9780545012222", "available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1"));
         user.setBorrowedBooks(borrowedBooks);
 
-        BorrowedBook returnedBorrowedBook = new BorrowedBook("9780545012222", "Available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1");
+        BorrowedBook returnedBorrowedBook = new BorrowedBook("9780545012222", "available","eQgZfhN2Yng9TPHcXvfBZs5ZKxj1");
         user.removeBorrowedBook(returnedBorrowedBook);
         borrowedBooks.remove(returnedBorrowedBook.getIsbn());
         assertEquals(user.getBorrowedBooks(), borrowedBooks);
@@ -191,6 +193,20 @@ public class UserTests {
         user.removeChatRoom("htimsnhoj");
         chatRooms.remove("htimsnhoj");
         assertEquals(user.getChatRooms(), chatRooms);
+    }
+
+    @Test
+    public void isBlockedUserNegativeTest() {
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith"));
+        user.addBlockedUser("userID");
+        assertFalse(user.isBlockedUser("janesmith"));
+    }
+
+    @Test
+    public void isBlockedUserPositiveTest() {
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith"));
+        user.addBlockedUser("userID");
+        assertTrue(user.isBlockedUser("userID"));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -308,6 +324,12 @@ public class UserTests {
     public void nullSetOwnedBooks() {
         User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
         user.setOwnedBooks(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void removeUnexistentBlockedUser() {
+        User user = new User("6588a715-1651-4d44-94bc-ee0a40176a93", new UserProfile("John Smith", "john@example.com", "7801234567", null,"johnsmith"));
+        user.removeBlockedUser("test");
     }
 
 }

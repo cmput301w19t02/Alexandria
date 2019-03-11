@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
 public class ViewUserProfileActivity extends AppCompatActivity {
