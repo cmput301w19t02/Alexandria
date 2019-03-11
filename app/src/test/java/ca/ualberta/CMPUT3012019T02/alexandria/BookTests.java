@@ -16,7 +16,7 @@ public class BookTests {
         Date date = new Date();
         Book book = new Book("9780545010221", imageId, "Harry Potter", "J. K. Rowling", "A book about a wizard", new Date());
         assertEquals("9780545010221", book.getIsbn());
-        assertEquals(imageId, book.getImage());
+        assertEquals(imageId, book.getImageId());
         assertEquals("Harry Potter", book.getTitle());
         assertEquals("J. K. Rowling", book.getAuthor());
         assertEquals(date, book.getDate());
@@ -33,8 +33,8 @@ public class BookTests {
     public void setImageTest() {
         Book book = new Book("9780545010221", null, "Harry Potter", "J. K. Rowling", "A book about a wizard", new Date());
         String imageId = "16bb3894-be95-4108-9b9d-c6f5283a7920";
-        book.setImage(imageId);
-        assertEquals(imageId, book.getImage());
+        book.setImageId(imageId);
+        assertEquals(imageId, book.getImageId());
     }
 
     @Test
