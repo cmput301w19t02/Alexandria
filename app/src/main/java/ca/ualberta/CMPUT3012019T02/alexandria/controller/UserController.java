@@ -11,6 +11,10 @@ import com.google.firebase.database.ValueEventListener;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 import java9.util.concurrent.CompletableFuture;
 
+
+/**
+ * This class is for controlling user profile and authentication
+ */
 public class UserController {
 
     private FirebaseAuth auth;

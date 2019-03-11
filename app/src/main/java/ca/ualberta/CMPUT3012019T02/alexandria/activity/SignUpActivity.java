@@ -73,6 +73,7 @@ public class SignUpActivity extends AppCompatActivity {
         future.handleAsync((result, error) -> {
             if (error == null) {
                 Intent startMainActivity = new Intent(this, MainActivity.class);
+                startMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(startMainActivity);
             } else {
                 showError(error.getMessage());

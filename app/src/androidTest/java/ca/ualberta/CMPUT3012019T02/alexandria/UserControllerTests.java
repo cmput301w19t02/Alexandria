@@ -25,7 +25,7 @@ import java9.util.concurrent.CompletableFuture;
 public class UserControllerTests {
 
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
     public void testCreateUser() throws InterruptedException, ExecutionException, TimeoutException {
