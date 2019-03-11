@@ -38,14 +38,15 @@
                 android:id="@+id/user_book_owner_pic"
                 android:layout_width="48dp"
                 android:layout_height="48dp" />
+
             <Button
+                android:id="@+id/user_book_owner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/user_book_owner"
-                android:textColor="@color/colorBlack"
+                android:layout_marginLeft="8dp"
                 android:background="@color/colorBeige"
                 android:textAllCaps="false"
-                />
+                android:textColor="@color/colorBlack" />
         </LinearLayout>
 
         <ImageView
