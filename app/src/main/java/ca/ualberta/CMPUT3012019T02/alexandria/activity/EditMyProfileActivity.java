@@ -136,12 +136,12 @@ public class EditMyProfileActivity extends AppCompatActivity {
             myUserProfile.setName(newName);
             // password set
             myUserProfile.setEmail(newEmail);
-            // TODO update on firebase userprofile
+            userController.updateMyProfile(myUserProfile);
             Toast.makeText(this , "Changes Saved", Toast.LENGTH_LONG).show();
             finish();
         } catch (IllegalArgumentException e) {
             String errorMessage = e.getMessage();
-            Toast.makeText(this , errorMessage, Toast.LENGTH_LONG).show();
+            showError(errorMessage);
         }
     }
 }
