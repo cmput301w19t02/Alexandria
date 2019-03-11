@@ -3,7 +3,10 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,10 +14,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
@@ -23,6 +28,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
     //private List<BookList> ownedBooks;
     private String username;
     private String name;
+    private String photoId;
     private UserProfile userProfile;
 
     private String userID;
@@ -94,16 +100,40 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         userController.getUserProfile(userID).handleAsync((result, error) -> {
             if(error == null) {
                 // Update ui here
-                //TODO update image
+                //TODO update imageImageController imageController = ImageController.getInstance();
                 userProfile = result;
                 TextView textView_username = (TextView) findViewById(R.id.view_profile_username);
                 TextView textView_name = (TextView) findViewById(R.id.view_profile_name);
 
                 username = userProfile.getUsername();
                 name = userProfile.getName();
+                photoId = userProfile.getPicture();
                 runOnUiThread(() -> {
                     textView_username.setText(username);
                     textView_name.setText(name);
+
+                    ImageController imageController = ImageController.getInstance();
+                    imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
+                        if (errorImage == null) {
+                            Bitmap bitmap = resultImage;
+
+                            if (bitmap != null) {
+                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
+
+                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);
+                                drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                drawable.setAntiAlias(true);
+
+                                ImageView imageView = findViewById(R.id.view_user_image);
+                                runOnUiThread(() -> {
+                                    imageView.setImageDrawable(drawable);
+                                });
+                            }
+                        } else {
+                            showError(errorImage.getMessage());
+                        }
+                        return null;
+                    });
                 });
             }
             else {
@@ -113,6 +143,12 @@ public class ViewUserProfileActivity extends AppCompatActivity {
             }
             return null;
         });
+
+
+    }
+
+    private void showError(String message) {
+        Toast.makeText(ViewUserProfileActivity.this, "Error: " + message, Toast.LENGTH_LONG).show();
     }
 
     @Override
