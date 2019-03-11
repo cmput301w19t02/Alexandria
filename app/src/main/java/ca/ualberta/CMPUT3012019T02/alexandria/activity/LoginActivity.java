@@ -44,8 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
         future.handleAsync((result, error) -> {
             if (error == null) {
-                Intent startMainActivity = new Intent(this, MainActivity.class);
-                startActivity(startMainActivity);
+                finish();
             } else {
                 showError(error.getMessage());
             }
