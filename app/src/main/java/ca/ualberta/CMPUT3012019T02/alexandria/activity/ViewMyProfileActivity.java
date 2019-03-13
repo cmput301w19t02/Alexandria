@@ -26,14 +26,14 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
  * provides navigation to blocked users activity
  * and edit my profile activity
  */
-public class MyProfileActivity extends AppCompatActivity {
+public class ViewMyProfileActivity extends AppCompatActivity {
 
     private UserProfile myUserProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_profile);
+        setContentView(R.layout.activity_view_my_profile);
 
         // toolbar
         Toolbar toolbar = findViewById(R.id.profile_toolbar);
