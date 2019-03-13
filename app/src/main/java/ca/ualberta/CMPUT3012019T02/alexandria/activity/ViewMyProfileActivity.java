@@ -59,7 +59,7 @@ public class ViewMyProfileActivity extends AppCompatActivity {
         TextView textView_username = findViewById(R.id.my_profile_username);
         TextView textView_name = findViewById(R.id.my_profile_name);
         TextView textView_email = findViewById(R.id.my_profile_email);
-        ImageView image_avatar = findViewById(R.id.user_image);
+        ImageView image_avatar = findViewById(R.id.my_profile_image);
 
         // sets user's strings
         UserController userController = UserController.getInstance();
