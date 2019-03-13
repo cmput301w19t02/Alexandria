@@ -15,6 +15,10 @@
             <item
                 android:id="@+id/blocked_users"
                 android:title="@string/blocked_users" />
+
+            <item
+                android:id="@+id/sing_out_profile"
+                android:title="@string/sign_out_title" />
         </menu>
     </item>
 
