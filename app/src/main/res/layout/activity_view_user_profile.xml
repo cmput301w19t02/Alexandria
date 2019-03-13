@@ -27,8 +27,7 @@
             android:fontFamily="sans-serif-light"
             android:textColor="@color/colorYellow"
             android:textSize="24sp"
-            tools:layout_editor_absoluteX="131dp"
-            tools:layout_editor_absoluteY="12dp" />
+            />
 
     </android.support.v7.widget.Toolbar>
 
