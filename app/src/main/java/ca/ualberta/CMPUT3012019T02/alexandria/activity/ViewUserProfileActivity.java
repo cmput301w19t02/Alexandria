@@ -28,18 +28,16 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
  */
 public class ViewUserProfileActivity extends AppCompatActivity {
 
-    //private List<BookList> ownedBooks;
     private String username;
     private String name;
     private String photoId;
     private UserProfile userProfile;
-
     private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_profile);
+        setContentView(R.layout.activity_view_user_profile);
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
@@ -48,29 +46,8 @@ public class ViewUserProfileActivity extends AppCompatActivity {
             userID = extras.getString("USER_ID");
         }
 
-        /*
-        //TODO setup data retrieval from Firebase, and remove placeholder lists
-        Bitmap aBitmap = Bitmap.createBitmap(32, 32, Bitmap.Config.ARGB_8888);
-        ownedBooks = new ArrayList<>();
-        ownedBooks.add(new BookList
-                (aBitmap, "Test Title",
-                        "Test Author", "Test ISBN", "accepted"));
-        ownedBooks.add(new BookList
-                (aBitmap, "Test Title 2",
-                        "Test Author", "Test ISBN", "accepted"));
-        ownedBooks.add(new BookList
-                (aBitmap, "Test Title 3",
-                        "Test Author", "Test ISBN", "accepted"));
-        ownedBooks.add(new BookList
-                (aBitmap, "Test Title 4",
-                        "Test Author", "Test ISBN", "accepted"));
-        ownedBooks.add(new BookList
-                (aBitmap, "Test Title 5",
-                        "Test Author", "Test ISBN", "accepted"));
-        */
-
         // Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.view_profile_toolbar);
+        Toolbar toolbar = findViewById(R.id.user_profile_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
 
@@ -82,14 +59,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
             }
         });
 
-
         //TODO implement book list
-        // Recycler View
-        //RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.view_user_books_recycler);
-        //BookRecyclerViewAdapter bookAdapter =
-        //        new BookRecyclerViewAdapter(this, ownedBooks, "UserBookFragment");
-        //mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //mRecyclerView.setAdapter(bookAdapter);
     }
 
     /**
@@ -105,8 +75,8 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                 // Update ui here
                 //TODO update imageImageController imageController = ImageController.getInstance();
                 userProfile = result;
-                TextView textView_username = (TextView) findViewById(R.id.view_profile_username);
-                TextView textView_name = (TextView) findViewById(R.id.view_profile_name);
+                TextView textView_username = findViewById(R.id.user_profile_username);
+                TextView textView_name = findViewById(R.id.user_profile_name);
 
                 username = userProfile.getUsername();
                 name = userProfile.getName();
@@ -121,13 +91,17 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                             Bitmap bitmap = resultImage;
 
                             if (bitmap != null) {
-                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                                        Math.min(bitmap.getWidth(), bitmap.getHeight()),
+                                        Math.min(bitmap.getWidth(), bitmap.getHeight()));
 
-                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);
-                                drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
+                                        .create(getResources(), squareBitmap);
+                                drawable.setCornerRadius(Math.min(
+                                        bitmap.getWidth(), bitmap.getHeight()));
                                 drawable.setAntiAlias(true);
 
-                                ImageView imageView = findViewById(R.id.view_user_image);
+                                ImageView imageView = findViewById(R.id.user_profile_image);
                                 runOnUiThread(() -> {
                                     imageView.setImageDrawable(drawable);
                                 });
@@ -141,15 +115,18 @@ public class ViewUserProfileActivity extends AppCompatActivity {
             }
             else {
                 // Show error message
-                Toast.makeText(this , "Profile is not recognized", Toast.LENGTH_LONG).show();
-                userProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown");
+                Toast.makeText(this , "Profile is not recognized",
+                        Toast.LENGTH_LONG).show();
+                userProfile = new UserProfile("Unknown","Unknown",
+                        "Unknown",null,"Unknown");
             }
             return null;
         });
     }
 
     private void showError(String message) {
-        Toast.makeText(ViewUserProfileActivity.this, "Error: " + message, Toast.LENGTH_LONG).show();
+        Toast.makeText(ViewUserProfileActivity.this,
+                "Error: " + message, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -178,7 +155,8 @@ public class ViewUserProfileActivity extends AppCompatActivity {
             case R.id.block_user_option:
                 Toast.makeText(this , "Block user implement", Toast.LENGTH_LONG).show();
 
-                AlertDialog.Builder blockAlert = new AlertDialog.Builder(ViewUserProfileActivity.this, R.style.AlertDialogTheme);
+                AlertDialog.Builder blockAlert = new AlertDialog.Builder(
+                        ViewUserProfileActivity.this, R.style.AlertDialogTheme);
 
                 blockAlert.setCancelable(true);
                 blockAlert.setTitle("Block User?");
