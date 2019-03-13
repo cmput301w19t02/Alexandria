@@ -83,21 +83,23 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
         myViewHolder.tvAuthor.setText(mBookList.get(position).getAuthor());
         myViewHolder.tvISBN.setText(mBookList.get(position).getIsbn());
 
-        switch (mBookList.get(position).getStatus()) {
-            case "available":
-                myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_available);
-                break;
-            case "requested":
-                myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_requested);
-                break;
-            case "accepted":
-                myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_accepted);
-                break;
-            case "borrowed":
-                myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_borrowed);
-                break;
-            default:
-                throw new RuntimeException("Status out of bounds");
+        if (mBookList.get(position).getStatus() != null) {
+            switch (mBookList.get(position).getStatus()) {
+                case "available":
+                    myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_available);
+                    break;
+                case "requested":
+                    myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_requested);
+                    break;
+                case "accepted":
+                    myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_accepted);
+                    break;
+                case "borrowed":
+                    myViewHolder.ivStatus.setImageResource(R.drawable.ic_status_borrowed);
+                    break;
+                default:
+                    throw new RuntimeException("Status out of bounds");
+            }
         }
     }
 
@@ -114,7 +116,9 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
         b.putString("title", mBookList.get(mViewHolder.getAdapterPosition()).getTitle());
         b.putString("author", mBookList.get(mViewHolder.getAdapterPosition()).getAuthor());
         b.putString("isbn", mBookList.get(mViewHolder.getAdapterPosition()).getIsbn());
-        b.putString("status", mBookList.get(mViewHolder.getAdapterPosition()).getStatus());
+        if (mBookList.get(mViewHolder.getAdapterPosition()).getStatus() != null) {
+            b.putString("status", mBookList.get(mViewHolder.getAdapterPosition()).getStatus());
+        }
         b.putString("owner", mBookList.get(mViewHolder.getAdapterPosition()).getOwner());
 
         return b;
