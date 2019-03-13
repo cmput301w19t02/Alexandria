@@ -141,13 +141,26 @@ public class MyProfileActivity extends AppCompatActivity {
             //menu switch
             case R.id.edit_profile:
                 // edit activity
-                Intent startEditProfile = new Intent(this, EditMyProfileActivity.class);
+                Intent startEditProfile = new Intent(this,
+                        EditMyProfileActivity.class);
                 startActivity(startEditProfile);
                 break;
             case R.id.blocked_users:
                 // black list activity
-                Intent startBlockedUsers = new Intent(this, BlockedUsersActivity.class);
+                Intent startBlockedUsers = new Intent(this,
+                        BlockedUsersActivity.class);
                 startActivity(startBlockedUsers);
+                break;
+            case R.id.sing_out_profile:
+                // Sing Out
+                // TODO show warning
+                Intent start_new_main_intent = new Intent(this,
+                        MainActivity.class);
+                start_new_main_intent.setFlags(start_new_main_intent.FLAG_ACTIVITY_NEW_TASK |
+                        start_new_main_intent.FLAG_ACTIVITY_CLEAR_TASK);  // clear activity  history
+                UserController.getInstance().deauthenticate();
+                finish();
+                startActivity(start_new_main_intent);
                 break;
             case R.id.profile_setting:
                 // open menu

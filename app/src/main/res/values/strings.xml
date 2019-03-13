@@ -23,6 +23,7 @@
     <string name="profile_username">Username</string>
     <string name="profile_name">Full Name</string>
     <string name="profile_email">Email</string>
+    <string name="sign_out_title">Sign Out</string>
     <!-- Strings related to edit my profile -->
     <string name="edit_profile_name">Full Name</string>
     <string name="edit_profile_username">Username</string>
