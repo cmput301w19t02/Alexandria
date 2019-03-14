@@ -12,6 +12,9 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -70,6 +73,34 @@ public class UserBookFragment extends Fragment {
         rootView.findViewById(R.id.user_book_button).setOnClickListener(mListener);
 
         return rootView;
+    }
+
+    //Instantiate the options menu
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_user_book, menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            //menu switch
+            case R.id.option_view_user:
+                onClickUser();
+                break;
+            case R.id.option_message_user:
+                break;
+            case R.id.menu_user_book_ellipses:
+                break;
+            default:
+                throw new RuntimeException("Unknown option");
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -223,12 +254,16 @@ public class UserBookFragment extends Fragment {
         }
     };
 
-    //TODO implement Activity Switching
     //switch to the book owner's profile
     private void onClickUser() {
         Intent intentViewOwner = new Intent(getActivity(), ViewUserProfileActivity.class);
         intentViewOwner.putExtra("USER_ID", owner);
         startActivity(intentViewOwner);
+    }
+
+    //TODO navigate to message fragment
+    private void onClickMessageUser() {
+
     }
 
     //TODO implement firebase status switching
