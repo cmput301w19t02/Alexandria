@@ -46,9 +46,10 @@ public class UserBookFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_user_book,null);
 
         // toolbar
-        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        Toolbar toolbar = rootView.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+        // remove default title
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -114,10 +115,14 @@ public class UserBookFragment extends Fragment {
                             Bitmap bitmap = resultImage;
 
                             if (bitmap != null) {
-                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                                        Math.min(bitmap.getWidth(), bitmap.getHeight()),
+                                        Math.min(bitmap.getWidth(), bitmap.getHeight()));
 
-                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);
-                                drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
+                                        .create(getResources(), squareBitmap);
+                                drawable.setCornerRadius(Math.min(
+                                        bitmap.getWidth(), bitmap.getHeight()));
                                 drawable.setAntiAlias(true);
 
                                 getActivity().runOnUiThread(() -> {
