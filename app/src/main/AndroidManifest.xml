@@ -13,7 +13,7 @@
         <activity android:name=".activity.ViewUserProfileActivity"></activity>
         <activity android:name=".activity.BlockedUsersActivity" />
         <activity android:name=".activity.EditMyProfileActivity" />
-        <activity android:name=".activity.MyProfileActivity" />
+        <activity android:name=".activity.ViewMyProfileActivity" />
         <activity android:name=".activity.viewuserbook.ViewBorrowedUserBookActivity" />
         <activity android:name=".activity.viewuserbook.ViewRequestedUserBookActivity" />
         <activity android:name=".activity.viewuserbook.ViewAcceptedUserBookActivity" />
