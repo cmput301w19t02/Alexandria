@@ -1,7 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.message;
 
-import java.util.Date;
-
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Location;
 
 /**
@@ -18,7 +16,6 @@ public class LocationMessage extends Message {
      * @param sender   the sender
      */
     public LocationMessage(Location location, String status, String/*Date*/ date, String sender) {
-        // TODO Finish implementation
         super("location", "temp", status, date, sender);
         this.setLocation(location);
     }
@@ -29,8 +26,10 @@ public class LocationMessage extends Message {
      * @return the location
      */
     public Location getLocation() {
-        // TODO Finish implementation
-        throw new UnsupportedOperationException();
+        String[] tokens = getContent().split(",");
+        double latitude =  Double.parseDouble(tokens[0]);
+        double longitude =  Double.parseDouble(tokens[1]);
+        return new Location(latitude,longitude);
     }
 
     /**
@@ -39,7 +38,12 @@ public class LocationMessage extends Message {
      * @param location the location
      */
     public void setLocation(Location location) {
-        // TODO Finish implementation
-        throw new UnsupportedOperationException();
+        if(location!=null) {
+            String serializedLocation = location.getLatitude() + "," + location.getLongitude();
+            setContent(serializedLocation);
+        }
+        else{
+            throw new IllegalArgumentException("Location cannot be null.");
+        }
     }
 }
