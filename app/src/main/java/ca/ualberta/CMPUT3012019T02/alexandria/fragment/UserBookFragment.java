@@ -38,6 +38,7 @@ public class UserBookFragment extends Fragment {
     private String isbn;
     private String status;
     private String owner;
+    private String ownerId;
 
     @Nullable
     @Override
@@ -81,6 +82,7 @@ public class UserBookFragment extends Fragment {
         isbn = arguments.getString("isbn");
         status = arguments.getString("status");
         owner = arguments.getString("owner");
+        ownerId = arguments.getString("ownerId");
     }
 
     private void setBookInfo(View v) {
@@ -222,7 +224,7 @@ public class UserBookFragment extends Fragment {
     //switch to the book owner's profile
     private void onClickUser() {
         Intent intentViewOwner = new Intent(getActivity(), ViewUserProfileActivity.class);
-        intentViewOwner.putExtra("USER_ID", owner);
+        intentViewOwner.putExtra("USER_ID", ownerId);
         startActivity(intentViewOwner);
     }
 

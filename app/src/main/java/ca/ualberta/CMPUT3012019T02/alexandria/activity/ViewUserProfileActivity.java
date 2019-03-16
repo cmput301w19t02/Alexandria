@@ -1,7 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +32,9 @@ public class ViewUserProfileActivity extends AppCompatActivity {
     private UserProfile userProfile;
     private String userID;
 
+    private ImageController imageController = ImageController.getInstance();
+    private UserController userController = UserController.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,12 +53,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         //TODO implement book list
     }
@@ -69,23 +65,20 @@ public class ViewUserProfileActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        UserController userController = UserController.getInstance();
         userController.getUserProfile(userID).handleAsync((result, error) -> {
-            if(error == null) {
-                // Update ui here
-                //TODO update imageImageController imageController = ImageController.getInstance();
+            if (error == null) {
                 userProfile = result;
-                TextView textView_username = findViewById(R.id.user_profile_username);
-                TextView textView_name = findViewById(R.id.user_profile_name);
+                TextView textViewUsername = findViewById(R.id.user_profile_username);
+                TextView textViewName = findViewById(R.id.user_profile_name);
 
                 username = userProfile.getUsername();
                 name = userProfile.getName();
                 photoId = userProfile.getPicture();
                 runOnUiThread(() -> {
-                    textView_username.setText(username);
-                    textView_name.setText(name);
-
-                    ImageController imageController = ImageController.getInstance();
+                    textViewUsername.setText(username);
+                    textViewName.setText(name);
+                });
+                if (photoId != null) {
                     imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
                         if (errorImage == null) {
                             Bitmap bitmap = resultImage;
@@ -111,14 +104,13 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                         }
                         return null;
                     });
-                });
-            }
-            else {
+                }
+            } else {
                 // Show error message
-                Toast.makeText(this , "Profile is not recognized",
+                Toast.makeText(this, "Profile is not recognized",
                         Toast.LENGTH_LONG).show();
-                userProfile = new UserProfile("Unknown","Unknown",
-                        "Unknown",null,"Unknown");
+                userProfile = new UserProfile("Unknown", "Unknown",
+                        "Unknown", null, "Unknown");
             }
             return null;
         });
@@ -139,6 +131,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
     /**
      * Menu switch, shows warning for blocking user,
      * takes to messaging activity
+     *
      * @param item item selected
      * @return boolean
      */
@@ -153,29 +146,21 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                 startActivity(intentMain);
                 break;
             case R.id.block_user_option:
-                Toast.makeText(this , "Block user implement", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Block user implement", Toast.LENGTH_LONG).show();
 
                 AlertDialog.Builder blockAlert = new AlertDialog.Builder(
                         ViewUserProfileActivity.this, R.style.AlertDialogTheme);
 
                 blockAlert.setCancelable(true);
                 blockAlert.setTitle("Block User?");
-                String blockMessage = "Are you sure you want to block " +  name;
+                String blockMessage = "Are you sure you want to block " + name;
                 blockAlert.setMessage(blockMessage);
 
-                blockAlert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                blockAlert.setNegativeButton("CANCEL", (dialog, which) -> dialog.cancel());
                 Context context = this;
-                blockAlert.setPositiveButton("BLOCK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // block user
-                        Toast.makeText(context , "User Blocked", Toast.LENGTH_LONG).show();
-                    }
+                blockAlert.setPositiveButton("BLOCK", (dialog, which) -> {
+                    // block user
+                    Toast.makeText(context, "User Blocked", Toast.LENGTH_LONG).show();
                 });
                 blockAlert.show();
 

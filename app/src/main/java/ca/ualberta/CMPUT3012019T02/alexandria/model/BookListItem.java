@@ -6,39 +6,51 @@ import android.graphics.Bitmap;
 /**
  * Model Class for BookRecyclerViewAdapter
  */
-
-public class BookList {
+public class BookListItem {
     private Bitmap cover;
     private String title;
     private String author;
     private String isbn;
     private String status;
     private String owner;
+    private String ownerId;
 
-    public BookList() {
+    /**
+     * Instantiates a new Book list item.
+     */
+    public BookListItem() {
     }
 
     /**
-     * Constructor for BookList
+     * Constructor for BookListItem
      *
-     * @param cover bitmap of cover image
-     * @param title title of the book
+     * @param cover  bitmap of cover image
+     * @param title  title of the book
      * @param author author of the book
-     * @param isbn isbn of the book
+     * @param isbn   isbn of the book
      * @param status status
-     * @param owner owner of hte book
+     * @param owner  owner of hte book
      */
-    public BookList(Bitmap cover, String title, String author,
-                    String isbn, String status, String owner) {
+    public BookListItem(Bitmap cover, String title, String author,
+                        String isbn, String status, String owner, String ownerId) {
         this.cover = cover;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
         this.status = status;
         this.owner = owner;
+        this.ownerId = ownerId;
     }
 
-    public BookList(Bitmap cover, String title, String author, String isbn) {
+    /**
+     * Instantiates a new Book list item.
+     *
+     * @param cover  the cover
+     * @param title  the title
+     * @param author the author
+     * @param isbn   the isbn
+     */
+    public BookListItem(Bitmap cover, String title, String author, String isbn) {
         this.cover = cover;
         this.title = title;
         this.author = author;
@@ -148,4 +160,23 @@ public class BookList {
      * @param owner owner
      */
     public void setOwner(String owner) { this.owner = owner; }
+
+
+    /**
+     * Gets owner id.
+     *
+     * @return the owner id
+     */
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    /**
+     * Sets owner id.
+     *
+     * @param ownerId the owner id
+     */
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
 }

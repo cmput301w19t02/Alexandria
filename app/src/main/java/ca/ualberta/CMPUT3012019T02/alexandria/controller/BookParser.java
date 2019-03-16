@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserBook;
 import java9.util.concurrent.CompletableFuture;
 
@@ -19,17 +19,17 @@ import java9.util.concurrent.CompletableFuture;
 public class BookParser {
 
     /**
-     * Convert a Map of String, UserBook to a list of BookList
+     * Convert a Map of String, UserBook to a list of BookListItem
      * @param userBookMap map of userbooks referenced by strings
-     * @return an CompletableFuture with an ArrayList of BookList objects
+     * @return an CompletableFuture with an ArrayList of BookListItem objects
      */
-    public static <T extends UserBook> CompletableFuture<ArrayList<BookList>> UserBooksToBookList(Map<String, T> userBookMap) {
-        CompletableFuture<ArrayList<BookList>> bookListFuture = new CompletableFuture<>();
+    public static <T extends UserBook> CompletableFuture<ArrayList<BookListItem>> UserBooksToBookList(Map<String, T> userBookMap) {
+        CompletableFuture<ArrayList<BookListItem>> bookListFuture = new CompletableFuture<>();
 
         BookController bookController = BookController.getInstance();
         ImageController imageController = ImageController.getInstance();
         UserController userController = UserController.getInstance();
-        ArrayList<BookList> result = new ArrayList<>();
+        ArrayList<BookListItem> result = new ArrayList<>();
 
         List<CompletableFuture> futures = new ArrayList<>();
         for (Map.Entry<String, T> entry : userBookMap.entrySet()) {
@@ -47,9 +47,9 @@ public class BookParser {
                             image = imageController.getImage(book.getImageId()).get(5, TimeUnit.SECONDS);
                         }
 
-                        BookList bookList = new BookList(image, book.getTitle(), book.getAuthor(), isbn, userBook.getStatus(), userProfile.getName());
+                        BookListItem bookListItem = new BookListItem(image, book.getTitle(), book.getAuthor(), isbn, userBook.getStatus(), userProfile.getName(), userBook.getOwner());
 
-                        result.add(bookList);
+                        result.add(bookListItem);
                         future.complete(null);
 
                     } catch (InterruptedException e) {

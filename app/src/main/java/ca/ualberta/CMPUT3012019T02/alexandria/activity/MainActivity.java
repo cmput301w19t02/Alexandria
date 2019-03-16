@@ -23,7 +23,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookParser;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.ExchangeFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.library.LibraryFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 
 /**
  * The main screen that opens when the application opens
@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener, BookListProvider {
 
     private UserController userController = UserController.getInstance();
-    private List<BookList> borrowedBookListings = new ArrayList<>();
-    private List<BookList> ownedBookListings = new ArrayList<>();
+    private List<BookListItem> borrowedBookListings = new ArrayList<>();
+    private List<BookListItem> ownedBookListings = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,10 +86,10 @@ public class MainActivity extends AppCompatActivity
 
                     System.out.println("Loading borrowed books");
                     // Gets accepted book list items
-                    List<BookList> bookLists = BookParser.UserBooksToBookList(stringBorrowedBookHashMap).get(5, TimeUnit.SECONDS);
+                    List<BookListItem> bookListItems = BookParser.UserBooksToBookList(stringBorrowedBookHashMap).get(5, TimeUnit.SECONDS);
 
                     borrowedBookListings.clear();
-                    borrowedBookListings.addAll(bookLists);
+                    borrowedBookListings.addAll(bookListItems);
 
                     // Sort by alphabetical order of book titles
                     Collections.sort(borrowedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
@@ -112,10 +112,10 @@ public class MainActivity extends AppCompatActivity
 
                     System.out.println("Loading owned books");
                     // Gets accepted book list items
-                    List<BookList> bookLists = BookParser.UserBooksToBookList(stringOwnedBookHashMap).get(5, TimeUnit.SECONDS);
+                    List<BookListItem> bookListItems = BookParser.UserBooksToBookList(stringOwnedBookHashMap).get(5, TimeUnit.SECONDS);
 
                     ownedBookListings.clear();
-                    ownedBookListings.addAll(bookLists);
+                    ownedBookListings.addAll(bookListItems);
 
                     // Sort by alphabetical order of book titles
                     Collections.sort(ownedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
@@ -181,12 +181,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public List<BookList> getBorrowedBookList() {
+    public List<BookListItem> getBorrowedBookList() {
         return borrowedBookListings;
     }
 
     @Override
-    public List<BookList> getOwnedBookList() {
+    public List<BookListItem> getOwnedBookList() {
         return ownedBookListings;
     }
 }
