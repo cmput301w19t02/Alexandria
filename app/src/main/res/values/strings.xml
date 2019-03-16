@@ -52,4 +52,7 @@
     <string name="send_description">send_button</string>
     <string name="view_profile_title">View Profile</string>
     <string name="message_hint">Type your message</string>
+    <!-- Strings related to ellipses menu -->
+    <string name="view_user">View User</string>
+    <string name="message">Message</string>
 </resources>
