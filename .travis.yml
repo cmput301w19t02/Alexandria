@@ -13,5 +13,8 @@ android:
   - 'android-sdk-preview-license-.+'
   - 'android-sdk-license-.+'
   - 'google-gdk-license-.+'
+before_install:
+  - pwd
+  - ls -la
 script:
 - ./gradlew build check
