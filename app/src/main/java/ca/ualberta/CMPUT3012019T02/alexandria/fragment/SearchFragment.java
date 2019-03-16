@@ -2,6 +2,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria.fragment;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
@@ -30,9 +32,10 @@ import java9.util.concurrent.CompletableFuture;
  */
 public class SearchFragment extends Fragment {
 
-    private ArrayList<BookListItem> searchBooks = new ArrayList<BookListItem>();
+    private List<BookListItem> searchBooks = new ArrayList<BookListItem>();
     private EditText searchText;
     private CompletableFuture<ArrayList<Book>> results;
+    private BookRecyclerViewAdapter bookAdapter;
 
     private final SearchController searchController = SearchController.getInstance();
     private final ImageController imageController = ImageController.getInstance();
@@ -45,8 +48,7 @@ public class SearchFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_search, null);
         RecyclerView mRecyclerView = rootView.findViewById(R.id.search_recycler);
 
-        BookRecyclerViewAdapter bookAdapter =
-                new BookRecyclerViewAdapter(getContext(), searchBooks, "UserBookFragment");
+        bookAdapter = new BookRecyclerViewAdapter(getContext(), searchBooks, "UserBookFragment");
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(bookAdapter);
@@ -70,11 +72,15 @@ public class SearchFragment extends Fragment {
 
                                 CompletableFuture<Bitmap> imageResult = imageController.getImage(book.getImageId());
 
-                                imageResult.handleAsync((image,imageError)->{
-                                    if(imageError==null) {
-                                        searchBooks.add(new BookListItem
-                                                (image, book.getTitle(), book.getAuthor(),
-                                                        book.getIsbn()));
+                                imageResult.handleAsync((image, imageError)->{
+                                    if(imageError == null) {
+                                        searchBooks.add(new BookListItem(
+                                                image,
+                                                book.getTitle(),
+                                                book.getAuthor(),
+                                                book.getIsbn())
+                                        );
+                                        bookAdapter.setmBookListItem(searchBooks);
                                         bookAdapter.notifyDataSetChanged();
                                     }
                                     else{
@@ -96,9 +102,25 @@ public class SearchFragment extends Fragment {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchBooks.clear();
             }
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                bookAdapter.setmBookListItem(searchBooks);
+                bookAdapter.notifyDataSetChanged();
+                handler.postDelayed(this, 500);
+            }
+        }, 500);
     }
 }

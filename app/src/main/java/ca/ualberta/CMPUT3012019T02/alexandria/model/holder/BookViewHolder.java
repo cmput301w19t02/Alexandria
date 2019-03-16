@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
@@ -19,7 +19,7 @@ public class BookViewHolder extends RecyclerView.ViewHolder{
     /**
      * The Item book.
      */
-    public LinearLayout itemBook;
+    public RelativeLayout itemBook;
     /**
      * The ImageView cover.
      */
@@ -50,10 +50,10 @@ public class BookViewHolder extends RecyclerView.ViewHolder{
         super(itemView);
 
         itemBook = itemView.findViewById(R.id.item_book);
-        ivCover = itemView.findViewById(R.id.book_cover);
-        tvTitle = itemView.findViewById(R.id.book_title);
-        tvAuthor = itemView.findViewById(R.id.book_author);
-        tvISBN = itemView.findViewById(R.id.book_isbn);
-        ivStatus = itemView.findViewById(R.id.book_status);
+        ivCover = itemView.findViewById(R.id.item_book_cover);
+        tvTitle = itemView.findViewById(R.id.item_book_title);
+        tvAuthor = itemView.findViewById(R.id.item_book_author);
+        tvISBN = itemView.findViewById(R.id.item_book_isbn);
+        ivStatus = itemView.findViewById(R.id.item_book_status);
     }
 }

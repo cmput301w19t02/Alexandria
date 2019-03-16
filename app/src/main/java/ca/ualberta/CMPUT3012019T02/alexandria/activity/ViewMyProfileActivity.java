@@ -15,8 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
@@ -28,17 +26,17 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
  * provides navigation to blocked users activity
  * and edit my profile activity
  */
-public class MyProfileActivity extends AppCompatActivity {
+public class ViewMyProfileActivity extends AppCompatActivity {
 
     private UserProfile myUserProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_profile);
+        setContentView(R.layout.activity_view_my_profile);
 
         // toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.profile_toolbar);
+        Toolbar toolbar = findViewById(R.id.profile_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
 
@@ -58,10 +56,10 @@ public class MyProfileActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        TextView textView_username = (TextView) findViewById(R.id.textView_username);
-        TextView textView_name = (TextView) findViewById(R.id.textView_name);
-        TextView textView_email = (TextView) findViewById(R.id.textView_email);
-        ImageView image_avatar = (ImageView) findViewById(R.id.user_image);
+        TextView textView_username = findViewById(R.id.my_profile_username);
+        TextView textView_name = findViewById(R.id.my_profile_name);
+        TextView textView_email = findViewById(R.id.my_profile_email);
+        ImageView image_avatar = findViewById(R.id.my_profile_image);
 
         // sets user's strings
         UserController userController = UserController.getInstance();
@@ -86,10 +84,14 @@ public class MyProfileActivity extends AppCompatActivity {
                             Bitmap bitmap = resultImage;
 
                             if (bitmap != null) {
-                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                                        Math.min(bitmap.getWidth(), bitmap.getHeight()),
+                                        Math.min(bitmap.getWidth(), bitmap.getHeight()));
 
-                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);
-                                drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
+                                        .create(getResources(), squareBitmap);
+                                drawable.setCornerRadius(Math.min(
+                                        bitmap.getWidth(), bitmap.getHeight()));
                                 drawable.setAntiAlias(true);
 
                                 runOnUiThread(() -> {
@@ -106,7 +108,8 @@ public class MyProfileActivity extends AppCompatActivity {
             else {
                 // Show error message
                 showError("Profile is not recognized");
-                myUserProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown");
+                myUserProfile = new UserProfile("Unknown","Unknown",
+                        "Unknown",null,"Unknown");
                 textView_name.setText(myUserProfile.getName());
                 textView_username.setText(myUserProfile.getUsername());
                 textView_email.setText(myUserProfile.getEmail());
@@ -116,7 +119,7 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
     /**
-     * shos error toast
+     * shows error toast
      * @param message error message
      */
     private void showError(String message) {
@@ -151,7 +154,7 @@ public class MyProfileActivity extends AppCompatActivity {
                         BlockedUsersActivity.class);
                 startActivity(startBlockedUsers);
                 break;
-            case R.id.sing_out_profile:
+            case R.id.sign_out_profile:
                 // Sing Out
                 // TODO show warning
                 Intent start_new_main_intent = new Intent(this,

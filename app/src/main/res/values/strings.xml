@@ -19,9 +19,10 @@
     <string name="search_hint">Author, Title, or ISBN</string>
     <string name="nav_profile">Profile</string>
     <!-- Strings related to my profile -->
+    <string name="profile_info">Information</string>
     <string name="image_desc">User Logo</string>
     <string name="profile_username">Username</string>
-    <string name="profile_name">Full Name</string>
+    <string name="profile_name">Name</string>
     <string name="profile_email">Email</string>
     <string name="sign_out_title">Sign Out</string>
     <!-- Strings related to edit my profile -->
