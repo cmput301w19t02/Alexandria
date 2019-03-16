@@ -12,6 +12,9 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -46,17 +49,13 @@ public class UserBookFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_user_book,null);
 
         // toolbar
-        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        Toolbar toolbar = rootView.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+        // remove default title
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().popBackStack();
-            }
-        });
+        toolbar.setNavigationOnClickListener((View v) -> getFragmentManager().popBackStack());
 
         extractData();
         setBookInfo(rootView);
@@ -69,6 +68,34 @@ public class UserBookFragment extends Fragment {
         rootView.findViewById(R.id.user_book_button).setOnClickListener(mListener);
 
         return rootView;
+    }
+
+    //Instantiate the options menu
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_user_book, menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            //menu switch
+            case R.id.option_view_user:
+                onClickUser();
+                break;
+            case R.id.option_message_user:
+                break;
+            case R.id.menu_user_book_ellipses:
+                break;
+            default:
+                throw new RuntimeException("Unknown option");
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -114,10 +141,14 @@ public class UserBookFragment extends Fragment {
                             Bitmap bitmap = resultImage;
 
                             if (bitmap != null) {
-                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                                        Math.min(bitmap.getWidth(), bitmap.getHeight()),
+                                        Math.min(bitmap.getWidth(), bitmap.getHeight()));
 
-                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);
-                                drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
+                                        .create(getResources(), squareBitmap);
+                                drawable.setCornerRadius(Math.min(
+                                        bitmap.getWidth(), bitmap.getHeight()));
                                 drawable.setAntiAlias(true);
 
                                 getActivity().runOnUiThread(() -> {
@@ -199,31 +230,33 @@ public class UserBookFragment extends Fragment {
 
     }
 
+    //TODO Implement
     //To be called when the status changes in order to reload the page
     private void onStatusChange(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(this).attach(this).commit();
     }
 
-    private final View.OnClickListener mListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch(v.getId()){
-                case R.id.user_book_owner: onClickUser(); break;
-                case R.id.user_book_owner_pic: onClickUser(); break;
-                case R.id.user_book_button_temp: onClickTempButton(); break;
-                case R.id.user_book_button: onClickButton(); break;
-                default: throw new RuntimeException("No Button Found");
-            }
+    private final View.OnClickListener mListener = (View v) -> {
+        switch(v.getId()){
+            case R.id.user_book_owner: onClickUser(); break;
+            case R.id.user_book_owner_pic: onClickUser(); break;
+            case R.id.user_book_button_temp: onClickTempButton(); break;
+            case R.id.user_book_button: onClickButton(); break;
+            default: throw new RuntimeException("No Button Found");
         }
     };
 
-    //TODO implement Activity Switching
     //switch to the book owner's profile
     private void onClickUser() {
         Intent intentViewOwner = new Intent(getActivity(), ViewUserProfileActivity.class);
         intentViewOwner.putExtra("USER_ID", owner);
         startActivity(intentViewOwner);
+    }
+
+    //TODO navigate to message fragment
+    private void onClickMessageUser() {
+
     }
 
     //TODO implement firebase status switching
