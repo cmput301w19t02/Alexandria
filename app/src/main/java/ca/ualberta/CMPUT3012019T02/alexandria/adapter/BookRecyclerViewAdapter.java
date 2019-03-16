@@ -54,22 +54,18 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
         BookViewHolder mViewHolder = new BookViewHolder(mView);
 
         //list click to switch fragments
-        mViewHolder.itemBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mViewHolder.itemBook.setOnClickListener((View v) -> {
+            Fragment frag = setDestination(destination);
+            frag.setArguments(dataBundler(mViewHolder));
 
-                Fragment frag = setDestination(destination);
-                frag.setArguments(dataBundler(mViewHolder));
+            //switch fragments with bundled data
+            FragmentTransaction fragmentTransaction =
+                    ((FragmentActivity) mView.getContext()).getSupportFragmentManager()
+                            .beginTransaction();
 
-                //switch fragments with bundled data
-                FragmentTransaction fragmentTransaction =
-                        ((FragmentActivity) mView.getContext()).getSupportFragmentManager()
-                                .beginTransaction();
-
-                fragmentTransaction.replace(R.id.fragment_container, frag, "UserBook");
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
+            fragmentTransaction.replace(R.id.fragment_container, frag, "UserBook");
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         });
 
         return mViewHolder;
@@ -119,7 +115,6 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
         if (mBookListItem.get(mViewHolder.getAdapterPosition()).getStatus() != null) {
             b.putString("status", mBookListItem.get(mViewHolder.getAdapterPosition()).getStatus());
         }
-        b.putString("owner", mBookListItem.get(mViewHolder.getAdapterPosition()).getOwner());
         b.putString("ownerId", mBookListItem.get(mViewHolder.getAdapterPosition()).getOwnerId());
 
         return b;

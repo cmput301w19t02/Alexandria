@@ -12,7 +12,6 @@ public class BookListItem {
     private String author;
     private String isbn;
     private String status;
-    private String owner;
     private String ownerId;
 
     /**
@@ -29,16 +28,15 @@ public class BookListItem {
      * @param author author of the book
      * @param isbn   isbn of the book
      * @param status status
-     * @param owner  owner of hte book
+     * @param ownerId the id of the owner
      */
     public BookListItem(Bitmap cover, String title, String author,
-                        String isbn, String status, String owner, String ownerId) {
+                        String isbn, String status, String ownerId) {
         this.cover = cover;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
         this.status = status;
-        this.owner = owner;
         this.ownerId = ownerId;
     }
 
@@ -148,35 +146,17 @@ public class BookListItem {
     }
 
     /**
-     * gets owner of the book
+     * gets owner Id of the book
      *
      * @return String owner
      */
-    public String getOwner() { return owner; }
+    public String getOwnerId() { return ownerId; }
 
     /**
-     * sets owner for the book
+     * sets ownerId for the book
      *
      * @param owner owner
      */
-    public void setOwner(String owner) { this.owner = owner; }
+    public void setOwnerId(String owner) { this.ownerId = owner; }
 
-
-    /**
-     * Gets owner id.
-     *
-     * @return the owner id
-     */
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    /**
-     * Sets owner id.
-     *
-     * @param ownerId the owner id
-     */
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
-    }
 }

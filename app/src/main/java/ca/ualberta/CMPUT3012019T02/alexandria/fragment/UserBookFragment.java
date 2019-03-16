@@ -38,7 +38,6 @@ public class UserBookFragment extends Fragment {
     private String author;
     private String isbn;
     private String status;
-    private String owner;
     private String ownerId;
 
     @Nullable
@@ -106,7 +105,6 @@ public class UserBookFragment extends Fragment {
         author = arguments.getString("author");
         isbn = arguments.getString("isbn");
         status = arguments.getString("status");
-        owner = arguments.getString("owner");
         ownerId = arguments.getString("ownerId");
     }
 
@@ -122,7 +120,6 @@ public class UserBookFragment extends Fragment {
         tvTitle.setText(title);
         tvAuthor.setText(author);
         tvIsbn.setText(isbn);
-        tvOwner.setText(owner);
 
         // sets owner name and avatar
         UserController userController = UserController.getInstance();
