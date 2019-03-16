@@ -55,12 +55,7 @@ public class UserBookFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().popBackStack();
-            }
-        });
+        toolbar.setNavigationOnClickListener((View v) -> getFragmentManager().popBackStack());
 
         extractData();
         setBookInfo(rootView);
@@ -235,22 +230,20 @@ public class UserBookFragment extends Fragment {
 
     }
 
+    //TODO Implement
     //To be called when the status changes in order to reload the page
     private void onStatusChange(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(this).attach(this).commit();
     }
 
-    private final View.OnClickListener mListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch(v.getId()){
-                case R.id.user_book_owner: onClickUser(); break;
-                case R.id.user_book_owner_pic: onClickUser(); break;
-                case R.id.user_book_button_temp: onClickTempButton(); break;
-                case R.id.user_book_button: onClickButton(); break;
-                default: throw new RuntimeException("No Button Found");
-            }
+    private final View.OnClickListener mListener = (View v) ->{
+        switch(v.getId()){
+            case R.id.user_book_owner: onClickUser(); break;
+            case R.id.user_book_owner_pic: onClickUser(); break;
+            case R.id.user_book_button_temp: onClickTempButton(); break;
+            case R.id.user_book_button: onClickButton(); break;
+            default: throw new RuntimeException("No Button Found");
         }
     };
 
