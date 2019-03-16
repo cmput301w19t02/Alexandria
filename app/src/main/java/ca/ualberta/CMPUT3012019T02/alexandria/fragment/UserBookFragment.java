@@ -237,7 +237,7 @@ public class UserBookFragment extends Fragment {
         ft.detach(this).attach(this).commit();
     }
 
-    private final View.OnClickListener mListener = (View v) ->{
+    private final View.OnClickListener mListener = (View v) -> {
         switch(v.getId()){
             case R.id.user_book_owner: onClickUser(); break;
             case R.id.user_book_owner_pic: onClickUser(); break;
