@@ -21,7 +21,7 @@ before_script:
 - export GRADLE_HOME=$PWD/gradle-4.10.1
 - export PATH=$GRADLE_HOME/bin:$PATH
 # Emulator
-- echo no | android create avd --force -n test -t android-28 --abi x86
+- echo no | android create avd --force -n test -t android-28 --abi google_apis/x86
 - emulator -avd test -no-skin -no-audio -no-window &
 - android-wait-for-emulator
 - adb shell input keyevent 82 &
