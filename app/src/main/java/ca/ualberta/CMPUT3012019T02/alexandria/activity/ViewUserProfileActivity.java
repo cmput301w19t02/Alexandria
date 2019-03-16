@@ -78,6 +78,8 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                     textViewUsername.setText(username);
                     textViewName.setText(name);
                 });
+
+                //TODO Implement a spinner for image search
                 if (photoId != null) {
                     imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
                         if (errorImage == null) {
