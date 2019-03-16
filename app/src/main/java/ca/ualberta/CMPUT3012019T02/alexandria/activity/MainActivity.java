@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity
      *
      * @param view the button clicked
      */
-    protected void onProfileButtonClick(View view) {
+    public void onProfileButtonClick(View view) {
         Intent startProfileActivity = new Intent(this, ViewMyProfileActivity.class);
         startActivity(startProfileActivity);
     }
