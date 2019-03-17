@@ -120,6 +120,7 @@ public class UserBookFragment extends Fragment {
         tvTitle.setText(title);
         tvAuthor.setText(author);
         tvIsbn.setText(isbn);
+        ivCover.setImageBitmap(cover);
 
         // sets owner name and avatar
         UserController userController = UserController.getInstance();
@@ -164,9 +165,6 @@ public class UserBookFragment extends Fragment {
             }
             return null;
         });
-
-        //TODO implement firebase lookup for user profile pic
-        ivCover.setImageBitmap(cover);
     }
 
     /**

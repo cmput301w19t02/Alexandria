@@ -15,6 +15,7 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.UserBookFragment;
+import ca.ualberta.CMPUT3012019T02.alexandria.fragment.mybook.MyBookFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.BookViewHolder;
 
@@ -129,8 +130,9 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
 
         switch (destination){
             case "UserBookFragment":
-                UserBookFragment frag = new UserBookFragment();
-                return frag;
+                return new UserBookFragment();
+            case "MyBookFragment":
+                return new MyBookFragment();
             default:
                 throw new RuntimeException("Fragment Not Defined");
         }
