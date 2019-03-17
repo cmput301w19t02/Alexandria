@@ -21,6 +21,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
 public class MyBookTransactionFragment extends Fragment {
 
     private String status;
+    private String isbn;
     private String borrowerId;
 
     @Nullable
@@ -45,9 +46,10 @@ public class MyBookTransactionFragment extends Fragment {
         return rootView;
     }
 
-    //sets the status via parent fragment
-    public void setStatus(String status) {
+    //sets the status/isbn via parent fragment
+    public void setVariables(String status, String isbn) {
         this.status = status;
+        this.isbn= isbn;
     }
 
     //gets the borrower info from firebase

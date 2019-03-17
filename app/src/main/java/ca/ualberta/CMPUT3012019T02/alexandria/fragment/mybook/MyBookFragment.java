@@ -112,11 +112,11 @@ public class MyBookFragment extends Fragment {
                 return new MyBookUserListFragment();
             case "accepted":
                 Fragment fragment = new MyBookTransactionFragment();
-                ((MyBookTransactionFragment) fragment).setStatus(status);
+                ((MyBookTransactionFragment) fragment).setVariables(status,isbn);
                 return fragment;
             case "borrowed":
                 fragment = new MyBookTransactionFragment();
-                ((MyBookTransactionFragment) fragment).setStatus(status);
+                ((MyBookTransactionFragment) fragment).setVariables(status,isbn);
                 return fragment;
             default:
                 throw new RuntimeException("Status out of bounds");
