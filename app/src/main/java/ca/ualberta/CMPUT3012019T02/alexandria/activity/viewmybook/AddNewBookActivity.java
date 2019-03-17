@@ -1,7 +1,9 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity.viewmybook;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
@@ -9,7 +11,9 @@ import android.widget.Toast;
 import java.util.Date;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 
 /**
  * The Add new book activity.
@@ -34,40 +38,6 @@ public class AddNewBookActivity extends AppCompatActivity {
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v -> finish());
-
-    }
-
-    /**
-     * Validate title boolean.
-     *
-     * @param title the title
-     * @return the validation result
-     */
-    public boolean validateTitle(String title) {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    /**
-     * Validate author boolean.
-     *
-     * @param author the author
-     * @return the validation result
-     */
-    public boolean validateAuthor(String author) {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    /**
-     * Validate isbn boolean.
-     *
-     * @param isbn the isbn
-     * @return the validation result
-     */
-    public boolean validateISBN(String isbn) {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented");
     }
 
     /**
@@ -87,11 +57,42 @@ public class AddNewBookActivity extends AppCompatActivity {
     }
 
     /**
-     * Add book.
+     * Adds a book to the database and sets a user as one of the owners for that book. Quits.
      */
     public void addBook(View view) {
-        book = new Book(isbn, image, title, author, description, date);
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented");
+        fetchData();
+        try {
+            book = new Book(isbn, image, title, author, description, date);
+            BookController.getInstance().addBook(book);
+            OwnedBook myBook = new OwnedBook(isbn);
+            BookController.getInstance().addMyOwnedBook(myBook);
+
+            Toast.makeText(this , "Book Added", Toast.LENGTH_LONG).show();
+            finish();
+        } catch (IllegalArgumentException e) {
+            String errorMessage = e.getMessage();
+            showError(errorMessage);
+        }
+    }
+
+    /**
+     * Collects data from input fields/
+     */
+    private void fetchData() {
+        AppCompatEditText nameField = findViewById(R.id.add_book_add_title_field);
+        AppCompatEditText authorField = findViewById(R.id.add_book_add_author_field);
+        AppCompatEditText isbnField = findViewById(R.id.add_book_add_ISBN_field);
+        //TODO add image input, date input, description input
+        image = null;
+        date = null;
+        description = "default";
+
+        title = nameField.getText().toString();
+        author = authorField.getText().toString();
+        isbn = isbnField.getText().toString();
+    }
+
+    private void showError(String message) {
+        Toast.makeText(this, "Error: " + message, Toast.LENGTH_LONG).show();
     }
 }
