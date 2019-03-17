@@ -18,6 +18,7 @@ import java.util.concurrent.TimeoutException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.viewmybook.AddNewBookActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.viewmybook.EditBookActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookParser;
@@ -177,6 +178,7 @@ public class MainActivity extends AppCompatActivity
      * @param view the button clicked
      */
     protected void onProfileButtonClick(View view) {
+        // TODO CHANGE BACK
         Intent startProfileActivity = new Intent(this, AddNewBookActivity.class);
         startActivity(startProfileActivity);
     }

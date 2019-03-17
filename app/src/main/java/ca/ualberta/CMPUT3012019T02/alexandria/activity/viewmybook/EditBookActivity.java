@@ -2,9 +2,11 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity.viewmybook;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.Date;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 
 /**
@@ -22,8 +24,12 @@ public class EditBookActivity extends AddNewBookActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_edit_book);
+        setContentView(R.layout.activity_add_new_book);
         // TODO: set information from book being edited
+
+        TextView tvTitle = findViewById(R.id.add_book_title);
+        String pageTitle = "Edit Book";
+        tvTitle.setText(pageTitle);
     }
 
     @Override
