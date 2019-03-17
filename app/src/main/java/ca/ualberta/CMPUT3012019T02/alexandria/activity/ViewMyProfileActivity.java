@@ -2,15 +2,14 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,12 +40,7 @@ public class ViewMyProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     /**

@@ -1,7 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.library;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -18,7 +17,7 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.BookListProvider;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
 
 /**
@@ -26,7 +25,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
  */
 public class AvailableFragment extends Fragment {
 
-    private List<BookList> bookListings = new ArrayList<>();
+    private List<BookListItem> bookListings = new ArrayList<>();
     private BookRecyclerViewAdapter bookAdapter;
     private BookListProvider bookListProvider;
 
@@ -68,14 +67,14 @@ public class AvailableFragment extends Fragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                List<BookList> books = bookListProvider.getOwnedBookList();
+                List<BookListItem> books = bookListProvider.getOwnedBookList();
                 bookListings.clear();
-                for (BookList book : books) {
+                for (BookListItem book : books) {
                     if (book.getStatus().equals("available") || book.getStatus().equals("requested")) {
                         bookListings.add(book);
                     }
                 }
-                bookAdapter.setmBookList(bookListings);
+                bookAdapter.setmBookListItem(bookListings);
                 bookAdapter.notifyDataSetChanged();
                 handler.postDelayed(this, 2000);
             }

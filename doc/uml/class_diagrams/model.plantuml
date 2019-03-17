@@ -68,7 +68,7 @@ title __MODEL's Class Diagram__\n
     package ca.ualberta.CMPUT3012019T02.alexandria.model {
       class BookRecyclerViewAdapter {
           - mContext : Context
-          - mBookList : List<BookList>
+          - mBookListItem : List<BookList>
           - destination : String
           + BookRecyclerViewAdapter()
           + onCreateViewHolder()
