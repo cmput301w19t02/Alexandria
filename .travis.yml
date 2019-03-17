@@ -36,3 +36,5 @@ script:
 - adb shell settings put global transition_animation_scale 0 &
 - adb shell settings put global animator_duration_scale 0 &
 - gradle build check
+- gradle build test
+- gradle build connectedCheck
