@@ -11,6 +11,7 @@ import java.util.Date;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 import java9.util.function.Consumer;
 
 /**
@@ -18,7 +19,7 @@ import java9.util.function.Consumer;
  */
 public class EditBookActivity extends AddNewBookActivity {
     private Book myBook;
-    private String title ;
+    private String title;
     private String author;
     private String isbn;
     private String description;
@@ -29,7 +30,6 @@ public class EditBookActivity extends AddNewBookActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_book);
-        // TODO: set information from book being edited
 
         TextView tvTitle = findViewById(R.id.add_book_title);
         String pageTitle = "Edit Book";
@@ -37,10 +37,7 @@ public class EditBookActivity extends AddNewBookActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
-            // quit
             isbn = null;
-            Toast.makeText(this , "ISBN is incorrect", Toast.LENGTH_LONG).show();
-            finish();
         } else {
             isbn = extras.getString("BOOK_ISBN");
             BookController.getInstance().getBook(isbn).thenAccept(new Consumer<Book>() {
@@ -53,18 +50,37 @@ public class EditBookActivity extends AddNewBookActivity {
             });
         }
 
-        //runOnUiThread(() -> {
-
-        //});
+        // quit if no data found
+        if (isbn == null | myBook == null) {
+            showError("The book is not found.");
+            finish();
+        }
     }
 
+    /**
+     * deletes an instance of old book, and adds a new one, if inputs is valid
+     *
+     * @param view current view
+     */
     @Override
     public void addBook(View view) {
-        Book newBook = new Book(isbn, image, title, author, description, date);
-        // TODO: implement
-        // make sure the old book is deleted from the user profile
-        Toast.makeText(this , "Book Information Changed", Toast.LENGTH_LONG).show();
-        finish();
+        fetchData();
+        try {
+            Book newBook = new Book(isbn, image, title, author, description, date);
+            OwnedBook newOwnedBook = new OwnedBook(isbn);
+
+            BookController.getInstance().deleteMyOwnedBook(myBook.getIsbn());
+            BookController.getInstance().deleteBook(myBook.getIsbn());
+
+            BookController.getInstance().addBook(newBook);
+            BookController.getInstance().addMyOwnedBook(newOwnedBook);
+
+            Toast.makeText(this, "Book Information Changed", Toast.LENGTH_LONG).show();
+            finish();
+        } catch (IllegalArgumentException e) {
+            String errorMessage = e.getMessage();
+            showError(errorMessage);
+        }
     }
 
     /**
@@ -72,9 +88,13 @@ public class EditBookActivity extends AddNewBookActivity {
      */
     public void deleteBook() {
         // TODO: implement
-        throw new UnsupportedOperationException("Not implemented");
+        BookController.getInstance().deleteMyOwnedBook(myBook.getIsbn());
+        BookController.getInstance().deleteBook(myBook.getIsbn());
     }
 
+    /**
+     * Extracts book info from Book class
+     */
     private void extractBookInfo() {
         title = myBook.getTitle();
         author = myBook.getAuthor();
@@ -82,6 +102,20 @@ public class EditBookActivity extends AddNewBookActivity {
         description = myBook.getDescription();
         date = myBook.getDate();
         image = myBook.getImageId();
+    }
+
+    private void fetchData() {
+        AppCompatEditText titleField = findViewById(R.id.add_book_add_title_field);
+        AppCompatEditText authorField = findViewById(R.id.add_book_add_author_field);
+        AppCompatEditText isbnField = findViewById(R.id.add_book_add_ISBN_field);
+        //TODO add image input, date input, description input
+        image = null;
+        date = null;
+        description = "default";
+
+        title = titleField.getText().toString();
+        author = authorField.getText().toString();
+        isbn = isbnField.getText().toString();
     }
 
     /**
@@ -92,7 +126,6 @@ public class EditBookActivity extends AddNewBookActivity {
         AppCompatEditText authorField = findViewById(R.id.add_book_add_author_field);
         AppCompatEditText isbnField = findViewById(R.id.add_book_add_ISBN_field);
         //TODO image input, date input, description input
-
 
         nameField.setText(title);
         authorField.setText(author);

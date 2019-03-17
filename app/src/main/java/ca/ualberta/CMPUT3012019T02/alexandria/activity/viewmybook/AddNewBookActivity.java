@@ -64,8 +64,8 @@ public class AddNewBookActivity extends AppCompatActivity {
         try {
             book = new Book(isbn, image, title, author, description, date);
             BookController.getInstance().addBook(book);
-            OwnedBook myBook = new OwnedBook(isbn);
-            BookController.getInstance().addMyOwnedBook(myBook);
+            OwnedBook myOwnedBook = new OwnedBook(isbn);
+            BookController.getInstance().addMyOwnedBook(myOwnedBook);
 
             Toast.makeText(this , "Book Added", Toast.LENGTH_LONG).show();
             finish();
@@ -92,7 +92,7 @@ public class AddNewBookActivity extends AppCompatActivity {
         isbn = isbnField.getText().toString();
     }
 
-    private void showError(String message) {
+    public void showError(String message) {
         Toast.makeText(this, "Error: " + message, Toast.LENGTH_LONG).show();
     }
 }
