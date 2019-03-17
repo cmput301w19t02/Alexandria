@@ -2,9 +2,13 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity.viewmybook;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.Date;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 
 /**
@@ -21,8 +25,16 @@ public class AddNewBookActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_edit_book);
-        // TODO: set information from book being edited
+        setContentView(R.layout.activity_add_new_book);
+
+        // toolbar
+        Toolbar toolbar = findViewById(R.id.add_new_book_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setNavigationOnClickListener(v -> finish());
+
     }
 
     /**
@@ -61,7 +73,7 @@ public class AddNewBookActivity extends AppCompatActivity {
     /**
      * Add photo.
      */
-    public void addPhoto() {
+    public void addPhoto(View view) {
         // TODO: implement
         throw new UnsupportedOperationException("Not implemented");
     }
@@ -69,7 +81,7 @@ public class AddNewBookActivity extends AppCompatActivity {
     /**
      * Scan isbn.
      */
-    public void scanISBN() {
+    public void scanISBN(View view) {
         // TODO: implement
         throw new UnsupportedOperationException("Not implemented");
     }
@@ -77,7 +89,7 @@ public class AddNewBookActivity extends AppCompatActivity {
     /**
      * Add book.
      */
-    public void addBook() {
+    public void addBook(View view) {
         book = new Book(isbn, image, title, author, description, date);
         // TODO: implement
         throw new UnsupportedOperationException("Not implemented");

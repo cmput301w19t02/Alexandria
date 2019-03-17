@@ -55,4 +55,10 @@
     <!-- Strings related to ellipses menu -->
     <string name="view_user">View User</string>
     <string name="message">Message</string>
+    <!-- Strings related to add new book -->
+    <string name="add_a_book">Add a Book</string>
+    <string name="book_title">Book Title</string>
+    <string name="author_name">Author Name</string>
+    <string name="ISBN_num">ISBN #</string>
+    <string name="add_to_library">Add to Library</string>
 </resources>
