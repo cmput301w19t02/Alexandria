@@ -10,7 +10,7 @@ android:
   - extra-google-m2repository
   - extra-android-m2repository
   - addon-google_apis-google-28
-  - sys-img-armeabi-v7a-android-17
+  - sys-img-armeabi-v7a-google_apis-17
 
   licenses:
   - 'android-sdk-preview-license-.+'
