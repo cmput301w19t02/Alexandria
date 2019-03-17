@@ -25,6 +25,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookParser;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.ExchangeFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.library.LibraryFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 
 /**
@@ -179,7 +180,8 @@ public class MainActivity extends AppCompatActivity
      */
     protected void onProfileButtonClick(View view) {
         // TODO CHANGE BACK
-        Intent startProfileActivity = new Intent(this, AddNewBookActivity.class);
+        Intent startProfileActivity = new Intent(this, EditBookActivity.class);
+        startProfileActivity.putExtra("BOOK_ISBN", "1234567890123");
         startActivity(startProfileActivity);
     }
 
