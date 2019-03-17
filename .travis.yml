@@ -29,6 +29,6 @@ before_script:
 script:
 - gradle assembleDebug -PdisablePreDex
 - gradle assembleDebugAndroidTest -PdisablePreDex
-- adb install app/build/outputs/apk/app-debug.apk
-- adb install app/build/outputs/apk/app-debug-androidTest-unaligned.apk
+- adb install app/build/outputs/apk/debug/app-debug.apk
+- adb install app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 - gradle build connectedCheck
