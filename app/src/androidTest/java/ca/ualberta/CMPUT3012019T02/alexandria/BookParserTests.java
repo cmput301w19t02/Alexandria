@@ -16,7 +16,7 @@ import java.util.concurrent.TimeoutException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookParser;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 
 public class BookParserTests {
@@ -25,10 +25,10 @@ public class BookParserTests {
     public void testBorrowedBooksToBookList() throws InterruptedException, ExecutionException, TimeoutException, IOException {
         BookController bookController = BookController.getInstance();
         HashMap<String, BorrowedBook> borrowedBookHashMap = bookController.getUserBorrowedBooks("eQgZfhN2Yng9TPHcXvfBZs5ZKxj1").get(5, TimeUnit.SECONDS);
-        List<BookList> bookList = BookParser.UserBooksToBookList(borrowedBookHashMap).get(10, TimeUnit.SECONDS);
-        Assert.assertEquals(1, bookList.size());
+        List<BookListItem> bookListItem = BookParser.UserBooksToBookList(borrowedBookHashMap).get(10, TimeUnit.SECONDS);
+        Assert.assertEquals(1, bookListItem.size());
 
-        BookList item = bookList.get(0);
+        BookListItem item = bookListItem.get(0);
         Assert.assertTrue(item.getIsbn().equals("9780547928227"));
         Assert.assertTrue(item.getTitle().equals("The Hobbit"));
         Assert.assertTrue(item.getAuthor().equals("J.R.R. Tolkien"));

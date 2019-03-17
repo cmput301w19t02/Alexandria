@@ -18,11 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
@@ -40,7 +38,7 @@ public class UserBookFragment extends Fragment {
     private String author;
     private String isbn;
     private String status;
-    private String owner;
+    private String ownerId;
 
     @Nullable
     @Override
@@ -107,7 +105,7 @@ public class UserBookFragment extends Fragment {
         author = arguments.getString("author");
         isbn = arguments.getString("isbn");
         status = arguments.getString("status");
-        owner = arguments.getString("owner");
+        ownerId = arguments.getString("ownerId");
     }
 
     private void setBookInfo(View v) {
@@ -117,49 +115,47 @@ public class UserBookFragment extends Fragment {
         Button tvOwner = v.findViewById(R.id.user_book_owner);
 
         ImageView ivCover = v.findViewById(R.id.user_book_cover);
-        ImageButton ivOwnerPic = v.findViewById(R.id.user_book_owner_pic);
+        ImageView ivOwnerPic = v.findViewById(R.id.user_book_owner_pic);
 
         tvTitle.setText(title);
         tvAuthor.setText(author);
         tvIsbn.setText(isbn);
-        tvOwner.setText(owner);
 
         // sets owner name and avatar
         UserController userController = UserController.getInstance();
-        userController.getUserProfile(owner).handleAsync((result, error) -> {
+        userController.getUserProfile(ownerId).handleAsync((result, error) -> {
             if(error == null) {
                 // Update ui here
                 String name = result.getName();
                 String photoId = result.getPicture();
                 getActivity().runOnUiThread(() -> {
                     tvOwner.setText(name);
+                });
+                // sets owner image if there is one
+                ImageController imageController = ImageController.getInstance();
+                imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
+                    if (errorImage == null) {
+                        Bitmap bitmap = resultImage;
 
-                    // sets owner image if there is one
-                    ImageController imageController = ImageController.getInstance();
-                    imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
-                        if (errorImage == null) {
-                            Bitmap bitmap = resultImage;
+                        if (bitmap != null) {
+                            Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                                    Math.min(bitmap.getWidth(), bitmap.getHeight()),
+                                    Math.min(bitmap.getWidth(), bitmap.getHeight()));
 
-                            if (bitmap != null) {
-                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                                        Math.min(bitmap.getWidth(), bitmap.getHeight()),
-                                        Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
+                                    .create(getResources(), squareBitmap);
+                            drawable.setCornerRadius(Math.min(
+                                    bitmap.getWidth(), bitmap.getHeight()));
+                            drawable.setAntiAlias(true);
 
-                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
-                                        .create(getResources(), squareBitmap);
-                                drawable.setCornerRadius(Math.min(
-                                        bitmap.getWidth(), bitmap.getHeight()));
-                                drawable.setAntiAlias(true);
-
-                                getActivity().runOnUiThread(() -> {
-                                    ivOwnerPic.setImageDrawable(drawable);
-                                });
-                            }
-                        } else {
-                            showError(errorImage.getMessage());
+                            getActivity().runOnUiThread(() -> {
+                                ivOwnerPic.setImageDrawable(drawable);
+                            });
                         }
-                        return null;
-                    });
+                    } else {
+                        showError(errorImage.getMessage());
+                    }
+                    return null;
                 });
             }
             else {
@@ -250,7 +246,7 @@ public class UserBookFragment extends Fragment {
     //switch to the book owner's profile
     private void onClickUser() {
         Intent intentViewOwner = new Intent(getActivity(), ViewUserProfileActivity.class);
-        intentViewOwner.putExtra("USER_ID", owner);
+        intentViewOwner.putExtra("USER_ID", ownerId);
         startActivity(intentViewOwner);
     }
 

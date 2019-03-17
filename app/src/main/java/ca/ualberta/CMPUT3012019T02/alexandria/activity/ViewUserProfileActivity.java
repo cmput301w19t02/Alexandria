@@ -1,7 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,18 +26,19 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
  */
 public class ViewUserProfileActivity extends AppCompatActivity {
 
-    //private List<BookList> ownedBooks;
     private String username;
     private String name;
     private String photoId;
     private UserProfile userProfile;
-
     private String userID;
+
+    private ImageController imageController = ImageController.getInstance();
+    private UserController userController = UserController.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_profile);
+        setContentView(R.layout.activity_view_user_profile);
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
@@ -48,48 +47,15 @@ public class ViewUserProfileActivity extends AppCompatActivity {
             userID = extras.getString("USER_ID");
         }
 
-        /*
-        //TODO setup data retrieval from Firebase, and remove placeholder lists
-        Bitmap aBitmap = Bitmap.createBitmap(32, 32, Bitmap.Config.ARGB_8888);
-        ownedBooks = new ArrayList<>();
-        ownedBooks.add(new BookList
-                (aBitmap, "Test Title",
-                        "Test Author", "Test ISBN", "accepted"));
-        ownedBooks.add(new BookList
-                (aBitmap, "Test Title 2",
-                        "Test Author", "Test ISBN", "accepted"));
-        ownedBooks.add(new BookList
-                (aBitmap, "Test Title 3",
-                        "Test Author", "Test ISBN", "accepted"));
-        ownedBooks.add(new BookList
-                (aBitmap, "Test Title 4",
-                        "Test Author", "Test ISBN", "accepted"));
-        ownedBooks.add(new BookList
-                (aBitmap, "Test Title 5",
-                        "Test Author", "Test ISBN", "accepted"));
-        */
-
         // Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.view_profile_toolbar);
+        Toolbar toolbar = findViewById(R.id.user_profile_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         //TODO implement book list
-        // Recycler View
-        //RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.view_user_books_recycler);
-        //BookRecyclerViewAdapter bookAdapter =
-        //        new BookRecyclerViewAdapter(this, ownedBooks, "UserBookFragment");
-        //mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //mRecyclerView.setAdapter(bookAdapter);
     }
 
     /**
@@ -99,35 +65,38 @@ public class ViewUserProfileActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        UserController userController = UserController.getInstance();
         userController.getUserProfile(userID).handleAsync((result, error) -> {
-            if(error == null) {
-                // Update ui here
-                //TODO update imageImageController imageController = ImageController.getInstance();
+            if (error == null) {
                 userProfile = result;
-                TextView textView_username = (TextView) findViewById(R.id.view_profile_username);
-                TextView textView_name = (TextView) findViewById(R.id.view_profile_name);
+                TextView textViewUsername = findViewById(R.id.user_profile_username);
+                TextView textViewName = findViewById(R.id.user_profile_name);
 
                 username = userProfile.getUsername();
                 name = userProfile.getName();
                 photoId = userProfile.getPicture();
                 runOnUiThread(() -> {
-                    textView_username.setText(username);
-                    textView_name.setText(name);
+                    textViewUsername.setText(username);
+                    textViewName.setText(name);
+                });
 
-                    ImageController imageController = ImageController.getInstance();
+                //TODO Implement a spinner for image search
+                if (photoId != null) {
                     imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
                         if (errorImage == null) {
                             Bitmap bitmap = resultImage;
 
                             if (bitmap != null) {
-                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                                        Math.min(bitmap.getWidth(), bitmap.getHeight()),
+                                        Math.min(bitmap.getWidth(), bitmap.getHeight()));
 
-                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);
-                                drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
+                                        .create(getResources(), squareBitmap);
+                                drawable.setCornerRadius(Math.min(
+                                        bitmap.getWidth(), bitmap.getHeight()));
                                 drawable.setAntiAlias(true);
 
-                                ImageView imageView = findViewById(R.id.view_user_image);
+                                ImageView imageView = findViewById(R.id.user_profile_image);
                                 runOnUiThread(() -> {
                                     imageView.setImageDrawable(drawable);
                                 });
@@ -137,19 +106,21 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                         }
                         return null;
                     });
-                });
-            }
-            else {
+                }
+            } else {
                 // Show error message
-                Toast.makeText(this , "Profile is not recognized", Toast.LENGTH_LONG).show();
-                userProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown");
+                Toast.makeText(this, "Profile is not recognized",
+                        Toast.LENGTH_LONG).show();
+                userProfile = new UserProfile("Unknown", "Unknown",
+                        "Unknown", null, "Unknown");
             }
             return null;
         });
     }
 
     private void showError(String message) {
-        Toast.makeText(ViewUserProfileActivity.this, "Error: " + message, Toast.LENGTH_LONG).show();
+        Toast.makeText(ViewUserProfileActivity.this,
+                "Error: " + message, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -162,6 +133,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
     /**
      * Menu switch, shows warning for blocking user,
      * takes to messaging activity
+     *
      * @param item item selected
      * @return boolean
      */
@@ -176,28 +148,21 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                 startActivity(intentMain);
                 break;
             case R.id.block_user_option:
-                Toast.makeText(this , "Block user implement", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Block user implement", Toast.LENGTH_LONG).show();
 
-                AlertDialog.Builder blockAlert = new AlertDialog.Builder(ViewUserProfileActivity.this, R.style.AlertDialogTheme);
+                AlertDialog.Builder blockAlert = new AlertDialog.Builder(
+                        ViewUserProfileActivity.this, R.style.AlertDialogTheme);
 
                 blockAlert.setCancelable(true);
                 blockAlert.setTitle("Block User?");
-                String blockMessage = "Are you sure you want to block " +  name;
+                String blockMessage = "Are you sure you want to block " + name;
                 blockAlert.setMessage(blockMessage);
 
-                blockAlert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                blockAlert.setNegativeButton("CANCEL", (dialog, which) -> dialog.cancel());
                 Context context = this;
-                blockAlert.setPositiveButton("BLOCK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // block user
-                        Toast.makeText(context , "User Blocked", Toast.LENGTH_LONG).show();
-                    }
+                blockAlert.setPositiveButton("BLOCK", (dialog, which) -> {
+                    // block user
+                    Toast.makeText(context, "User Blocked", Toast.LENGTH_LONG).show();
                 });
                 blockAlert.show();
 

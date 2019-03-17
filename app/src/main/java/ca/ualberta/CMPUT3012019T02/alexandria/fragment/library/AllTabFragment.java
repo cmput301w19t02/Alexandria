@@ -17,7 +17,7 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.BookListProvider;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
 
 /**
@@ -25,7 +25,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
  */
 public class AllTabFragment extends Fragment {
 
-    private List<BookList> bookListings = new ArrayList<>();
+    private List<BookListItem> bookListings = new ArrayList<>();
     private BookRecyclerViewAdapter bookAdapter;
     private BookListProvider bookListProvider;
 
@@ -67,10 +67,10 @@ public class AllTabFragment extends Fragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                List<BookList> books = bookListProvider.getOwnedBookList();
+                List<BookListItem> books = bookListProvider.getOwnedBookList();
                 bookListings.clear();
                 bookListings.addAll(books);
-                bookAdapter.setmBookList(bookListings);
+                bookAdapter.setmBookListItem(bookListings);
                 bookAdapter.notifyDataSetChanged();
                 handler.postDelayed(this, 2000);
             }

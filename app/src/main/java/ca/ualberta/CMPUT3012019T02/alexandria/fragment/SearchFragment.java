@@ -24,7 +24,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookList;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 import java9.util.concurrent.CompletableFuture;
 
 /**
@@ -32,7 +32,7 @@ import java9.util.concurrent.CompletableFuture;
  */
 public class SearchFragment extends Fragment {
 
-    private List<BookList> searchBooks = new ArrayList<BookList>();
+    private List<BookListItem> searchBooks = new ArrayList<BookListItem>();
     private EditText searchText;
     private CompletableFuture<ArrayList<Book>> results;
     private BookRecyclerViewAdapter bookAdapter;
@@ -74,13 +74,13 @@ public class SearchFragment extends Fragment {
 
                                 imageResult.handleAsync((image, imageError)->{
                                     if(imageError == null) {
-                                        searchBooks.add(new BookList(
+                                        searchBooks.add(new BookListItem(
                                                 image,
                                                 book.getTitle(),
                                                 book.getAuthor(),
                                                 book.getIsbn())
                                         );
-                                        bookAdapter.setmBookList(searchBooks);
+                                        bookAdapter.setmBookListItem(searchBooks);
                                         bookAdapter.notifyDataSetChanged();
                                     }
                                     else{
@@ -117,7 +117,7 @@ public class SearchFragment extends Fragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                bookAdapter.setmBookList(searchBooks);
+                bookAdapter.setmBookListItem(searchBooks);
                 bookAdapter.notifyDataSetChanged();
                 handler.postDelayed(this, 500);
             }
