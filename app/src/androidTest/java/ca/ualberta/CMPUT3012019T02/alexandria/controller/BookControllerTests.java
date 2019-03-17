@@ -148,9 +148,9 @@ public class BookControllerTests {
 
         String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
         String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
-        userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
+        userController.authenticate(username, password).get(10, TimeUnit.SECONDS);
 
-        bookController.getMyBorrowedBook("0000000000000").get(5, TimeUnit.SECONDS);
+        bookController.getMyBorrowedBook("0000000000000").get(10, TimeUnit.SECONDS);
     }
 
     @Test
@@ -160,7 +160,7 @@ public class BookControllerTests {
 
         String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
         String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
-        userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
+        userController.authenticate(username, password).get(10, TimeUnit.SECONDS);
 
         HashMap<String, BorrowedBook> borrowedBookHashMap = bookController.getMyBorrowedBooks().get(5, TimeUnit.SECONDS);
         Assert.assertEquals(1, borrowedBookHashMap.size());
@@ -280,16 +280,16 @@ public class BookControllerTests {
 
         String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
         String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
-        userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
+        userController.authenticate(username, password).get(10, TimeUnit.SECONDS);
 
         OwnedBook expected = new OwnedBook("9781781102459");
-        bookController.updateMyOwnedBook(expected).get(5, TimeUnit.SECONDS);
+        bookController.updateMyOwnedBook(expected).get(10, TimeUnit.SECONDS);
         OwnedBook actual = bookController.getMyOwnedBook("9781781102459").get(5, TimeUnit.SECONDS);
 
         Assert.assertTrue(expected.getIsbn().equals(actual.getIsbn()) && expected.getStatus().equals(actual.getStatus()));
 
         // Clean up
-        bookController.deleteMyOwnedBook("9781781102459").get(5, TimeUnit.SECONDS);
+        bookController.deleteMyOwnedBook("9781781102459").get(10, TimeUnit.SECONDS);
     }
 
     @Test(expected = ExecutionException.class)
@@ -300,10 +300,10 @@ public class BookControllerTests {
 
         String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
         String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
-        userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
+        userController.authenticate(username, password).get(10, TimeUnit.SECONDS);
 
-        bookController.deleteMyOwnedBook("9781781102459").get(5, TimeUnit.SECONDS);
-        bookController.getMyOwnedBook("9781781102459").get(5, TimeUnit.SECONDS);
+        bookController.deleteMyOwnedBook("9781781102459").get(10, TimeUnit.SECONDS);
+        bookController.getMyOwnedBook("9781781102459").get(10, TimeUnit.SECONDS);
     }
 
 
