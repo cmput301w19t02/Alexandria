@@ -66,7 +66,8 @@ public class LoginActivityTests {
 
         onView(withId(R.id.login_button)).perform(click());
 
-        Thread.sleep(10000);
+        // For some reason this takes a really long time for the ci
+        Thread.sleep(20000);
 
         Assert.assertTrue(UserController.getInstance().isAuthenticated());
     }

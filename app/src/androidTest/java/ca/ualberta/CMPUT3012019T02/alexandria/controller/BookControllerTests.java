@@ -300,10 +300,10 @@ public class BookControllerTests {
 
         String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
         String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
-        userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
+        userController.authenticate(username, password).get(10, TimeUnit.SECONDS);
 
-        bookController.deleteMyOwnedBook("9781781102459").get(5, TimeUnit.SECONDS);
-        bookController.getMyOwnedBook("9781781102459").get(5, TimeUnit.SECONDS);
+        bookController.deleteMyOwnedBook("9781781102459").get(10, TimeUnit.SECONDS);
+        bookController.getMyOwnedBook("9781781102459").get(10, TimeUnit.SECONDS);
     }
 
 
