@@ -79,7 +79,7 @@ public class AddNewBookActivity extends AppCompatActivity {
      * Collects data from input fields/
      */
     private void fetchData() {
-        AppCompatEditText nameField = findViewById(R.id.add_book_add_title_field);
+        AppCompatEditText titleField = findViewById(R.id.add_book_add_title_field);
         AppCompatEditText authorField = findViewById(R.id.add_book_add_author_field);
         AppCompatEditText isbnField = findViewById(R.id.add_book_add_ISBN_field);
         //TODO add image input, date input, description input
@@ -87,7 +87,7 @@ public class AddNewBookActivity extends AppCompatActivity {
         date = null;
         description = "default";
 
-        title = nameField.getText().toString();
+        title = titleField.getText().toString();
         author = authorField.getText().toString();
         isbn = isbnField.getText().toString();
     }
