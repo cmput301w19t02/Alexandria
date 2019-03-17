@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/option_view_user"
+        android:title="@string/view_user"/>
+
+    <item
+        android:id="@+id/option_set_borrowed"
+        android:title="@string/set_borrowed"/>
+
+    <item
+        android:id="@+id/option_cancel_order"
+        android:title="@string/cancel_order"/>
+
+</menu>
