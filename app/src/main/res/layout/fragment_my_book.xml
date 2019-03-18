@@ -26,7 +26,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="0dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintEnd_toStartOf="@+id/toolbar"
@@ -64,8 +64,22 @@
             android:textColor="@color/colorBlack"
             android:textSize="12sp" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/my_book_container_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textStyle="bold"
+            android:textColor="@color/colorRed"
+            android:textSize="20sp"
+            android:layout_gravity="start"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="0dp"
+            />
 
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/my_book_fragment_container"
@@ -76,6 +90,6 @@
         android:layout_alignParentLeft="true"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="0dp" />
 
 </RelativeLayout>

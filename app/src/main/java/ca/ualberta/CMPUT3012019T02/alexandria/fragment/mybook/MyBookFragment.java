@@ -35,7 +35,7 @@ public class MyBookFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_my_book,null);
 
         extractData();
-        setBookInfo(rootView);
+        setUI(rootView);
         loadFragment(fragmentSelector());
 
         // toolbar
@@ -89,16 +89,24 @@ public class MyBookFragment extends Fragment {
         status = arguments.getString("status");
     }
 
-    private void setBookInfo(View v) {
+    private void setUI(View v) {
         TextView tvTitle = v.findViewById(R.id.my_book_title);
         TextView tvAuthor = v.findViewById(R.id.my_book_author);
         TextView tvIsbn = v.findViewById(R.id.my_book_isbn);
         ImageView ivCover = v.findViewById(R.id.my_book_cover);
+        TextView tvContainerTitle = v.findViewById(R.id.my_book_container_title);
 
         tvTitle.setText(title);
         tvAuthor.setText(author);
         tvIsbn.setText(isbn);
         ivCover.setImageBitmap(cover);
+
+        //This is needed due to the way the UI is designed
+        //Will set the title for only the Recycler view
+        //Since the transaction page items hover at the bottom it's set in the daughter fragment
+        if (status.equals("requested") || status.equals("available")) {
+            tvContainerTitle.setText(R.string.my_book_requests);
+        }
 
     }
 
@@ -109,12 +117,12 @@ public class MyBookFragment extends Fragment {
             case "requested":
                 return new MyBookUserListFragment();
             case "accepted":
-                Fragment fragment = new MyBookTransactionFragment();
-                ((MyBookTransactionFragment) fragment).setVariables(status,isbn);
+                MyBookTransactionFragment fragment = new MyBookTransactionFragment();
+                fragment.setVariables(status,isbn);
                 return fragment;
             case "borrowed":
                 fragment = new MyBookTransactionFragment();
-                ((MyBookTransactionFragment) fragment).setVariables(status,isbn);
+                fragment.setVariables(status,isbn);
                 return fragment;
             default:
                 throw new RuntimeException("Status out of bounds");
@@ -128,9 +136,9 @@ public class MyBookFragment extends Fragment {
         }
     }
 
-    //TODO Implement
+    //TODO Implement, will probably need data bundled again
     //To be called when the status changes in order to reload the page
-    private void onStatusChange(){
+    public void onStatusChange(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(this).attach(this).commit();
     }
