@@ -26,7 +26,6 @@ public class MyBookFragment extends Fragment {
     private String author;
     private String isbn;
     private String status;
-    private String ownerId;
 
     @Nullable
     @Override
@@ -88,7 +87,6 @@ public class MyBookFragment extends Fragment {
         author = arguments.getString("author");
         isbn = arguments.getString("isbn");
         status = arguments.getString("status");
-        ownerId = arguments.getString("ownerId");
     }
 
     private void setBookInfo(View v) {
