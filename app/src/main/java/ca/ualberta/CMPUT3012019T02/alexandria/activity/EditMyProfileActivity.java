@@ -40,17 +40,12 @@ public class EditMyProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_my_profile);
 
         // toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.edit_my_profile_toolbar);
+        Toolbar toolbar = findViewById(R.id.edit_my_profile_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {   // back button
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     /**
@@ -62,11 +57,11 @@ public class EditMyProfileActivity extends AppCompatActivity {
 
         //TODO password
 
-        editText_name = (EditText) findViewById(R.id.editText_name);
-        editText_username = (EditText) findViewById(R.id.editText_username);
-        //editText_password = (EditText) findViewById(R.id.editText_password);
-        editText_email = (EditText) findViewById(R.id.editText_email);
-        ImageView image_avatar = (ImageView) findViewById(R.id.user_image);
+        editText_name = findViewById(R.id.editText_name);
+        editText_username = findViewById(R.id.editText_username);
+        //editText_password = findViewById(R.id.editText_password);
+        editText_email = findViewById(R.id.editText_email);
+        ImageView image_avatar = findViewById(R.id.user_image);
 
         // sets user info
         userController = UserController.getInstance();
@@ -91,10 +86,14 @@ public class EditMyProfileActivity extends AppCompatActivity {
                             Bitmap bitmap = resultImage;
 
                             if (bitmap != null) {
-                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                                        Math.min(bitmap.getWidth(), bitmap.getHeight()),
+                                        Math.min(bitmap.getWidth(), bitmap.getHeight()));
 
-                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);
-                                drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
+                                        .create(getResources(), squareBitmap);
+                                drawable.setCornerRadius(Math.min(
+                                        bitmap.getWidth(), bitmap.getHeight()));
                                 drawable.setAntiAlias(true);
 
                                 runOnUiThread(() -> {
@@ -112,7 +111,8 @@ public class EditMyProfileActivity extends AppCompatActivity {
             else {
                 // Show error message
                 showError("Profile is not recognized");
-                myUserProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown");
+                myUserProfile = new UserProfile("Unknown","Unknown",
+                        "Unknown",null,"Unknown");
                 editText_name.setText(myUserProfile.getName());
                 editText_username.setText(myUserProfile.getUsername());
                 editText_email.setText(myUserProfile.getEmail());
@@ -131,7 +131,6 @@ public class EditMyProfileActivity extends AppCompatActivity {
         ConstraintLayout mainContent = findViewById(R.id.edit_my_profile_main_content);
         mainContent.setVisibility(View.VISIBLE);
     }
-
 
     /**
      * shows toast of an error
