@@ -180,8 +180,7 @@ public class MainActivity extends AppCompatActivity
      */
     protected void onProfileButtonClick(View view) {
         // TODO CHANGE BACK
-        Intent startProfileActivity = new Intent(this, EditBookActivity.class);
-        startProfileActivity.putExtra("BOOK_ISBN", "1234567890123");
+        Intent startProfileActivity = new Intent(this, ViewMyProfileActivity.class);
         startActivity(startProfileActivity);
     }
 
