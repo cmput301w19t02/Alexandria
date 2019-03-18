@@ -14,7 +14,6 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -66,9 +65,9 @@ public class LoginActivityTests {
 
         onView(withId(R.id.login_button)).perform(click());
 
-        Thread.sleep(5000);
+        Thread.sleep(10000);
 
-        Assert.assertTrue(UserController.getInstance().isAuthenticated());
+        Assert.assertTrue(loginActivityTestRule.getActivity().isFinishing());
     }
 
     @Test

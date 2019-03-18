@@ -16,7 +16,7 @@ public class TextMessageTests {
         TextMessage message = new TextMessage("TEST content", "unread", date.toString(), "johndoe@email.com");
         assertEquals("TEST content", message.getText());
         assertEquals("unread", message.getStatus());
-        assertEquals(date, message.getDate());
+        assertEquals(date.toString(), message.getDate());
         assertEquals("johndoe@email.com", message.getSender());
         assertEquals("text", message.getType());
     }

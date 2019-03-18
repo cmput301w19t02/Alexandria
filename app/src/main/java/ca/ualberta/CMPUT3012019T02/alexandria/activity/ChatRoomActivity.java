@@ -197,7 +197,7 @@ public class ChatRoomActivity extends AppCompatActivity {
      *
      * @param view the view
      */
-    protected void onAddPhotoClick(View view) {
+    public void onAddPhotoClick(View view) {
         //TODO implement function
         Toast.makeText(this , "Add Photo", Toast.LENGTH_LONG).show();
     }
@@ -207,7 +207,7 @@ public class ChatRoomActivity extends AppCompatActivity {
      *
      * @param view the view
      */
-    protected void onAddLocationClick(View view) {
+    public void onAddLocationClick(View view) {
         //TODO implement function
         Toast.makeText(this , "Add Location", Toast.LENGTH_LONG).show();
     }

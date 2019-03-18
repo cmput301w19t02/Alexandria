@@ -16,11 +16,12 @@ public class LocationMessageTests {
         Date date = new Date();
         Location location = new Location(5,4);
         LocationMessage message = new LocationMessage(location, "unread", date.toString(), "johndoe@email.com");
-        assertEquals(location, message.getLocation());
+        assertEquals(location.getLatitude(), message.getLocation().getLatitude(),0.01);
+        assertEquals(location.getLongitude(), message.getLocation().getLongitude(),0.01);
         assertEquals("unread", message.getStatus());
-        assertEquals(date, message.getDate());
+        assertEquals(date.toString(), message.getDate());
         assertEquals("johndoe@email.com", message.getSender());
-        assertEquals("text", message.getType());
+        assertEquals("location", message.getType());
     }
 
     // negative constructor tests
@@ -66,7 +67,8 @@ public class LocationMessageTests {
         LocationMessage message = new LocationMessage(location, "unread", new Date().toString(), "johndoe@email.com");
         Location location2 = new Location(6,3);
         message.setLocation(location2);
-        assertEquals(location2, message.getLocation());
+        assertEquals(location2.getLatitude(), message.getLocation().getLatitude(),0.01);
+        assertEquals(location2.getLongitude(), message.getLocation().getLongitude(),0.01);
     }
 
     @Test(expected = IllegalArgumentException.class)

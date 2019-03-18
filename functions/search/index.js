@@ -29,17 +29,22 @@ function addOrUpdateIndexRecord(book) {
   // Get Firebase object
   const record = book.val();
   // Specify Algolia's objectID using the Firebase object key
-  record.objectID = book.key;
-  // Add or update object
-  index
-    .saveObject(record)
-    .then(() => {
-      console.log('Firebase object indexed in Algolia', record.objectID);
-    })
-    .catch(error => {
-      console.error('Error when indexing book into Algolia', error);
-      process.exit(1);
-    });
+  if(record.availableOwners && record.availableOwners.length>0){
+	  record.objectID = book.key;
+	  // Add or update object
+	  index
+		.saveObject(record)
+		.then(() => {
+		  console.log('Firebase object indexed in Algolia', record.objectID);
+		})
+		.catch(error => {
+		  console.error('Error when indexing book into Algolia', error);
+		  process.exit(1);
+		});
+  }
+  else{
+	  deleteIndexRecord(book);
+  }
 }
 
 function deleteIndexRecord(book) {

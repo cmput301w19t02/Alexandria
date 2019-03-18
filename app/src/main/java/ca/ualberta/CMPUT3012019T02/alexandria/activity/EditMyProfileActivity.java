@@ -132,7 +132,7 @@ public class EditMyProfileActivity extends AppCompatActivity {
      * @param view View
      */
     //TODO add avatar change options etc
-    protected void onSaveButtonClick(View view) {
+    public void onSaveButtonClick(View view) {
         //TODO decide if to have password
 
         String newUsername = editText_username.getText().toString();

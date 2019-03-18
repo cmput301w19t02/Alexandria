@@ -98,9 +98,9 @@ public class SignUpActivityTests {
 
         onView(withId(R.id.sign_up_button)).perform(click());
 
-        Thread.sleep(5000);
+        Thread.sleep(10000);
 
-        UserProfile profile = UserController.getInstance().getMyProfile().get(5, TimeUnit.SECONDS);
+        UserProfile profile = UserController.getInstance().getMyProfile().get(10, TimeUnit.SECONDS);
 
         Assert.assertEquals(email, profile.getEmail());
         Assert.assertEquals(username, profile.getUsername());

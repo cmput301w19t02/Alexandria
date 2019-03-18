@@ -36,7 +36,7 @@ public class ChatRoomItem {
 // TODO: Checks on setters for tests
     public ChatRoomItem(String chatRoomId, String user1Id, String user1Name,
                         String user2Id, String user2Name, boolean readStatus) {
-        if (chatRoomId == null || chatId.isEmpty()) {
+        if (chatRoomId == null || chatRoomId.isEmpty()) {
             throw new IllegalArgumentException("Type cannot be null or empty");
         }
         if (user1Id == null || user1Id.isEmpty()) {
