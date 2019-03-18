@@ -31,6 +31,7 @@ import java.util.List;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.MessageRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.message.LocationMessage;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.TextMessage;
 
@@ -205,11 +206,17 @@ public class ChatRoomActivity extends AppCompatActivity {
     /**
      * On add location message to database.
      *
-     * @param view the view
+     * @param senderId the id of the current user of the app
+     * @param ref      database reference to chatMessages
      */
-    protected void onAddLocationClick(View view) {
+    protected void onAddLocationClick(String senderId, DatabaseReference ref) {
         //TODO implement function
-        Toast.makeText(this , "Add Location", Toast.LENGTH_LONG).show();
+        // get current location info and put into bundle
+        // Start map fragment with Bundle
+        // After Fragment finishes, set Location message data from placed pin
+        long location = ;
+        LocationMessage message = new LocationMessage(location, "unread", "", senderId);
+        ref.push().setValue(message);
     }
 
 
@@ -224,5 +231,9 @@ public class ChatRoomActivity extends AppCompatActivity {
         // TODO move this to chat controller, replace with chat controller methods
         TextMessage message = new TextMessage(inputText, "unread", "", senderId);
         ref.push().setValue(message);
+    }
+
+    protected void getLocationPermission() {
+
     }
 }

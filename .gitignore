@@ -14,3 +14,4 @@
 /captures
 .externalNativeBuild
 /functions/search/node_modules
+**/*/res/values/secrets.xml
