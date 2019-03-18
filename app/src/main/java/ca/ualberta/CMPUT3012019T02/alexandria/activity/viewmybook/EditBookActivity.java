@@ -1,9 +1,12 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity.viewmybook;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -11,6 +14,7 @@ import java.util.Date;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 import java9.util.function.Consumer;
@@ -140,5 +144,32 @@ public class EditBookActivity extends AddNewBookActivity {
         nameField.setText(title);
         authorField.setText(author);
         isbnField.setText(isbn);
+        setImage();
+    }
+
+    private void setImage() {
+        // sets user image
+        ImageView bookCover = findViewById(R.id.new_book_image);
+
+        ImageController imageController = ImageController.getInstance();
+        imageController.getImage(image).handleAsync((resultImage, errorImage) -> {
+            if (errorImage == null) {
+                Bitmap bitmap = resultImage;
+
+                if (bitmap != null) {
+                    Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                            bitmap.getWidth(), bitmap.getHeight());
+
+                    runOnUiThread(() -> {
+                        bookCover.setImageBitmap(squareBitmap);
+                    });
+                }
+            } else {
+                showError(errorImage.getMessage());
+            }
+            return null;
+        });
+
+
     }
 }

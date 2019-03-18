@@ -43,7 +43,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/new_book_image_image"
+                android:id="@+id/new_book_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/new_book_image_image">
+                app:layout_constraintTop_toBottomOf="@+id/new_book_image">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/add_book_add_title_field"
