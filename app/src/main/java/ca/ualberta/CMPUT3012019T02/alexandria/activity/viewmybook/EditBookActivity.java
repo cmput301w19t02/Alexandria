@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity.viewmybook;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -72,6 +73,37 @@ public class EditBookActivity extends AddNewBookActivity {
     }
 
     /**
+     * Saves camera result to database and loads it to the adding page
+     *
+     * @param requestCode result code
+     * @param resultCode confirmation code
+     * @param data output of camera
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            Bundle extras = data.getExtras();
+            Bitmap bitmap = (Bitmap) extras.get("data");
+            ImageController.getInstance().addImage(bitmap).handleAsync((result, error) -> {
+                if (error == null) {
+                    image = result;
+
+                    Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                            bitmap.getWidth(), bitmap.getHeight());
+
+                    ImageView bookCover = findViewById(R.id.new_book_image);
+                    runOnUiThread(() -> {
+                        bookCover.setImageBitmap(squareBitmap);
+                    });
+                } else {
+                    showError(error.getMessage());
+                }
+                return null;
+            });
+        }
+    }
+
+    /**
      * deletes an instance of old book, and adds a new one, if inputs is valid
      *
      * @param view current view
@@ -123,7 +155,7 @@ public class EditBookActivity extends AddNewBookActivity {
         AppCompatEditText authorField = findViewById(R.id.add_book_add_author_field);
         AppCompatEditText isbnField = findViewById(R.id.add_book_add_ISBN_field);
         //TODO add image input, date input, description input
-        image = null;
+        //image = null;
         date = null;
         description = "default";
 
@@ -169,7 +201,5 @@ public class EditBookActivity extends AddNewBookActivity {
             }
             return null;
         });
-
-
     }
 }

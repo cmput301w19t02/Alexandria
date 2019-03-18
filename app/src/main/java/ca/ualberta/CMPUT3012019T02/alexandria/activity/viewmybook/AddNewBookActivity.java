@@ -1,17 +1,21 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity.viewmybook;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.Date;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 
@@ -41,11 +45,47 @@ public class AddNewBookActivity extends AppCompatActivity {
     }
 
     /**
-     * Add photo.
+     * Adds photo from camera
+     *
+     * @param view the add photo button
      */
     public void addPhoto(View view) {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented");
+        // Todo: implement other possibilities
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, 1);
+        }
+    }
+
+    /**
+     * Saves camera result to database and loads it to the adding page
+     *
+     * @param requestCode result code
+     * @param resultCode confirmation code
+     * @param data output of camera
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            Bundle extras = data.getExtras();
+            Bitmap bitmap = (Bitmap) extras.get("data");
+            ImageController.getInstance().addImage(bitmap).handleAsync((result, error) -> {
+                if (error == null) {
+                    image = result;
+
+                    Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                            bitmap.getWidth(), bitmap.getHeight());
+
+                    ImageView bookCover = findViewById(R.id.new_book_image);
+                    runOnUiThread(() -> {
+                        bookCover.setImageBitmap(squareBitmap);
+                    });
+                } else {
+                    showError(error.getMessage());
+                }
+                return null;
+            });
+        }
     }
 
     /**
@@ -83,7 +123,7 @@ public class AddNewBookActivity extends AppCompatActivity {
         AppCompatEditText authorField = findViewById(R.id.add_book_add_author_field);
         AppCompatEditText isbnField = findViewById(R.id.add_book_add_ISBN_field);
         //TODO add image input, date input, description input
-        image = null;
+        //image = null;
         date = null;
         description = "default";
 
