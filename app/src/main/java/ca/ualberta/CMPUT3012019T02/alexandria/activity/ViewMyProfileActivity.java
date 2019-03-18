@@ -121,7 +121,7 @@ public class ViewMyProfileActivity extends AppCompatActivity {
      * Removes spinner when data is loaded
      */
     private void stopSpinner() {
-        ProgressBar spinner = (ProgressBar) findViewById(R.id.view_my_profile_spinner);
+        ProgressBar spinner = findViewById(R.id.view_my_profile_spinner);
         spinner.setVisibility(View.GONE);
 
         ConstraintLayout mainContent = findViewById(R.id.view_my_profile_main_content);
