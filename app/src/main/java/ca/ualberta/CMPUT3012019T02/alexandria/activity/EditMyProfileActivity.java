@@ -1,6 +1,8 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -132,12 +134,28 @@ public class EditMyProfileActivity extends AppCompatActivity {
         mainContent.setVisibility(View.VISIBLE);
     }
 
+    private void startSpinner() {
+        ProgressBar spinner = findViewById(R.id.edit_my_profile_spinner);
+        spinner.setVisibility(View.VISIBLE);
+
+        ConstraintLayout mainContent = findViewById(R.id.edit_my_profile_main_content);
+        mainContent.setVisibility(View.GONE);
+    }
+
     /**
      * shows toast of an error
      * @param message error message
      */
     private void showError(String message) {
         Toast.makeText(this, "Error: " + message, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * shows message
+     * @param message  message
+     */
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -161,11 +179,25 @@ public class EditMyProfileActivity extends AppCompatActivity {
             // todo password set
             myUserProfile.setEmail(newEmail);
             userController.updateMyProfile(myUserProfile);
-            Toast.makeText(this , "Changes Saved", Toast.LENGTH_LONG).show();
-            finish();
+
+            delayedClose();
         } catch (IllegalArgumentException e) {
             String errorMessage = e.getMessage();
             showError(errorMessage);
         }
+    }
+
+    private void delayedClose() {
+        startSpinner();
+
+
+        int finishTime = 2; //1 sec
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                showMessage("Changes Saved");
+                finish();
+            }
+        }, finishTime * 1000);
     }
 }
