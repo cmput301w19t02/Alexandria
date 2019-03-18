@@ -2,6 +2,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity.viewmybook;
 
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,9 +32,18 @@ public class EditBookActivity extends AddNewBookActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_book);
 
+        // toolbar
+        Toolbar toolbar = findViewById(R.id.add_new_book_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+
+        // Set new title
         TextView tvTitle = findViewById(R.id.add_book_title);
         String pageTitle = "Edit Book";
         tvTitle.setText(pageTitle);
+
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
