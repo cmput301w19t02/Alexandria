@@ -75,8 +75,8 @@ public class EditMyProfileActivity extends AppCompatActivity {
                 String email = myUserProfile.getEmail();
                 String photoId = myUserProfile.getPicture();
                 runOnUiThread(() -> {
-                    editText_name.setText(username);
-                    editText_username.setText(name);
+                    editText_name.setText(name);
+                    editText_username.setText(username);
                     editText_email.setText(email);
 
                     // sets user image if any
