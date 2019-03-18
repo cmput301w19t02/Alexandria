@@ -47,7 +47,7 @@ public class MyBookTransactionFragment extends Fragment {
         getUserInfo(rootView);
 
         //onclickListeners
-        rootView.findViewById(R.id.my_book_borrower).setOnClickListener(mListener);
+        rootView.findViewById(R.id.my_book_borrower_pic).setOnClickListener(mListener);
         rootView.findViewById(R.id.my_book_borrower).setOnClickListener(mListener);
         rootView.findViewById(R.id.my_book_message).setOnClickListener(mListener);
         rootView.findViewById(R.id.my_book_user_ellipses).setOnClickListener(mListener);
