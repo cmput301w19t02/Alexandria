@@ -42,8 +42,7 @@ public class MyBookTransactionFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_my_book_transaction,null);
 
-
-
+        //setUI
         setStatusBar(rootView);
         getUserInfo(rootView);
 
@@ -65,36 +64,40 @@ public class MyBookTransactionFragment extends Fragment {
 
     //gets the borrower info from firebase
     private void getUserInfo(View v){
-        this.borrowerId = "";
         ImageView ivBorrowerPic = v.findViewById(R.id.my_book_borrower_pic);
         Button btBorrowerName = v.findViewById(R.id.my_book_borrower);
 
 
         bookController.getMyOwnedBook(isbn).handleAsync((bookResult,bookError)->{
             if(bookError==null) {
-                String borrowerId = bookResult.getUserBorrowing();
+                this.borrowerId = bookResult.getUserBorrowing();
                 userController.getUserProfile(borrowerId).handleAsync((userResult,userError)->{
                     if(userError==null) {
-                        String name = userResult.getName();
                         String username = userResult.getUsername();
                         String pictureId = userResult.getPicture();
 
                         if(pictureId!=null) {
-                            imageController.getImage(pictureId).handleAsync((imageResult, imageError) -> {
+                            imageController.getImage(pictureId)
+                                    .handleAsync((imageResult, imageError) -> {
                                 if (imageError == null) {
 
-                                    Bitmap squareBitmap = Bitmap.createBitmap(imageResult, 0, 0, Math.min(imageResult.getWidth(), imageResult.getHeight()), Math.min(imageResult.getWidth(), imageResult.getHeight()));
+                                    Bitmap squareBitmap
+                                            = Bitmap.createBitmap(imageResult, 0, 0,
+                                            Math.min(imageResult.getWidth(),
+                                                    imageResult.getHeight()),
+                                            Math.min(imageResult.getWidth(),
+                                                    imageResult.getHeight()));
 
-                                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);
-                                    drawable.setCornerRadius(Math.min(imageResult.getWidth(), imageResult.getHeight()));
+                                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
+                                            .create(getResources(), squareBitmap);
+                                    drawable.setCornerRadius(Math.min(
+                                            imageResult.getWidth(), imageResult.getHeight()));
                                     drawable.setAntiAlias(true);
 
                                     getActivity().runOnUiThread(() -> {
                                         ivBorrowerPic.setImageDrawable(drawable);
                                         ivBorrowerPic.refreshDrawableState();
                                         btBorrowerName.setText(username);
-                                        //TODO Otman add any more ui update here
-                                        // I assumed you wanted username but I also got name
                                     });
                                 }
                                 else{
