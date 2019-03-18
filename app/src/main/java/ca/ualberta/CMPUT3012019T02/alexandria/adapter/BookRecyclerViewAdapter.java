@@ -20,7 +20,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.BookViewHolder;
 
 /**
- * Set up RecyclerView for book lists that direct to UserBookFragment
+ * Set up RecyclerView for book lists
  * Code based on code from https://youtu.be/T_QfRU-A3s4 on 03/04/2019
  */
 public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder> {
