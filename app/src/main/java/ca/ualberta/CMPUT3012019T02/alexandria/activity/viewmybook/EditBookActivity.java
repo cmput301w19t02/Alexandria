@@ -38,22 +38,22 @@ public class EditBookActivity extends AddNewBookActivity {
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
             isbn = null;
+            showError("The ISBN is not provided.");
+            finish();
         } else {
             isbn = extras.getString("BOOK_ISBN");
             BookController.getInstance().getBook(isbn).thenAccept(new Consumer<Book>() {
                 @Override
                 public void accept(Book book) {
                     myBook = book;
+                    if (myBook == null) {
+                        showError("The book is not found.");
+                        finish();
+                    }
                     extractBookInfo();
                     setData();
                 }
             });
-        }
-
-        // quit if no data found
-        if (isbn == null | myBook == null) {
-            showError("The book is not found.");
-            finish();
         }
     }
 
