@@ -15,7 +15,7 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.UserBookFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.fragment.mybook.MyBookFragment;
+import ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook.MyBookFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.BookViewHolder;
 

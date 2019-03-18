@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.fragment.mybook;
+package ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
