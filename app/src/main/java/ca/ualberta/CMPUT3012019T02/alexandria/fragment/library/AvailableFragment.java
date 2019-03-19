@@ -2,7 +2,6 @@ package ca.ualberta.CMPUT3012019T02.alexandria.fragment.library;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,8 +16,8 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.BookListProvider;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 
 /**
  * Fragment for filtering own book list that has the status of Available/Requested
@@ -37,11 +36,11 @@ public class AvailableFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_library_available,null);
+        View rootView = inflater.inflate(R.layout.fragment_library_available, null);
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.available_recycler);
         bookAdapter = new BookRecyclerViewAdapter(
-                getContext(), bookListings,"MyBookFragment");
+                getContext(), bookListings, "MyBookFragment");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(bookAdapter);
 
@@ -56,28 +55,26 @@ public class AvailableFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement BookListProvider");
         }
+        if (bookAdapter != null) {
+            update();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        update();
+    }
 
-        // TODO: dynamic loading/updating of books
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                List<BookListItem> books = bookListProvider.getOwnedBookList();
-                bookListings.clear();
-                for (BookListItem book : books) {
-                    if (book.getStatus().equals("available") || book.getStatus().equals("requested")) {
-                        bookListings.add(book);
-                    }
-                }
-                bookAdapter.setmBookListItem(bookListings);
-                bookAdapter.notifyDataSetChanged();
-                handler.postDelayed(this, 2000);
+    public void update() {
+        List<BookListItem> books = bookListProvider.getOwnedBookList();
+        bookListings.clear();
+        for (BookListItem book : books) {
+            if (book.getStatus().equals("available") || book.getStatus().equals("requested")) {
+                bookListings.add(book);
             }
-        }, 2000);
+        }
+        bookAdapter.setmBookListItem(bookListings);
+        bookAdapter.notifyDataSetChanged();
     }
 }

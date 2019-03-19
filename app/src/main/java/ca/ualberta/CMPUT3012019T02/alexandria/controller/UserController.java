@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 import java9.util.concurrent.CompletableFuture;
 
@@ -206,7 +207,13 @@ public class UserController {
      * @return a CompletableFuture signifying this operation's success/failure
      */
     public CompletableFuture<UserProfile> getMyProfile() {
-        return getUserProfile(getMyId());
+        ObservableUserCache cache = ObservableUserCache.getInstance();
+        if(cache.getProfile()==null) {
+            return getUserProfile(getMyId());
+        }
+        else{
+            return CompletableFuture.completedFuture(cache.getProfile());
+        }
     }
 
     /**
