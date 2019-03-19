@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/my_book_user"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="0dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/my_book_order"
+        android:textColor="@color/colorRed"
+        android:textStyle="bold"
+        android:textSize="20sp"/>
+
+    <RelativeLayout
+        android:id="@+id/my_book_user"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_above="@+id/relativeLayout"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/border_list_items"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:id="@+id/my_book_borrower_info"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/my_book_borrower_pic"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/ic_profile"
+                android:backgroundTint="#646970" />
+
+            <Button
+                android:id="@+id/my_book_borrower"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:background="@color/colorBeige"
+                android:textAllCaps="false"
+                android:textColor="@color/colorBlack" />
+        </LinearLayout>
+
+        <ImageButton
+            android:background="@android:color/transparent"
+            android:id="@+id/my_book_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/my_book_user_ellipses"
+            android:layout_toLeftOf="@+id/my_book_user_ellipses"
+            android:src="@drawable/ic_messages"
+            android:tint="@color/colorRed" />
+
+        <ImageButton
+            android:background="@android:color/transparent"
+            android:id="@+id/my_book_user_ellipses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_ellipses"
+            android:tint="@color/colorRed" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/border_status_bar"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_alignParentLeft="true">
+
+
+        <TextView
+            android:id="@+id/my_book_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="sans-serif-black"
+            android:textColor="@color/colorOrange"
+            android:textSize="24sp" />
+
+        <ImageView
+            android:id="@+id/my_book_status_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignBottom="@+id/my_book_status"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:contentDescription="Status"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+</RelativeLayout>

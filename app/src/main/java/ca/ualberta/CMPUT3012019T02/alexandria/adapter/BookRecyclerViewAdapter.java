@@ -15,11 +15,12 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.UserBookFragment;
+import ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook.MyBookFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.BookViewHolder;
 
 /**
- * Set up RecyclerView for book lists that direct to UserBookFragment
+ * Set up RecyclerView for book lists
  * Code based on code from https://youtu.be/T_QfRU-A3s4 on 03/04/2019
  */
 public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder> {
@@ -129,8 +130,9 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
 
         switch (destination){
             case "UserBookFragment":
-                UserBookFragment frag = new UserBookFragment();
-                return frag;
+                return new UserBookFragment();
+            case "MyBookFragment":
+                return new MyBookFragment();
             default:
                 throw new RuntimeException("Fragment Not Defined");
         }
