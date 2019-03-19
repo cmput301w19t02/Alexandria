@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.util.Date;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.book.Book;
 
 /**
  * The Add new book activity.

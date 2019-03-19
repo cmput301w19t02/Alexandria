@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import java.util.Date;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.book.Book;
 
 /**
  * The Edit book activity.

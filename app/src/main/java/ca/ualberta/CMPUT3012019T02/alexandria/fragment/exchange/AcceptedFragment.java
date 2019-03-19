@@ -17,7 +17,7 @@ import java.util.List;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.BookListProvider;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.book.BookListItem;
 
 /**
  * Fragment for filtering book list that has the status of Accepted

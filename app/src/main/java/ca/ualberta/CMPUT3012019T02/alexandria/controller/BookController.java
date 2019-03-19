@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.cache.BookCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.book.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserBook;

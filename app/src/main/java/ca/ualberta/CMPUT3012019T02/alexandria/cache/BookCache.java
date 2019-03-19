@@ -2,12 +2,12 @@ package ca.ualberta.CMPUT3012019T02.alexandria.cache;
 
 import java.util.HashMap;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.book.Book;
 
 /**
- * Cache for books
+ * BasicCache for books
  */
-public class BookCache {
+public class BookCache extends BasicCache {
 
     private static BookCache instance;
     private HashMap<String, Book> cache = new HashMap<>();

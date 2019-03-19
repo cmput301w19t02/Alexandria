@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.book.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserBook;
 import java9.util.concurrent.CompletableFuture;
 
@@ -23,7 +23,7 @@ public class BookParser {
      * @param userBookMap map of userbooks referenced by strings
      * @return an CompletableFuture with an ArrayList of BookListItem objects
      */
-    public static <T extends UserBook> CompletableFuture<ArrayList<BookListItem>> UserBooksToBookList(Map<String, T> userBookMap) {
+    public static <T extends UserBook> CompletableFuture<ArrayList<BookListItem>> parseUserBooksAsBookListItems(Map<String, T> userBookMap) {
         CompletableFuture<ArrayList<BookListItem>> bookListFuture = new CompletableFuture<>();
 
         BookController bookController = BookController.getInstance();

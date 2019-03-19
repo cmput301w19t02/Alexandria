@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.book.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 

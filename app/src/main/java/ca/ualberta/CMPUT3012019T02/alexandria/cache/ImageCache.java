@@ -5,9 +5,9 @@ import android.graphics.Bitmap;
 import java.util.HashMap;
 
 /**
- * Cache for images
+ * BasicCache for images
  */
-public class ImageCache {
+public class ImageCache extends BasicCache {
 
     private static ImageCache instance;
     private HashMap<String, Bitmap> cache = new HashMap<>();

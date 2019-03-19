@@ -23,7 +23,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.ExchangeFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.library.LibraryFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.book.BookListItem;
 
 /**
  * The main screen that opens when the application opens
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity
 
                     System.out.println("Loading borrowed books");
                     // Gets accepted book list items
-                    List<BookListItem> bookListItems = BookParser.UserBooksToBookList(stringBorrowedBookHashMap).get(5, TimeUnit.SECONDS);
+                    List<BookListItem> bookListItems = BookParser.parseUserBooksAsBookListItems(stringBorrowedBookHashMap).get(5, TimeUnit.SECONDS);
 
                     borrowedBookListings = bookListItems;
 
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity
 
                     System.out.println("Loading owned books");
                     // Gets accepted book list items
-                    List<BookListItem> bookListItems = BookParser.UserBooksToBookList(stringOwnedBookHashMap).get(5, TimeUnit.SECONDS);
+                    List<BookListItem> bookListItems = BookParser.parseUserBooksAsBookListItems(stringOwnedBookHashMap).get(5, TimeUnit.SECONDS);
 
                     ownedBookListings = bookListItems;
 

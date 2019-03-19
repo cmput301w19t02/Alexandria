@@ -23,8 +23,8 @@ import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.book.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.book.BookListItem;
 import java9.util.concurrent.CompletableFuture;
 
 /**

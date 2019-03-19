@@ -20,7 +20,7 @@ import java.util.List;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.UserRecyclerViewAdapter;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.UserListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserListItem;
 
 public class MyBookUserListFragment extends Fragment {
 

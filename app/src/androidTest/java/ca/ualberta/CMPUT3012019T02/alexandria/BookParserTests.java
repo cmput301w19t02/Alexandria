@@ -16,7 +16,7 @@ import java.util.concurrent.TimeoutException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookParser;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.book.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 
 public class BookParserTests {
@@ -25,7 +25,7 @@ public class BookParserTests {
     public void testBorrowedBooksToBookList() throws InterruptedException, ExecutionException, TimeoutException, IOException {
         BookController bookController = BookController.getInstance();
         HashMap<String, BorrowedBook> borrowedBookHashMap = bookController.getUserBorrowedBooks("eQgZfhN2Yng9TPHcXvfBZs5ZKxj1").get(5, TimeUnit.SECONDS);
-        List<BookListItem> bookListItem = BookParser.UserBooksToBookList(borrowedBookHashMap).get(10, TimeUnit.SECONDS);
+        List<BookListItem> bookListItem = BookParser.parseUserBooksAsBookListItems(borrowedBookHashMap).get(10, TimeUnit.SECONDS);
         Assert.assertEquals(1, bookListItem.size());
 
         BookListItem item = bookListItem.get(0);

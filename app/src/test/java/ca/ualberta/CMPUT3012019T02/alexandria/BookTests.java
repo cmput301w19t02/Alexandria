@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.book.Book;
 
 import static org.junit.Assert.assertEquals;
 

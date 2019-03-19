@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.UserListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.UserViewHolder;
 
 /**

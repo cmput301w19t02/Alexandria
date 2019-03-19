@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.book.Book;
 import java9.util.concurrent.CompletableFuture;
 
 /**
