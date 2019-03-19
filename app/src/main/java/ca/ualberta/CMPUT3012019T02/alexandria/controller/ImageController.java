@@ -13,6 +13,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
+
+import ca.ualberta.CMPUT3012019T02.alexandria.cache.ImageCache;
 import java9.util.concurrent.CompletableFuture;
 
 /**
@@ -23,15 +25,18 @@ public class ImageController {
     private final String IMAGE_FORMAT = "png";
 
     private StorageReference storage;
+    private ImageCache cache;
 
     private static ImageController instance;
 
     private ImageController() {
-        this.storage = FirebaseStorage.getInstance().getReference().child("images");
+        storage = FirebaseStorage.getInstance().getReference().child("images");
+        cache = ImageCache.getInstance();
     }
 
     /**
      * Gets the singleton instance of this controller
+     *
      * @return instance of ImageController
      */
     public static ImageController getInstance() {
@@ -43,50 +48,58 @@ public class ImageController {
 
     /**
      * Add an image to the database and get its unique id for later retrieval
+     *
      * @param image the image to add
      * @return a CompletableFuture that returns the image id
      */
     public CompletableFuture<String> addImage(@NonNull Bitmap image) {
         final String imageId = UUID.randomUUID().toString();
         final CompletableFuture<String> future = new CompletableFuture<>();
+        cache.putImage(imageId, image);
         updateImage(imageId, image).thenRun(() -> future.complete(imageId));
         return future;
     }
 
     /**
      * Get an image from the database
+     *
      * @param imageId the unique id of the image in the database
      * @return a CompletableFuture that returns the image bitmap
      */
     public CompletableFuture<Bitmap> getImage(@NonNull String imageId) {
         // Based off of https://firebase.google.com/docs/storage/android/download-files#download_to_a_local_file
+        if (cache.getImage(imageId) == null) {
+            StorageReference imageReference = getImageReference(imageId);
 
-        StorageReference imageReference = getImageReference(imageId);
+            final CompletableFuture<Bitmap> future = new CompletableFuture<>();
 
-        final CompletableFuture<Bitmap> future = new CompletableFuture<>();
+            try {
 
-        try {
+                final File localFile = File.createTempFile("images", IMAGE_FORMAT);
 
-            final File localFile = File.createTempFile("images", IMAGE_FORMAT);
+                final FileDownloadTask fileDownloadTask = imageReference.getFile(localFile);
+                fileDownloadTask.addOnSuccessListener(taskSnapshot -> {
+                    // Local temp file has been created
+                    Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    cache.putImage(imageId, bitmap);
+                    future.complete(bitmap);
+                }).addOnFailureListener(future::completeExceptionally);
 
-            final FileDownloadTask fileDownloadTask = imageReference.getFile(localFile);
-            fileDownloadTask.addOnSuccessListener(taskSnapshot -> {
-            // Local temp file has been created
-                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                future.complete(bitmap);
-            }).addOnFailureListener(future::completeExceptionally);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            return future;
+        } else {
+            return CompletableFuture.completedFuture(cache.getImage(imageId));
         }
-
-        return future;
     }
 
     /**
      * Update an image in the database
+     *
      * @param imageId the unique id of the image in the database
-     * @param image the new image to be associated with the imageId
+     * @param image   the new image to be associated with the imageId
      * @return a CompletableFuture signifying this operation's success/failture
      */
     public CompletableFuture<Void> updateImage(@NonNull String imageId, @NonNull Bitmap image) {
@@ -103,6 +116,7 @@ public class ImageController {
         final UploadTask uploadTask = imageReference.putBytes(data);
         uploadTask.addOnSuccessListener(taskSnapshot -> {
             // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+            cache.putImage(imageId, image);
             future.complete(null);
         }).addOnFailureListener(future::completeExceptionally);
 
@@ -111,6 +125,7 @@ public class ImageController {
 
     /**
      * Remove an image from the database
+     *
      * @param imageId the unique id of the image in the database
      * @return a CompletableFuture signifying this operation's success/failture
      */
@@ -118,6 +133,8 @@ public class ImageController {
         // Based off of https://firebase.google.com/docs/storage/android/delete-files#delete_a_file
 
         final CompletableFuture<Void> future = new CompletableFuture<>();
+
+        cache.deleteImage(imageId);
 
         StorageReference imageReference = getImageReference(imageId);
         imageReference.delete()
@@ -129,6 +146,7 @@ public class ImageController {
 
     /**
      * Get the reference to an image in Firebase Storage
+     *
      * @param imageId the unique id of the image in the database
      * @return a reference to the image
      */
