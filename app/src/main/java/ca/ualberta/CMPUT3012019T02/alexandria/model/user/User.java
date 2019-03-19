@@ -26,7 +26,12 @@ public class User {
      * DO NOT USE
      */
     @Deprecated
-    public User(){}
+    public User(){
+        chatRooms = new HashMap<>();
+        ownedBooks = new HashMap<>();
+        borrowedBooks = new HashMap<>();
+        blockedUsers = new ArrayList<>();
+    }
 
     /**
      * User constructor which sets id and user profile,
