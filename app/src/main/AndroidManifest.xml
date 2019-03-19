@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.ualberta.CMPUT3012019T02.alexandria">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ChatRoomActivity"></activity>
-        <activity android:name=".activity.ViewUserProfileActivity"></activity>
+        <activity android:name=".activity.LocationActivity"/>
+        <activity android:name=".activity.ChatRoomActivity"/>
+        <activity android:name=".activity.ViewUserProfileActivity"/>
         <activity android:name=".activity.BlockedUsersActivity" />
         <activity android:name=".activity.EditMyProfileActivity" />
         <activity android:name=".activity.ViewMyProfileActivity" />

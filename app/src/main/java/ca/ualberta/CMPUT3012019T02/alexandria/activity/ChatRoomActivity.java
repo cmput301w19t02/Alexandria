@@ -1,8 +1,10 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +43,8 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.message.TextMessage;
  */
 public class ChatRoomActivity extends AppCompatActivity {
 
+    static final int MEET_LOCATION_REQUEST = 1;
+
     private DatabaseReference messagesRef;
     private ValueEventListener messagesListener;
 
@@ -47,7 +52,6 @@ public class ChatRoomActivity extends AppCompatActivity {
     private String chatId;
     private String recieverId;
     private String senderId;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +100,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         };
         messagesRef.addValueEventListener(messagesListener);
 
+
         ImageView sendButton = (ImageView)findViewById(R.id.image_send);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -103,10 +108,19 @@ public class ChatRoomActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText input = (EditText)findViewById(R.id.edit_message);
                 String inputText = input.getText().toString();
-                onSendMessageClick(inputText, senderId, messagesRef);
+                onSendMessageClick(inputText, senderId);
                 input.setText("");
             }
         });
+
+        ImageView locationButton = (ImageView)findViewById(R.id.image_location);
+        locationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onAddLocationClick();
+            }
+        });
+
     }
 
     @Override
@@ -206,17 +220,15 @@ public class ChatRoomActivity extends AppCompatActivity {
     /**
      * On add location message to database.
      *
-     * @param senderId the id of the current user of the app
-     * @param ref      database reference to chatMessages
      */
-    protected void onAddLocationClick(String senderId, DatabaseReference ref) {
-        //TODO implement function
-        // get current location info and put into bundle
-        // Start map fragment with Bundle
+    protected void onAddLocationClick() {
+        // TODO: add last known location for transaction
+        // get latest location info and put into bundle, if we store this
+        // Start LocationActivity with Bundle
         // After Fragment finishes, set Location message data from placed pin
-        long location = ;
-        LocationMessage message = new LocationMessage(location, "unread", "", senderId);
-        ref.push().setValue(message);
+        Intent intent = new Intent(this, LocationActivity.class);
+
+        startActivityForResult(intent, MEET_LOCATION_REQUEST);
     }
 
 
@@ -225,15 +237,27 @@ public class ChatRoomActivity extends AppCompatActivity {
      *
      * @param inputText the input text
      * @param senderId  the sender id
-     * @param ref       the ref
      */
-    protected void onSendMessageClick(String inputText, String senderId, DatabaseReference ref) {
+    protected void onSendMessageClick(String inputText, String senderId) {
         // TODO move this to chat controller, replace with chat controller methods
         TextMessage message = new TextMessage(inputText, "unread", "", senderId);
-        ref.push().setValue(message);
+        messagesRef.push().setValue(message);
     }
 
-    protected void getLocationPermission() {
-
+    @Override
+    protected void onActivityResult(int requestCode,int resultCode, Intent returnIntent) {
+        if (requestCode == MEET_LOCATION_REQUEST){
+            if (resultCode == Activity.RESULT_OK){
+                double lat = returnIntent.getExtras().getDouble("latitude");
+                double lng = returnIntent.getExtras().getDouble("longitude");
+                String location = lat + "," + lng;
+                LocationMessage message = new LocationMessage(location, "unread", "", senderId);
+                messagesRef.push().setValue(message);
+                //Set up for transaction location
+            }
+            if (resultCode == Activity.RESULT_CANCELED){
+                Toast.makeText(this , "No Location Added", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
