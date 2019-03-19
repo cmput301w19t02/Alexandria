@@ -81,6 +81,7 @@ public class UserController {
      */
     public void deauthenticate() {
         auth.signOut();
+        ObservableUserCache.invalidate();
     }
 
     /**

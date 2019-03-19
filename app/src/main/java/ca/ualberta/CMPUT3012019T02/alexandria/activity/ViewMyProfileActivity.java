@@ -151,12 +151,11 @@ public class ViewMyProfileActivity extends AppCompatActivity {
             case R.id.sign_out_profile:
                 // Sing Out
                 // TODO show warning
+                UserController.getInstance().deauthenticate();
                 Intent start_new_main_intent = new Intent(this,
                         MainActivity.class);
                 start_new_main_intent.setFlags(start_new_main_intent.FLAG_ACTIVITY_NEW_TASK |
                         start_new_main_intent.FLAG_ACTIVITY_CLEAR_TASK);  // clear activity  history
-                UserController.getInstance().deauthenticate();
-                finish();
                 startActivity(start_new_main_intent);
                 break;
             case R.id.profile_setting:

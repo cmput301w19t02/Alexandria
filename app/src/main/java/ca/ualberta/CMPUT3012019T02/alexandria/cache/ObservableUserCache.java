@@ -146,4 +146,11 @@ public class ObservableUserCache extends Observable {
         return null;
     }
 
+    /**
+     * Invalidates cache
+     */
+    public static void invalidate() {
+        instance = null;
+    }
+
 }

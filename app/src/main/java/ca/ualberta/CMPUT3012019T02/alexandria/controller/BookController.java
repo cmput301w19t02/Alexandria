@@ -27,14 +27,12 @@ import java9.util.concurrent.CompletableFuture;
 public class BookController {
 
     private DatabaseReference database;
-    private ObservableUserCache myCache;
     private BookCache bookCache;
 
     private static BookController instance;
 
     private BookController() {
         database = FirebaseDatabase.getInstance().getReference();
-        myCache = ObservableUserCache.getInstance();
         bookCache = BookCache.getInstance();
     }
 
@@ -284,10 +282,10 @@ public class BookController {
      * @return a BorrowedBook with the same isbn
      */
     public CompletableFuture<BorrowedBook> getMyBorrowedBook(@NonNull String isbn) {
-        if (myCache.getBorrowedBook(isbn) == null) {
+        if (ObservableUserCache.getInstance().getBorrowedBook(isbn) == null) {
             return getUserBorrowedBook(getMyUserId(), isbn);
         } else {
-            return CompletableFuture.completedFuture(myCache.getBorrowedBook(isbn));
+            return CompletableFuture.completedFuture(ObservableUserCache.getInstance().getBorrowedBook(isbn));
         }
     }
 
@@ -297,11 +295,11 @@ public class BookController {
      * @return a HashMap mapping book isbn Strings to BorrowedBook objects
      */
     public CompletableFuture<Map<String, BorrowedBook>> getMyBorrowedBooks() {
-        if (myCache.getBorrowedBooks() == null) {
+        if (ObservableUserCache.getInstance().getBorrowedBooks() == null) {
             return getUserBorrowedBooks(getMyUserId());
         }
         else {
-            return CompletableFuture.completedFuture(myCache.getBorrowedBooks());
+            return CompletableFuture.completedFuture(ObservableUserCache.getInstance().getBorrowedBooks());
         }
     }
 
@@ -333,10 +331,10 @@ public class BookController {
      * @return an OwnedBook with the same isbn
      */
     public CompletableFuture<OwnedBook> getMyOwnedBook(@NonNull String isbn) {
-        if (myCache.getOwnedBook(isbn) == null) {
+        if (ObservableUserCache.getInstance().getOwnedBook(isbn) == null) {
             return getUserOwnedBook(getMyUserId(), isbn);
         } else {
-            return CompletableFuture.completedFuture(myCache.getOwnedBook(isbn));
+            return CompletableFuture.completedFuture(ObservableUserCache.getInstance().getOwnedBook(isbn));
         }
     }
 
@@ -346,10 +344,10 @@ public class BookController {
      * @return a HashMap mapping book isbn Strings to OwnedBook objects
      */
     public CompletableFuture<Map<String, OwnedBook>> getMyOwnedBooks() {
-        if (myCache.getOwnedBooks() == null) {
+        if (ObservableUserCache.getInstance().getOwnedBooks() == null) {
             return getUserOwnedBooks(getMyUserId());
         } else {
-            return CompletableFuture.completedFuture(myCache.getOwnedBooks());
+            return CompletableFuture.completedFuture(ObservableUserCache.getInstance().getOwnedBooks());
         }
     }
 
