@@ -14,7 +14,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.UserRecyclerViewAdapter;
 
 /**
- * Creates UserViewHolder for the
+ * Creates UserViewHolder for the UserRecyclerViewAdapter
  * Listener code implemented from
  * https://stackoverflow.com/questions/30284067/handle-button-click-inside-a-row-in-recyclerview
  * on March 17, 2018
