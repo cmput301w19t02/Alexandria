@@ -17,12 +17,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookParser;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
+import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.ExchangeFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.library.LibraryFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 
 /**
@@ -88,8 +88,9 @@ public class MainActivity extends AppCompatActivity
                     // Gets accepted book list items
                     List<BookListItem> bookListItems = BookParser.UserBooksToBookList(stringBorrowedBookHashMap).get(5, TimeUnit.SECONDS);
 
-                    borrowedBookListings.clear();
-                    borrowedBookListings.addAll(bookListItems);
+                    borrowedBookListings = bookListItems;
+
+                    updateFragments();
 
                     // Sort by alphabetical order of book titles
                     Collections.sort(borrowedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
@@ -114,8 +115,9 @@ public class MainActivity extends AppCompatActivity
                     // Gets accepted book list items
                     List<BookListItem> bookListItems = BookParser.UserBooksToBookList(stringOwnedBookHashMap).get(5, TimeUnit.SECONDS);
 
-                    ownedBookListings.clear();
-                    ownedBookListings.addAll(bookListItems);
+                    ownedBookListings = bookListItems;
+
+                    updateFragments();
 
                     // Sort by alphabetical order of book titles
                     Collections.sort(ownedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
@@ -175,7 +177,7 @@ public class MainActivity extends AppCompatActivity
      *
      * @param view the button clicked
      */
-    protected void onProfileButtonClick(View view) {
+    public void onProfileButtonClick(View view) {
         Intent startProfileActivity = new Intent(this, ViewMyProfileActivity.class);
         startActivity(startProfileActivity);
     }
@@ -188,5 +190,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public List<BookListItem> getOwnedBookList() {
         return ownedBookListings;
+    }
+
+    private void updateFragments(){
+        for (Fragment parent:getSupportFragmentManager().getFragments()){
+            for(Fragment child:parent.getChildFragmentManager().getFragments()){
+                parent.getChildFragmentManager().beginTransaction()
+                        .detach(child).attach(child).commit();
+            }
+        }
     }
 }

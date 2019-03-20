@@ -125,7 +125,7 @@ public class ChatRoomItemTests {
         ChatRoomItem chatRoomItem = new ChatRoomItem("Testasdf1234", "asdf","Heff"
                 , "lkjh", "Leff", true );
         chatRoomItem.setUser1Id("asdf;lkj");
-        assertEquals("asdf;lkj",chatRoomItem.getUser1Name());
+        assertEquals("asdf;lkj",chatRoomItem.getUser1Id());
     }
 
     //negative setUser1Name

@@ -1,17 +1,11 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.message;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.Date;
-
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Location;
 
 /**
  * The type Location message. NOT YET USED (11/03/2019).
  */
 public class LocationMessage extends Message {
-
-    private String location;
 
     /**
      * Instantiates a new Location message.
@@ -21,8 +15,8 @@ public class LocationMessage extends Message {
      * @param date     the date
      * @param sender   the sender
      */
-    public LocationMessage(String location, String status, String/*Date*/ date, String sender) {
-        super("location", location, status, date, sender);
+    public LocationMessage(Location location, String status, String/*Date*/ date, String sender) {
+        super("location", "temp", status, date, sender);
         this.setLocation(location);
     }
 
@@ -31,8 +25,11 @@ public class LocationMessage extends Message {
      *
      * @return the location
      */
-    public String getLocation() {
-        return this.location;
+    public Location getLocation() {
+        String[] tokens = getContent().split(",");
+        double latitude =  Double.parseDouble(tokens[0]);
+        double longitude =  Double.parseDouble(tokens[1]);
+        return new Location(latitude,longitude);
     }
 
     /**
@@ -40,10 +37,13 @@ public class LocationMessage extends Message {
      *
      * @param location the location
      */
-    public void setLocation(String location) {
-        if (location == null) {
-            throw new IllegalArgumentException("Content cannot be null or empty");
+    public void setLocation(Location location) {
+        if(location!=null) {
+            String serializedLocation = location.getLatitude() + "," + location.getLongitude();
+            setContent(serializedLocation);
         }
-        this.location = location;
+        else{
+            throw new IllegalArgumentException("Location cannot be null.");
+        }
     }
 }

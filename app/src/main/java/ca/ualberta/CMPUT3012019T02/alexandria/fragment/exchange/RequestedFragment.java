@@ -2,7 +2,6 @@ package ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,8 +16,8 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.BookListProvider;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 
 /**
  * Fragment for filtering book list that has the status of Requested
@@ -58,29 +57,27 @@ public class RequestedFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement BookListProvider");
         }
+        if (bookAdapter != null) {
+            update();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        update();
+    }
 
-        // TODO: dynamic loading/updating of books
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                List<BookListItem> books = bookListProvider.getBorrowedBookList();
-                bookListings.clear();
-                for (BookListItem book : books) {
-                    if (book.getStatus().equals("requested")) {
-                        bookListings.add(book);
-                    }
-                }
-                bookAdapter.setmBookListItem(bookListings);
-                bookAdapter.notifyDataSetChanged();
-                handler.postDelayed(this, 2000);
+    public void update(){
+        List<BookListItem> books = bookListProvider.getBorrowedBookList();
+        bookListings.clear();
+        for (BookListItem book : books) {
+            if (book.getStatus().equals("requested")) {
+                bookListings.add(book);
             }
-        }, 2000);
+        }
+        bookAdapter.setmBookListItem(bookListings);
+        bookAdapter.notifyDataSetChanged();
     }
 }
 
