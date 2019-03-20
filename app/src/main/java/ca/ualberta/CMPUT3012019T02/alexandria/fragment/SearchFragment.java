@@ -150,4 +150,12 @@ public class SearchFragment extends Fragment {
             }
         }, 500);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        keyboard.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+    }
 }
