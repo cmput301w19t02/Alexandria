@@ -47,6 +47,10 @@ public class ChatController {
         return addChatRoomPrivate(senderId, recieverId);
     }
 
+    //TODO: use userController for current id?
+    //TODO: check if chat room exists. If it does, return. Else, make add chat room to current user and reciever user.
+    //TODO: look at other controllers for how to properly add/get data (mapping)
+    //TODO: Wait for all completable futures to finish, then
     private CompletableFuture<Void> addChatRoomPrivate(String senderId, String recieverId){
         final CompletableFuture<Void> resultFuture = new CompletableFuture<>(); // might not be necessary
 
@@ -112,6 +116,8 @@ public class ChatController {
      * @param chatRoomId
      * @return boolean, true for the chat room exists in both database references, false if not
      */
+    //TODO: change checkChatRoomExists to check the user cache chatRoomList for a chat room that
+    //TODO: already has reciever user in user1Id or user2Id.
     private CompletableFuture<String> checkChatRoomExists(DatabaseReference ref, String chatRoomId){
         final CompletableFuture<String> resultFuture = new CompletableFuture<>();
 

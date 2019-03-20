@@ -123,11 +123,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         savePin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Finish Activity with result
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("latitude", mLastKnownLocation.getLatitude());
-                returnIntent.putExtra("longitude", mLastKnownLocation.getLongitude());
-                setResult(Activity.RESULT_OK, returnIntent);
+                //TODO: Set chat controller method call for location message
                 finish();
             }
         });

@@ -227,8 +227,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         // Start LocationActivity with Bundle
         // After Fragment finishes, set Location message data from placed pin
         Intent intent = new Intent(this, LocationActivity.class);
-
-        startActivityForResult(intent, MEET_LOCATION_REQUEST);
+        startActivity(intent);
+        //startActivityForResult(intent, MEET_LOCATION_REQUEST);
     }
 
 
@@ -244,20 +244,24 @@ public class ChatRoomActivity extends AppCompatActivity {
         messagesRef.push().setValue(message);
     }
 
+    /*
     @Override
     protected void onActivityResult(int requestCode,int resultCode, Intent returnIntent) {
         if (requestCode == MEET_LOCATION_REQUEST){
             if (resultCode == Activity.RESULT_OK){
-                double lat = returnIntent.getExtras().getDouble("latitude");
-                double lng = returnIntent.getExtras().getDouble("longitude");
-                String location = lat + "," + lng;
+
+                //double lat = returnIntent.getExtras().getDouble("latitude");
+                //double lng = returnIntent.getExtras().getDouble("longitude");
+                //String location = lat + "," + lng;
+                Location location = returnIntent.getParcelableExtra("location");
                 LocationMessage message = new LocationMessage(location, "unread", "", senderId);
                 messagesRef.push().setValue(message);
-                //Set up for transaction location
+                //Set up transaction location
             }
             if (resultCode == Activity.RESULT_CANCELED){
                 Toast.makeText(this , "No Location Added", Toast.LENGTH_LONG).show();
             }
         }
     }
+    */
 }
