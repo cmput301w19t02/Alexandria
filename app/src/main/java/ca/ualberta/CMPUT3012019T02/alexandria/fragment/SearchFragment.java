@@ -1,6 +1,8 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment;
 
-import android.graphics.Bitmap;
+// used in this .java: https://stackoverflow.com/questions/10508363/show-keyboard-for-edittext-when-fragment-starts
+
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -14,6 +16,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -21,7 +24,6 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
@@ -38,7 +40,6 @@ public class SearchFragment extends Fragment {
     private BookRecyclerViewAdapter bookAdapter;
 
     private final SearchController searchController = SearchController.getInstance();
-    private final ImageController imageController = ImageController.getInstance();
 
     @Nullable
     @Override
@@ -53,7 +54,10 @@ public class SearchFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(bookAdapter);
 
-        searchText = (EditText) rootView.findViewById(R.id.search_input);
+        searchText = rootView.findViewById(R.id.search_input);
+        searchText.requestFocus();
+        InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
         searchText.addTextChangedListener(new TextWatcher() {
 
@@ -69,29 +73,17 @@ public class SearchFragment extends Fragment {
                         if (error == null) {
                             for (int i = 0; i < books.size(); i++) {
                                 Book book = books.get(i);
-
-                                CompletableFuture<Bitmap> imageResult = imageController.getImage(book.getImageId());
-
-                                imageResult.handleAsync((image, imageError)->{
-                                    if(imageError == null) {
-                                        searchBooks.add(new BookListItem(
-                                                image,
-                                                book.getTitle(),
-                                                book.getAuthor(),
-                                                book.getIsbn())
-                                        );
-                                        bookAdapter.setmBookListItem(searchBooks);
-                                        bookAdapter.notifyDataSetChanged();
-                                    }
-                                    else{
-                                        imageError.printStackTrace();
-                                    }
-                                    return null;
-                                });
+                                searchBooks.add(new BookListItem(
+                                        book.getTitle(),
+                                        book.getAuthor(),
+                                        book.getIsbn())
+                                );
+                                bookAdapter.setmBookListItem(searchBooks);
                             }
                         } else {
                             error.printStackTrace();
                         }
+                        bookAdapter.notifyDataSetChanged();
                         return null;
                     });
                 }
