@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
@@ -18,7 +19,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.OwnerListItem;
 
 public class OwnerListFragment extends Fragment {
 
-    private List<OwnerListItem> owner;
+    private List<OwnerListItem> owner = new ArrayList<>();
     private String author;
     private String isbn;
     private String title;
