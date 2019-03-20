@@ -28,6 +28,9 @@ public class BookCatalogueFragment extends Fragment {
         extractData();
         setUI(rootView);
 
+        //Needed for Search UI hack
+        getActivity().findViewById(R.id.navigation).setVisibility(View.VISIBLE);
+
         OwnerListFragment frag = new OwnerListFragment();
         frag.dataGrab(title,author,isbn);
         loadFragment(frag);
