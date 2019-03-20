@@ -17,6 +17,7 @@
         completions."
     </string>
     <string name="search_hint">Author, Title, or ISBN</string>
+    <string name="search">Search</string>
     <string name="nav_profile">Profile</string>
     <!-- Strings related to my profile -->
     <string name="profile_info">Information</string>
