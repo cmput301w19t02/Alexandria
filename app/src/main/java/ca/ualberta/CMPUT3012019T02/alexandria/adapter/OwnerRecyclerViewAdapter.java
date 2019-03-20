@@ -23,7 +23,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.BookViewHolder;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.OwnerViewHolder;
 
 /**
- * Set up RecyclerView for book lists
+ * Set up RecyclerView for Book Catalogue
  * Code based on code from https://youtu.be/T_QfRU-A3s4 on 03/04/2019
  */
 public class OwnerRecyclerViewAdapter extends RecyclerView.Adapter<OwnerViewHolder> {
@@ -32,7 +32,7 @@ public class OwnerRecyclerViewAdapter extends RecyclerView.Adapter<OwnerViewHold
     private List<OwnerListItem> mOwnerListItem;
 
     /**
-     * Instantiates a new Book recycler view adapter.
+     * Instantiates a new Owner recycler view adapter.
      *
      * @param mContext    the application context
      * @param mOwnerListItem   the owner list
