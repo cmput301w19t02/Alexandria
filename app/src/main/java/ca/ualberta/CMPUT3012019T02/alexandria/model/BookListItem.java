@@ -48,7 +48,8 @@ public class BookListItem {
      * @param author the author
      * @param isbn   the isbn
      */
-    public BookListItem(String title, String author, String isbn) {
+    public BookListItem(Bitmap cover, String title, String author, String isbn) {
+        this.cover = cover;
         this.title = title;
         this.author = author;
         this.isbn = isbn;

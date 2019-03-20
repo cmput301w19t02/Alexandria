@@ -3,6 +3,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria.fragment;
 // used in this .java: https://stackoverflow.com/questions/10508363/show-keyboard-for-edittext-when-fragment-starts
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
@@ -40,6 +42,7 @@ public class SearchFragment extends Fragment {
     private BookRecyclerViewAdapter bookAdapter;
 
     private final SearchController searchController = SearchController.getInstance();
+    private final ImageController imageController = ImageController.getInstance();
 
     @Nullable
     @Override
@@ -73,19 +76,30 @@ public class SearchFragment extends Fragment {
                         if (error == null) {
                             for (int i = 0; i < books.size(); i++) {
                                 Book book = books.get(i);
-                                searchBooks.add(new BookListItem(
-                                        book.getTitle(),
-                                        book.getAuthor(),
-                                        book.getIsbn())
-                                );
-                                bookAdapter.setmBookListItem(searchBooks);
+
+                                CompletableFuture<Bitmap> imageResult = imageController.getImage(book.getImageId());
+
+                                imageResult.handleAsync((image, imageError)-> {
+                                    if (imageError == null) {
+                                        searchBooks.add(new BookListItem(
+                                                image,
+                                                book.getTitle(),
+                                                book.getAuthor(),
+                                                book.getIsbn())
+                                        );
+                                        bookAdapter.setmBookListItem(searchBooks);
+                                    } else {
+                                        imageError.printStackTrace();
+                                    }
+                                    return null;
+                                });
                             }
                         } else {
                             error.printStackTrace();
                         }
-                        bookAdapter.notifyDataSetChanged();
                         return null;
                     });
+                    bookAdapter.notifyDataSetChanged();
                 }
 
             }
