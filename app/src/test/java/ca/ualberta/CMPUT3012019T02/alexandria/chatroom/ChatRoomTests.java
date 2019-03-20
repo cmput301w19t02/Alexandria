@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria;
+package ca.ualberta.CMPUT3012019T02.alexandria.chatroom;
 
 import org.junit.Test;
 

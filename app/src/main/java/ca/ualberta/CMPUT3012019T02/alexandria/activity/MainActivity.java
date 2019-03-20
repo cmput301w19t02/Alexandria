@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity
 
                     borrowedBookListings = bookListItems;
 
-                    updateFragments();
+                    updateChildFragments();
 
                     // Sort by alphabetical order of book titles
                     Collections.sort(borrowedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity
 
                     ownedBookListings = bookListItems;
 
-                    updateFragments();
+                    updateChildFragments();
 
                     // Sort by alphabetical order of book titles
                     Collections.sort(ownedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity
         return ownedBookListings;
     }
 
-    private void updateFragments(){
+    private void updateChildFragments(){
         for (Fragment parent:getSupportFragmentManager().getFragments()){
             for(Fragment child:parent.getChildFragmentManager().getFragments()){
                 parent.getChildFragmentManager().beginTransaction()
