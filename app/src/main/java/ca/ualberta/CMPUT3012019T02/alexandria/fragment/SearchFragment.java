@@ -52,7 +52,7 @@ public class SearchFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_search, null);
         RecyclerView mRecyclerView = rootView.findViewById(R.id.search_recycler);
 
-        bookAdapter = new BookRecyclerViewAdapter(getContext(), searchBooks, "UserBookFragment");
+        bookAdapter = new BookRecyclerViewAdapter(getContext(), searchBooks, "BookCatalogueFragment");
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(bookAdapter);
