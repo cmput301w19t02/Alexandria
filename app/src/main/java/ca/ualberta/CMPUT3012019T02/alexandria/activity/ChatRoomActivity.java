@@ -212,7 +212,7 @@ public class ChatRoomActivity extends AppCompatActivity {
      *
      * @param view the view
      */
-    protected void onAddPhotoClick(View view) {
+    public void onAddPhotoClick(View view) {
         //TODO implement function
         Toast.makeText(this , "Add Photo", Toast.LENGTH_LONG).show();
     }
@@ -221,7 +221,7 @@ public class ChatRoomActivity extends AppCompatActivity {
      * On add location message to database.
      *
      */
-    protected void onAddLocationClick() {
+    public void onAddLocationClick() {
         // TODO: add last known location for transaction
         // get latest location info and put into bundle, if we store this
         // Start LocationActivity with Bundle
@@ -238,7 +238,7 @@ public class ChatRoomActivity extends AppCompatActivity {
      * @param inputText the input text
      * @param senderId  the sender id
      */
-    protected void onSendMessageClick(String inputText, String senderId) {
+    public void onSendMessageClick(String inputText, String senderId) {
         // TODO move this to chat controller, replace with chat controller methods
         TextMessage message = new TextMessage(inputText, "unread", "", senderId);
         messagesRef.push().setValue(message);

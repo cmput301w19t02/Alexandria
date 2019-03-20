@@ -65,4 +65,6 @@
     <string name="accept_return">Accept Return</string>
     <string name="accept_request">Accept Request</string>
     <string name="reject_request">Decline Request</string>
+    <!-- Strings related to map -->
+    <string name="save_pin">Save Pin Location</string>
 </resources>
