@@ -1,5 +1,8 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment;
 
+// used in this .java: https://stackoverflow.com/questions/10508363/show-keyboard-for-edittext-when-fragment-starts
+
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +17,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -53,7 +57,10 @@ public class SearchFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(bookAdapter);
 
-        searchText = (EditText) rootView.findViewById(R.id.search_input);
+        searchText = rootView.findViewById(R.id.search_input);
+        searchText.requestFocus();
+        InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
         searchText.addTextChangedListener(new TextWatcher() {
 
@@ -72,8 +79,8 @@ public class SearchFragment extends Fragment {
 
                                 CompletableFuture<Bitmap> imageResult = imageController.getImage(book.getImageId());
 
-                                imageResult.handleAsync((image, imageError)->{
-                                    if(imageError == null) {
+                                imageResult.handleAsync((image, imageError)-> {
+                                    if (imageError == null) {
                                         searchBooks.add(new BookListItem(
                                                 image,
                                                 book.getTitle(),
@@ -81,9 +88,7 @@ public class SearchFragment extends Fragment {
                                                 book.getIsbn())
                                         );
                                         bookAdapter.setmBookListItem(searchBooks);
-                                        bookAdapter.notifyDataSetChanged();
-                                    }
-                                    else{
+                                    } else {
                                         imageError.printStackTrace();
                                     }
                                     return null;
@@ -94,6 +99,7 @@ public class SearchFragment extends Fragment {
                         }
                         return null;
                     });
+                    bookAdapter.notifyDataSetChanged();
                 }
 
             }
