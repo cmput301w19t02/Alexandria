@@ -162,7 +162,7 @@ public class BookControllerTests {
         String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
         userController.authenticate(username, password).get(10, TimeUnit.SECONDS);
 
-        HashMap<String, BorrowedBook> borrowedBookHashMap = bookController.getMyBorrowedBooks().get(5, TimeUnit.SECONDS);
+        HashMap<String, BorrowedBook> borrowedBookHashMap = (HashMap<String, BorrowedBook>) bookController.getMyBorrowedBooks().get(5, TimeUnit.SECONDS);
         Assert.assertEquals(1, borrowedBookHashMap.size());
         Assert.assertTrue("9780547928227".equals(borrowedBookHashMap.get("9780547928227").getIsbn()));
     }
@@ -176,7 +176,7 @@ public class BookControllerTests {
         String password = "c32271c9-eb3f-4313-8f1e-db54c0158e5b";
         userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
 
-        HashMap<String, BorrowedBook> borrowedBookHashMap = bookController.getMyBorrowedBooks().get(5, TimeUnit.SECONDS);
+        HashMap<String, BorrowedBook> borrowedBookHashMap = (HashMap<String, BorrowedBook>) bookController.getMyBorrowedBooks().get(5, TimeUnit.SECONDS);
         Assert.assertEquals(0, borrowedBookHashMap.size());
     }
 
@@ -254,7 +254,7 @@ public class BookControllerTests {
         String password = "0ece7cb6-e601-45a1-a93c-0bbd159c31c5";
         userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
 
-        HashMap<String, OwnedBook> ownedBookHashMap = bookController.getMyOwnedBooks().get(5, TimeUnit.SECONDS);
+        HashMap<String, OwnedBook> ownedBookHashMap = (HashMap<String, OwnedBook>) bookController.getMyOwnedBooks().get(5, TimeUnit.SECONDS);
         Assert.assertEquals(1, ownedBookHashMap.size());
         Assert.assertTrue("9780547928227".equals(ownedBookHashMap.get("9780547928227").getIsbn()));
     }
@@ -268,7 +268,7 @@ public class BookControllerTests {
         String password = "c32271c9-eb3f-4313-8f1e-db54c0158e5b";
         userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
 
-        HashMap<String, OwnedBook> ownedBookHashMap = bookController.getMyOwnedBooks().get(5, TimeUnit.SECONDS);
+        HashMap<String, OwnedBook> ownedBookHashMap = (HashMap<String, OwnedBook>) bookController.getMyOwnedBooks().get(5, TimeUnit.SECONDS);
         Assert.assertEquals(0, ownedBookHashMap.size());
     }
 
@@ -329,7 +329,7 @@ public class BookControllerTests {
     public void testGetUserBorrowedBooks() throws InterruptedException, ExecutionException, TimeoutException {
         BookController bookController = BookController.getInstance();
 
-        HashMap<String, BorrowedBook> borrowedBookHashMap = bookController.getUserBorrowedBooks("eQgZfhN2Yng9TPHcXvfBZs5ZKxj1").get(5, TimeUnit.SECONDS);
+        HashMap<String, BorrowedBook> borrowedBookHashMap = (HashMap<String, BorrowedBook>) bookController.getUserBorrowedBooks("eQgZfhN2Yng9TPHcXvfBZs5ZKxj1").get(5, TimeUnit.SECONDS);
         Assert.assertEquals(1, borrowedBookHashMap.size());
         Assert.assertTrue("9780547928227".equals(borrowedBookHashMap.get("9780547928227").getIsbn()));
     }
@@ -338,7 +338,7 @@ public class BookControllerTests {
     public void testGetNullUserBorrowedBooks() throws InterruptedException, ExecutionException, TimeoutException {
         BookController bookController = BookController.getInstance();
 
-        HashMap<String, BorrowedBook> borrowedBookHashMap = bookController.getUserBorrowedBooks("bJyo1fjcj0aYJejnJSfz6tugpca2").get(5, TimeUnit.SECONDS);
+        HashMap<String, BorrowedBook> borrowedBookHashMap = (HashMap<String, BorrowedBook>) bookController.getUserBorrowedBooks("bJyo1fjcj0aYJejnJSfz6tugpca2").get(5, TimeUnit.SECONDS);
         Assert.assertEquals(0, borrowedBookHashMap.size());
     }
 
@@ -361,7 +361,7 @@ public class BookControllerTests {
     public void testGetUserOwnedBooks() throws InterruptedException, ExecutionException, TimeoutException {
         BookController bookController = BookController.getInstance();
 
-        HashMap<String, OwnedBook> ownedBookHashMap = bookController.getUserOwnedBooks("AQiv4J6BTsX5kYHgLChH7xFlir02").get(5, TimeUnit.SECONDS);
+        HashMap<String, OwnedBook> ownedBookHashMap = (HashMap<String, OwnedBook>) bookController.getUserOwnedBooks("AQiv4J6BTsX5kYHgLChH7xFlir02").get(5, TimeUnit.SECONDS);
         Assert.assertEquals(1, ownedBookHashMap.size());
         Assert.assertTrue("9780547928227".equals(ownedBookHashMap.get("9780547928227").getIsbn()));
     }
@@ -370,7 +370,7 @@ public class BookControllerTests {
     public void testGetNullUserOwnedBooks() throws InterruptedException, ExecutionException, TimeoutException {
         BookController bookController = BookController.getInstance();
 
-        HashMap<String, OwnedBook> ownedBookHashMap = bookController.getUserOwnedBooks("bJyo1fjcj0aYJejnJSfz6tugpca2").get(5, TimeUnit.SECONDS);
+        HashMap<String, OwnedBook> ownedBookHashMap = (HashMap<String, OwnedBook>) bookController.getUserOwnedBooks("bJyo1fjcj0aYJejnJSfz6tugpca2").get(5, TimeUnit.SECONDS);
         Assert.assertEquals(0, ownedBookHashMap.size());
     }
 

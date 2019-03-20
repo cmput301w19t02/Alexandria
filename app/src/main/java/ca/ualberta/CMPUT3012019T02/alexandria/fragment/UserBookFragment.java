@@ -1,10 +1,13 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -23,7 +26,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.MainActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.isbnLookup;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 
@@ -277,7 +282,9 @@ public class UserBookFragment extends Fragment {
             case "available": break;
             case "requested": break;
             case "accepted": break;
-            case "borrowed": break;
+            case "borrowed":
+                Intent intent = new Intent(getActivity(), isbnLookup.class);
+                startActivity(intent);
         }
 
     }
