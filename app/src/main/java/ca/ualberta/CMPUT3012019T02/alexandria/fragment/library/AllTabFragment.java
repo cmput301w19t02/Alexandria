@@ -2,7 +2,6 @@ package ca.ualberta.CMPUT3012019T02.alexandria.fragment.library;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,8 +16,8 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.BookListProvider;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 
 /**
  * Fragment for listing all own books
@@ -41,7 +40,7 @@ public class AllTabFragment extends Fragment {
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.all_recycler);
         bookAdapter = new BookRecyclerViewAdapter(
-                getContext(), bookListings,"UserBookFragment");
+                getContext(), bookListings,"MyBookFragment");
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(bookAdapter);
 
@@ -56,24 +55,22 @@ public class AllTabFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement BookListProvider");
         }
+        if (bookAdapter != null) {
+            update();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        update();
+    }
 
-        // TODO: dynamic loading/updating of books
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                List<BookListItem> books = bookListProvider.getOwnedBookList();
-                bookListings.clear();
-                bookListings.addAll(books);
-                bookAdapter.setmBookListItem(bookListings);
-                bookAdapter.notifyDataSetChanged();
-                handler.postDelayed(this, 2000);
-            }
-        }, 2000);
+    public void update(){
+        List<BookListItem> books = bookListProvider.getOwnedBookList();
+        bookListings.clear();
+        bookListings.addAll(books);
+        bookAdapter.setmBookListItem(bookListings);
+        bookAdapter.notifyDataSetChanged();
     }
 }

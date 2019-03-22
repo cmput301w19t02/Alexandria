@@ -67,4 +67,11 @@ public class ExchangeFragment extends Fragment implements View.OnClickListener {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getActivity().findViewById(R.id.navigation).setVisibility(View.VISIBLE);
+    }
 }
