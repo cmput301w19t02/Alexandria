@@ -15,7 +15,7 @@ public class LocationMessage extends Message {
      * @param date     the date
      * @param sender   the sender
      */
-    public LocationMessage(Location location, String status, String/*Date*/ date, String sender) {
+    public LocationMessage(Location location, String status, Long date, String sender) {
         super("location", "temp", status, date, sender);
         this.setLocation(location);
     }
