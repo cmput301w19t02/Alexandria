@@ -63,7 +63,8 @@ public class ChatController {
         if (chatRoomExists == null) {
 
             String senderName = userCache.getProfile().getName();
-
+            // TODO: implement ExecutionException and InterruptedException catches
+            // for each lambda function add try/catch  Exception e
             CompletableFuture<String> future1 = CompletableFuture.supplyAsync(() ->
                     database.getReference().child("users")
                             .child(senderId).child("chatRoomList").push().getKey());

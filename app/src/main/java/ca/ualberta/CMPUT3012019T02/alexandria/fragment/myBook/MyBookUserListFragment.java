@@ -18,13 +18,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ChatRoomActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.UserRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ChatController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.UserListItem;
+import java9.util.concurrent.CompletableFuture;
 
 public class MyBookUserListFragment extends Fragment {
 
     private List<UserListItem> requests;
+    private UserController userController = UserController.getInstance();
+    private ChatController chatController = ChatController.getInstance();
+    private ObservableUserCache userCache = ObservableUserCache.getInstance();
 
     @Nullable
     @Override
@@ -41,7 +49,30 @@ public class MyBookUserListFragment extends Fragment {
             //Sets up onClick functions for each user
             @Override
             public void messageClick(int position) {
-                //TODO implement
+                UserListItem item = requests.get(position);
+                String userId = item.getBorrowerId();
+                String userName = item.getBorrowerUsername();
+                String chatRoomId = userCache.getChatRoomId(userId);
+                if (chatRoomId == null) {
+                    //TODO: Start spinner
+                    CompletableFuture<Void> addChatRoom = chatController.addChatRoom(userController.getMyId(), userId, userName);
+                    if (addChatRoom.get().equals(Void.TYPE)) {
+                        //TODO: stop spinner
+                        Intent intentChatRoom = new Intent(getContext(), ChatRoomActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("chatId", chatRoomId);
+                        bundle.putString("recieverId", userId);
+                        intentChatRoom.putExtra("bundle", bundle);
+                        startActivity(intentChatRoom);
+                    }
+                } else {
+                    Intent intentChatRoom = new Intent(getContext(), ChatRoomActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("chatId", chatRoomId);
+                    bundle.putString("recieverId", userId);
+                    intentChatRoom.putExtra("bundle", bundle);
+                    startActivity(intentChatRoom);
+                }
             }
 
             @Override

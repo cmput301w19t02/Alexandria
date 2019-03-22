@@ -74,13 +74,11 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
 
         // messages
-        //TODO REMOVE HARD CODED ID's
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("bundle");
         chatId = bundle.getString("chatId");
         recieverId = bundle.getString("recieverId");
         senderId = UserController.getInstance().getMyId();
-        senderId = "eQgZfhN2Yng9TPHcXvfBZs5ZKxj1";
 
         messagesRef = FirebaseDatabase.getInstance().getReference().child("chatMessages").child(chatId);
         messagesListener = new ValueEventListener() {

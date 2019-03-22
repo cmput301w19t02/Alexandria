@@ -52,7 +52,6 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
             @Override
             public void onClick(View v) {
 
-                //bundles data for fragment switching
                 Intent intent = new Intent(viewGroup.getContext(), ChatRoomActivity.class);
                 Bundle bundle = new Bundle();
 

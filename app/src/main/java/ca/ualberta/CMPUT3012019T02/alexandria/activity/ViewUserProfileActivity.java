@@ -16,7 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java9.util.concurrent.CompletableFuture;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ChatController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
@@ -34,6 +38,8 @@ public class ViewUserProfileActivity extends AppCompatActivity {
 
     private ImageController imageController = ImageController.getInstance();
     private UserController userController = UserController.getInstance();
+    private ChatController chatController = ChatController.getInstance();
+    private ObservableUserCache userCache = ObservableUserCache.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,11 +148,27 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             //TODO make use of actual user name
             case R.id.message_user_option:
-                //TODO: ADD addChatRoom method if chat does not exist
-                Intent intentMain = new Intent(this, MainActivity.class);
-                String fragment_name = "message";
-                intentMain.putExtra("fragment_name", fragment_name);
-                startActivity(intentMain);
+                String chatRoomId = userCache.getChatRoomId(userID);
+                if (chatRoomId == null) {
+                    //TODO: Start spinner
+                    CompletableFuture<Void> addChatRoom = chatController.addChatRoom(userController.getMyId(), userID, username);
+                    if (addChatRoom.get().equals(Void.TYPE)) {
+                        //TODO: stop spinner
+                        Intent intentChatRoom = new Intent(this, ChatRoomActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("chatId", chatRoomId);
+                        bundle.putString("recieverId", userID);
+                        intentChatRoom.putExtra("bundle", bundle);
+                        startActivity(intentChatRoom);
+                    }
+                } else {
+                    Intent intentChatRoom = new Intent(this, ChatRoomActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("chatId", chatRoomId);
+                    bundle.putString("recieverId", userID);
+                    intentChatRoom.putExtra("bundle", bundle);
+                    startActivity(intentChatRoom);
+                }
                 break;
             case R.id.block_user_option:
                 Toast.makeText(this, "Block user implement", Toast.LENGTH_LONG).show();
