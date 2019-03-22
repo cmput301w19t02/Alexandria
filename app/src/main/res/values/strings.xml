@@ -17,6 +17,7 @@
         completions."
     </string>
     <string name="search_hint">Author, Title, or ISBN</string>
+    <string name="search">Search</string>
     <string name="nav_profile">Profile</string>
     <!-- Strings related to my profile -->
     <string name="profile_info">Information</string>
@@ -52,6 +53,14 @@
     <string name="send_description">send_button</string>
     <string name="view_profile_title">View Profile</string>
     <string name="message_hint">Type your message</string>
+    <!-- Strings related to book catalogue -->
+    <string name="bc_owners">Availability</string>
+    <string name="isbn">ISBN</string>
+    <string name="title">Title</string>
+    <string name="author">Author</string>
+    <!-- Strings related to my book -->
+    <string name="my_book_requests">Requests</string>
+    <string name="my_book_order">Order</string>
     <!-- Strings related to ellipses menu -->
     <string name="view_user">View User</string>
     <string name="message">Message</string>
@@ -61,4 +70,12 @@
     <string name="author_name">Author Name</string>
     <string name="ISBN_num">ISBN #</string>
     <string name="add_to_library">Add to Library</string>
+    <string name="edit_book">Edit Book</string>
+    <string name="delete_book">Delete Book</string>
+    <!-- Strings related to book exchange -->
+    <string name="cancel_order">Cancel Order</string>
+    <string name="set_borrowed">Set Status: Borrowed</string>
+    <string name="accept_return">Accept Return</string>
+    <string name="accept_request">Accept Request</string>
+    <string name="reject_request">Decline Request</string>
 </resources>

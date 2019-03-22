@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_my_book_ellipses"
+        android:icon="@drawable/ic_ellipses"
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/option_edit_book"
+                android:title="@string/edit_book" />
+
+            <item
+                android:id="@+id/option_delete_book"
+                android:title="@string/delete_book" />
+        </menu>
+    </item>
+
+</menu>

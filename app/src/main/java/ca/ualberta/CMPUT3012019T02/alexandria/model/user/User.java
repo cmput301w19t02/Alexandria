@@ -13,11 +13,25 @@ import java.util.Map;
 public class User {
 
     private Map<String, String> chatRooms;
-    private HashMap<String, OwnedBook> ownedBooks;
-    private HashMap<String, BorrowedBook> borrowedBooks;
+    private Map<String, OwnedBook> ownedBooks;
+    private Map<String, BorrowedBook> borrowedBooks;
     private UserProfile profile;
     private String id;
     private List<String> blockedUsers;
+
+
+    /**
+     * No args constructor to maintain compatibility
+     * with Firebase deserializer
+     * DO NOT USE
+     */
+    @Deprecated
+    public User(){
+        chatRooms = new HashMap<>();
+        ownedBooks = new HashMap<>();
+        borrowedBooks = new HashMap<>();
+        blockedUsers = new ArrayList<>();
+    }
 
     /**
      * User constructor which sets id and user profile,

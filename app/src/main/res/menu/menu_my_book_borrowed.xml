@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/option_view_user"
+        android:title="@string/view_user"/>
+
+    <item
+        android:id="@+id/option_return"
+        android:title="@string/accept_return"/>
+
+</menu>

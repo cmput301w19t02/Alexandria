@@ -3,7 +3,7 @@
     android:id="@+id/item_message"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/border_item_book"
+    android:background="@drawable/border_list_items"
     android:orientation="vertical"
     android:padding="8dp">
 

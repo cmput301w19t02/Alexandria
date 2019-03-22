@@ -11,34 +11,15 @@ import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
 /**
  * Sets up item ID for RecyclerViews
- * Says that access can be private, even though it will break RecyclerViewAdapters
  */
 
 public class BookViewHolder extends RecyclerView.ViewHolder{
 
-    /**
-     * The Item book.
-     */
     public RelativeLayout itemBook;
-    /**
-     * The ImageView cover.
-     */
     public ImageView ivCover;
-    /**
-     * The TextView title.
-     */
     public TextView tvTitle;
-    /**
-     * The TextView author.
-     */
     public TextView tvAuthor;
-    /**
-     * The TextView isbn.
-     */
     public TextView tvISBN;
-    /**
-     * The ImageView status.
-     */
     public ImageView ivStatus;
 
     /**
