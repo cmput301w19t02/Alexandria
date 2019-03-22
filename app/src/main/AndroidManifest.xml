@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.ChatRoomActivity"></activity>
-        <activity android:name=".activity.isbnLookup"></activity>
+        <activity android:name=".activity.ISBNLookup"></activity>
         <activity android:name=".activity.ViewUserProfileActivity"></activity>
         <activity android:name=".activity.BlockedUsersActivity" />
         <activity android:name=".activity.EditMyProfileActivity" />

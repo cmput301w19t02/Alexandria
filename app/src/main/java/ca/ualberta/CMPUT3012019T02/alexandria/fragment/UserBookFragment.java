@@ -1,13 +1,10 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -26,11 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.MainActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ISBNLookup;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.isbnLookup;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Implements UserBookRecyclerView
@@ -46,6 +44,7 @@ public class UserBookFragment extends Fragment {
     private String ownerId;
     private String ownerUsername;
     private Bitmap ownerPic;
+    private final int RESULT_ISBN = 1;
 
     @Nullable
     @Override
@@ -283,8 +282,8 @@ public class UserBookFragment extends Fragment {
             case "requested": break;
             case "accepted": break;
             case "borrowed":
-                Intent intent = new Intent(getActivity(), isbnLookup.class);
-                startActivity(intent);
+                Intent intent = new Intent(getActivity(), ISBNLookup.class);
+                startActivityForResult(intent, RESULT_ISBN);
         }
 
     }
@@ -294,4 +293,19 @@ public class UserBookFragment extends Fragment {
     private void onClickTempButton() {
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        // Check which request we're responding to
+        if (requestCode == RESULT_ISBN) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                String isbn = extras.getString("isbn");
+                
+            }
+        }
+    }
+
 }

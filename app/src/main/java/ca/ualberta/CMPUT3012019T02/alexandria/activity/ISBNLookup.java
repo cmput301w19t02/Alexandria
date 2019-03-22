@@ -2,6 +2,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +20,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
 
 
-public class isbnLookup extends AppCompatActivity implements ZBarScannerView.ResultHandler {
+public class ISBNLookup extends AppCompatActivity implements ZBarScannerView.ResultHandler {
     private ZBarScannerView mScannerView;
     private final int REQUEST_PERMISSION_PHONE_STATE = 1;
 
@@ -51,22 +52,33 @@ public class isbnLookup extends AppCompatActivity implements ZBarScannerView.Res
 
     @Override
     public void handleResult(Result rawResult) {
-        Toast.makeText(this, "Contents = " + rawResult.getContents() +
-                ", Format = " + rawResult.getBarcodeFormat().getName(), Toast.LENGTH_SHORT).show();
-//        // Note:
-//        // * Wait 2 seconds to resume the preview.
-//        // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
-//        // * I don't know why this is the case but I don't have the time to figure out.
-//        Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mScannerView.resumeCameraPreview(isbnLookup.this);
-//            }
-//        }, 2000);
+        String format = rawResult.getBarcodeFormat().getName();
+        String isbn = rawResult.getContents();
+        System.out.println("================================================== Contents = " + isbn +
+                ", Format = " + format + "==================================================");
+        // Note:
+        // * Wait 2 seconds to resume the preview.
+        // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
+        // * I don't know why this is the case but I don't have the time to figure out.
+        if (!format.equals("ISBN10") && !format.equals("ISBN13")) {
+            Toast.makeText(this, "ISBN code not found", Toast.LENGTH_SHORT).show();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mScannerView.resumeCameraPreview(ISBNLookup.this);
+                }
+            }, 1000);
+        } else {
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("isbn", isbn);
+            setResult(-1, resultIntent);
+            finish();
+        }
 
-        finish();
     }
+
+
 
     /*
     Permission code implemented from :
@@ -84,7 +96,7 @@ public class isbnLookup extends AppCompatActivity implements ZBarScannerView.Res
                 requestPermission(Manifest.permission.CAMERA, REQUEST_PERMISSION_PHONE_STATE);
             }
         } else {
-            Toast.makeText(isbnLookup.this, "Permission already granted!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ISBNLookup.this, "Permission already granted!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -97,9 +109,9 @@ public class isbnLookup extends AppCompatActivity implements ZBarScannerView.Res
             case REQUEST_PERMISSION_PHONE_STATE:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(isbnLookup.this, "Permission Granted!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ISBNLookup.this, "Permission Granted!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(isbnLookup.this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ISBNLookup.this, "Permission Denied!", Toast.LENGTH_SHORT).show();
                 }
         }
     }
