@@ -14,8 +14,8 @@
         <activity android:name=".activity.BlockedUsersActivity" />
         <activity android:name=".activity.EditMyProfileActivity" />
         <activity android:name=".activity.ViewMyProfileActivity" />
-        <activity android:name=".activity.viewmybook.AddNewBookActivity" />
-        <activity android:name=".activity.viewmybook.EditBookActivity" />
+        <activity android:name=".activity.myBook.AddNewBookActivity" />
+        <activity android:name=".activity.myBook.EditBookActivity" />
         <activity android:name=".activity.SignUpActivity"/>
         <activity
             android:name=".activity.MainActivity"

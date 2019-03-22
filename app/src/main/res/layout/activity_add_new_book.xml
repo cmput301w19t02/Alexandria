@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.viewmybook.AddNewBookActivity">
+    tools:context=".activity.myBook.AddNewBookActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/add_new_book_toolbar"
@@ -44,8 +44,8 @@
 
             <ImageView
                 android:id="@+id/new_book_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="152dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="60dp"
@@ -64,17 +64,16 @@
                 android:id="@+id/add_book_add_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="82dp"
-                android:layout_marginLeft="82dp"
-                android:layout_marginTop="138dp"
+                android:layout_marginStart="88dp"
+                android:layout_marginLeft="88dp"
+                android:layout_marginTop="108dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:onClick="addPhoto"
                 android:src="@drawable/ic_add_circle"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.534"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/new_book_image" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/add_book_add_title_layout"
