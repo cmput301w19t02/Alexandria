@@ -1,6 +1,9 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
@@ -38,17 +42,12 @@ public class EditMyProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_my_profile);
 
         // toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.edit_my_profile_toolbar);
+        Toolbar toolbar = findViewById(R.id.edit_my_profile_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {   // back button
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     /**
@@ -60,11 +59,11 @@ public class EditMyProfileActivity extends AppCompatActivity {
 
         //TODO password
 
-        editText_name = (EditText) findViewById(R.id.editText_name);
-        editText_username = (EditText) findViewById(R.id.editText_username);
-        //editText_password = (EditText) findViewById(R.id.editText_password);
-        editText_email = (EditText) findViewById(R.id.editText_email);
-        ImageView image_avatar = (ImageView) findViewById(R.id.user_image);
+        editText_name = findViewById(R.id.editText_name);
+        editText_username = findViewById(R.id.editText_username);
+        //editText_password = findViewById(R.id.editText_password);
+        editText_email = findViewById(R.id.editText_email);
+        ImageView image_avatar = findViewById(R.id.user_image);
 
         // sets user info
         userController = UserController.getInstance();
@@ -78,8 +77,8 @@ public class EditMyProfileActivity extends AppCompatActivity {
                 String email = myUserProfile.getEmail();
                 String photoId = myUserProfile.getPicture();
                 runOnUiThread(() -> {
-                    editText_name.setText(username);
-                    editText_username.setText(name);
+                    editText_name.setText(name);
+                    editText_username.setText(username);
                     editText_email.setText(email);
 
                     // sets user image if any
@@ -89,14 +88,19 @@ public class EditMyProfileActivity extends AppCompatActivity {
                             Bitmap bitmap = resultImage;
 
                             if (bitmap != null) {
-                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                                        Math.min(bitmap.getWidth(), bitmap.getHeight()),
+                                        Math.min(bitmap.getWidth(), bitmap.getHeight()));
 
-                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);
-                                drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
+                                        .create(getResources(), squareBitmap);
+                                drawable.setCornerRadius(Math.min(
+                                        bitmap.getWidth(), bitmap.getHeight()));
                                 drawable.setAntiAlias(true);
 
                                 runOnUiThread(() -> {
                                     image_avatar.setImageDrawable(drawable);
+                                    stopSpinner();
                                 });
                             }
                         } else {
@@ -109,7 +113,8 @@ public class EditMyProfileActivity extends AppCompatActivity {
             else {
                 // Show error message
                 showError("Profile is not recognized");
-                myUserProfile = new UserProfile("Unknown","Unknown","Unknown",null,"Unknown");
+                myUserProfile = new UserProfile("Unknown","Unknown",
+                        "Unknown",null,"Unknown");
                 editText_name.setText(myUserProfile.getName());
                 editText_username.setText(myUserProfile.getUsername());
                 editText_email.setText(myUserProfile.getEmail());
@@ -119,11 +124,38 @@ public class EditMyProfileActivity extends AppCompatActivity {
     }
 
     /**
+     * Removes spinner when data is loaded
+     */
+    private void stopSpinner() {
+        ProgressBar spinner = findViewById(R.id.edit_my_profile_spinner);
+        spinner.setVisibility(View.GONE);
+
+        ConstraintLayout mainContent = findViewById(R.id.edit_my_profile_main_content);
+        mainContent.setVisibility(View.VISIBLE);
+    }
+
+    private void startSpinner() {
+        ProgressBar spinner = findViewById(R.id.edit_my_profile_spinner);
+        spinner.setVisibility(View.VISIBLE);
+
+        ConstraintLayout mainContent = findViewById(R.id.edit_my_profile_main_content);
+        mainContent.setVisibility(View.GONE);
+    }
+
+    /**
      * shows toast of an error
      * @param message error message
      */
     private void showError(String message) {
         Toast.makeText(this, "Error: " + message, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * shows message
+     * @param message  message
+     */
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -147,11 +179,25 @@ public class EditMyProfileActivity extends AppCompatActivity {
             // todo password set
             myUserProfile.setEmail(newEmail);
             userController.updateMyProfile(myUserProfile);
-            Toast.makeText(this , "Changes Saved", Toast.LENGTH_LONG).show();
-            finish();
+
+            delayedClose();
         } catch (IllegalArgumentException e) {
             String errorMessage = e.getMessage();
             showError(errorMessage);
         }
+    }
+
+    private void delayedClose() {
+        startSpinner();
+
+
+        int finishTime = 2; //1 sec
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                showMessage("Changes Saved");
+                finish();
+            }
+        }, finishTime * 1000);
     }
 }

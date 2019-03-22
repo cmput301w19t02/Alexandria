@@ -3,6 +3,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +11,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,6 +94,7 @@ public class ViewMyProfileActivity extends AppCompatActivity {
 
                                 runOnUiThread(() -> {
                                     image_avatar.setImageDrawable(drawable);
+                                    stopSpinner();
                                 });
                             }
                         } else {
@@ -110,6 +115,17 @@ public class ViewMyProfileActivity extends AppCompatActivity {
             }
             return null;
         });
+    }
+
+    /**
+     * Removes spinner when data is loaded
+     */
+    private void stopSpinner() {
+        ProgressBar spinner = findViewById(R.id.view_my_profile_spinner);
+        spinner.setVisibility(View.GONE);
+
+        ConstraintLayout mainContent = findViewById(R.id.view_my_profile_main_content);
+        mainContent.setVisibility(View.VISIBLE);
     }
 
     /**
