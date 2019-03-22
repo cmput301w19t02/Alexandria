@@ -69,12 +69,12 @@ public class EditBookActivity extends AddNewBookActivity {
     }
 
     /**
-     * Sets new title. Hides isbn input from the page, as it cannot be changed in
-     * a pre-existent book.
+     * Sets new title. Disallows isbn changes, makes colour grey. Updates save button text
      */
     private void updateUItoEdit() {
-        TextInputLayout ilIsbn = findViewById(R.id.add_book_add_ISBN_layout);
-        ilIsbn.setEnabled(false);
+        AppCompatEditText etIsbn = findViewById(R.id.add_book_add_ISBN_field);
+        etIsbn.setEnabled(false);
+        etIsbn.setTextColor(getResources().getColor(R.color.colorGrey));
 
         ImageView ivScan = findViewById(R.id.image_location);
         ivScan.setVisibility(View.GONE);
