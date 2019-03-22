@@ -6,13 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
+
 /**
  * User model class that allows to get and set information
  * relevant to a user
  */
 public class User {
 
-    private Map<String, String> chatRooms;
+    private Map<String, ChatRoomItem> chatRooms;
     private Map<String, OwnedBook> ownedBooks;
     private Map<String, BorrowedBook> borrowedBooks;
     private UserProfile profile;
@@ -65,7 +67,7 @@ public class User {
      *
      * @return the chat rooms
      */
-    public Map<String, String> getChatRooms() {
+    public Map<String, ChatRoomItem> getChatRooms() {
         return Collections.unmodifiableMap(chatRooms);
     }
 
@@ -74,7 +76,7 @@ public class User {
      *
      * @param chatRooms the chat rooms
      */
-    public void setChatRooms(Map<String, String> chatRooms) {
+    public void setChatRooms(Map<String, ChatRoomItem> chatRooms) {
         if (chatRooms == null){
             throw new IllegalArgumentException("Chat Rooms cannot be null");
         }
@@ -86,10 +88,10 @@ public class User {
      * Add chat room.
      *
      * @param user the user id of the other user
-     * @param uuid the uuid
+     * @param chatRoomItem the uuid
      */
-    public void addChatRoom(String user, String uuid) {
-        this.chatRooms.put(user,uuid);
+    public void addChatRoom(String user, ChatRoomItem chatRoomItem) {
+        this.chatRooms.put(user,chatRoomItem);
     }
 
     /**

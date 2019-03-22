@@ -142,6 +142,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             //TODO make use of actual user name
             case R.id.message_user_option:
+                //TODO: ADD addChatRoom method if chat does not exist
                 Intent intentMain = new Intent(this, MainActivity.class);
                 String fragment_name = "message";
                 intentMain.putExtra("fragment_name", fragment_name);

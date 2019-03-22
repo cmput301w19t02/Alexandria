@@ -29,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
@@ -240,7 +241,9 @@ public class ChatRoomActivity extends AppCompatActivity {
      */
     public void onSendMessageClick(String inputText, String senderId) {
         // TODO move this to chat controller, replace with chat controller methods
-        TextMessage message = new TextMessage(inputText, "unread", "", senderId);
+        Date dateObj = new Date();
+        long date = dateObj.getTime();
+        TextMessage message = new TextMessage(inputText, "unread", date, senderId);
         messagesRef.push().setValue(message);
     }
 
