@@ -15,7 +15,7 @@ public class ImageMessage extends Message {
      * @param date    the date
      * @param sender  the sender
      */
-    public ImageMessage(String content, String status, String /*Date*/date, String sender) {
+    public ImageMessage(String content, String status, Long date, String sender) {
         super("image", content, status, date, sender);
     }
 
