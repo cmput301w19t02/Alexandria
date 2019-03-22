@@ -7,6 +7,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,8 @@ import java9.util.function.Consumer;
  * The Edit book activity.
  */
 public class EditBookActivity extends AddNewBookActivity {
+    public static final String EDIT_BOOK_TITLE = "Edit Book";
+    public static final String ISBN_KEY = "BOOK_ISBN";
     private Book myBook;
     private String title;
     private String author;
@@ -37,18 +40,14 @@ public class EditBookActivity extends AddNewBookActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
 
-        hideIsbn();
+        updateUItoEdit();
 
-        // Set new title
-        TextView tvTitle = findViewById(R.id.add_book_title);
-        String pageTitle = "Edit Book";
-        tvTitle.setText(pageTitle);
-
+        // back button
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v -> finish());
 
         Bundle extras = getIntent().getExtras();
-        if (extras.getString("BOOK_ISBN") == null) {
+        if (extras.getString(ISBN_KEY) == null) {
             isbn = null;
             showError("The ISBN is not provided.");
             finish();
@@ -70,15 +69,23 @@ public class EditBookActivity extends AddNewBookActivity {
     }
 
     /**
-     * hides isbn input from the page, as it cannot be changed in
+     * Sets new title. Hides isbn input from the page, as it cannot be changed in
      * a pre-existent book.
      */
-    private void hideIsbn() {
+    private void updateUItoEdit() {
         TextInputLayout ilIsbn = findViewById(R.id.add_book_add_ISBN_layout);
         ilIsbn.setEnabled(false);
 
         ImageView ivScan = findViewById(R.id.image_location);
         ivScan.setVisibility(View.GONE);
+
+        // Set new title
+        TextView tvTitle = findViewById(R.id.add_book_title);
+        String pageTitle = EDIT_BOOK_TITLE;
+        tvTitle.setText(pageTitle);
+
+        Button saveButton = findViewById(R.id.add_book_save);
+        saveButton.setText(getString(R.string.edit_book_save));
     }
 
     /**
