@@ -76,32 +76,36 @@ public class ViewMyProfileActivity extends AppCompatActivity {
                     textView_email.setText(email);
 
                     // sets user image
-                    ImageController imageController = ImageController.getInstance();
-                    imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
-                        if (errorImage == null) {
-                            Bitmap bitmap = resultImage;
+                    if (photoId == null) {
+                        stopSpinner();
+                    } else {
+                        ImageController imageController = ImageController.getInstance();
+                        imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
+                            if (errorImage == null) {
+                                Bitmap bitmap = resultImage;
 
-                            if (bitmap != null) {
-                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                                        Math.min(bitmap.getWidth(), bitmap.getHeight()),
-                                        Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                if (bitmap != null) {
+                                    Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                                            Math.min(bitmap.getWidth(), bitmap.getHeight()),
+                                            Math.min(bitmap.getWidth(), bitmap.getHeight()));
 
-                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
-                                        .create(getResources(), squareBitmap);
-                                drawable.setCornerRadius(Math.min(
-                                        bitmap.getWidth(), bitmap.getHeight()));
-                                drawable.setAntiAlias(true);
+                                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
+                                            .create(getResources(), squareBitmap);
+                                    drawable.setCornerRadius(Math.min(
+                                            bitmap.getWidth(), bitmap.getHeight()));
+                                    drawable.setAntiAlias(true);
 
-                                runOnUiThread(() -> {
-                                    image_avatar.setImageDrawable(drawable);
-                                    stopSpinner();
-                                });
+                                    runOnUiThread(() -> {
+                                        image_avatar.setImageDrawable(drawable);
+                                        stopSpinner();
+                                    });
+                                }
+                            } else {
+                                showError(errorImage.getMessage());
                             }
-                        } else {
-                            showError(errorImage.getMessage());
-                        }
-                        return null;
-                    });
+                            return null;
+                        });
+                    }
                 });
             }
             else {
