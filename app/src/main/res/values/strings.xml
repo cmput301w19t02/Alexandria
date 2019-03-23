@@ -53,6 +53,8 @@
     <string name="send_description">send_button</string>
     <string name="view_profile_title">View Profile</string>
     <string name="message_hint">Type your message</string>
+    <!-- Strings related to map -->
+    <string name="save_pin">Save Pin Location</string>
     <!-- Strings related to book catalogue -->
     <string name="bc_owners">Availability</string>
     <string name="isbn">ISBN</string>
@@ -64,13 +66,21 @@
     <!-- Strings related to ellipses menu -->
     <string name="view_user">View User</string>
     <string name="message">Message</string>
+    <!-- Strings related to add new book -->
+    <string name="add_a_book">Add a Book</string>
+    <string name="book_title">Book Title</string>
+    <string name="author_name">Author Name</string>
+    <string name="ISBN_num">ISBN #</string>
+    <string name="add_to_library">Add to Library</string>
     <string name="edit_book">Edit Book</string>
     <string name="delete_book">Delete Book</string>
+    <!-- Strings related to book exchange -->
     <string name="cancel_order">Cancel Order</string>
     <string name="set_borrowed">Set Status: Borrowed</string>
     <string name="accept_return">Accept Return</string>
     <string name="accept_request">Accept Request</string>
     <string name="reject_request">Decline Request</string>
+    <string name="edit_book_save">Save Changes</string>
     <!-- Strings related to map -->
     <string name="save_pin">Save Pin Location</string>
 </resources>
