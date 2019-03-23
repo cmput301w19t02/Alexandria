@@ -1,7 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
-import android.os.AsyncTask;
-
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
 import com.algolia.search.saas.Query;
@@ -12,19 +10,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import java9.util.concurrent.CompletableFuture;
-
-import java.net.HttpURLConnection;
 
 /**
  * The type Search controller.
@@ -37,7 +33,6 @@ public class SearchController {
     private static SearchController instance;
     private final String GOOGLE_BOOK_URL = "https://www.googleapis.com/books/v1/volumes?&maxResults=1&projection=lite&q=";
     private final String apiKey = "AIzaSyA0Km9mozkCqNX7N0Sy4V_Uk1OIvxUvRn4";
-    private Book isbnBook;
 
     /**
      * The Books.
@@ -107,24 +102,17 @@ public class SearchController {
         return resultFuture;
     }
 
-    public Book searchIsbn(String isbn) {
-        AsyncTask<String, Void, String> bookSearch = new SearchGoogleBooks().execute(isbn);
+    public CompletableFuture<Book> searchIsbn(String isbn) {
+        final CompletableFuture<Book> resultFuture = new CompletableFuture<>();
 
-        return isbnBook;
-    }
-
-    // information retrieved from https://code.tutsplus.com/tutorials/android-sdk-create-a-book-scanning-app-interface-book-search--mobile-17790
-
-    public class SearchGoogleBooks extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... bookURLs) {
-            //request book info
-//            String book = "";
-            String searchUrl = GOOGLE_BOOK_URL + bookURLs[0] + "&key=" + apiKey;
+        // information retrieved from https://code.tutsplus.com/tutorials/android-sdk-create-a-book-scanning-app-interface-book-search--mobile-17790
+        CompletableFuture.runAsync(() -> {
+            String searchUrl = GOOGLE_BOOK_URL + isbn + "&key=" + apiKey;
 
             StringBuilder bookBuilder = new StringBuilder();
-            bookBuilder.append("{'isbn':" + bookURLs[0] + ",");
+            bookBuilder.append("{'isbn':" + isbn + ",");
+
+            Book resultBook = null;
 
             try {
                 URL url = new URL(searchUrl);
@@ -148,7 +136,7 @@ public class SearchController {
                             if (lineIn.contains("authors")) {
                                 bookBuilder.append("author:");
                             } else {
-                            bookBuilder.append(lineIn);
+                                bookBuilder.append(lineIn);
                             }
                         }
 
@@ -156,27 +144,30 @@ public class SearchController {
                             volumeInfo = true;
                         }
                     }
-                } finally {
+                    resultBook = new Gson().fromJson(bookBuilder.toString(), Book.class);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    resultFuture.completeExceptionally(e);
+                }
+                finally {
                     bookConnection.disconnect();
                 }
 
             } catch (MalformedURLException e) {
-                System.out.println("Failed to create URL object");
                 e.printStackTrace();
+                resultFuture.completeExceptionally(new IOException("Failed to create URL object"));
             } catch (IOException e) {
-                System.out.println("Failed to create URL connection");
                 e.printStackTrace();
+                resultFuture.completeExceptionally(new IOException("Failed to create URL connection"));
             }
 
-            return bookBuilder.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            isbnBook = new Gson().fromJson(result, Book.class);
-        }
-
+            resultFuture.complete(resultBook);
+        });
+        return resultFuture;
     }
+
+
 
 
 }

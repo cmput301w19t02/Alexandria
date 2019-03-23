@@ -22,10 +22,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java9.util.concurrent.CompletableFuture;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ISBNLookup;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 
@@ -306,8 +309,18 @@ public class UserBookFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 Bundle extras = data.getExtras();
                 String isbn = extras.getString("isbn");
-                Book book = ISBNLookup.searchISBN(isbn);
-                System.out.print("==============================" + book);
+                CompletableFuture<Book> resultFuture = SearchController.getInstance().searchIsbn(isbn);
+                resultFuture.handleAsync((result,error)->{
+                   if(error==null){
+                       Book book = result;
+                       System.out.print("==============================" + book);
+                       //TODO implement
+                   }
+                   else{
+                       //TODO show error message
+                   }
+                   return null;
+                });
             }
         }
     }

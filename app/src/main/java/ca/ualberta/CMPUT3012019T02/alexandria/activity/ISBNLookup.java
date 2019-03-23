@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
@@ -14,22 +13,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java9.util.concurrent.CompletableFuture;
-
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
-
-import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
 
 
 public class ISBNLookup extends AppCompatActivity implements ZBarScannerView.ResultHandler {
     private ZBarScannerView mScannerView;
     private final int REQUEST_PERMISSION_PHONE_STATE = 1;
-
-    private static final SearchController searchController = SearchController.getInstance();
 
     @Override
     public void onCreate(Bundle state) {
@@ -68,12 +60,7 @@ public class ISBNLookup extends AppCompatActivity implements ZBarScannerView.Res
         if (!format.equals("ISBN10") && !format.equals("ISBN13")) {
             Toast.makeText(this, "ISBN code not found", Toast.LENGTH_SHORT).show();
             Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mScannerView.resumeCameraPreview(ISBNLookup.this);
-                }
-            }, 1000);
+            handler.postDelayed(() -> mScannerView.resumeCameraPreview(ISBNLookup.this), 1000);
         } else {
             Intent resultIntent = new Intent();
             resultIntent.putExtra("isbn", isbn);
@@ -81,12 +68,6 @@ public class ISBNLookup extends AppCompatActivity implements ZBarScannerView.Res
             finish();
         }
 
-    }
-
-    public static Book searchISBN(String isbn) {
-        Book book = searchController.searchIsbn(isbn);
-
-        return book;
     }
 
     /*
