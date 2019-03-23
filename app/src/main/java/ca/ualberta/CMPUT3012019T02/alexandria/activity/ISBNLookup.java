@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
@@ -13,6 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java9.util.concurrent.CompletableFuture;
+
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
@@ -23,6 +28,8 @@ import ca.ualberta.CMPUT3012019T02.alexandria.R;
 public class ISBNLookup extends AppCompatActivity implements ZBarScannerView.ResultHandler {
     private ZBarScannerView mScannerView;
     private final int REQUEST_PERMISSION_PHONE_STATE = 1;
+
+    private static final SearchController searchController = SearchController.getInstance();
 
     @Override
     public void onCreate(Bundle state) {
@@ -78,7 +85,21 @@ public class ISBNLookup extends AppCompatActivity implements ZBarScannerView.Res
 
     }
 
+    public static void searchISBN(String isbn) {
+        searchController.searchIsbn(isbn);
+        Book book;
 
+//        result.handleAsync((bookResult, error) -> {
+//            if (error == null) {
+//
+//            } else {
+//                error.printStackTrace();
+//            }
+//            return null;
+//        });
+
+//        return book;
+    }
 
     /*
     Permission code implemented from :

@@ -26,6 +26,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ISBNLookup;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 
 import static android.app.Activity.RESULT_OK;
@@ -45,6 +46,8 @@ public class UserBookFragment extends Fragment {
     private String ownerUsername;
     private Bitmap ownerPic;
     private final int RESULT_ISBN = 1;
+
+
 
     @Nullable
     @Override
@@ -303,7 +306,7 @@ public class UserBookFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 Bundle extras = data.getExtras();
                 String isbn = extras.getString("isbn");
-                
+                ISBNLookup.searchISBN(isbn);
             }
         }
     }
