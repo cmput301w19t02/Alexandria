@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -55,12 +58,28 @@ public class ChatRoomActivity extends AppCompatActivity {
     private String chatId;
     private String recieverId;
     private String senderId;
+    private String recieverName;
+    private Bitmap recieverImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
 
+        Intent intent = getIntent();
+        chatId = intent.getStringExtra("chatId");
+        recieverId = intent.getStringExtra("recieverId");
+        recieverName = intent.getStringExtra("recieverName");
+        senderId = UserController.getInstance().getMyId();
+
+        //byte[] byteArray = intent.getByteArrayExtra("image");
+        //recieverImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
+        TextView recieverUserName = (TextView)findViewById(R.id.reciever_username);
+        recieverUserName.setText(recieverName);
+
+        //ImageView recieverImageIcon = (ImageView)findViewById(R.id.reciever_image);
+        //recieverImage.setImageBitmap();
 
         // toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.ChatRoom_toolbar);
@@ -76,11 +95,6 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
 
         // messages
-        Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra("bundle");
-        chatId = bundle.getString("chatId");
-        recieverId = bundle.getString("recieverId");
-        senderId = UserController.getInstance().getMyId();
 
         messagesRef = FirebaseDatabase.getInstance().getReference().child("chatMessages").child(chatId);
         messagesListener = new ValueEventListener() {
@@ -103,7 +117,6 @@ public class ChatRoomActivity extends AppCompatActivity {
 
 
         ImageView sendButton = (ImageView)findViewById(R.id.image_send);
-
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -238,8 +251,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         // TODO move this to chat controller, replace with chat controller methods
         Date date = new Date();
         TextMessage message = new TextMessage(inputText, "unread", date.getTime(), senderId);
-
         chatController.addTextMessage(chatId, message);
+        chatController.setUserChatRoomReadStatus(chatId, recieverId, false);
     }
 
     @Override
@@ -254,6 +267,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 LocationMessage message = new LocationMessage(location, "unread", date.getTime(), senderId);
 
                 chatController.addLocationMessage(chatId, message);
+                chatController.setUserChatRoomReadStatus(chatId, recieverId, false);
                 //TODO: transaction location
             }
             if (resultCode == Activity.RESULT_CANCELED){

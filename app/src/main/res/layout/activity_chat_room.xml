@@ -25,7 +25,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-light"
-            android:text="@string/joe_message"
             android:textColor="@color/colorYellow"
             android:textSize="24sp"
             tools:layout_editor_absoluteX="135dp"

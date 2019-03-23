@@ -15,6 +15,8 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ChatRoomActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ChatController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.ChatViewHolder;
 
@@ -26,6 +28,9 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
 
     private Context mContext;
     private List<ChatRoomItem> mChatRoomList;
+
+    private UserController userController = UserController.getInstance();
+    private ChatController chatController = ChatController.getInstance();
 
     /**
      * Instantiates a new Chat recycler view adapter.
@@ -52,18 +57,28 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
             @Override
             public void onClick(View v) {
 
+                String chatId = mChatRoomList.get(mViewHolder.getAdapterPosition()).getChatId();
+                String myId = userController.getMyId();
+                String recieverId = mChatRoomList.get(mViewHolder.getAdapterPosition())
+                        .getUser1Id();
+                String recieverName = mChatRoomList.get(mViewHolder.getAdapterPosition())
+                        .getUser1Name();
+
+                if (recieverId.equals(myId)) {
+                    recieverId = mChatRoomList.get(mViewHolder.getAdapterPosition()).getUser2Id();
+                    recieverName = mChatRoomList.get(mViewHolder.getAdapterPosition())
+                            .getUser2Name();
+                }
+
+
                 Intent intent = new Intent(viewGroup.getContext(), ChatRoomActivity.class);
-                Bundle bundle = new Bundle();
+                intent.putExtra("chatId", chatId);
+                intent.putExtra("recieverId", recieverId);
+                intent.putExtra("recieverName", recieverName);
+                //TODO: add imageId to display in ChatRoom
+                //intent.putExtra("imageId", imageId);
 
-                //TODO UNCOMMENT
-                //bundle.putString("chatId", mChatRoomList.get(mViewHolder.getAdapterPosition()).getChatRoomId());
-                bundle.putString("chatId", "Testasdf1234");
-                bundle.putString("recieverId", mChatRoomList.get(mViewHolder
-                        .getAdapterPosition()).getUser2Id());
-                intent.putExtra("bundle", bundle);
-
-                Log.d("CHAT_ADAPTER", "chatRoomID: "+ mChatRoomList
-                        .get(mViewHolder.getAdapterPosition()).getChatId());
+                chatController.setUserChatRoomReadStatus(chatId, myId, true);
                 mContext.startActivity(intent);
             }
         });

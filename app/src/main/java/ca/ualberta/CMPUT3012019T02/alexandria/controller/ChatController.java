@@ -80,7 +80,7 @@ public class ChatController {
         return future;
     }
 
-    public void setChatRoomReadStatus(String chatId, String otherUserId, boolean status) {
+    public void setUserChatRoomReadStatus(String chatId, String otherUserId, boolean status) {
         setChatRoomReadStatusPrivate(chatId, otherUserId, status);
     }
 
