@@ -56,7 +56,7 @@ public class MyBookUserListFragment extends Fragment {
                 if (chatRoomId == null) {
                     //TODO: Start spinner
                     CompletableFuture<Void> addChatRoom = chatController.addChatRoom(userController.getMyId(), userId, userName);
-                    if (addChatRoom.get().equals(Void.TYPE)) {
+                    addChatRoom.thenRun(()-> {
                         //TODO: stop spinner
                         Intent intentChatRoom = new Intent(getContext(), ChatRoomActivity.class);
                         Bundle bundle = new Bundle();
@@ -64,7 +64,7 @@ public class MyBookUserListFragment extends Fragment {
                         bundle.putString("recieverId", userId);
                         intentChatRoom.putExtra("bundle", bundle);
                         startActivity(intentChatRoom);
-                    }
+                    });
                 } else {
                     Intent intentChatRoom = new Intent(getContext(), ChatRoomActivity.class);
                     Bundle bundle = new Bundle();

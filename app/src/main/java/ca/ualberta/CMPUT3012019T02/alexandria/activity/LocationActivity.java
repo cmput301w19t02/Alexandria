@@ -16,15 +16,12 @@
 
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -53,7 +50,6 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private Location mLastKnownLocation;
 
     private FusedLocationProviderClient mFusedLocationProviderClient;
-
 
     // Default location (Edmonton, AB) assuming permissions are denied
     private final LatLng mDefaultLocation = new LatLng(53.5444,-113.4909);
@@ -124,6 +120,12 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             @Override
             public void onClick(View v) {
                 //TODO: Set chat controller method call for location message
+                Intent intent = new Intent();
+                double lat = mLastKnownLocation.getLatitude();
+                double lng = mLastKnownLocation.getLongitude();
+                intent.putExtra("lat", lat);
+                intent.putExtra("lng", lng);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });

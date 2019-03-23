@@ -152,7 +152,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                 if (chatRoomId == null) {
                     //TODO: Start spinner
                     CompletableFuture<Void> addChatRoom = chatController.addChatRoom(userController.getMyId(), userID, username);
-                    if (addChatRoom.get().equals(Void.TYPE)) {
+                    addChatRoom.thenRun(()-> {
                         //TODO: stop spinner
                         Intent intentChatRoom = new Intent(this, ChatRoomActivity.class);
                         Bundle bundle = new Bundle();
@@ -160,7 +160,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                         bundle.putString("recieverId", userID);
                         intentChatRoom.putExtra("bundle", bundle);
                         startActivity(intentChatRoom);
-                    }
+                    });
                 } else {
                     Intent intentChatRoom = new Intent(this, ChatRoomActivity.class);
                     Bundle bundle = new Bundle();

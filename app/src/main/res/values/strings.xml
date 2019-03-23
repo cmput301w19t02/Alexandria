@@ -81,6 +81,4 @@
     <string name="accept_request">Accept Request</string>
     <string name="reject_request">Decline Request</string>
     <string name="edit_book_save">Save Changes</string>
-    <!-- Strings related to map -->
-    <string name="save_pin">Save Pin Location</string>
 </resources>

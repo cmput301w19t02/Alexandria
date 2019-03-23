@@ -44,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
             showError("Password is invalid! Password must contain at least 8 characters.");
             return;
         }
-
         CompletableFuture<Void> future = userController.authenticate(username,password);
 
         future.handleAsync((result, error) -> {

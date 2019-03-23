@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -21,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,8 +31,10 @@ import java.util.Date;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ChatController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.MessageRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.Location;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.LocationMessage;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.TextMessage;
@@ -45,6 +45,8 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.message.TextMessage;
 public class ChatRoomActivity extends AppCompatActivity {
 
     static final int MEET_LOCATION_REQUEST = 1;
+
+    private ChatController chatController = ChatController.getInstance();
 
     private DatabaseReference messagesRef;
     private ValueEventListener messagesListener;
@@ -221,13 +223,8 @@ public class ChatRoomActivity extends AppCompatActivity {
      *
      */
     public void onAddLocationClick() {
-        // TODO: add last known location for transaction
-        // get latest location info and put into bundle, if we store this
-        // Start LocationActivity with Bundle
-        // After Fragment finishes, set Location message data from placed pin
         Intent intent = new Intent(this, LocationActivity.class);
-        startActivity(intent);
-        //startActivityForResult(intent, MEET_LOCATION_REQUEST);
+        startActivityForResult(intent, MEET_LOCATION_REQUEST);
     }
 
 
@@ -239,30 +236,29 @@ public class ChatRoomActivity extends AppCompatActivity {
      */
     public void onSendMessageClick(String inputText, String senderId) {
         // TODO move this to chat controller, replace with chat controller methods
-        Date dateObj = new Date();
-        long date = dateObj.getTime();
-        TextMessage message = new TextMessage(inputText, "unread", date, senderId);
-        messagesRef.push().setValue(message);
+        Date date = new Date();
+        TextMessage message = new TextMessage(inputText, "unread", date.getTime(), senderId);
+
+        chatController.addTextMessage(chatId, message);
     }
 
-    /*
     @Override
     protected void onActivityResult(int requestCode,int resultCode, Intent returnIntent) {
         if (requestCode == MEET_LOCATION_REQUEST){
             if (resultCode == Activity.RESULT_OK){
+                double lat = returnIntent.getExtras().getDouble("lat");
+                double lng = returnIntent.getExtras().getDouble("lng");
 
-                //double lat = returnIntent.getExtras().getDouble("latitude");
-                //double lng = returnIntent.getExtras().getDouble("longitude");
-                //String location = lat + "," + lng;
-                Location location = returnIntent.getParcelableExtra("location");
-                LocationMessage message = new LocationMessage(location, "unread", "", senderId);
-                messagesRef.push().setValue(message);
-                //Set up transaction location
+                Location location = new Location(lat, lng);
+                Date date = new Date();
+                LocationMessage message = new LocationMessage(location, "unread", date.getTime(), senderId);
+
+                chatController.addLocationMessage(chatId, message);
+                //TODO: transaction location
             }
             if (resultCode == Activity.RESULT_CANCELED){
                 Toast.makeText(this , "No Location Added", Toast.LENGTH_LONG).show();
             }
         }
     }
-    */
 }

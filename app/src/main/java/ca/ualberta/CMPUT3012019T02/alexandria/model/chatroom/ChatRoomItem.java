@@ -10,11 +10,11 @@ import java.util.Map;
  */
 public class ChatRoomItem {
 
+    private String chatId;
     private String user1Id;
     private String user1Name;
     private String user2Id;
     private String user2Name;
-    private String chatId;
     private boolean readStatus;
 
     /**
