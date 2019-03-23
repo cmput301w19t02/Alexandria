@@ -111,18 +111,26 @@ public class MyBookFragment extends Fragment {
     }
 
     private Fragment fragmentSelector() {
+        Bundle bundle = new Bundle();
+
+        bundle.putString("status", status);
+        bundle.putString("isbn", isbn);
         switch (status) {
             case "available":
-                return new MyBookUserListFragment();
+                MyBookUserListFragment availableListFragment = new MyBookUserListFragment();
+                availableListFragment.setArguments(bundle);
+                return availableListFragment;
             case "requested":
-                return new MyBookUserListFragment();
+                MyBookUserListFragment requestedListFragment = new MyBookUserListFragment();
+                requestedListFragment.setArguments(bundle);
+                return requestedListFragment;
             case "accepted":
                 MyBookTransactionFragment fragment = new MyBookTransactionFragment();
-                fragment.setVariables(status,isbn);
+                fragment.setArguments(bundle);
                 return fragment;
             case "borrowed":
                 fragment = new MyBookTransactionFragment();
-                fragment.setVariables(status,isbn);
+                fragment.setArguments(bundle);
                 return fragment;
             default:
                 throw new RuntimeException("Status out of bounds");

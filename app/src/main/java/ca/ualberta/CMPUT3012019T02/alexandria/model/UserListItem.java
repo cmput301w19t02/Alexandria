@@ -1,11 +1,11 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model;
 
-import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 //List Item for MyBookFragment's UserRecyclerViewAdapter
 public class UserListItem {
 
-    private Bitmap borrowerPic;
+    private Drawable borrowerPic;
     private String borrowerUsername;
     private String isbn;
     private String borrowerId;
@@ -14,7 +14,7 @@ public class UserListItem {
     }
 
     public UserListItem(
-            Bitmap borrowerPic, String borrowerUsername, String isbn, String borrowerId) {
+            Drawable borrowerPic, String borrowerUsername, String isbn, String borrowerId) {
 
         this.borrowerPic = borrowerPic;
         this.borrowerUsername = borrowerUsername;
@@ -22,11 +22,11 @@ public class UserListItem {
         this.borrowerId = borrowerId;
     }
 
-    public Bitmap getBorrowerPic() {
+    public Drawable getBorrowerPic() {
         return borrowerPic;
     }
 
-    public void setBorrowerPic(Bitmap borrowerPic) {
+    public void setBorrowerPic(Drawable borrowerPic) {
         this.borrowerPic = borrowerPic;
     }
 
