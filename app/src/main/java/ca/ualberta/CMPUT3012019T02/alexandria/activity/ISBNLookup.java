@@ -86,16 +86,6 @@ public class ISBNLookup extends AppCompatActivity implements ZBarScannerView.Res
     public static Book searchISBN(String isbn) {
         Book book = searchController.searchIsbn(isbn);
 
-
-//        result.handleAsync((bookResult, error) -> {
-//            if (error == null) {
-//
-//            } else {
-//                error.printStackTrace();
-//            }
-//            return null;F
-//        });
-
         return book;
     }
 
