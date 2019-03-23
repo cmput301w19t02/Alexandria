@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Date;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
@@ -40,7 +41,7 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageView
         View mView;
 
         mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.item_message, viewGroup, false);
+                .inflate(R.layout.item_message_recieve, viewGroup, false);
         MessageViewHolder mViewHolder = new MessageViewHolder(mView);
 
         return mViewHolder;
@@ -48,8 +49,8 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageView
 
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder myViewHolder, int position) {
-
-        myViewHolder.tvSenderUsername.setText(mMessageList.get(position).getSender());
+        Date date = new Date(mMessageList.get(position).getDate());
+        myViewHolder.tvSendTime.setText(date.toString());
         myViewHolder.tvContent.setText(mMessageList.get(position).getContent());
     }
 
