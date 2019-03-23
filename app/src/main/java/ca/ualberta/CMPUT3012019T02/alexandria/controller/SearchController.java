@@ -37,6 +37,7 @@ public class SearchController {
     private static SearchController instance;
     private final String GOOGLE_BOOK_URL = "https://www.googleapis.com/books/v1/volumes?&maxResults=1&projection=lite&q=";
     private final String apiKey = "AIzaSyA0Km9mozkCqNX7N0Sy4V_Uk1OIvxUvRn4";
+    private Book isbnBook;
 
     /**
      * The Books.
@@ -106,10 +107,10 @@ public class SearchController {
         return resultFuture;
     }
 
-    public void searchIsbn(String isbn) {
+    public Book searchIsbn(String isbn) {
         AsyncTask<String, Void, String> bookSearch = new SearchGoogleBooks().execute(isbn);
 
-//        return
+        return isbnBook;
     }
 
     // information retrieved from https://code.tutsplus.com/tutorials/android-sdk-create-a-book-scanning-app-interface-book-search--mobile-17790
@@ -123,6 +124,7 @@ public class SearchController {
             String searchUrl = GOOGLE_BOOK_URL + bookURLs[0] + "&key=" + apiKey;
 
             StringBuilder bookBuilder = new StringBuilder();
+            bookBuilder.append("{'isbn':" + bookURLs[0] + ",");
 
             try {
                 URL url = new URL(searchUrl);
@@ -135,8 +137,24 @@ public class SearchController {
                     BufferedReader bookReader = new BufferedReader(bookInput);
 
                     String lineIn;
-                    while ((lineIn=bookReader.readLine())!=null) {
-                        bookBuilder.append(lineIn);
+                    Boolean volumeInfo = false;
+                    while ((lineIn = bookReader.readLine())!= null) {
+                        if (lineIn.contains("]") && volumeInfo) {
+                            volumeInfo = false;
+                            bookBuilder.append("}");
+                        }
+
+                        if (volumeInfo) {
+                            if (lineIn.contains("authors")) {
+                                bookBuilder.append("author:");
+                            } else {
+                            bookBuilder.append(lineIn);
+                            }
+                        }
+
+                        if (lineIn.contains("volumeInfo")) {
+                            volumeInfo = true;
+                        }
                     }
                 } finally {
                     bookConnection.disconnect();
@@ -149,13 +167,13 @@ public class SearchController {
                 System.out.println("Failed to create URL connection");
                 e.printStackTrace();
             }
-            String book = bookBuilder.toString();
+
             return bookBuilder.toString();
         }
 
         @Override
         protected void onPostExecute(String result) {
-            System.out.println(result);
+            isbnBook = new Gson().fromJson(result, Book.class);
         }
 
     }

@@ -61,8 +61,6 @@ public class ISBNLookup extends AppCompatActivity implements ZBarScannerView.Res
     public void handleResult(Result rawResult) {
         String format = rawResult.getBarcodeFormat().getName();
         String isbn = rawResult.getContents();
-        System.out.println("================================================== Contents = " + isbn +
-                ", Format = " + format + "==================================================");
         // Note:
         // * Wait 2 seconds to resume the preview.
         // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
@@ -85,9 +83,9 @@ public class ISBNLookup extends AppCompatActivity implements ZBarScannerView.Res
 
     }
 
-    public static void searchISBN(String isbn) {
-        searchController.searchIsbn(isbn);
-        Book book;
+    public static Book searchISBN(String isbn) {
+        Book book = searchController.searchIsbn(isbn);
+
 
 //        result.handleAsync((bookResult, error) -> {
 //            if (error == null) {
@@ -95,10 +93,10 @@ public class ISBNLookup extends AppCompatActivity implements ZBarScannerView.Res
 //            } else {
 //                error.printStackTrace();
 //            }
-//            return null;
+//            return null;F
 //        });
 
-//        return book;
+        return book;
     }
 
     /*
