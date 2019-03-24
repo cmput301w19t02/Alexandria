@@ -151,17 +151,14 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                 String chatRoomId = userCache.getChatRoomId(userID);
                 if (chatRoomId == null) {
                     //TODO: Start spinner
-                    CompletableFuture<Void> addChatRoom = chatController.addChatRoom(userController.getMyId(), userID, username);
-                    addChatRoom.thenRun(()-> {
+                    CompletableFuture<String> addChatRoom = chatController.addChatRoom(userController.getMyId(), userID, username);
+                    addChatRoom.thenAccept(chatId -> {
                         //TODO: stop spinner
                         Intent intentChatRoom = new Intent(this, ChatRoomActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("chatId", chatRoomId);
-                        bundle.putString("recieverId", userID);
-                        intentChatRoom.putExtra("bundle", bundle);
-                        addChatRoom.complete(null);
+                        intentChatRoom.putExtra("chatId", chatId);
+                        intentChatRoom.putExtra("recieverId", userID);
+                        intentChatRoom.putExtra("recieverName", username);
                         startActivity(intentChatRoom);
-
                     });
                 } else {
                     Intent intentChatRoom = new Intent(this, ChatRoomActivity.class);

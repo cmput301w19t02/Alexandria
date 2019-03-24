@@ -72,14 +72,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         receiverName = intent.getStringExtra("receiverName");
         senderId = UserController.getInstance().getMyId();
 
-        //byte[] byteArray = intent.getByteArrayExtra("image");
-        //receiverImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-
         TextView receiverUserName = (TextView)findViewById(R.id.receiver_username);
         receiverUserName.setText(receiverName);
-
-        //ImageView receiverImageIcon = (ImageView)findViewById(R.id.receiver_image);
-        //receiverImage.setImageBitmap();
 
         // toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.ChatRoom_toolbar);

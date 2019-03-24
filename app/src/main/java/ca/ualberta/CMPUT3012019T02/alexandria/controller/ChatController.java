@@ -46,33 +46,35 @@ public class ChatController {
      * @param receiverId the person I want to message's id
      * @return the completable future
      */
-    public CompletableFuture<Void> addChatRoom(String senderId, String receiverId,
+    public CompletableFuture<String> addChatRoom(String senderId, String receiverId,
                                                String receiverName) {
         return addChatRoomPrivate(senderId, receiverId, receiverName);
     }
 
-    private CompletableFuture<Void> addChatRoomPrivate(String senderId, String receiverId,
+    private CompletableFuture<String> addChatRoomPrivate(String senderId, String receiverId,
                                                        String receiverName) {
-        CompletableFuture<Void> future = new CompletableFuture<>();
+        CompletableFuture<String> future = new CompletableFuture<>();
         String chatRoomExists = userCache.getChatRoomId(receiverId);
 
         if (chatRoomExists == null) {
             String senderName = userCache.getProfile().getName();
-            String chatId = getUserChatRoomListReference(senderId).push().getKey();
+            String chatId = getNewChatRoomId(senderId);
             ChatRoomItem chatRoomItem = new ChatRoomItem(chatId, senderId, senderName, receiverId,
                     receiverName, false);
 
-            addChatRoomItemToId(senderId, chatId, chatRoomItem).thenRun(() ->
-                addChatRoomItemToId(receiverId, chatId, chatRoomItem).join())
-                    .exceptionally(throwable -> {
-                        future.completeExceptionally(throwable);
-                        return null;
-                    }).thenAccept(future::complete);
+            CompletableFuture<Void> combinedFuture = CompletableFuture
+                    .allOf(addChatRoomItemToId(senderId, chatId, chatRoomItem),
+                            addChatRoomItemToId(receiverId, chatId, chatRoomItem));
+            combinedFuture.join();
+            future.completedFuture(chatId);
             return future;
         } else {
-            future.complete(null);
-            return future;
+            return future.completedFuture(null);
         }
+    }
+
+    private String getNewChatRoomId(String userId) {
+        return getUserChatRoomListReference(userId).push().getKey();
     }
 
     private CompletableFuture<Void> addChatRoomItemToId(String userId, String chatId,
