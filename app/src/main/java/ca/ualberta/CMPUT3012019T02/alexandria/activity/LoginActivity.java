@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         AppCompatEditText usernameField = findViewById(R.id.login_usernname_field);
         AppCompatEditText passwordField = findViewById(R.id.login_password_field);
 
-        String username = usernameField.getText().toString();
+        String username = usernameField.getText().toString().trim();
         String password = passwordField.getText().toString();
 
         if (!validateUsername(username)) {

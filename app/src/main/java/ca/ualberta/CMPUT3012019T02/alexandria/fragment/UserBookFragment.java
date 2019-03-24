@@ -40,6 +40,8 @@ import static android.app.Activity.RESULT_OK;
 
 public class UserBookFragment extends Fragment {
 
+    private ImageController imageController = ImageController.getInstance();
+
     private String coverId;
     private String title;
     private String author;
@@ -131,8 +133,15 @@ public class UserBookFragment extends Fragment {
         tvAuthor.setText(author);
         tvIsbn.setText(isbn);
 
-        //TODO Get image via coverId
-        //ivCover.setImageBitmap(cover);
+        imageController.getImage(coverId).handleAsync((result,error)->{
+            if(error==null){
+                ivCover.setImageBitmap(result);
+            }
+            else{
+                showError("Failed to get image from server");
+            }
+            return null;
+        });
 
         // sets owner name and avatar
         UserController userController = UserController.getInstance();
@@ -179,7 +188,7 @@ public class UserBookFragment extends Fragment {
     }
 
     /**
-     * throws and error in toast
+     * Shows an error message in toast
      * @param message error message
      */
     private void showError(String message) {

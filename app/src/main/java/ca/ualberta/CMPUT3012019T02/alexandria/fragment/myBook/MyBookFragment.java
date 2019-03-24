@@ -15,10 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 
 public class MyBookFragment extends Fragment {
+
+    private ImageController imageController = ImageController.getInstance();
 
     private String coverId;
     private String title;
@@ -99,8 +103,15 @@ public class MyBookFragment extends Fragment {
         tvAuthor.setText(author);
         tvIsbn.setText(isbn);
 
-        //TODO grab cover using ID
-        //ivCover.setImageBitmap(cover);
+        imageController.getImage(coverId).handleAsync((result,error)->{
+            if(error==null){
+                ivCover.setImageBitmap(result);
+            }
+            else{
+                showError("Failed to get image from server");
+            }
+          return null;
+        });
 
         //This is needed due to the way the UI is designed
         //Will set the title for only the Recycler view
@@ -143,6 +154,15 @@ public class MyBookFragment extends Fragment {
             getChildFragmentManager()
                     .beginTransaction().replace(R.id.my_book_fragment_container, fragment).commit();
         }
+    }
+
+    /**
+     * Shows an error message in toast
+     *
+     * @param message error message
+     */
+    private void showError(String message) {
+        Toast.makeText(getView().getContext(), "Error: " + message, Toast.LENGTH_LONG).show();
     }
 
     //TODO Implement, will probably need data bundled again

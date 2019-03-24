@@ -151,13 +151,8 @@ public class MyBookUserListFragment extends Fragment {
 
     }
 
-    //sets the isbn via parent fragment
-    public void setVariables(String isbn) {
-        this.isbn = isbn;
-    }
-
     /**
-     * throws and error in toast
+     * Shows an error message in toast
      *
      * @param message error message
      */
