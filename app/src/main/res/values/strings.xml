@@ -55,6 +55,7 @@
     <string name="message_hint">Type your message</string>
     <!-- Strings related to map -->
     <string name="save_pin">Save Pin Location</string>
+    <string name="place_pin">Place A Pin</string>
     <!-- Strings related to book catalogue -->
     <string name="bc_owners">Availability</string>
     <string name="isbn">ISBN</string>

@@ -59,6 +59,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private String senderId;
     private String receiverName;
     private Bitmap receiverImage;
+    private MessageRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,20 +143,20 @@ public class ChatRoomActivity extends AppCompatActivity {
         super.onStart();
 
         RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.message_recycler);
-        MessageRecyclerViewAdapter adapter = new MessageRecyclerViewAdapter(this, messageList);
+        adapter = new MessageRecyclerViewAdapter(this, messageList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
         mRecyclerView.setAdapter(adapter);
-        mRecyclerView.scrollToPosition(messageList.size()-1);
+
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 adapter.updateMessageList(messageList);
                 adapter.notifyDataSetChanged();
-                handler.postDelayed(this, 2000);
+                handler.postDelayed(this, 500);
             }
-        }, 2000);
-
+        }, 500);
     }
 
     @Override
@@ -249,7 +250,6 @@ public class ChatRoomActivity extends AppCompatActivity {
      * @param senderId  the sender id
      */
     public void onSendMessageClick(String inputText, String senderId) {
-        // TODO move this to chat controller, replace with chat controller methods
         Date date = new Date();
         TextMessage message = new TextMessage(inputText, "unread", date.getTime(), senderId);
         chatController.addTextMessage(chatId, message);
@@ -262,13 +262,16 @@ public class ChatRoomActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK){
                 double lat = returnIntent.getExtras().getDouble("lat");
                 double lng = returnIntent.getExtras().getDouble("lng");
-
+                //TODO: get and save image to message
                 Location location = new Location(lat, lng);
                 Date date = new Date();
                 LocationMessage message = new LocationMessage(location, "unread", date.getTime(), senderId);
 
                 chatController.addLocationMessage(chatId, message);
                 chatController.setUserChatRoomReadStatus(chatId, receiverId, false);
+                messageList.add(message);
+                adapter.updateMessageList(messageList);
+                adapter.notifyDataSetChanged();
                 //TODO: transaction location
             }
             if (resultCode == Activity.RESULT_CANCELED){

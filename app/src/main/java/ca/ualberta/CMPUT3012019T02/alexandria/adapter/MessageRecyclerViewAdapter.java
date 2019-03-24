@@ -46,6 +46,7 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter {
         Message message = (Message) mMessageList.get(position);
         String myId = userController.getMyId();
         String senderId = message.getSender();
+        //TODO: message type check
         if (myId.equals(senderId)) {
             return SENT;
         } else {
@@ -68,7 +69,7 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter {
                     .inflate(R.layout.item_message_received, viewGroup, false);
             return new ReceivedMessageViewHolder(mView);
         }
-
+        //TODO: location message check and onClickListeners
 
     }
 

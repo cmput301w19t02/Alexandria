@@ -16,6 +16,7 @@
 
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -23,6 +24,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -89,6 +91,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         updateLocationUI();
         getDeviceLocation();
 
+        /*
         // check if location permission is accepted or not
         if (mLocationPermissionGranted) {
             // get current location and put a pin
@@ -99,6 +102,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             // set pin to default location
             mMap.addMarker(new MarkerOptions().position(mDefaultLocation).draggable(true));
         }
+
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
             public void onMarkerDragStart(Marker marker) {}
@@ -113,18 +117,52 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                 mLastKnownLocation.setLongitude(position.longitude);
             }
         });
+           */
+
+        Button placePin = (Button)findViewById(R.id.button_place_pin);
+        placePin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mLocationPermissionGranted) {
+                    // get current location and put a pin
+                    LatLng lastPosition = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(lastPosition).draggable(true));
+                    mMap.addMarker(new MarkerOptions().position(mDefaultLocation).draggable(true));
+                } else {
+                    // set pin to default location
+                    mMap.addMarker(new MarkerOptions().position(mDefaultLocation).draggable(true));
+                }
+                mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                    @Override
+                    public void onMarkerDragStart(Marker marker) {}
+
+                    @Override
+                    public void onMarkerDrag(Marker marker) {}
+
+                    @Override
+                    public void onMarkerDragEnd(Marker marker) {
+                        LatLng position = marker.getPosition();
+                        mLastKnownLocation.setLatitude(position.latitude);
+                        mLastKnownLocation.setLongitude(position.longitude);
+                    }
+                });
+            }
+        });
 
         // Save current pin location to the location message
         Button savePin = (Button)findViewById(R.id.button_save_pin);
         savePin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Set chat controller method call for location message
+
                 Intent intent = new Intent();
                 double lat = mLastKnownLocation.getLatitude();
                 double lng = mLastKnownLocation.getLongitude();
                 intent.putExtra("lat", lat);
                 intent.putExtra("lng", lng);
+                //TODO: start spinner
+                //TODO: async request to get static map image from Maps Static API
+                //TODO: tranform image into whatever it needs to be to go into an intent
                 setResult(RESULT_OK, intent);
                 finish();
             }
@@ -143,23 +181,6 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
          */
         try {
             if (mLocationPermissionGranted) {
-                Log.d("LOCATION ACTIVITY",  "Have location permissions, getting device location");
-                /*
-                mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, location -> {
-                   if (location != null){
-                       try {
-                           mLastKnownLocation.setLatitude(location.getLatitude());
-                           mLastKnownLocation.setLongitude(location.getLongitude());
-                           LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                           mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
-                           Log.d("LOCATION ACTIVITY", "location" + mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude());
-                       } catch (Exception e) {
-                           Log.e("Exception:", "location was null");
-                       }
-                    }
-                });
-                */
-
                 Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
                 locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
                     @Override
@@ -231,6 +252,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         }
         updateLocationUI();
     }
+
 
     /**
      * Updates the map's UI settings based on whether the user has granted location permission.
