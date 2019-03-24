@@ -33,10 +33,13 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintBottom_toTopOf="@+id/add_book_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/add_new_book_toolbar"
-        app:layout_constraintVertical_bias="1.0"
-        tools:layout_editor_absoluteX="387dp">
+        app:layout_constraintVertical_bias="1.0">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -48,7 +51,7 @@
                 android:layout_height="152dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:contentDescription="@string/image_desc"
@@ -66,12 +69,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="88dp"
                 android:layout_marginLeft="88dp"
-                android:layout_marginTop="108dp"
+                android:layout_marginTop="120dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:onClick="addPhoto"
                 android:src="@drawable/ic_add_circle"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.542"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/new_book_image" />
 
@@ -81,6 +85,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/new_book_image">
 
                 <android.support.v7.widget.AppCompatEditText
