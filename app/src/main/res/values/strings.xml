@@ -80,4 +80,5 @@
     <string name="reject_request">Decline Request</string>
     <string name="edit_book_save">Save Changes</string>
     <string name="isbn_scanner">ISBN Scanner</string>
+    <string name="view_image_title">View Image</string>
 </resources>
