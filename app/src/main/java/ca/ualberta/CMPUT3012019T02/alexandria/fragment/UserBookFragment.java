@@ -22,10 +22,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java9.util.concurrent.CompletableFuture;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ISBNLookup;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Implements UserBookRecyclerView
@@ -41,6 +48,9 @@ public class UserBookFragment extends Fragment {
     private String ownerId;
     private String ownerUsername;
     private Bitmap ownerPic;
+    private final int RESULT_ISBN = 1;
+
+
 
     @Nullable
     @Override
@@ -277,7 +287,9 @@ public class UserBookFragment extends Fragment {
             case "available": break;
             case "requested": break;
             case "accepted": break;
-            case "borrowed": break;
+            case "borrowed":
+                Intent intent = new Intent(getActivity(), ISBNLookup.class);
+                startActivityForResult(intent, RESULT_ISBN);
         }
 
     }
@@ -287,4 +299,30 @@ public class UserBookFragment extends Fragment {
     private void onClickTempButton() {
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        // Check which request we're responding to
+        if (requestCode == RESULT_ISBN) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                String isbn = extras.getString("isbn");
+                CompletableFuture<Book> resultFuture = SearchController.getInstance().searchIsbn(isbn);
+                resultFuture.handleAsync((result,error)->{
+                   if(error==null){
+                       Book book = result;
+                       System.out.print("==============================" + book);
+                       //TODO implement
+                   }
+                   else{
+                       //TODO show error message
+                   }
+                   return null;
+                });
+            }
+        }
+    }
+
 }

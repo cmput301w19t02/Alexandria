@@ -1,5 +1,9 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
+import android.app.Application;
+import android.content.res.Resources;
+import android.view.View;
+
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
 import com.algolia.search.saas.Query;
@@ -10,8 +14,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.App;
+import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import java9.util.concurrent.CompletableFuture;
 
@@ -24,6 +37,9 @@ public class SearchController {
     private Index index;
     private Gson gson;
     private static SearchController instance;
+    private final String GOOGLE_BOOK_URL = "https://www.googleapis.com/books/v1/volumes?&maxResults=1&projection=lite&q=";
+    private final String booksApiKey = App.getContext().getResources().getString(R.string.google_books_api_key);
+
     /**
      * The Books.
      */
@@ -31,7 +47,7 @@ public class SearchController {
 
 
     private SearchController() {
-        client = new Client("9ETLQT0YZC", "7c5462a00988e4152996bac591236760");
+        client = new Client("9ETLQT0YZC", App.getContext().getResources().getString(R.string.algolia_api_key));
         index = client.getIndex("search");
         try {
             index.setSettingsAsync(new JSONObject().put(
@@ -91,5 +107,73 @@ public class SearchController {
 
         return resultFuture;
     }
+
+    public CompletableFuture<Book> searchIsbn(String isbn) {
+        final CompletableFuture<Book> resultFuture = new CompletableFuture<>();
+
+        // information retrieved from https://code.tutsplus.com/tutorials/android-sdk-create-a-book-scanning-app-interface-book-search--mobile-17790
+        CompletableFuture.runAsync(() -> {
+            String searchUrl = GOOGLE_BOOK_URL + isbn + "&key=" + booksApiKey;
+
+            StringBuilder bookBuilder = new StringBuilder();
+            bookBuilder.append("{'isbn':" + isbn + ",");
+
+            Book resultBook = null;
+
+            try {
+                URL url = new URL(searchUrl);
+                HttpURLConnection bookConnection = (HttpURLConnection) url.openConnection();
+
+                try {
+                    InputStream in = bookConnection.getInputStream();
+
+                    InputStreamReader bookInput = new InputStreamReader(in);
+                    BufferedReader bookReader = new BufferedReader(bookInput);
+
+                    String lineIn;
+                    Boolean volumeInfo = false;
+                    while ((lineIn = bookReader.readLine())!= null) {
+                        if (lineIn.contains("]") && volumeInfo) {
+                            volumeInfo = false;
+                            bookBuilder.append("}");
+                        }
+
+                        if (volumeInfo) {
+                            if (lineIn.contains("authors")) {
+                                bookBuilder.append("author:");
+                            } else {
+                                bookBuilder.append(lineIn);
+                            }
+                        }
+
+                        if (lineIn.contains("volumeInfo")) {
+                            volumeInfo = true;
+                        }
+                    }
+                    resultBook = new Gson().fromJson(bookBuilder.toString(), Book.class);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    resultFuture.completeExceptionally(e);
+                }
+                finally {
+                    bookConnection.disconnect();
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                resultFuture.completeExceptionally(new IOException("Failed to create URL object"));
+            } catch (IOException e) {
+                e.printStackTrace();
+                resultFuture.completeExceptionally(new IOException("Failed to create URL connection"));
+            }
+
+            resultFuture.complete(resultBook);
+        });
+        return resultFuture;
+    }
+
+
+
 
 }
