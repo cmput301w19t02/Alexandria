@@ -2,10 +2,13 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
-import android.widget.Toast;
+import android.view.WindowManager;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
@@ -21,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setContentView(R.layout.activity_login);
     }
 
@@ -30,28 +34,27 @@ public class LoginActivity extends AppCompatActivity {
      * @param view the signin button
      */
     public void signIn(View view) {
-        AppCompatEditText usernameField = findViewById(R.id.login_usernname_field);
+        AppCompatEditText usernameField = findViewById(R.id.login_username_field);
         AppCompatEditText passwordField = findViewById(R.id.login_password_field);
+        TextView errorMessage = findViewById(R.id.error_message);
+
+        errorMessage.setText("");
 
         String username = usernameField.getText().toString();
         String password = passwordField.getText().toString();
 
-        if (!validateUsername(username)) {
-            showError("Username is invalid! Username must contain at least 4 character.");
-            return;
-        }
-        if (!validatePassword(password)) {
-            showError("Password is invalid! Password must contain at least 8 characters.");
-            return;
-        }
+        if (!validator(username,password)) return;
 
         CompletableFuture<Void> future = userController.authenticate(username,password);
-
+        startSpinner();
         future.handleAsync((result, error) -> {
             if (error == null) {
                 finish();
             } else {
-                showError(error.getMessage());
+                runOnUiThread(() -> {
+                    stopSpinner();
+                    errorMessage.setText(R.string.login_error);
+                });
             }
             return null;
         });
@@ -67,17 +70,50 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(startSignUpActivity);
     }
 
-    private void showError(String message) {
-        Toast.makeText(LoginActivity.this, "Error: " + message, Toast.LENGTH_LONG).show();
+    private Boolean validator(String username, String password) {
+        TextView errorMessage = findViewById(R.id.error_message);
+        if (username.equals("") || password.equals("")) {
+            errorMessage.setText(R.string.login_error);
+            return false;
+        }
+        else return true;
     }
 
-    private boolean validateUsername(String username) {
-        return username.length() >= 4;
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity(); // or finish();
     }
 
-    private boolean validatePassword(String password) {
-        return password.length() >= 8;
+    /**
+     * Removes spinner when data is loaded
+     *
+     */
+    private void stopSpinner() {
+        ProgressBar spinner = findViewById(R.id.spinner);
+        TextInputLayout tiUsername = findViewById(R.id.login_username_layout);
+        TextInputLayout tiPassword = findViewById(R.id.login_password_layout);
+        TextView tvSignup = findViewById(R.id.to_sign_up);
+
+        tiUsername.setVisibility(View.VISIBLE);
+        tiPassword.setVisibility(View.VISIBLE);
+        tvSignup.setVisibility(View.VISIBLE);
+        spinner.setVisibility(View.INVISIBLE);
+
     }
+
+    private void startSpinner() {
+        ProgressBar spinner = findViewById(R.id.spinner);
+        TextInputLayout tiUsername = findViewById(R.id.login_username_layout);
+        TextInputLayout tiPassword = findViewById(R.id.login_password_layout);
+        TextView tvSignup = findViewById(R.id.to_sign_up);
+
+        tiUsername.setVisibility(View.INVISIBLE);
+        tiPassword.setVisibility(View.INVISIBLE);
+        tvSignup.setVisibility(View.INVISIBLE);
+        spinner.setVisibility(View.VISIBLE);
+    }
+
 
 }
 
