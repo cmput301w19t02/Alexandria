@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,12 +17,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook.EditBookActivity;
 
 public class MyBookFragment extends Fragment {
 
-    private Bitmap cover;
+    private ImageController imageController = ImageController.getInstance();
+
+    private String coverId;
     private String title;
     private String author;
     private String isbn;
@@ -68,6 +74,7 @@ public class MyBookFragment extends Fragment {
         switch (item.getItemId()) {
             //menu switch
             case R.id.option_edit_book:
+                onClickEditBook();
                 break;
             case R.id.option_delete_book:
                 break;
@@ -82,7 +89,7 @@ public class MyBookFragment extends Fragment {
     private void extractData() {
         Bundle arguments = getArguments();
 
-        cover = arguments.getParcelable("cover");
+        coverId = arguments.getString("coverId");
         title = arguments.getString("title");
         author = arguments.getString("author");
         isbn = arguments.getString("isbn");
@@ -99,7 +106,16 @@ public class MyBookFragment extends Fragment {
         tvTitle.setText(title);
         tvAuthor.setText(author);
         tvIsbn.setText(isbn);
-        ivCover.setImageBitmap(cover);
+
+        imageController.getImage(coverId).handleAsync((result,error)->{
+            if(error==null){
+                ivCover.setImageBitmap(result);
+            }
+            else{
+                showError("Failed to get image from server");
+            }
+          return null;
+        });
 
         //This is needed due to the way the UI is designed
         //Will set the title for only the Recycler view
@@ -111,18 +127,26 @@ public class MyBookFragment extends Fragment {
     }
 
     private Fragment fragmentSelector() {
+        Bundle bundle = new Bundle();
+
+        bundle.putString("status", status);
+        bundle.putString("isbn", isbn);
         switch (status) {
             case "available":
-                return new MyBookUserListFragment();
+                MyBookUserListFragment availableListFragment = new MyBookUserListFragment();
+                availableListFragment.setArguments(bundle);
+                return availableListFragment;
             case "requested":
-                return new MyBookUserListFragment();
+                MyBookUserListFragment requestedListFragment = new MyBookUserListFragment();
+                requestedListFragment.setArguments(bundle);
+                return requestedListFragment;
             case "accepted":
                 MyBookTransactionFragment fragment = new MyBookTransactionFragment();
-                fragment.setVariables(status,isbn);
+                fragment.setArguments(bundle);
                 return fragment;
             case "borrowed":
                 fragment = new MyBookTransactionFragment();
-                fragment.setVariables(status,isbn);
+                fragment.setArguments(bundle);
                 return fragment;
             default:
                 throw new RuntimeException("Status out of bounds");
@@ -136,11 +160,27 @@ public class MyBookFragment extends Fragment {
         }
     }
 
+    /**
+     * Shows an error message in toast
+     *
+     * @param message error message
+     */
+    private void showError(String message) {
+        Toast.makeText(getView().getContext(), "Error: " + message, Toast.LENGTH_LONG).show();
+    }
+
     //TODO Implement, will probably need data bundled again
     //To be called when the status changes in order to reload the page
     public void onStatusChange(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(this).attach(this).commit();
+    }
+
+
+    private void onClickEditBook(){
+        Intent intentEditBook = new Intent(getActivity(), EditBookActivity.class);
+        intentEditBook.putExtra("BOOK_ISBN", isbn);
+        startActivity(intentEditBook);
     }
 
 }

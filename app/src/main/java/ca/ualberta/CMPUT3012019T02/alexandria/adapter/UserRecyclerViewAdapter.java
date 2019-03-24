@@ -46,7 +46,10 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserViewHolder
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder userViewHolder, int position) {
 
-        userViewHolder.ivUserPic.setImageBitmap(mUserListItem.get(position).getBorrowerPic());
+        if (mUserListItem.get(position).getBorrowerPic() != null) {
+            userViewHolder.ivUserPic.setImageDrawable(mUserListItem.get(position).getBorrowerPic());
+            userViewHolder.ivUserPic.setBackground(null);
+        }
         userViewHolder.btUser.setText(mUserListItem.get(position).getBorrowerUsername());
     }
 
@@ -63,7 +66,6 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserViewHolder
 
         void ellipsesClick(View v, int position);
     }
-
 
 
 }
