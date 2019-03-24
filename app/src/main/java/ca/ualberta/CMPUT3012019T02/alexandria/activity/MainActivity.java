@@ -75,65 +75,26 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        if(!userController.isAuthenticated()) {
+        if (!userController.isAuthenticated()) {
             Intent startLoginActivity = new Intent(this, LoginActivity.class);
             startActivity(startLoginActivity);
-        }
-        else{
-//            System.out.println("Already logged in");
-            BookController bookController = BookController.getInstance();
-            bookController.getMyBorrowedBooks().thenAcceptAsync(stringBorrowedBookHashMap -> {
-                try {
+        } else {
+            BookParser.getMyBorrowedBooksList().thenAcceptAsync(bookListItems -> {
+                borrowedBookListings = bookListItems;
 
-                    System.out.println("Loading borrowed books");
-                    // Gets accepted book list items
-                    List<BookListItem> bookListItems = BookParser.UserBooksToBookList(stringBorrowedBookHashMap).get(5, TimeUnit.SECONDS);
+                // Sort by alphabetical order of book titles
+                Collections.sort(borrowedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
 
-                    borrowedBookListings = bookListItems;
-
-                    updateFragments();
-
-                    // Sort by alphabetical order of book titles
-                    Collections.sort(borrowedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
-                    System.out.println("Loading borrowed books");
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (TimeoutException e) {
-                    e.printStackTrace();
-                }
-            }).exceptionally(throwable -> {
-                throwable.printStackTrace();
-                return null;
+                updateFragments();
             });
 
-            bookController.getMyOwnedBooks().thenAcceptAsync(stringOwnedBookHashMap -> {
-                try {
+            BookParser.getMyOwnedBooksList().thenAcceptAsync(bookListItems -> {
+                ownedBookListings = bookListItems;
 
-                    System.out.println("Loading owned books");
-                    // Gets accepted book list items
-                    List<BookListItem> bookListItems = BookParser.UserBooksToBookList(stringOwnedBookHashMap).get(5, TimeUnit.SECONDS);
+                // Sort by alphabetical order of book titles
+                Collections.sort(ownedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
 
-                    ownedBookListings = bookListItems;
-
-                    updateFragments();
-
-                    // Sort by alphabetical order of book titles
-                    Collections.sort(ownedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
-                    System.out.println("Finished loading owned books");
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (TimeoutException e) {
-                    e.printStackTrace();
-                }
-            }).exceptionally(throwable -> {
-                throwable.printStackTrace();
-                return null;
+                updateFragments();
             });
         }
 
