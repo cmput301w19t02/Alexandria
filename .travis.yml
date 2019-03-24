@@ -22,6 +22,8 @@ before_script:
 - unzip gradle-4.10.1-bin.zip
 - export GRADLE_HOME=$PWD/gradle-4.10.1
 - export PATH=$GRADLE_HOME/bin:$PATH
+# Secrets
+- echo '<?xml version="1.0" encoding="utf-8"?><resources><string name="google_maps_api_key">$google_maps_api_key</string><string name="google_books_api_key">$google_books_api_key</string><string name="algolia_api_key">$algolia_api_key</string></resources>' > ./app/src/main/res/values/secrets.xml
 # Emulator
 #- echo no | android create avd --force -n test -t "android-19" --abi armeabi-v7a --tag google_apis
 #- emulator -avd test -no-skin -no-window &
