@@ -33,7 +33,6 @@
     <string name="edit_profile_password">Password</string>
     <string name="edit_profile_email">Email</string>
     <string name="edit_profile">Edit Profile</string>
-    <string name="blocked_users">Blocked Users</string>
     <string name="edit_profile_save">Save Changes</string>
     <!-- String related to sign up -->
     <string name="sign_up">Sign Up</string>
@@ -47,7 +46,6 @@
     <string name="view_user_name">Full Name</string>
     <string name="view_user_available_books">Available Books</string>
     <string name="message_user_title">Message</string>
-    <string name="block_user_title">Block User</string>
     <!-- Strings related to chat room -->
     <string name="joe_message">Joe Message</string>
     <string name="add_location_description">add_location</string>
