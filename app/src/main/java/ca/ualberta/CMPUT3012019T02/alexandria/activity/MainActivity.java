@@ -10,15 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook.AddNewBookActivity;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookParser;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
@@ -82,8 +79,8 @@ public class MainActivity extends AppCompatActivity
             BookParser.getMyBorrowedBooksList().thenAcceptAsync(bookListItems -> {
                 borrowedBookListings = bookListItems;
 
-                // Sort by alphabetical order of book titles
-                Collections.sort(borrowedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
+                // Sort by status then alphabetical order of book titles
+                Collections.sort(borrowedBookListings, (o1, o2) -> BookListItem.getComparator().compare(o1, o2));
 
                 updateFragments();
             });
@@ -91,8 +88,8 @@ public class MainActivity extends AppCompatActivity
             BookParser.getMyOwnedBooksList().thenAcceptAsync(bookListItems -> {
                 ownedBookListings = bookListItems;
 
-                // Sort by alphabetical order of book titles
-                Collections.sort(ownedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
+                // Sort by status then alphabetical order of book titles
+                Collections.sort(ownedBookListings, (o1, o2) -> BookListItem.getComparator().compare(o1, o2));
 
                 updateFragments();
             });
