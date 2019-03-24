@@ -141,7 +141,7 @@ public class ObservableUserCache extends Observable {
      * @return the chat room id
      */
     public String getChatRoomId(String userId) {
-        if (user != null && user.getChatRooms() != null) {
+        if (user != null && user.getChatRooms() != null && user.getChatRooms().size() > 0) {
             if (user.getChatRooms().get(userId).getUser1Id().equals(userId) ||
                     user.getChatRooms().get(userId).getUser2Id().equals(userId)) {
                 return user.getChatRooms().get(userId).getChatId();
