@@ -183,11 +183,6 @@ public class MainActivity extends AppCompatActivity
         startActivity(startProfileActivity);
     }
 
-    public void onAddBookButtonClick(View view) {
-        Intent startAddMyBookActivity = new Intent(this, AddNewBookActivity.class);
-        startActivity(startAddMyBookActivity);
-    }
-
     @Override
     public List<BookListItem> getBorrowedBookList() {
         return borrowedBookListings;
