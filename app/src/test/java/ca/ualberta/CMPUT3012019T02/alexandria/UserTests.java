@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.User;
@@ -162,10 +163,11 @@ public class UserTests {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
+        ChatRoomItem chatRoomItem = new ChatRoomItem("TestRoom213141", id, "John Smith", id, "Hit Menshoj", false);
 
-        HashMap<String,String> chatRooms = new HashMap<>();
-        chatRooms.put("johnsmith","6588a715-1651-4d44-94bc-ee0a40176a93");
-        chatRooms.put("htimsnhoj","6588a715-4d44-94bc-1651-ee0a40176a93");
+        HashMap<String, ChatRoomItem> chatRooms = new HashMap<>();
+        chatRooms.put("johnsmith",chatRoomItem);
+        chatRooms.put("htimsnhoj",chatRoomItem);
         user.setChatRooms(chatRooms);
         assertEquals(user.getChatRooms(), chatRooms);
     }
@@ -175,9 +177,9 @@ public class UserTests {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
-
-        user.addChatRoom("userId", "6588a715-1651-4d44-94bc-ee0a40176a93");
-        assertEquals(user.getChatRooms().get("userId"), "6588a715-1651-4d44-94bc-ee0a40176a93");
+        ChatRoomItem chatRoomItem = new ChatRoomItem("TestRoom213141", id, "John Smith", id, "Hit Menshoj", false);
+        user.addChatRoom("userId", chatRoomItem);
+        assertEquals(user.getChatRooms().get("userId"), chatRoomItem);
     }
 
     @Test
@@ -185,10 +187,11 @@ public class UserTests {
         String id = "6588a715-1651-4d44-94bc-ee0a40176a93";
         UserProfile userProfile = new UserProfile("John Smith","john@example.com","7801234567",null,"johnsmith");
         User user = new User(id, userProfile);
+        ChatRoomItem chatRoomItem = new ChatRoomItem("TestRoom213141", id, "John Smith", id, "Hit Menshoj", false);
 
-        HashMap<String,String> chatRooms = new HashMap<>();
-        chatRooms.put("johnsmith","6588a715-1651-4d44-94bc-ee0a40176a93");
-        chatRooms.put("htimsnhoj","6588a715-4d44-94bc-1651-ee0a40176a93");
+        HashMap<String, ChatRoomItem> chatRooms = new HashMap<>();
+        chatRooms.put("johnsmith",chatRoomItem);
+        chatRooms.put("htimsnhoj",chatRoomItem);
         user.setChatRooms(chatRooms);
         user.removeChatRoom("htimsnhoj");
         chatRooms.remove("htimsnhoj");
