@@ -24,7 +24,7 @@ public class BookParserTests {
     @Test
     public void testBorrowedBooksToBookList() throws InterruptedException, ExecutionException, TimeoutException, IOException {
         BookController bookController = BookController.getInstance();
-        HashMap<String, BorrowedBook> borrowedBookHashMap = bookController.getUserBorrowedBooks("eQgZfhN2Yng9TPHcXvfBZs5ZKxj1").get(5, TimeUnit.SECONDS);
+        HashMap<String, BorrowedBook> borrowedBookHashMap = (HashMap<String, BorrowedBook>) bookController.getUserBorrowedBooks("eQgZfhN2Yng9TPHcXvfBZs5ZKxj1").get(5, TimeUnit.SECONDS);
         List<BookListItem> bookListItem = BookParser.UserBooksToBookList(borrowedBookHashMap).get(10, TimeUnit.SECONDS);
         Assert.assertEquals(1, bookListItem.size());
 
