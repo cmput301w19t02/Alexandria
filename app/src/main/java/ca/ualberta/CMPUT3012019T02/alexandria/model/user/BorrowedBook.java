@@ -1,5 +1,7 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.user;
 
+import android.support.annotation.NonNull;
+
 /**
  * This class represents the relationship between a User and an OwnedBook, where the User has made
  * some sort of transaction/interaction with the OwnedBook (e.g. requested, exchanged, etc.)
@@ -7,7 +9,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria.model.user;
 public class BorrowedBook extends UserBook {
 
     /**
-     * No args constructor to maintain compatibility with Firebase deserializer
+     * No args constructor for Firebase deserializer
      * TO BE USED BY FIREBASE ONLY
      */
     @Deprecated
@@ -16,15 +18,15 @@ public class BorrowedBook extends UserBook {
     }
 
     /**
-     * Creates a new BorrowedBook from isbn, status, and owner
+     * Creates a new borrowed book with isbn, status, and owner
      * TO BE USED BY BOOK CONTROLLER ONLY
-     * @param isbn isbn of the borrowed book
-     * @param status status of the borrowed book
-     * @param owner owner of the borrowed book
+     *
+     * @param isbn
+     * @param status
+     * @param owner
      */
     @Deprecated
-    public BorrowedBook(String isbn, String status, String owner) {
+    public BorrowedBook(@NonNull String isbn, @NonNull String status, @NonNull String owner) {
         super(isbn, status, owner);
     }
-
 }
