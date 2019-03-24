@@ -100,6 +100,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    messageList.clear();
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()){
                         TextMessage message = childSnapshot.getValue(TextMessage.class);
                         messageList.add(message);
@@ -144,6 +145,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         MessageRecyclerViewAdapter adapter = new MessageRecyclerViewAdapter(this, messageList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);
+        mRecyclerView.scrollToPosition(messageList.size()-1);
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
