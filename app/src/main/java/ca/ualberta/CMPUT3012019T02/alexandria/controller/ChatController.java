@@ -1,5 +1,7 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
+import android.graphics.Bitmap;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -13,6 +15,8 @@ import java9.util.concurrent.CompletableFuture;
  * The controller for chat functionality
  */
 public class ChatController {
+
+
 
     private static ChatController instance;
     private FirebaseDatabase database;

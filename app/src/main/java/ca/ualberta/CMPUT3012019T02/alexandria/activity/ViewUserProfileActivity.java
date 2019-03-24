@@ -159,7 +159,9 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                         bundle.putString("chatId", chatRoomId);
                         bundle.putString("recieverId", userID);
                         intentChatRoom.putExtra("bundle", bundle);
+                        addChatRoom.complete(null);
                         startActivity(intentChatRoom);
+
                     });
                 } else {
                     Intent intentChatRoom = new Intent(this, ChatRoomActivity.class);

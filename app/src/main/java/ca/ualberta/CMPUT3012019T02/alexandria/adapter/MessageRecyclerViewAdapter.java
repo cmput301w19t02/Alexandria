@@ -1,6 +1,9 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,11 +12,16 @@ import android.view.ViewGroup;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.cache.ImageCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.ReceivedLocationMessageViewHolder;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.ReceivedMessageViewHolder;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.SentLocationMessageViewHolder;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.SentMessageViewHolder;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.message.LocationMessage;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 
 
@@ -22,13 +30,16 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
  */
 public class MessageRecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private static final int SENT = 1;
-    private static final int RECEIVED = 2;
+    private static final int SENT_TEXT = 1;
+    private static final int SENT_LOCATION = 2;
+    private static final int RECEIVED_TEXT = 3;
+    private static final int RECEIVED_LOCATION = 4;
 
     private Context mContext;
     private List<Message> mMessageList;
 
     private UserController userController = UserController.getInstance();
+    private ImageCache imageCache = ImageCache.getInstance();
 
     /**
      * Instantiates a new Message recycler view adapter.
@@ -46,11 +57,18 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter {
         Message message = (Message) mMessageList.get(position);
         String myId = userController.getMyId();
         String senderId = message.getSender();
-        //TODO: message type check
         if (myId.equals(senderId)) {
-            return SENT;
+            if (message.getType().equals("text")) {
+                return SENT_TEXT;
+            } else {
+                return SENT_LOCATION;
+            }
         } else {
-            return RECEIVED;
+            if (message.getType().equals("text")){
+                return RECEIVED_TEXT;
+            } else {
+                return RECEIVED_LOCATION;
+            }
         }
     }
 
@@ -60,31 +78,80 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter {
 
         View mView;
 
-        if (viewType == SENT) {
+        if (viewType == SENT_TEXT) {
             mView = LayoutInflater.from(mContext)
                     .inflate(R.layout.item_message_sent, viewGroup, false);
             return new SentMessageViewHolder(mView);
-        } else {
+
+        } else if (viewType == RECEIVED_TEXT){
             mView = LayoutInflater.from(mContext)
                     .inflate(R.layout.item_message_received, viewGroup, false);
             return new ReceivedMessageViewHolder(mView);
-        }
-        //TODO: location message check and onClickListeners
 
+        } else if (viewType == SENT_LOCATION){
+            mView = LayoutInflater.from(mContext)
+                    .inflate(R.layout.item_location_message_sent, viewGroup, false);
+            return new SentLocationMessageViewHolder(mView);
+
+        } else {
+            mView = LayoutInflater.from(mContext)
+                    .inflate(R.layout.item_location_message_sent, viewGroup, false);
+            return new ReceivedLocationMessageViewHolder(mView);
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder myViewHolder, int position) {
         Date date = new Date(mMessageList.get(position).getDate());
 
-        if (myViewHolder.getItemViewType() == SENT){
+        if (myViewHolder.getItemViewType() == SENT_TEXT){
             ((SentMessageViewHolder) myViewHolder).tvTimeStamp.setText(date.toString());
             ((SentMessageViewHolder) myViewHolder).tvContent.setText(mMessageList.get(position).getContent());
-        } else if (myViewHolder.getItemViewType() == RECEIVED) {
+
+        } else if (myViewHolder.getItemViewType() == RECEIVED_TEXT) {
             ((ReceivedMessageViewHolder) myViewHolder).tvTimeStamp.setText(date.toString());
             ((ReceivedMessageViewHolder) myViewHolder).tvContent.setText(mMessageList.get(position).getContent());
-        }
 
+        } else if (myViewHolder.getItemViewType() == SENT_LOCATION) {
+             String[] content = mMessageList.get(position).getContent().split(",");
+             String imageId = content[0];
+             String lat = content[1];
+             String lng = content[2];
+             Bitmap image = imageCache.getImage(imageId);
+            ((SentLocationMessageViewHolder) myViewHolder).ivLocationImage.setImageBitmap(image);
+            ((SentLocationMessageViewHolder) myViewHolder).ivLocationImage
+                    .setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String zoom = "15";
+                    String geoString = "geo:" + lat + "," + lng + "?z=" + zoom;
+                    Uri intentUri = Uri.parse(geoString);
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, intentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    mContext.startActivity(mapIntent);
+                }
+                    });
+
+        } else {
+            String[] content = mMessageList.get(position).getContent().split(",");
+            String imageId = content[0];
+            String lat = content[1];
+            String lng = content[2];
+            Bitmap image = imageCache.getImage(imageId);
+            ((ReceivedLocationMessageViewHolder) myViewHolder).ivLocationImage.setImageBitmap(image);
+            ((ReceivedLocationMessageViewHolder) myViewHolder).ivLocationImage
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String zoom = "15";
+                            String geoString = "geo:" + lat + "," + lng + "?z=" + zoom;
+                            Uri intentUri = Uri.parse(geoString);
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, intentUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            mContext.startActivity(mapIntent);
+                        }
+                    });
+        }
     }
 
     @Override

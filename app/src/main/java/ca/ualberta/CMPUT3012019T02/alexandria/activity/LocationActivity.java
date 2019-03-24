@@ -19,6 +19,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -43,13 +44,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.ByteArrayOutputStream;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
+import java9.util.concurrent.CompletableFuture;
 
 public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
     private Location mLastKnownLocation;
+
+    private ImageController imageController = ImageController.getInstance();
 
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
@@ -84,40 +91,11 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d("LOCATION ACTIVITY", "got to onMapReady");
         mMap = googleMap;
 
         getLocationPermission();
         updateLocationUI();
         getDeviceLocation();
-
-        /*
-        // check if location permission is accepted or not
-        if (mLocationPermissionGranted) {
-            // get current location and put a pin
-            //LatLng lastPosition = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
-            //mMap.addMarker(new MarkerOptions().position(lastPosition).draggable(true));
-            mMap.addMarker(new MarkerOptions().position(mDefaultLocation).draggable(true));
-        } else {
-            // set pin to default location
-            mMap.addMarker(new MarkerOptions().position(mDefaultLocation).draggable(true));
-        }
-
-        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-            @Override
-            public void onMarkerDragStart(Marker marker) {}
-
-            @Override
-            public void onMarkerDrag(Marker marker) {}
-
-            @Override
-            public void onMarkerDragEnd(Marker marker) {
-                LatLng position = marker.getPosition();
-                mLastKnownLocation.setLatitude(position.latitude);
-                mLastKnownLocation.setLongitude(position.longitude);
-            }
-        });
-           */
 
         Button placePin = (Button)findViewById(R.id.button_place_pin);
         placePin.setOnClickListener(new View.OnClickListener() {
@@ -161,10 +139,20 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                 intent.putExtra("lat", lat);
                 intent.putExtra("lng", lng);
                 //TODO: start spinner
-                //TODO: async request to get static map image from Maps Static API
-                //TODO: tranform image into whatever it needs to be to go into an intent
-                setResult(RESULT_OK, intent);
-                finish();
+                mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                    @Override
+                    public void onSnapshotReady(Bitmap bitmap) {
+                        CompletableFuture<String> addImage = imageController.addImage(bitmap);
+                        addImage.thenAccept(imageId -> {
+                            //TODO: stop spinner
+                            intent.putExtra("imageId", imageId);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        });
+
+                    }
+                });
+
             }
         });
     }

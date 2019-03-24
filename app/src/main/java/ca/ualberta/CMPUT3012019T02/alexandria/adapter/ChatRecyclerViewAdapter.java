@@ -73,6 +73,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
             public void onClick(View v) {
 
                 String chatId = mChatRoomList.get(mViewHolder.getAdapterPosition()).getChatId();
+                //TODO: After testing add chat room, uncomment and remove 2nd myId
                 //String myId = userController.getMyId();
                 String myId = mChatRoomList.get(mViewHolder.getAdapterPosition()).getUser1Id();
                 String receiverId = mChatRoomList.get(mViewHolder.getAdapterPosition())
@@ -86,13 +87,10 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
                             .getUser2Name();
                 }
 
-
                 Intent intent = new Intent(viewGroup.getContext(), ChatRoomActivity.class);
                 intent.putExtra("chatId", chatId);
                 intent.putExtra("receiverId", receiverId);
                 intent.putExtra("receiverName", receiverName);
-                //TODO: add imageId to display in ChatRoom
-                //intent.putExtra("imageId", imageId);
 
                 chatController.setUserChatRoomReadStatus(chatId, myId, true);
                 mContext.startActivity(intent);
@@ -104,10 +102,13 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ChatViewHolder myViewHolder, int position) {
-
-        //TODO get user pic
-        //myViewHolder.ivChatUserPic.setImageBitmap(mChatRoomList.get(position).getUserPic());
-        myViewHolder.tvChatReceiverUsername.setText(mChatRoomList.get(position).getUser2Name());
+        String myId = userController.getMyId();
+        String user1Id = mChatRoomList.get(position).getUser1Id();
+        if (myId.equals(user1Id)) {
+            myViewHolder.tvChatReceiverUsername.setText(mChatRoomList.get(position).getUser1Name());
+        } else {
+            myViewHolder.tvChatReceiverUsername.setText(mChatRoomList.get(position).getUser2Name());
+        }
     }
 
     @Override

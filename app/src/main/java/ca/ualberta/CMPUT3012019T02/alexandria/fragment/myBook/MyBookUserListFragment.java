@@ -62,6 +62,7 @@ public class MyBookUserListFragment extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putString("chatId", chatRoomId);
                         bundle.putString("recieverId", userId);
+                        addChatRoom.complete(null);
                         intentChatRoom.putExtra("bundle", bundle);
                         startActivity(intentChatRoom);
                     });

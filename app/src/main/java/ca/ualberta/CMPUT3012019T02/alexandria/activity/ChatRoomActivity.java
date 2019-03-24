@@ -262,10 +262,15 @@ public class ChatRoomActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK){
                 double lat = returnIntent.getExtras().getDouble("lat");
                 double lng = returnIntent.getExtras().getDouble("lng");
-                //TODO: get and save image to message
+                String imageId = returnIntent.getStringExtra("imageId");
                 Location location = new Location(lat, lng);
                 Date date = new Date();
-                LocationMessage message = new LocationMessage(location, "unread", date.getTime(), senderId);
+                LocationMessage message = new LocationMessage(location, "unread",
+                        date.getTime(), senderId, imageId);
+
+                //setting content for RecyclerAdapter use
+                String content = imageId + "," + lat + "," + lng;
+                message.setContent(content);
 
                 chatController.addLocationMessage(chatId, message);
                 chatController.setUserChatRoomReadStatus(chatId, receiverId, false);
