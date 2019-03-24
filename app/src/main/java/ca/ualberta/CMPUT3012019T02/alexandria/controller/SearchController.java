@@ -1,5 +1,9 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
+import android.app.Application;
+import android.content.res.Resources;
+import android.view.View;
+
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
 import com.algolia.search.saas.Query;
@@ -19,6 +23,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.App;
+import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import java9.util.concurrent.CompletableFuture;
 
@@ -32,7 +38,7 @@ public class SearchController {
     private Gson gson;
     private static SearchController instance;
     private final String GOOGLE_BOOK_URL = "https://www.googleapis.com/books/v1/volumes?&maxResults=1&projection=lite&q=";
-    private final String apiKey = "AIzaSyA0Km9mozkCqNX7N0Sy4V_Uk1OIvxUvRn4";
+    private final String booksApiKey = App.getContext().getResources().getString(R.string.google_books_api_key);
 
     /**
      * The Books.
@@ -41,7 +47,7 @@ public class SearchController {
 
 
     private SearchController() {
-        client = new Client("9ETLQT0YZC", "7c5462a00988e4152996bac591236760");
+        client = new Client("9ETLQT0YZC", App.getContext().getResources().getString(R.string.algolia_api_key));
         index = client.getIndex("search");
         try {
             index.setSettingsAsync(new JSONObject().put(
@@ -107,7 +113,7 @@ public class SearchController {
 
         // information retrieved from https://code.tutsplus.com/tutorials/android-sdk-create-a-book-scanning-app-interface-book-search--mobile-17790
         CompletableFuture.runAsync(() -> {
-            String searchUrl = GOOGLE_BOOK_URL + isbn + "&key=" + apiKey;
+            String searchUrl = GOOGLE_BOOK_URL + isbn + "&key=" + booksApiKey;
 
             StringBuilder bookBuilder = new StringBuilder();
             bookBuilder.append("{'isbn':" + isbn + ",");
