@@ -1,6 +1,8 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -43,7 +45,11 @@ public class ViewImageActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
 
         // back button
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        Drawable backIcon = getResources().getDrawable(R.drawable.ic_arrow_back);
+        backIcon.setColorFilter(getResources().getColor(R.color.colorWhite),
+                PorterDuff.Mode.SRC_IN);
+
+        toolbar.setNavigationIcon(backIcon);
         toolbar.setNavigationOnClickListener(v -> finish());
     }
 

@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity
      * @param view the button clicked
      */
     public void onProfileButtonClick(View view) {
-        // replace
+        // TODO replace
         // Intent startProfileActivity = new Intent(this, ViewMyProfileActivity.class);
         //        startActivity(startProfileActivity);
         Intent intentViewImage = new Intent(this, ViewImageActivity.class);

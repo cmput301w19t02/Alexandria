@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ViewImageActivity"></activity>
+        <activity android:name=".activity.ViewImageActivity" android:theme="@style/blackToolBarTheme"></activity>
         <activity android:name=".activity.ChatRoomActivity"></activity>
         <activity android:name=".activity.ISBNLookup"></activity>
         <activity android:name=".activity.ViewUserProfileActivity"></activity>
