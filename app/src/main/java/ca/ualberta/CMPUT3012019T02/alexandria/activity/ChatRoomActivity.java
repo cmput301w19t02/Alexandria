@@ -155,34 +155,6 @@ public class ChatRoomActivity extends AppCompatActivity {
             case R.id.view_profile:
                 Intent startViewProfile = new Intent(this, ViewUserProfileActivity.class);
                 startActivity(startViewProfile);
-                break;
-            case R.id.block_user:
-                // Block User
-                //TODO implement block user
-
-                AlertDialog.Builder blockAlert = new AlertDialog.Builder(ChatRoomActivity.this, R.style.AlertDialogTheme);
-
-                blockAlert.setCancelable(true);
-                blockAlert.setTitle("Block User?");
-                String blockMessage = "Are you sure you want to block " +  "Joe123 Example";
-                blockAlert.setMessage(blockMessage);
-
-                blockAlert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                Context context = this;
-                blockAlert.setPositiveButton("BLOCK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // block user
-                        Toast.makeText(context , "User Blocked", Toast.LENGTH_LONG).show();
-                    }
-                });
-                blockAlert.show();
-                break;
             case R.id.messaging_setting:
                 // open menu
                 break;

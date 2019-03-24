@@ -147,26 +147,6 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                 intentMain.putExtra("fragment_name", fragment_name);
                 startActivity(intentMain);
                 break;
-            case R.id.block_user_option:
-                Toast.makeText(this, "Block user implement", Toast.LENGTH_LONG).show();
-
-                AlertDialog.Builder blockAlert = new AlertDialog.Builder(
-                        ViewUserProfileActivity.this, R.style.AlertDialogTheme);
-
-                blockAlert.setCancelable(true);
-                blockAlert.setTitle("Block User?");
-                String blockMessage = "Are you sure you want to block " + name;
-                blockAlert.setMessage(blockMessage);
-
-                blockAlert.setNegativeButton("CANCEL", (dialog, which) -> dialog.cancel());
-                Context context = this;
-                blockAlert.setPositiveButton("BLOCK", (dialog, which) -> {
-                    // block user
-                    Toast.makeText(context, "User Blocked", Toast.LENGTH_LONG).show();
-                });
-                blockAlert.show();
-
-                break;
             case R.id.user_profile_setting:
                 // open menu
                 break;
