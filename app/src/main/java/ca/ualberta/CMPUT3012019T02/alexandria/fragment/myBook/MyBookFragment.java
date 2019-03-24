@@ -1,6 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,7 +20,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
 public class MyBookFragment extends Fragment {
 
-    private Bitmap cover;
+    private String coverId;
     private String title;
     private String author;
     private String isbn;
@@ -82,7 +81,7 @@ public class MyBookFragment extends Fragment {
     private void extractData() {
         Bundle arguments = getArguments();
 
-        cover = arguments.getParcelable("cover");
+        coverId = arguments.getString("coverId");
         title = arguments.getString("title");
         author = arguments.getString("author");
         isbn = arguments.getString("isbn");
@@ -99,7 +98,9 @@ public class MyBookFragment extends Fragment {
         tvTitle.setText(title);
         tvAuthor.setText(author);
         tvIsbn.setText(isbn);
-        ivCover.setImageBitmap(cover);
+
+        //TODO grab cover using ID
+        //ivCover.setImageBitmap(cover);
 
         //This is needed due to the way the UI is designed
         //Will set the title for only the Recycler view
