@@ -14,7 +14,6 @@ import java.util.concurrent.TimeoutException;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.MainActivity;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 import java9.util.concurrent.CompletableFuture;
 
@@ -180,9 +179,7 @@ public class UserControllerTests {
 
         authFuture.get(5, TimeUnit.SECONDS);
 
-        CompletableFuture<UserProfile> profileFuture = controller.getMyProfile();
-
-        UserProfile profile = profileFuture.get(5, TimeUnit.SECONDS);
+        UserProfile profile = controller.getMyProfile().get();
 
         Assert.assertEquals("0457de6b_0a85_481a_9093_c73de1ba0020", profile.getUsername());
     }
@@ -197,9 +194,7 @@ public class UserControllerTests {
 
         authFuture.get(5, TimeUnit.SECONDS);
 
-        CompletableFuture<UserProfile> oldProfileFuture = controller.getMyProfile();
-
-        UserProfile oldProfile = oldProfileFuture.get(5, TimeUnit.SECONDS);
+        UserProfile oldProfile = controller.getMyProfile().get();
 
         Random random = new Random();
         String phoneNumber = "780" + (random.nextInt(899) + 100) + "" + (random.nextInt(8999) + 1000);
@@ -209,9 +204,7 @@ public class UserControllerTests {
 
         updateProfileFuture.get(5, TimeUnit.SECONDS);
 
-        CompletableFuture<UserProfile> newProfileFuture = controller.getMyProfile();
-
-        UserProfile newProfile = newProfileFuture.get(5, TimeUnit.SECONDS);
+        UserProfile newProfile = controller.getMyProfile().get();
 
         Assert.assertEquals(phoneNumber, newProfile.getPhone());
     }
