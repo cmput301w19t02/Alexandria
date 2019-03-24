@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
  */
 public class BookListItem {
     private Bitmap cover;
+    private String coverId;
     private String title;
     private String author;
     private String isbn;
@@ -30,9 +31,10 @@ public class BookListItem {
      * @param status status
      * @param ownerId the id of the owner
      */
-    public BookListItem(Bitmap cover, String title, String author,
+    public BookListItem(Bitmap cover, String coverId, String title, String author,
                         String isbn, String status, String ownerId) {
         this.cover = cover;
+        this.coverId = coverId;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
@@ -159,4 +161,11 @@ public class BookListItem {
      */
     public void setOwnerId(String owner) { this.ownerId = owner; }
 
+    public String getCoverId() {
+        return coverId;
+    }
+
+    public void setCoverId(String coverId) {
+        this.coverId = coverId;
+    }
 }

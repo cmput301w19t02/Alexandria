@@ -40,14 +40,14 @@ import static android.app.Activity.RESULT_OK;
 
 public class UserBookFragment extends Fragment {
 
-    private Bitmap cover;
+    private ImageController imageController = ImageController.getInstance();
+
+    private String coverId;
     private String title;
     private String author;
     private String isbn;
     private String status;
     private String ownerId;
-    private String ownerUsername;
-    private Bitmap ownerPic;
     private final int RESULT_ISBN = 1;
 
 
@@ -112,17 +112,12 @@ public class UserBookFragment extends Fragment {
     private void extractData() {
         Bundle arguments = getArguments();
 
-        cover = arguments.getParcelable("cover");
+        coverId = arguments.getString("coverId");
         title = arguments.getString("title");
         author = arguments.getString("author");
         isbn = arguments.getString("isbn");
         status = arguments.getString("status");
         ownerId = arguments.getString("ownerId");
-
-        if (arguments.getString("ownerUsername") != null) {
-            ownerUsername = arguments.getString("ownerUsername");
-            ownerPic = arguments.getParcelable("ownerPic");
-        }
     }
 
     private void setBookInfo(View v) {
@@ -138,63 +133,62 @@ public class UserBookFragment extends Fragment {
         tvAuthor.setText(author);
         tvIsbn.setText(isbn);
 
-        //TODO Make if for cover as search will not have one
-        ivCover.setImageBitmap(cover);
+        imageController.getImage(coverId).handleAsync((result,error)->{
+            if(error==null){
+                ivCover.setImageBitmap(result);
+            }
+            else{
+                showError("Failed to get image from server");
+            }
+            return null;
+        });
 
-        //if coming in from search result
-        if (ownerUsername != null) {
-            tvOwner.setText(ownerUsername);
-            ivCover.setImageBitmap(ownerPic);
-        }
-        //search if coming in from exchange
-        else {
-            // sets owner name and avatar
-            UserController userController = UserController.getInstance();
-            userController.getUserProfile(ownerId).handleAsync((result, error) -> {
-                if (error == null) {
-                    // Update ui here
-                    String name = result.getName();
-                    String photoId = result.getPicture();
-                    getActivity().runOnUiThread(() -> {
-                        tvOwner.setText(name);
-                    });
-                    // sets owner image if there is one
-                    ImageController imageController = ImageController.getInstance();
-                    imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
-                        if (errorImage == null) {
-                            Bitmap bitmap = resultImage;
+        // sets owner name and avatar
+        UserController userController = UserController.getInstance();
+        userController.getUserProfile(ownerId).handleAsync((result, error) -> {
+            if (error == null) {
+                // Update ui here
+                String name = result.getName();
+                String photoId = result.getPicture();
+                getActivity().runOnUiThread(() -> {
+                    tvOwner.setText(name);
+                });
+                // sets owner image if there is one
+                ImageController imageController = ImageController.getInstance();
+                imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
+                    if (errorImage == null) {
+                        Bitmap bitmap = resultImage;
 
-                            if (bitmap != null) {
-                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                                        Math.min(bitmap.getWidth(), bitmap.getHeight()),
-                                        Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                        if (bitmap != null) {
+                            Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                                    Math.min(bitmap.getWidth(), bitmap.getHeight()),
+                                    Math.min(bitmap.getWidth(), bitmap.getHeight()));
 
-                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
-                                        .create(getResources(), squareBitmap);
-                                drawable.setCornerRadius(Math.min(
-                                        bitmap.getWidth(), bitmap.getHeight()));
-                                drawable.setAntiAlias(true);
+                            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
+                                    .create(getResources(), squareBitmap);
 
-                                getActivity().runOnUiThread(() -> {
-                                    ivOwnerPic.setImageDrawable(drawable);
-                                });
-                            }
-                        } else {
-                            showError(errorImage.getMessage());
+                            drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                            drawable.setAntiAlias(true);
+
+                            getActivity().runOnUiThread(() -> {
+                                ivOwnerPic.setImageDrawable(drawable);
+                            });
                         }
-                        return null;
-                    });
-                } else {
-                    // Show error message
-                    throw new NullPointerException("user profile not obtained");
-                }
-                return null;
-            });
-        }
+                    } else {
+                        showError(errorImage.getMessage());
+                    }
+                    return null;
+                });
+            } else {
+                // Show error message
+                throw new NullPointerException("user profile not obtained");
+            }
+            return null;
+        });
     }
 
     /**
-     * throws and error in toast
+     * Shows an error message in toast
      * @param message error message
      */
     private void showError(String message) {

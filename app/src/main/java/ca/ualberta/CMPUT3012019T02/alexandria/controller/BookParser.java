@@ -47,7 +47,7 @@ public class BookParser {
                             image = imageController.getImage(book.getImageId()).get(5, TimeUnit.SECONDS);
                         }
 
-                        BookListItem bookListItem = new BookListItem(image, book.getTitle(), book.getAuthor(), isbn, userBook.getStatus(), userBook.getOwner());
+                        BookListItem bookListItem = new BookListItem(image, book.getImageId(), book.getTitle(), book.getAuthor(), isbn, userBook.getStatus(), userBook.getOwner());
 
                         result.add(bookListItem);
                         future.complete(null);

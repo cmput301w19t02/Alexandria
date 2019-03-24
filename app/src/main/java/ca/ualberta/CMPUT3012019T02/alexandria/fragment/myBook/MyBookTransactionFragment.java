@@ -40,7 +40,11 @@ public class MyBookTransactionFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_my_book_transaction,null);
+        Bundle arguments = getArguments();
+        isbn = arguments.getString("isbn");
+        status = arguments.getString("status");
+
+        View rootView = inflater.inflate(R.layout.fragment_my_book_transaction, null);
 
         //setUI
         setStatusBar(rootView);
@@ -56,65 +60,56 @@ public class MyBookTransactionFragment extends Fragment {
         return rootView;
     }
 
-    //sets the status/isbn via parent fragment
-    public void setVariables(String status, String isbn) {
-        this.status = status;
-        this.isbn= isbn;
-    }
-
     //gets the borrower info from firebase
-    private void getUserInfo(View v){
+    private void getUserInfo(View v) {
         ImageView ivBorrowerPic = v.findViewById(R.id.my_book_borrower_pic);
         Button btBorrowerName = v.findViewById(R.id.my_book_borrower);
 
 
-        bookController.getMyOwnedBook(isbn).handleAsync((bookResult,bookError)->{
-            if(bookError==null) {
+        bookController.getMyOwnedBook(isbn).handleAsync((bookResult, bookError) -> {
+            if (bookError == null) {
                 this.borrowerId = bookResult.getUserBorrowing();
-                userController.getUserProfile(borrowerId).handleAsync((userResult,userError)->{
-                    if(userError==null) {
+                userController.getUserProfile(borrowerId).handleAsync((userResult, userError) -> {
+                    if (userError == null) {
                         String username = userResult.getUsername();
                         String pictureId = userResult.getPicture();
 
-                        if(pictureId!=null) {
+                        if (pictureId != null) {
                             imageController.getImage(pictureId)
                                     .handleAsync((imageResult, imageError) -> {
-                                if (imageError == null) {
+                                        if (imageError == null) {
 
-                                    Bitmap squareBitmap
-                                            = Bitmap.createBitmap(imageResult, 0, 0,
-                                            Math.min(imageResult.getWidth(),
-                                                    imageResult.getHeight()),
-                                            Math.min(imageResult.getWidth(),
-                                                    imageResult.getHeight()));
+                                            Bitmap squareBitmap
+                                                    = Bitmap.createBitmap(imageResult, 0, 0,
+                                                    Math.min(imageResult.getWidth(),
+                                                            imageResult.getHeight()),
+                                                    Math.min(imageResult.getWidth(),
+                                                            imageResult.getHeight()));
 
-                                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
-                                            .create(getResources(), squareBitmap);
-                                    drawable.setCornerRadius(Math.min(
-                                            imageResult.getWidth(), imageResult.getHeight()));
-                                    drawable.setAntiAlias(true);
+                                            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
+                                                    .create(getResources(), squareBitmap);
+                                            drawable.setCornerRadius(Math.min(
+                                                    imageResult.getWidth(), imageResult.getHeight()));
+                                            drawable.setAntiAlias(true);
 
-                                    getActivity().runOnUiThread(() -> {
-                                        ivBorrowerPic.setImageDrawable(drawable);
-                                        ivBorrowerPic.refreshDrawableState();
-                                        btBorrowerName.setText(username);
+                                            getActivity().runOnUiThread(() -> {
+                                                ivBorrowerPic.setImageDrawable(drawable);
+                                                ivBorrowerPic.refreshDrawableState();
+                                                btBorrowerName.setText(username);
+                                            });
+                                        } else {
+                                            Log.e("Error", "Error getting user image");
+                                        }
+                                        return null;
                                     });
-                                }
-                                else{
-                                    Log.e("Error","Error getting user image");
-                                }
-                                return null;
-                            });
                         }
-                    }
-                    else{
-                        Log.e("Error","Error getting user");
+                    } else {
+                        Log.e("Error", "Error getting user");
                     }
                     return null;
                 });
-            }
-            else{
-                Log.e("Error","Error getting owned book");
+            } else {
+                Log.e("Error", "Error getting owned book");
             }
             return null;
         });
@@ -148,12 +143,21 @@ public class MyBookTransactionFragment extends Fragment {
 
     //onClick functions for buttons
     private final View.OnClickListener mListener = (View v) -> {
-        switch(v.getId()){
-            case R.id.my_book_borrower_pic: onClickUser(); break;
-            case R.id.my_book_borrower: onClickUser(); break;
-            case R.id.my_book_message: onClickMessageUser(); break;
-            case R.id.my_book_user_ellipses: onClickEllipses(v); break;
-            default: throw new RuntimeException("No Button Found");
+        switch (v.getId()) {
+            case R.id.my_book_borrower_pic:
+                onClickUser();
+                break;
+            case R.id.my_book_borrower:
+                onClickUser();
+                break;
+            case R.id.my_book_message:
+                onClickMessageUser();
+                break;
+            case R.id.my_book_user_ellipses:
+                onClickEllipses(v);
+                break;
+            default:
+                throw new RuntimeException("No Button Found");
         }
     };
 
@@ -175,11 +179,18 @@ public class MyBookTransactionFragment extends Fragment {
         popup.getMenuInflater().inflate(getStatusMenu(), popup.getMenu());
 
         popup.setOnMenuItemClickListener((MenuItem item) -> {
-            switch (item.getItemId()){
-                case R.id.option_view_user: onClickUser(); break;
-                case R.id.option_set_borrowed: setBorrowed(); break;
-                case R.id.option_return: acceptReturn(); break;
-                default: throw new RuntimeException("No Button Found");
+            switch (item.getItemId()) {
+                case R.id.option_view_user:
+                    onClickUser();
+                    break;
+                case R.id.option_set_borrowed:
+                    setBorrowed();
+                    break;
+                case R.id.option_return:
+                    acceptReturn();
+                    break;
+                default:
+                    throw new RuntimeException("No Button Found");
             }
             return true;
         });
@@ -188,23 +199,26 @@ public class MyBookTransactionFragment extends Fragment {
 
     //switches popup menus depending on status
     private int getStatusMenu() {
-        switch (status){
-            case "accepted": return R.menu.menu_my_book_accepted;
-            case "borrowed": return R.menu.menu_my_book_borrowed;
-            default: throw new RuntimeException("No Button Found");
+        switch (status) {
+            case "accepted":
+                return R.menu.menu_my_book_accepted;
+            case "borrowed":
+                return R.menu.menu_my_book_borrowed;
+            default:
+                throw new RuntimeException("No Button Found");
         }
 
     }
 
     //TODO implement
     //opens the camera to change status
-    private void setBorrowed(){
+    private void setBorrowed() {
 
     }
 
     //TODO implement
     //opens camera to process return
-    private void acceptReturn(){
+    private void acceptReturn() {
 
     }
 

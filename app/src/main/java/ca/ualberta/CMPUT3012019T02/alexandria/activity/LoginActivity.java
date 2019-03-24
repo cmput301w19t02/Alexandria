@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
         errorMessage.setText("");
 
-        String username = usernameField.getText().toString();
+        String username = usernameField.getText().toString().trim();
         String password = passwordField.getText().toString();
 
         if (!validator(username,password)) return;
