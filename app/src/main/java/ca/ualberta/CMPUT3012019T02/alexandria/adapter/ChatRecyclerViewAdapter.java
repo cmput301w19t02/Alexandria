@@ -2,11 +2,8 @@ package ca.ualberta.CMPUT3012019T02.alexandria.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +23,9 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.ChatViewHolder;
  */
 public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder> {
 
+    private static final int MESSAGE_READ = 1;
+    private static final int MESSAGE_UNREAD = 2;
+
     private Context mContext;
     private List<ChatRoomItem> mChatRoomList;
 
@@ -43,14 +43,29 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
         this.mChatRoomList = mChatRoomList;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        ChatRoomItem chatRoomItem = (ChatRoomItem)mChatRoomList.get(position);
+        if (chatRoomItem.getReadStatus()) {
+            return MESSAGE_READ;
+        } else {
+            return MESSAGE_UNREAD;
+        }
+    }
+
     @NonNull
     @Override
-    public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
 
         View mView;
 
-        mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.item_chat_list, viewGroup, false);
+        if (viewType == MESSAGE_READ) {
+            mView = LayoutInflater.from(mContext)
+                    .inflate(R.layout.item_chat_list_read, viewGroup, false);
+        } else {
+            mView = LayoutInflater.from(mContext)
+                    .inflate(R.layout.item_chat_list_unread, viewGroup, false);
+        }
         ChatViewHolder mViewHolder = new ChatViewHolder(mView);
 
         mViewHolder.itemChat.setOnClickListener(new View.OnClickListener() {
@@ -58,23 +73,24 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
             public void onClick(View v) {
 
                 String chatId = mChatRoomList.get(mViewHolder.getAdapterPosition()).getChatId();
-                String myId = userController.getMyId();
-                String recieverId = mChatRoomList.get(mViewHolder.getAdapterPosition())
+                //String myId = userController.getMyId();
+                String myId = mChatRoomList.get(mViewHolder.getAdapterPosition()).getUser1Id();
+                String receiverId = mChatRoomList.get(mViewHolder.getAdapterPosition())
                         .getUser1Id();
-                String recieverName = mChatRoomList.get(mViewHolder.getAdapterPosition())
+                String receiverName = mChatRoomList.get(mViewHolder.getAdapterPosition())
                         .getUser1Name();
 
-                if (recieverId.equals(myId)) {
-                    recieverId = mChatRoomList.get(mViewHolder.getAdapterPosition()).getUser2Id();
-                    recieverName = mChatRoomList.get(mViewHolder.getAdapterPosition())
+                if (receiverId.equals(myId)) {
+                    receiverId = mChatRoomList.get(mViewHolder.getAdapterPosition()).getUser2Id();
+                    receiverName = mChatRoomList.get(mViewHolder.getAdapterPosition())
                             .getUser2Name();
                 }
 
 
                 Intent intent = new Intent(viewGroup.getContext(), ChatRoomActivity.class);
                 intent.putExtra("chatId", chatId);
-                intent.putExtra("recieverId", recieverId);
-                intent.putExtra("recieverName", recieverName);
+                intent.putExtra("receiverId", receiverId);
+                intent.putExtra("receiverName", receiverName);
                 //TODO: add imageId to display in ChatRoom
                 //intent.putExtra("imageId", imageId);
 
@@ -89,21 +105,9 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
     @Override
     public void onBindViewHolder(@NonNull ChatViewHolder myViewHolder, int position) {
 
+        //TODO get user pic
         //myViewHolder.ivChatUserPic.setImageBitmap(mChatRoomList.get(position).getUserPic());
-        myViewHolder.tvChatRecieverUsername.setText(mChatRoomList.get(position).getUser2Name());
-        // TODO: add image from res folder for read status
-        /**
-        if (!mChatRoomList.get(position).getReadStatus()){
-            //unread image from res folder
-            myViewHolder.ivReadStatus.setImageBitmap();
-        } else{
-            //clear image for read from res folder
-            myViewHolder.ivReadStatus.setImageBitmap();
-        }
-         */
-        Bitmap.Config config = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = Bitmap.createBitmap(24, 24, config);
-        myViewHolder.ivReadStatus.setImageBitmap(bitmap);
+        myViewHolder.tvChatReceiverUsername.setText(mChatRoomList.get(position).getUser2Name());
     }
 
     @Override

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -56,10 +55,10 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     private List<Message> messageList = new ArrayList<>();
     private String chatId;
-    private String recieverId;
+    private String receiverId;
     private String senderId;
-    private String recieverName;
-    private Bitmap recieverImage;
+    private String receiverName;
+    private Bitmap receiverImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,18 +67,18 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         chatId = intent.getStringExtra("chatId");
-        recieverId = intent.getStringExtra("recieverId");
-        recieverName = intent.getStringExtra("recieverName");
+        receiverId = intent.getStringExtra("receiverId");
+        receiverName = intent.getStringExtra("receiverName");
         senderId = UserController.getInstance().getMyId();
 
         //byte[] byteArray = intent.getByteArrayExtra("image");
-        //recieverImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        //receiverImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
-        TextView recieverUserName = (TextView)findViewById(R.id.reciever_username);
-        recieverUserName.setText(recieverName);
+        TextView receiverUserName = (TextView)findViewById(R.id.receiver_username);
+        receiverUserName.setText(receiverName);
 
-        //ImageView recieverImageIcon = (ImageView)findViewById(R.id.reciever_image);
-        //recieverImage.setImageBitmap();
+        //ImageView receiverImageIcon = (ImageView)findViewById(R.id.receiver_image);
+        //receiverImage.setImageBitmap();
 
         // toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.ChatRoom_toolbar);
@@ -252,7 +251,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         Date date = new Date();
         TextMessage message = new TextMessage(inputText, "unread", date.getTime(), senderId);
         chatController.addTextMessage(chatId, message);
-        chatController.setUserChatRoomReadStatus(chatId, recieverId, false);
+        chatController.setUserChatRoomReadStatus(chatId, receiverId, false);
     }
 
     @Override
@@ -267,7 +266,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 LocationMessage message = new LocationMessage(location, "unread", date.getTime(), senderId);
 
                 chatController.addLocationMessage(chatId, message);
-                chatController.setUserChatRoomReadStatus(chatId, recieverId, false);
+                chatController.setUserChatRoomReadStatus(chatId, receiverId, false);
                 //TODO: transaction location
             }
             if (resultCode == Activity.RESULT_CANCELED){

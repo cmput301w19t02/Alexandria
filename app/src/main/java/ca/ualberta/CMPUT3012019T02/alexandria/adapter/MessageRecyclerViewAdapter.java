@@ -11,17 +11,24 @@ import java.util.Date;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.MessageViewHolder;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.ReceivedMessageViewHolder;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.SentMessageViewHolder;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 
 
 /**
  * The Message recycler view adapter.
  */
-public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageViewHolder> {
+public class MessageRecyclerViewAdapter extends RecyclerView.Adapter {
+
+    private static final int SENT = 1;
+    private static final int RECEIVED = 2;
 
     private Context mContext;
     private List<Message> mMessageList;
+
+    private UserController userController = UserController.getInstance();
 
     /**
      * Instantiates a new Message recycler view adapter.
@@ -34,24 +41,49 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageView
         this.mMessageList = mMessageList;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        Message message = (Message) mMessageList.get(position);
+        String myId = userController.getMyId();
+        String senderId = message.getSender();
+        if (myId.equals(senderId)) {
+            return SENT;
+        } else {
+            return RECEIVED;
+        }
+    }
+
     @NonNull
     @Override
-    public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
 
         View mView;
 
-        mView = LayoutInflater.from(mContext)
-                .inflate(R.layout.item_message_recieve, viewGroup, false);
-        MessageViewHolder mViewHolder = new MessageViewHolder(mView);
+        if (viewType == SENT) {
+            mView = LayoutInflater.from(mContext)
+                    .inflate(R.layout.item_message_sent, viewGroup, false);
+            return new SentMessageViewHolder(mView);
+        } else {
+            mView = LayoutInflater.from(mContext)
+                    .inflate(R.layout.item_message_received, viewGroup, false);
+            return new ReceivedMessageViewHolder(mView);
+        }
 
-        return mViewHolder;
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MessageViewHolder myViewHolder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder myViewHolder, int position) {
         Date date = new Date(mMessageList.get(position).getDate());
-        myViewHolder.tvSendTime.setText(date.toString());
-        myViewHolder.tvContent.setText(mMessageList.get(position).getContent());
+
+        if (myViewHolder.getItemViewType() == SENT){
+            ((SentMessageViewHolder) myViewHolder).tvTimeStamp.setText(date.toString());
+            ((SentMessageViewHolder) myViewHolder).tvContent.setText(mMessageList.get(position).getContent());
+        } else if (myViewHolder.getItemViewType() == RECEIVED) {
+            ((ReceivedMessageViewHolder) myViewHolder).tvTimeStamp.setText(date.toString());
+            ((ReceivedMessageViewHolder) myViewHolder).tvContent.setText(mMessageList.get(position).getContent());
+        }
+
     }
 
     @Override

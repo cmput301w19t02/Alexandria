@@ -11,7 +11,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.R;
 /**
  * Sets up item ids for Recycler views, which require attributes to be public.
  */
-public class MessageViewHolder extends RecyclerView.ViewHolder {
+public class SentMessageViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * The Item message.
@@ -24,18 +24,18 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     /**
      * The TextView sender username.
      */
-    public TextView tvSendTime;
+    public TextView tvTimeStamp;
 
     /**
      * Instantiates a new Message view holder.
      *
      * @param itemView the item view
      */
-    public MessageViewHolder(@NonNull View itemView) {
+    public SentMessageViewHolder(@NonNull View itemView) {
         super(itemView);
 
         itemMessage = itemView.findViewById(R.id.item_message);
-        tvSendTime = itemView.findViewById(R.id.message_time_recieved);
-        tvContent = itemView.findViewById(R.id.message_content);
+        tvTimeStamp = itemView.findViewById(R.id.message_time_sent);
+        tvContent = itemView.findViewById(R.id.message_content_sent);
     }
 }

@@ -20,9 +20,9 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
      */
     public ConstraintLayout itemChat;
     /**
-     * The TextView chat reciever username.
+     * The TextView chat receiver username.
      */
-    public TextView tvChatRecieverUsername;
+    public TextView tvChatReceiverUsername;
     /**
      * The ImageView chat user pic.
      */
@@ -41,7 +41,7 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         itemChat = itemView.findViewById(R.id.item_chat);
-        tvChatRecieverUsername = itemView.findViewById(R.id.chat_reciever_username);
+        tvChatReceiverUsername = itemView.findViewById(R.id.chat_receiver_username);
         ivChatUserPic = itemView.findViewById(R.id.chat_user_pic);
         ivReadStatus = itemView.findViewById(R.id.read_status);
     }

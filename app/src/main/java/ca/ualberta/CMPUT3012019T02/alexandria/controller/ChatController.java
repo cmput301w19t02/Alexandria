@@ -39,27 +39,27 @@ public class ChatController {
      * already a chat between the two.
      *
      * @param senderId   my user id
-     * @param recieverId the person I want to message's id
+     * @param receiverId the person I want to message's id
      * @return the completable future
      */
-    public CompletableFuture<Void> addChatRoom(String senderId, String recieverId,
-                                               String recieverName) {
-        return addChatRoomPrivate(senderId, recieverId, recieverName);
+    public CompletableFuture<Void> addChatRoom(String senderId, String receiverId,
+                                               String receiverName) {
+        return addChatRoomPrivate(senderId, receiverId, receiverName);
     }
 
-    private CompletableFuture<Void> addChatRoomPrivate(String senderId, String recieverId,
-                                                       String recieverName) {
+    private CompletableFuture<Void> addChatRoomPrivate(String senderId, String receiverId,
+                                                       String receiverName) {
         CompletableFuture<Void> future = new CompletableFuture<>();
-        String chatRoomExists = userCache.getChatRoomId(recieverId);
+        String chatRoomExists = userCache.getChatRoomId(receiverId);
 
         if (chatRoomExists == null) {
             String senderName = userCache.getProfile().getName();
             String chatId = getUserChatRoomListReference(senderId).push().getKey();
-            ChatRoomItem chatRoomItem = new ChatRoomItem(chatId, senderId, senderName, recieverId,
-                    recieverName, false);
+            ChatRoomItem chatRoomItem = new ChatRoomItem(chatId, senderId, senderName, receiverId,
+                    receiverName, false);
 
             addChatRoomItemToId(senderId, chatId, chatRoomItem).thenRun(() ->
-                addChatRoomItemToId(recieverId, chatId, chatRoomItem).join())
+                addChatRoomItemToId(receiverId, chatId, chatRoomItem).join())
                     .exceptionally(throwable -> {
                         future.completeExceptionally(throwable);
                         return null;
@@ -86,7 +86,7 @@ public class ChatController {
 
     private void setChatRoomReadStatusPrivate(String chatId, String otherUserId, boolean status) {
         final CompletableFuture<Void> future = new CompletableFuture<>();
-        getUserChatRoomListReference(otherUserId).child(chatId).setValue("readStatus", status)
+        getUserChatRoomListReference(otherUserId).child(chatId).child("readStatus").setValue(status)
                 .addOnSuccessListener(future::complete)
                 .addOnFailureListener(future::completeExceptionally);
     }
