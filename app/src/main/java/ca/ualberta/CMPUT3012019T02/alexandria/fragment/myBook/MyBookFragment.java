@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook.EditBookActivity;
 
 public class MyBookFragment extends Fragment {
 
@@ -68,7 +70,7 @@ public class MyBookFragment extends Fragment {
         switch (item.getItemId()) {
             //menu switch
             case R.id.option_edit_book:
-                break;
+                onClickEditBook();
             case R.id.option_delete_book:
                 break;
             case R.id.menu_my_book_ellipses:
@@ -141,6 +143,13 @@ public class MyBookFragment extends Fragment {
     public void onStatusChange(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(this).attach(this).commit();
+    }
+
+
+    private void onClickEditBook(){
+        Intent intentEditBook = new Intent(getActivity(), EditBookActivity.class);
+        intentEditBook.putExtra("BOOK_ISBN", isbn);
+        startActivity(intentEditBook);
     }
 
 }
