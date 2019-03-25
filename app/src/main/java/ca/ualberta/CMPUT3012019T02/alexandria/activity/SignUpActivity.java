@@ -64,10 +64,10 @@ public class SignUpActivity extends AppCompatActivity {
         AppCompatEditText passwordField = findViewById(R.id.sign_up_password_field);
         AppCompatEditText emailField = findViewById(R.id.sign_up_email_field);
 
-        String name = nameField.getText().toString();
-        String username = usernameField.getText().toString();
+        String name = nameField.getText().toString().trim();
+        String username = usernameField.getText().toString().trim();
         String password = passwordField.getText().toString();
-        String email = emailField.getText().toString();
+        String email = emailField.getText().toString().trim();
 
         if (!validateName(name)) {
             showError("Name is invalid! Name must contain at least 4 character.");

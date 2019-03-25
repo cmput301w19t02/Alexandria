@@ -3,7 +3,6 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -16,7 +15,6 @@ import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
-import java9.util.function.Consumer;
 
 /**
  * The Edit book activity.
@@ -53,16 +51,14 @@ public class EditBookActivity extends AddNewBookActivity {
             finish();
         } else {
             isbn = extras.getString("BOOK_ISBN");
-            BookController.getInstance().getBook(isbn).thenAccept(new Consumer<Book>() {
-                @Override
-                public void accept(Book book) {
-                    myBook = book;
-                    if (myBook == null) {
-                        showError("The book is not found.");
-                        finish();
-                    }
+            BookController.getInstance().getBook(isbn).thenAccept(bookOptional -> {
+                if (bookOptional.isPresent()) {
+                    myBook = bookOptional.get();
                     extractBookInfo();
                     setData();
+                } else {
+                    showError("The book is not found.");
+                    finish();
                 }
             });
         }

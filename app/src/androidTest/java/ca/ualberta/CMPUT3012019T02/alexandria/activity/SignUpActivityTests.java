@@ -100,7 +100,7 @@ public class SignUpActivityTests {
 
         Thread.sleep(10000);
 
-        UserProfile profile = UserController.getInstance().getMyProfile().get(10, TimeUnit.SECONDS);
+        UserProfile profile = UserController.getInstance().getMyProfile().get();
 
         Assert.assertEquals(email, profile.getEmail());
         Assert.assertEquals(username, profile.getUsername());

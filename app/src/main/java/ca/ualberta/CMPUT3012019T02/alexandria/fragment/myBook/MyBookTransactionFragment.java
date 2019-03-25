@@ -1,5 +1,8 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -19,10 +22,13 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ISBNLookup;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
+
+import static android.app.Activity.RESULT_OK;
 
 public class MyBookTransactionFragment extends Fragment {
 
@@ -34,13 +40,28 @@ public class MyBookTransactionFragment extends Fragment {
     private UserController userController = UserController.getInstance();
     private ImageController imageController = ImageController.getInstance();
 
+    private final int RESULT_ISBN = 1;
+
+    private Activity activity;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            activity = (Activity) context;
+        }
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_my_book_transaction,null);
+        Bundle arguments = getArguments();
+        isbn = arguments.getString("isbn");
+        status = arguments.getString("status");
+
+        View rootView = inflater.inflate(R.layout.fragment_my_book_transaction, null);
 
         //setUI
         setStatusBar(rootView);
@@ -56,65 +77,56 @@ public class MyBookTransactionFragment extends Fragment {
         return rootView;
     }
 
-    //sets the status/isbn via parent fragment
-    public void setVariables(String status, String isbn) {
-        this.status = status;
-        this.isbn= isbn;
-    }
-
     //gets the borrower info from firebase
-    private void getUserInfo(View v){
+    private void getUserInfo(View v) {
         ImageView ivBorrowerPic = v.findViewById(R.id.my_book_borrower_pic);
         Button btBorrowerName = v.findViewById(R.id.my_book_borrower);
 
 
-        bookController.getMyOwnedBook(isbn).handleAsync((bookResult,bookError)->{
-            if(bookError==null) {
-                this.borrowerId = bookResult.getUserBorrowing();
-                userController.getUserProfile(borrowerId).handleAsync((userResult,userError)->{
-                    if(userError==null) {
+        bookController.getMyOwnedBook(isbn).handleAsync((bookResult, bookError) -> {
+            if (bookError == null) {
+                this.borrowerId = bookResult.get().getUserBorrowing();
+                userController.getUserProfile(borrowerId).handleAsync((userResult, userError) -> {
+                    if (userError == null) {
                         String username = userResult.getUsername();
                         String pictureId = userResult.getPicture();
 
-                        if(pictureId!=null) {
+                        if (pictureId != null) {
                             imageController.getImage(pictureId)
                                     .handleAsync((imageResult, imageError) -> {
-                                if (imageError == null) {
+                                        if (imageError == null) {
 
-                                    Bitmap squareBitmap
-                                            = Bitmap.createBitmap(imageResult, 0, 0,
-                                            Math.min(imageResult.getWidth(),
-                                                    imageResult.getHeight()),
-                                            Math.min(imageResult.getWidth(),
-                                                    imageResult.getHeight()));
+                                            Bitmap squareBitmap
+                                                    = Bitmap.createBitmap(imageResult, 0, 0,
+                                                    Math.min(imageResult.getWidth(),
+                                                            imageResult.getHeight()),
+                                                    Math.min(imageResult.getWidth(),
+                                                            imageResult.getHeight()));
 
-                                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
-                                            .create(getResources(), squareBitmap);
-                                    drawable.setCornerRadius(Math.min(
-                                            imageResult.getWidth(), imageResult.getHeight()));
-                                    drawable.setAntiAlias(true);
+                                            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
+                                                    .create(getResources(), squareBitmap);
+                                            drawable.setCornerRadius(Math.min(
+                                                    imageResult.getWidth(), imageResult.getHeight()));
+                                            drawable.setAntiAlias(true);
 
-                                    getActivity().runOnUiThread(() -> {
-                                        ivBorrowerPic.setImageDrawable(drawable);
-                                        ivBorrowerPic.refreshDrawableState();
-                                        btBorrowerName.setText(username);
+                                            activity.runOnUiThread(() -> {
+                                                ivBorrowerPic.setImageDrawable(drawable);
+                                                ivBorrowerPic.refreshDrawableState();
+                                                btBorrowerName.setText(username);
+                                            });
+                                        } else {
+                                            Log.e("Error", "Error getting user image");
+                                        }
+                                        return null;
                                     });
-                                }
-                                else{
-                                    Log.e("Error","Error getting user image");
-                                }
-                                return null;
-                            });
                         }
-                    }
-                    else{
-                        Log.e("Error","Error getting user");
+                    } else {
+                        Log.e("Error", "Error getting user");
                     }
                     return null;
                 });
-            }
-            else{
-                Log.e("Error","Error getting owned book");
+            } else {
+                Log.e("Error", "Error getting owned book");
             }
             return null;
         });
@@ -148,18 +160,27 @@ public class MyBookTransactionFragment extends Fragment {
 
     //onClick functions for buttons
     private final View.OnClickListener mListener = (View v) -> {
-        switch(v.getId()){
-            case R.id.my_book_borrower_pic: onClickUser(); break;
-            case R.id.my_book_borrower: onClickUser(); break;
-            case R.id.my_book_message: onClickMessageUser(); break;
-            case R.id.my_book_user_ellipses: onClickEllipses(v); break;
-            default: throw new RuntimeException("No Button Found");
+        switch (v.getId()) {
+            case R.id.my_book_borrower_pic:
+                onClickUser();
+                break;
+            case R.id.my_book_borrower:
+                onClickUser();
+                break;
+            case R.id.my_book_message:
+                onClickMessageUser();
+                break;
+            case R.id.my_book_user_ellipses:
+                onClickEllipses(v);
+                break;
+            default:
+                throw new RuntimeException("No Button Found");
         }
     };
 
     //switch to the borrower's profile
     private void onClickUser() {
-        Intent intentViewOwner = new Intent(getActivity(), ViewUserProfileActivity.class);
+        Intent intentViewOwner = new Intent(activity, ViewUserProfileActivity.class);
         intentViewOwner.putExtra("USER_ID", borrowerId);
         startActivity(intentViewOwner);
     }
@@ -175,11 +196,25 @@ public class MyBookTransactionFragment extends Fragment {
         popup.getMenuInflater().inflate(getStatusMenu(), popup.getMenu());
 
         popup.setOnMenuItemClickListener((MenuItem item) -> {
-            switch (item.getItemId()){
-                case R.id.option_view_user: onClickUser(); break;
-                case R.id.option_set_borrowed: setBorrowed(); break;
-                case R.id.option_return: acceptReturn(); break;
-                default: throw new RuntimeException("No Button Found");
+
+
+            Intent intent = new Intent(activity, ISBNLookup.class);
+
+            switch (item.getItemId()) {
+                case R.id.option_view_user:
+                    onClickUser();
+                    break;
+                case R.id.option_set_borrowed:
+                    startActivityForResult(intent, RESULT_ISBN);
+                    break;
+                case R.id.option_return:
+                    startActivityForResult(intent, RESULT_ISBN);
+                    break;
+                case R.id.option_cancel_order:
+                    cancelOrder();
+                    break;
+                default:
+                    throw new RuntimeException("No Button Found");
             }
             return true;
         });
@@ -188,24 +223,141 @@ public class MyBookTransactionFragment extends Fragment {
 
     //switches popup menus depending on status
     private int getStatusMenu() {
-        switch (status){
-            case "accepted": return R.menu.menu_my_book_accepted;
-            case "borrowed": return R.menu.menu_my_book_borrowed;
-            default: throw new RuntimeException("No Button Found");
+        switch (status) {
+            case "accepted":
+                return R.menu.menu_my_book_accepted;
+            case "borrowed":
+                return R.menu.menu_my_book_borrowed;
+            default:
+                throw new RuntimeException("No Button Found");
         }
 
     }
 
-    //TODO implement
-    //opens the camera to change status
-    private void setBorrowed(){
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        // Check which request we're responding to
+        if (requestCode == RESULT_ISBN) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                String isbn = extras.getString("isbn");
+                switch (status) {
+                    case "accepted":
+                        setBorrowed(isbn);
+                        break;
+                    case "borrowed":
+                        acceptReturn(isbn);
+                        break;
+                    default:
+                }
+            }
+        }
     }
 
-    //TODO implement
-    //opens camera to process return
-    private void acceptReturn(){
+    private void setBorrowed(String scannedIsbn) {
+//        if (isbn.equals(scannedIsbn)) {
+        // TODO: fix ISBN scanning so that it scans properly
+        if (true) {
+            BookController.getInstance().scanMyOwnedBook(isbn).handleAsync((aVoid, throwable) -> {
+                if (throwable == null) {
 
+                    BookController.getInstance().exchangeBook(isbn, userController.getMyId()).handleAsync((aVoid1, throwable1) -> {
+                        activity.runOnUiThread(() -> {
+                            if (throwable1 == null) {
+
+                                // Completed successfully
+
+                            } else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setMessage("Scan successful. Please wait for the other member to confirm.");
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                        });
+                        return null;
+                    });
+
+                } else {
+                    activity.runOnUiThread(() -> {
+                        throwable.printStackTrace();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setMessage("Was not able to scan ISBN. Please try again later.");
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    });
+                }
+                return null;
+            });
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage("Scanned ISBN does not match the book you are returning");
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+    private void acceptReturn(String scannedIsbn) {
+//        if (isbn.equals(scannedIsbn)) {
+        // TODO: fix ISBN scanning so that it scans properly
+        if (true) {
+            BookController.getInstance().scanMyOwnedBook(isbn).handleAsync((aVoid, throwable) -> {
+                if (throwable == null) {
+
+                    BookController.getInstance().returnBook(isbn, userController.getMyId()).handleAsync((aVoid1, throwable1) -> {
+                        activity.runOnUiThread(() -> {
+                            if (throwable1 == null) {
+
+                                // Completed successfully
+
+                            } else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setMessage("Scan successful. Please wait for the other member to confirm.");
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                        });
+                        return null;
+                    });
+
+                } else {
+                    activity.runOnUiThread(() -> {
+                        throwable.printStackTrace();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setMessage("Was not able to scan ISBN. Please try again later.");
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    });
+                }
+                return null;
+            });
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage("Scanned ISBN does not match the book you are returning");
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+    private void cancelOrder() {
+        bookController.declineRequest(isbn, borrowerId).handleAsync((aVoid, throwable) -> {
+            activity.runOnUiThread(() -> {
+                if (throwable == null) {
+
+                    // Successfully declined the request
+                    // TODO: MyBookFragment.onStatusChange()
+
+                } else {
+                    throwable.printStackTrace();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("Unable to cancel order. Please try again later.");
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+            return null;
+        });
     }
 
 }

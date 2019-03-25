@@ -110,7 +110,7 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
     private Bundle dataBundler(BookViewHolder mViewHolder) {
         Bundle b = new Bundle();
 
-        b.putParcelable("cover", mBookListItem.get(mViewHolder.getAdapterPosition()).getCover());
+        b.putString("coverId", mBookListItem.get(mViewHolder.getAdapterPosition()).getCoverId());
         b.putString("title", mBookListItem.get(mViewHolder.getAdapterPosition()).getTitle());
         b.putString("author", mBookListItem.get(mViewHolder.getAdapterPosition()).getAuthor());
         b.putString("isbn", mBookListItem.get(mViewHolder.getAdapterPosition()).getIsbn());

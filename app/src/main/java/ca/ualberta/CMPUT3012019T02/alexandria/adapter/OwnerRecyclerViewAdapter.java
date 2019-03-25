@@ -106,10 +106,6 @@ public class OwnerRecyclerViewAdapter extends RecyclerView.Adapter<OwnerViewHold
         b.putString("isbn", mOwnerListItem.get(mViewHolder.getAdapterPosition()).getIsbn());
         b.putString("ownerId", mOwnerListItem.get(mViewHolder.getAdapterPosition()).getOwnerId());
         b.putString("status", mOwnerListItem.get(mViewHolder.getAdapterPosition()).getStatus());
-        b.putString("ownerUsername",
-                mOwnerListItem.get(mViewHolder.getAdapterPosition()).getOwnerUsername());
-        b.putParcelable("ownerPic",
-                mOwnerListItem.get(mViewHolder.getAdapterPosition()).getOwnerPic());
 
         return b;
     }
