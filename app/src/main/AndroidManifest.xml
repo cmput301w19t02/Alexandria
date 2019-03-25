@@ -24,9 +24,6 @@
             android:name=".activity.ISBNLookup"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".activity.BlockedUsersActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.EditMyProfileActivity"
             android:screenOrientation="portrait" />
         <activity

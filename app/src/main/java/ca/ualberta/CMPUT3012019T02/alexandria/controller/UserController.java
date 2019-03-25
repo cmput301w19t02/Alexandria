@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
-import java9.util.Optional;
 import java9.util.concurrent.CompletableFuture;
 
 

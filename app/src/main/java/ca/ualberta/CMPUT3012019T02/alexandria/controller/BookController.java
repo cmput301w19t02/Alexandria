@@ -31,6 +31,7 @@ public class BookController {
 
     private FirebaseDatabase firebase;
     private UserController userController;
+    private NotificationController notificationController;
     private ObservableUserCache observableUserCache;
 
     private static BookController instance;
@@ -38,6 +39,7 @@ public class BookController {
     private BookController() {
         firebase = FirebaseDatabase.getInstance();
         userController = UserController.getInstance();
+        notificationController = NotificationController.getInstance();
         observableUserCache = ObservableUserCache.getInstance();
     }
 
@@ -164,7 +166,7 @@ public class BookController {
     /**
      * As the current user (borrower), request a book from another user
      *
-     * @param isbn isbn of the book to request
+     * @param isbn    isbn of the book to request
      * @param ownerId id of the user to request to
      * @return a CompletableFuture signifying the success/failure of this operation
      */
@@ -194,6 +196,7 @@ public class BookController {
                         }
                         mutableData.setValue(ownedBook);
                         return Transaction.success(mutableData);
+
                     }
 
                     @Override
@@ -203,6 +206,17 @@ public class BookController {
                                     .setValue(new BorrowedBook(isbn, "requested", ownerId))
                                     .addOnSuccessListener(future::complete)
                                     .addOnFailureListener(future::completeExceptionally); // a potentially problematic error. Leaves ambiguous data in database
+                            userController.getMyProfile().handleAsync((myProfile, profileError) -> {
+                                if (profileError == null) {
+                                    getBook(isbn).handleAsync((book, bookError) -> {
+                                        if (bookError == null) {
+                                            notificationController.sendNotification(ownerId, myProfile.getUsername(), "Requested "+book.get().getTitle());
+                                        }
+                                        return null;
+                                    });
+                                }
+                                return null;
+                            });
                         } else {
                             if (databaseError == null) {
                                 future.completeExceptionally(new IllegalStateException("Book was not able to be requested"));
@@ -223,7 +237,7 @@ public class BookController {
     /**
      * As the current user (borrower), cancel a request for a book from another user
      *
-     * @param isbn isbn of the book to cancel the request for
+     * @param isbn    isbn of the book to cancel the request for
      * @param ownerId id of the user you sent the request to
      * @return a CompletableFuture signifying the success/failure of this operation
      */
@@ -261,6 +275,17 @@ public class BookController {
                             .updateChildren(update)
                             .addOnSuccessListener(future::complete)
                             .addOnFailureListener(future::completeExceptionally); // a potentially problematic error. Leaves ambiguous data in database
+                    userController.getMyProfile().handleAsync((myProfile, profileError) -> {
+                        if (profileError == null) {
+                            getBook(isbn).handleAsync((book, bookError) -> {
+                                if (bookError == null) {
+                                    notificationController.sendNotification(ownerId, myProfile.getUsername(), "Canceled request for "+book.get().getTitle());
+                                }
+                                return null;
+                            });
+                        }
+                        return null;
+                    });
                 } else {
                     if (databaseError == null) {
                         future.completeExceptionally(new IllegalStateException("Request was not able to be cancelled"));
@@ -279,7 +304,7 @@ public class BookController {
     /**
      * As the current user (book owner), accept a request on your book made by another user
      *
-     * @param isbn isbn of your book
+     * @param isbn       isbn of your book
      * @param borrowerId id of the user whose request you want to accept
      * @return a CompletableFuture signifying the success/failure of this operation
      */
@@ -322,6 +347,17 @@ public class BookController {
                             .updateChildren(update)
                             .addOnSuccessListener(future::complete)
                             .addOnFailureListener(future::completeExceptionally); // a potentially problematic error. Leaves ambiguous data in database
+                    userController.getMyProfile().handleAsync((myProfile, profileError) -> {
+                        if (profileError == null) {
+                            getBook(isbn).handleAsync((book, bookError) -> {
+                                if (bookError == null) {
+                                    notificationController.sendNotification(borrowerId, myProfile.getUsername(), "Accepted request for "+book.get().getTitle());
+                                }
+                                return null;
+                            });
+                        }
+                        return null;
+                    });
                 } else {
                     if (databaseError == null) {
                         future.completeExceptionally(new IllegalStateException("Unable to accept user's request"));
@@ -337,7 +373,7 @@ public class BookController {
     /**
      * As the current user (book owner), decline a request on your book made by another user
      *
-     * @param isbn isbn of your book
+     * @param isbn       isbn of your book
      * @param borrowerId id of the user whose request you want to decline
      * @return a CompletableFuture signifying the success/failure of this operation
      */
@@ -375,6 +411,17 @@ public class BookController {
                             .updateChildren(update)
                             .addOnSuccessListener(future::complete)
                             .addOnFailureListener(future::completeExceptionally); // a potentially problematic error. Leaves ambiguous data in database
+                    userController.getMyProfile().handleAsync((myProfile, profileError) -> {
+                        if (profileError == null) {
+                            getBook(isbn).handleAsync((book, bookError) -> {
+                                if (bookError == null) {
+                                    notificationController.sendNotification(borrowerId, myProfile.getUsername(), "Declined request for "+book.get().getTitle());
+                                }
+                                return null;
+                            });
+                        }
+                        return null;
+                    });
                 } else {
                     if (databaseError == null) {
                         future.completeExceptionally(new IllegalStateException("Unable to decline user's request"));
@@ -482,9 +529,9 @@ public class BookController {
     /**
      * Initiates an exchange of books between an owner and a borrower.
      * Pre-condition:
-     *  - Both owner and borrower must have scanned the book isbn
+     * - Both owner and borrower must have scanned the book isbn
      *
-     * @param isbn isbn of the book to exchange
+     * @param isbn    isbn of the book to exchange
      * @param ownerId id of the owner of the book
      * @return a CompletableFuture signifying the success/failure of this operation
      */
@@ -519,8 +566,8 @@ public class BookController {
                                 update.put(ownedBookPath, ownedBook);
                                 update.put(borrowedBookPath, borrowedBook);
                                 firebase.getReference().updateChildren(update)
-                                    .addOnSuccessListener(future::complete)
-                                    .addOnFailureListener(future::completeExceptionally);
+                                        .addOnSuccessListener(future::complete)
+                                        .addOnFailureListener(future::completeExceptionally);
 
                             } else {
                                 future.completeExceptionally(new IllegalStateException("Borrowing user " + ownedBook.getUserBorrowing() + " is not borrowing " + isbn));
@@ -550,7 +597,7 @@ public class BookController {
     /**
      * As the current user (borrower), return a book to its owner user
      *
-     * @param isbn isbn of the book to return
+     * @param isbn    isbn of the book to return
      * @param ownerId id of the owner of the book
      * @return a CompletableFuture signifying the success/failure of this operation
      */
@@ -583,8 +630,8 @@ public class BookController {
                                 update.put(ownedBookPath, ownedBook);
                                 update.put(borrowedBookPath, null);
                                 firebase.getReference().updateChildren(update)
-                                    .addOnSuccessListener(future::complete)
-                                    .addOnFailureListener(future::completeExceptionally);
+                                        .addOnSuccessListener(future::complete)
+                                        .addOnFailureListener(future::completeExceptionally);
 
                             } else {
                                 future.completeExceptionally(new IllegalStateException("Borrowing user " + ownedBook.getUserBorrowing() + " is not borrowing " + isbn));
@@ -668,7 +715,8 @@ public class BookController {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    Map<String, BorrowedBook> borrowedBookMap = dataSnapshot.getValue(new GenericTypeIndicator<Map<String, BorrowedBook>>() { });
+                    Map<String, BorrowedBook> borrowedBookMap = dataSnapshot.getValue(new GenericTypeIndicator<Map<String, BorrowedBook>>() {
+                    });
                     future.complete(borrowedBookMap.values());
                 } else {
                     future.complete(Collections.emptySet());
@@ -708,8 +756,8 @@ public class BookController {
                     update.put(getOwnedBookPath(userController.getMyId(), ownedBook.getIsbn()), ownedBook);
                     update.put(getBookPath(ownedBook.getIsbn()) + "/availableFrom/" + userController.getMyId(), 1);
                     firebase.getReference().updateChildren(update)
-                        .addOnSuccessListener(future::complete)
-                        .addOnFailureListener(future::completeExceptionally);
+                            .addOnSuccessListener(future::complete)
+                            .addOnFailureListener(future::completeExceptionally);
 
                 } else {
                     future.completeExceptionally(new IllegalArgumentException("An owned book with the isbn " + ownedBook.getIsbn() + " already exists"));
@@ -775,7 +823,8 @@ public class BookController {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    Map<String, OwnedBook> ownedBookMap = dataSnapshot.getValue(new GenericTypeIndicator<Map<String, OwnedBook>>() { });
+                    Map<String, OwnedBook> ownedBookMap = dataSnapshot.getValue(new GenericTypeIndicator<Map<String, OwnedBook>>() {
+                    });
                     future.complete(ownedBookMap.values());
                 } else {
                     future.complete(Collections.emptySet());
@@ -811,7 +860,7 @@ public class BookController {
                             .addOnSuccessListener(future::complete)
                             .addOnFailureListener(future::completeExceptionally);
                 } else {
-                   future.completeExceptionally(new IllegalArgumentException("No owned book exists with the given isbn " + ownedBook.getIsbn()));
+                    future.completeExceptionally(new IllegalArgumentException("No owned book exists with the given isbn " + ownedBook.getIsbn()));
                 }
             }
 
@@ -878,7 +927,7 @@ public class BookController {
      * Gets an owned book from the user's collection of owned books
      *
      * @param userId id of the user
-     * @param isbn isbn of the book
+     * @param isbn   isbn of the book
      * @return a CompletableFuture that returns an optional that may or may not contain the owned book
      */
     public CompletableFuture<Optional<OwnedBook>> getUserOwnedBook(@NonNull String isbn, @NonNull String userId) {
