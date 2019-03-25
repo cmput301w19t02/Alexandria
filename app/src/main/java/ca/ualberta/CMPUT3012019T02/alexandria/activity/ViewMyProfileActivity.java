@@ -14,12 +14,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.NotificationController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
@@ -36,6 +36,7 @@ public class ViewMyProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        NotificationController.getInstance().sendNotification("ZvLVXXLOoWTZ7o6xmW6fT4PP0Wj1","I own all books","What is up?");
         setContentView(R.layout.activity_view_my_profile);
 
         // toolbar
