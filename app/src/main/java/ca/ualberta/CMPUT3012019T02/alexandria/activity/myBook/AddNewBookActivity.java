@@ -3,8 +3,12 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +23,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.FileDescriptor;
+import java.io.IOException;
 import java.util.Date;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
@@ -34,9 +40,10 @@ import java9.util.concurrent.CompletableFuture;
  * The Add new book activity.
  */
 public class AddNewBookActivity extends AppCompatActivity {
-    private static final int RESULT_CAMERA = 1;
-    private final int RESULT_ISBN = 2;
-    private final int REQUEST_PERMISSION_PHONE_STATE = 5;
+    public static final int RESULT_CAMERA = 1;
+    public static final int RESULT_GALLERY = 2;
+    public final int RESULT_ISBN = 3;
+    public final int REQUEST_PERMISSION_PHONE_STATE = 5;
 
     private Book book;
     private String title = "";
@@ -79,7 +86,7 @@ public class AddNewBookActivity extends AppCompatActivity {
             //menu switch
             case R.id.option_select_photo:
                 // Select from gallery
-                // todo implement
+                openGallery();
                 break;
             case R.id.option_take_photo:
                 // Take camera picture
@@ -117,15 +124,16 @@ public class AddNewBookActivity extends AppCompatActivity {
     }
 
     /**
-     * Saves camera result to database and loads it to the adding page
+     * camera, scan, gallery
      *
      * @param requestCode result code
      * @param resultCode confirmation code
-     * @param data output of camera
+     * @param data output action
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == RESULT_CAMERA) {
+            // Camera photo
             Bundle extras = data.getExtras();
             Bitmap bitmap = (Bitmap) extras.get("data");
             ImageController.getInstance().addImage(bitmap).handleAsync((result, error) -> {
@@ -145,6 +153,7 @@ public class AddNewBookActivity extends AppCompatActivity {
                 return null;
             });
         } else if (requestCode == RESULT_ISBN && resultCode == RESULT_OK) {
+            // ISBN scan
             Bundle extras = data.getExtras();
             String isbn = extras.getString("isbn");
             CompletableFuture<Book> resultFuture = SearchController.getInstance().searchIsbn(isbn);
@@ -157,7 +166,43 @@ public class AddNewBookActivity extends AppCompatActivity {
                 }
                 return null;
             });
+        } else if (requestCode == RESULT_GALLERY && resultCode == RESULT_OK) {
+            // Gallery look up
+            // as described in https://stackoverflow.com/questions/13023788/how-to-load-an-image-in-image-view-from-gallery
+            Uri selectedImage = data.getData();
+
+            Bitmap bmp = null;
+            try {
+                bmp = getBitmapFromUri(selectedImage);
+                final Bitmap bookCover = bmp;
+                ImageController.getInstance().addImage(bookCover).handleAsync((result, error) -> {
+                    if (error == null) {
+                        ImageView ivCover = (ImageView) findViewById(R.id.new_book_image);
+                        runOnUiThread(() -> {
+                            ivCover.setImageBitmap(bookCover);
+                        });
+                    } else {
+                        showError(error.getMessage());
+                    }
+                    return null;
+                });
+            } catch (IOException e) {
+                showError(e.getMessage());
+            }
         }
+    }
+
+    /**
+     * https://stackoverflow.com/questions/13023788/how-to-load-an-image-in-image-view-from-gallery
+     * returns bitmap image from uri
+     */
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+        return image;
     }
 
     /**
@@ -166,6 +211,11 @@ public class AddNewBookActivity extends AppCompatActivity {
     public void scanISBN(View view) {
         Intent intentScan = new Intent(this, ISBNLookup.class);
         startActivityForResult(intentScan, RESULT_ISBN);
+    }
+
+    public void openGallery() {
+        Intent intentGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(intentGallery, RESULT_GALLERY);
     }
 
     /**
