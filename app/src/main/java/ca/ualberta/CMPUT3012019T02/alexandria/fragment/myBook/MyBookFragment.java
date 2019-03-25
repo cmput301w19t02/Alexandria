@@ -133,9 +133,7 @@ public class MyBookFragment extends Fragment {
         bundle.putString("isbn", isbn);
         switch (status) {
             case "available":
-                MyBookUserListFragment availableListFragment = new MyBookUserListFragment();
-                availableListFragment.setArguments(bundle);
-                return availableListFragment;
+                return new MyBookAvailableFragment();
             case "requested":
                 MyBookUserListFragment requestedListFragment = new MyBookUserListFragment();
                 requestedListFragment.setArguments(bundle);
