@@ -3,6 +3,10 @@ package ca.ualberta.CMPUT3012019T02.alexandria.model;
 
 import android.graphics.Bitmap;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
 /**
  * Model Class for BookRecyclerViewAdapter
  */
@@ -14,6 +18,33 @@ public class BookListItem {
     private String isbn;
     private String status;
     private String ownerId;
+
+    private static class BookListItemComparator implements Comparator<BookListItem> {
+        @Override
+        public int compare(BookListItem o1, BookListItem o2) {
+            List<String> statuses = Arrays.asList("available", "requested", "accepted", "borrowed");
+            int i1 = statuses.indexOf(o1.getStatus());
+            int i2 = statuses.indexOf(o2.getStatus());
+            if (i1 < i2) {
+                return -1;
+            } else if (i1 == i2) {
+                return String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle());
+            } else { // i1 > i2
+                return 1;
+            }
+        }
+    }
+
+    /**
+     * Gets a comparator for comparing two BookListItems.
+     * Sorts by status first, in order of 'available', 'requested', 'accepted', 'borrowed'.
+     * Then uses alphabetical order of book title to resolve ordering of books with the same status.
+     *
+     * @return a Comparator
+     */
+    public static Comparator<BookListItem> getComparator() {
+        return new BookListItemComparator();
+    }
 
     /**
      * Instantiates a new Book list item.

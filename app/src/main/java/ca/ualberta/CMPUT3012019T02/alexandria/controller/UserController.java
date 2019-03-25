@@ -1,6 +1,7 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -10,6 +11,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
+import java9.util.Optional;
 import java9.util.concurrent.CompletableFuture;
 
 
@@ -57,6 +59,8 @@ public class UserController {
      * @return a CompletableFuture signifying this operation's success/failure
      */
     public CompletableFuture<Void> authenticate(String username, final String password) {
+        ObservableUserCache.invalidate();
+
         final CompletableFuture<Void> future = new CompletableFuture<>();
 
         CompletableFuture<String> emailFuture = getUserEmail(username);
@@ -142,6 +146,7 @@ public class UserController {
      *
      * @return the current user's id
      */
+    @Nullable
     public String getMyId() {
         return auth.getUid();
     }
@@ -209,23 +214,26 @@ public class UserController {
      */
     public CompletableFuture<UserProfile> getMyProfile() {
         ObservableUserCache cache = ObservableUserCache.getInstance();
-        if(cache.getProfile()==null) {
+        if (cache.getProfile().isEmpty()) {
             return getUserProfile(getMyId());
-        }
-        else{
-            return CompletableFuture.completedFuture(cache.getProfile());
+        } else {
+            return CompletableFuture.completedFuture(cache.getProfile().get());
         }
     }
 
     /**
-     * Gets the updates the current user's profile
+     * Updates the current user's profile
      *
      * @param userProfile the updated profile of the current user
      * @return a CompletableFuture signifying this operation's success/failure
      */
     public CompletableFuture<Void> updateMyProfile(UserProfile userProfile) {
-        final CompletableFuture<Void> resultFuture = new CompletableFuture<>();
 
+        if (!isAuthenticated()) {
+            return CompletableFuture.failedFuture(new IllegalStateException("Currently not signed in"));
+        }
+
+        final CompletableFuture<Void> resultFuture = new CompletableFuture<>();
         auth.getCurrentUser().updateEmail(userProfile.getEmail()).addOnCompleteListener(updateEmailTask -> {
             if (updateEmailTask.isSuccessful()) {
                 database.getReference().child("usernameToEmail").child(userProfile.getUsername()).setValue(userProfile.getEmail()).addOnCompleteListener(mappingTask -> {
