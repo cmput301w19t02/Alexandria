@@ -1,23 +1,8 @@
 package ca.ualberta.CMPUT3012019T02.alexandria;
 
-import org.junit.Before;
-import org.junit.Test;
+public class BookDataAdapterTests {
 
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
-import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookParser;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
-
-public class BookParserTests {
-
-    // TODO: book parser tests.
+    // TODO: book data adapter tests.
     // It works fine from using the app though. So this "formal testing" can be done later.
 
 //    @Before
@@ -31,7 +16,7 @@ public class BookParserTests {
 //
 //    @Test
 //    public void testBorrowedBooksToBookList() throws InterruptedException, ExecutionException, TimeoutException, IOException {
-//        List<BookListItem> bookList = BookParser.getMyBorrowedBooksList().get(5, TimeUnit.SECONDS);
+//        List<BookListItem> bookList = BookDataAdapter.getMyBorrowedBooksList().get(5, TimeUnit.SECONDS);
 //
 ////        Assert.assertEquals(1, bookListItem.size());
 ////
@@ -52,7 +37,7 @@ public class BookParserTests {
 //
 //    @Test
 //    public void testOwnedBooksToBookList() throws InterruptedException, ExecutionException, TimeoutException {
-//        List<BookListItem> bookList = BookParser.getMyOwnedBooksList().get(5, TimeUnit.SECONDS);
+//        List<BookListItem> bookList = BookDataAdapter.getMyOwnedBooksList().get(5, TimeUnit.SECONDS);
 //    }
 
 }

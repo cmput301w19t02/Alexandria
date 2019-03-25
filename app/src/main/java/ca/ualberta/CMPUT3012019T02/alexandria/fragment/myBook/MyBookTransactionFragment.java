@@ -1,5 +1,8 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -19,10 +22,13 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ISBNLookup;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
+
+import static android.app.Activity.RESULT_OK;
 
 public class MyBookTransactionFragment extends Fragment {
 
@@ -34,6 +40,17 @@ public class MyBookTransactionFragment extends Fragment {
     private UserController userController = UserController.getInstance();
     private ImageController imageController = ImageController.getInstance();
 
+    private final int RESULT_ISBN = 1;
+
+    private Activity activity;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            activity = (Activity) context;
+        }
+    }
 
     @Nullable
     @Override
@@ -92,7 +109,7 @@ public class MyBookTransactionFragment extends Fragment {
                                                     imageResult.getWidth(), imageResult.getHeight()));
                                             drawable.setAntiAlias(true);
 
-                                            getActivity().runOnUiThread(() -> {
+                                            activity.runOnUiThread(() -> {
                                                 ivBorrowerPic.setImageDrawable(drawable);
                                                 ivBorrowerPic.refreshDrawableState();
                                                 btBorrowerName.setText(username);
@@ -163,7 +180,7 @@ public class MyBookTransactionFragment extends Fragment {
 
     //switch to the borrower's profile
     private void onClickUser() {
-        Intent intentViewOwner = new Intent(getActivity(), ViewUserProfileActivity.class);
+        Intent intentViewOwner = new Intent(activity, ViewUserProfileActivity.class);
         intentViewOwner.putExtra("USER_ID", borrowerId);
         startActivity(intentViewOwner);
     }
@@ -179,15 +196,22 @@ public class MyBookTransactionFragment extends Fragment {
         popup.getMenuInflater().inflate(getStatusMenu(), popup.getMenu());
 
         popup.setOnMenuItemClickListener((MenuItem item) -> {
+
+
+            Intent intent = new Intent(activity, ISBNLookup.class);
+
             switch (item.getItemId()) {
                 case R.id.option_view_user:
                     onClickUser();
                     break;
                 case R.id.option_set_borrowed:
-                    setBorrowed();
+                    startActivityForResult(intent, RESULT_ISBN);
                     break;
                 case R.id.option_return:
-                    acceptReturn();
+                    startActivityForResult(intent, RESULT_ISBN);
+                    break;
+                case R.id.option_cancel_order:
+                    cancelOrder();
                     break;
                 default:
                     throw new RuntimeException("No Button Found");
@@ -210,16 +234,130 @@ public class MyBookTransactionFragment extends Fragment {
 
     }
 
-    //TODO implement
-    //opens the camera to change status
-    private void setBorrowed() {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        // Check which request we're responding to
+        if (requestCode == RESULT_ISBN) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                String isbn = extras.getString("isbn");
+                switch (status) {
+                    case "accepted":
+                        setBorrowed(isbn);
+                        break;
+                    case "borrowed":
+                        acceptReturn(isbn);
+                        break;
+                    default:
+                }
+            }
+        }
     }
 
-    //TODO implement
-    //opens camera to process return
-    private void acceptReturn() {
+    private void setBorrowed(String scannedIsbn) {
+//        if (isbn.equals(scannedIsbn)) {
+        // TODO: fix ISBN scanning so that it scans properly
+        if (true) {
+            BookController.getInstance().scanMyOwnedBook(isbn).handleAsync((aVoid, throwable) -> {
+                if (throwable == null) {
 
+                    BookController.getInstance().exchangeBook(isbn, userController.getMyId()).handleAsync((aVoid1, throwable1) -> {
+                        activity.runOnUiThread(() -> {
+                            if (throwable1 == null) {
+
+                                // Completed successfully
+
+                            } else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setMessage("Scan successful. Please wait for the other member to confirm.");
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                        });
+                        return null;
+                    });
+
+                } else {
+                    activity.runOnUiThread(() -> {
+                        throwable.printStackTrace();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setMessage("Was not able to scan ISBN. Please try again later.");
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    });
+                }
+                return null;
+            });
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage("Scanned ISBN does not match the book you are returning");
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+    private void acceptReturn(String scannedIsbn) {
+//        if (isbn.equals(scannedIsbn)) {
+        // TODO: fix ISBN scanning so that it scans properly
+        if (true) {
+            BookController.getInstance().scanMyOwnedBook(isbn).handleAsync((aVoid, throwable) -> {
+                if (throwable == null) {
+
+                    BookController.getInstance().returnBook(isbn, userController.getMyId()).handleAsync((aVoid1, throwable1) -> {
+                        activity.runOnUiThread(() -> {
+                            if (throwable1 == null) {
+
+                                // Completed successfully
+
+                            } else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setMessage("Scan successful. Please wait for the other member to confirm.");
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                        });
+                        return null;
+                    });
+
+                } else {
+                    activity.runOnUiThread(() -> {
+                        throwable.printStackTrace();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setMessage("Was not able to scan ISBN. Please try again later.");
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    });
+                }
+                return null;
+            });
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage("Scanned ISBN does not match the book you are returning");
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+    private void cancelOrder() {
+        bookController.declineRequest(isbn, borrowerId).handleAsync((aVoid, throwable) -> {
+            activity.runOnUiThread(() -> {
+                if (throwable == null) {
+
+                    // Successfully declined the request
+                    // TODO: MyBookFragment.onStatusChange()
+
+                } else {
+                    throwable.printStackTrace();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("Unable to cancel order. Please try again later.");
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+            return null;
+        });
     }
 
 }
