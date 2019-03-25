@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +79,16 @@ public class AcceptedFragment extends Fragment {
         }
         bookAdapter.setmBookListItem(bookListings);
         bookAdapter.notifyDataSetChanged();
+
+        if (bookListings.isEmpty()){
+            RecyclerView mRecyclerView = getView().findViewById(R.id.accepted_recycler);
+            TextView emptyView = getView().findViewById(R.id.empty_view);
+
+            if (mRecyclerView != null && emptyView != null) {
+                mRecyclerView.setVisibility(View.GONE);
+                emptyView.setVisibility(View.VISIBLE);
+            }
+        }
     }
 }
 
