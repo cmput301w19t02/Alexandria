@@ -18,7 +18,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.adapter.TabsAdapter;
 
 /**
  * Created as a fragment by MainActivity
- * Creates tab fragments, AllTabFragment, AvailableFragment,LoanedFragment
+ * Creates tab fragments, LibraryAllFragment, AvailableFragment,LoanedFragment
  * code for tabs adapted from https://youtu.be/bNpWGI_hGGg at 02/25/2019
  */
 public class LibraryFragment extends Fragment implements View.OnClickListener {
@@ -49,7 +49,7 @@ public class LibraryFragment extends Fragment implements View.OnClickListener {
 
     private void setupViewPager(ViewPager viewPager) {
         TabsAdapter adapter = new TabsAdapter(getChildFragmentManager());
-        adapter.addFragment(new AllTabFragment(), "All");
+        adapter.addFragment(new LibraryAllFragment(), "All");
         adapter.addFragment(new AvailableFragment(), "Available");
         adapter.addFragment(new LoanedFragment(),"Loaned");
         viewPager.setAdapter(adapter);

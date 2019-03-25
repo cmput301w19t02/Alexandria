@@ -15,7 +15,7 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.UserBookFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.fragment.bookCatalogue.BookCatalogueFragment;
+import ca.ualberta.CMPUT3012019T02.alexandria.fragment.searchResults.BookCatalogueFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook.MyBookFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.BookViewHolder;
@@ -58,7 +58,7 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
         //list click to switch fragments
         mViewHolder.itemBook.setOnClickListener((View v) -> {
             Fragment frag = setDestination(destination);
-            frag.setArguments(dataBundler(mViewHolder));
+            frag.setArguments(bundleData(mViewHolder));
 
             //switch fragments with bundled data
             FragmentTransaction fragmentTransaction =
@@ -107,7 +107,7 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
     }
 
     //bundles data for fragment switching
-    private Bundle dataBundler(BookViewHolder mViewHolder) {
+    private Bundle bundleData(BookViewHolder mViewHolder) {
         Bundle b = new Bundle();
 
         b.putString("coverId", mBookListItem.get(mViewHolder.getAdapterPosition()).getCoverId());

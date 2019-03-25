@@ -26,7 +26,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 /**
  * Fragment for listing all own books
  */
-public class AllTabFragment extends Fragment implements Observer {
+public class LibraryAllFragment extends Fragment implements Observer {
 
     private List<BookListItem> bookListings = new ArrayList<>();
     private BookRecyclerViewAdapter bookAdapter;

@@ -6,25 +6,18 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import java9.util.concurrent.CompletableFuture;
 
 /**
  * The sign up screen
  */
-public class SignUpActivity extends AppCompatActivity {
-
-    private UserController userController = UserController.getInstance();
-    private ImageController imageController = ImageController.getInstance();
-    private String photoId = null;
+public class SignUpActivity extends SignUpActivitySuper {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,19 +122,4 @@ public class SignUpActivity extends AppCompatActivity {
         Toast.makeText(SignUpActivity.this, "Error: " + message, Toast.LENGTH_LONG).show();
     }
 
-    private boolean validateUsername(String username) {
-        return username.length() >= 4;
-    }
-
-    private boolean validateName(String username) {
-        return username.length() >= 3;
-    }
-
-    private boolean validateEmail(String email) {
-        return email.contains("@") && email.contains(".");
-    }
-
-    private boolean validatePassword(String password) {
-        return password.length() >= 8;
-    }
 }

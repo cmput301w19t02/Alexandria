@@ -1,4 +1,4 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.fragment.bookCatalogue;
+package ca.ualberta.CMPUT3012019T02.alexandria.fragment.searchResults;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
