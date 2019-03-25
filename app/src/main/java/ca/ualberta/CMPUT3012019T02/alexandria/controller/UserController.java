@@ -8,10 +8,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.io.IOException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
-import java9.util.Optional;
 import java9.util.concurrent.CompletableFuture;
 
 
@@ -66,7 +68,15 @@ public class UserController {
         CompletableFuture<String> emailFuture = getUserEmail(username);
         emailFuture.thenAccept(email -> auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                future.complete(null);
+                NotificationController.getInstance().setDeviceToken().handleAsync((result,error)->{
+                    if(error==null){
+                        future.complete(null);
+                    }
+                    else {
+                        future.completeExceptionally(error);
+                    }
+                    return null;
+                });
             } else {
                 future.completeExceptionally(task.getException());
             }
@@ -86,6 +96,13 @@ public class UserController {
     public void deauthenticate() {
         auth.signOut();
         ObservableUserCache.invalidate();
+        CompletableFuture.runAsync(()->{
+            try {
+                FirebaseInstanceId.getInstance().deleteInstanceId();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -110,9 +127,21 @@ public class UserController {
                                 database.getReference().child("usernameToEmail").child(username).setValue(email).addOnCompleteListener(databaseTask -> {
                                     if (databaseTask.isSuccessful()) {
                                         CompletableFuture<Void> profileFuture = updateMyProfile(profile);
-                                        profileFuture.thenAccept(result -> resultFuture.complete(null));
-                                        profileFuture.exceptionally(throwable -> {
-                                            resultFuture.completeExceptionally(throwable);
+                                        profileFuture.handleAsync((profileResult,profileError)->{
+                                            if(profileError==null){
+                                                NotificationController.getInstance().setDeviceToken().handleAsync((result,error)->{
+                                                    if(error==null){
+                                                        resultFuture.complete(null);
+                                                    }
+                                                    else {
+                                                        resultFuture.completeExceptionally(error);
+                                                    }
+                                                    return null;
+                                                });
+                                            }
+                                            else {
+                                                resultFuture.completeExceptionally(profileError);
+                                            }
                                             return null;
                                         });
                                     } else {
