@@ -33,7 +33,6 @@
             android:layout_marginEnd="0dp"
             android:layout_marginRight="0dp"
             android:background="@color/colorMaroon"
-            android:elevation="4dp"
             app:layout_constraintTop_toTopOf="parent"
             app:popupTheme="@style/CustomPopupStyle">
 
@@ -58,6 +57,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:contentDescription="@string/image_desc"
+            android:background="@drawable/ic_profile"
             app:layout_constraintBottom_toTopOf="@+id/my_profile_username"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
