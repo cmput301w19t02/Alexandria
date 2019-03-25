@@ -50,7 +50,6 @@ public class AddNewBookActivity extends AppCompatActivity {
     private String author = "";
     private String isbn = "";
     private String description = "";
-    private Date date;
     private String imageID;
     private Bitmap coverBitmap;
 
@@ -233,10 +232,16 @@ public class AddNewBookActivity extends AppCompatActivity {
     }
 
     private void saveBook() {
-        book = new Book(isbn, imageID, title, author, description, date);
+        book = new Book(isbn, title, author, description, imageID);
         BookController.getInstance().addBook(book);
-        OwnedBook myOwnedBook = new OwnedBook(isbn);
+        OwnedBook myOwnedBook;
+        if (coverBitmap != null) {
+            myOwnedBook = new OwnedBook(isbn, imageID);
+        } else {
+            myOwnedBook = new OwnedBook(isbn);
+        }
         BookController.getInstance().addMyOwnedBook(myOwnedBook);
+
         Toast.makeText(this, "Book Added", Toast.LENGTH_LONG).show();
         finish();
     }
@@ -248,7 +253,6 @@ public class AddNewBookActivity extends AppCompatActivity {
         AppCompatEditText titleField = findViewById(R.id.add_book_add_title_field);
         AppCompatEditText authorField = findViewById(R.id.add_book_add_author_field);
         AppCompatEditText isbnField = findViewById(R.id.add_book_add_ISBN_field);
-        date = null;
         description = "default";
 
         title = titleField.getText().toString();

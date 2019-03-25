@@ -10,7 +10,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
@@ -19,6 +18,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.User;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
+import java9.util.Optional;
 
 /**
  * Observable cache for current user
@@ -43,6 +43,10 @@ public class ObservableUserCache extends Observable {
     }
 
     private ObservableUserCache() {
+        if (!userController.isAuthenticated()) {
+            return;
+        }
+
         database.child("users").child(userController.getMyId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -64,11 +68,11 @@ public class ObservableUserCache extends Observable {
      * @param isbn the isbn
      * @return the borrowed book
      */
-    public BorrowedBook getBorrowedBook(String isbn) {
-        if (user != null && user.getBorrowedBooks() != null) {
-            return user.getBorrowedBooks().get(isbn);
+    public Optional<BorrowedBook> getBorrowedBook(String isbn) {
+        if (user == null || user.getBorrowedBooks() == null) {
+            return Optional.empty();
         }
-        return null;
+        return Optional.ofNullable(user.getBorrowedBooks().get(isbn));
     }
 
     /**
@@ -77,11 +81,11 @@ public class ObservableUserCache extends Observable {
      * @param isbn the isbn
      * @return the owned book
      */
-    public OwnedBook getOwnedBook(String isbn) {
-        if (user != null && user.getOwnedBooks() != null) {
-            return user.getOwnedBooks().get(isbn);
+    public Optional<OwnedBook> getOwnedBook(String isbn) {
+        if (user == null || user.getOwnedBooks() == null) {
+            return Optional.empty();
         }
-        return null;
+        return Optional.ofNullable(user.getOwnedBooks().get(isbn));
     }
 
 
@@ -90,11 +94,11 @@ public class ObservableUserCache extends Observable {
      *
      * @return the borrowed books
      */
-    public Map<String, BorrowedBook> getBorrowedBooks() {
-        if (user != null && user.getBorrowedBooks() != null) {
-            return Collections.unmodifiableMap(user.getBorrowedBooks());
+    public Optional<Map<String, BorrowedBook>> getBorrowedBooks() {
+        if (user == null || user.getBorrowedBooks() == null) {
+            return Optional.empty();
         }
-        return null;
+        return Optional.of(Collections.unmodifiableMap(user.getBorrowedBooks()));
     }
 
     /**
@@ -102,11 +106,11 @@ public class ObservableUserCache extends Observable {
      *
      * @return the owned books
      */
-    public Map<String, OwnedBook> getOwnedBooks() {
-        if (user != null && user.getOwnedBooks() != null) {
-            return Collections.unmodifiableMap(user.getOwnedBooks());
+    public Optional<Map<String, OwnedBook>> getOwnedBooks() {
+        if (user == null || user.getOwnedBooks() == null) {
+            return Optional.empty();
         }
-        return null;
+        return Optional.of(Collections.unmodifiableMap(user.getOwnedBooks()));
     }
 
     /**
@@ -114,23 +118,11 @@ public class ObservableUserCache extends Observable {
      *
      * @return the profile
      */
-    public UserProfile getProfile() {
-        if (user != null) {
-            return user.getProfile();
+    public Optional<UserProfile> getProfile() {
+        if (user == null) {
+            return Optional.empty();
         }
-        return null;
-    }
-
-    /**
-     * Gets blocked users.
-     *
-     * @return the blocked users
-     */
-    public List<String> getBlockedUsers() {
-        if (user != null) {
-            return user.getBlockedUsers();
-        }
-        return null;
+        return Optional.of(user.getProfile());
     }
 
     /**
@@ -139,11 +131,11 @@ public class ObservableUserCache extends Observable {
      * @param userId the user id
      * @return the chat room id
      */
-    public String getChatRoomId(String userId) {
-        if (user != null && user.getChatRooms() != null) {
-            return user.getChatRooms().get(userId);
+    public Optional<String> getChatRoomId(String userId) {
+        if (user == null || user.getChatRooms() == null) {
+            return Optional.empty();
         }
-        return null;
+        return Optional.ofNullable(user.getChatRooms().get(userId));
     }
 
     /**

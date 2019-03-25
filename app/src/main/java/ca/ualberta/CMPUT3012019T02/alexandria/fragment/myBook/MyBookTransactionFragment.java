@@ -68,7 +68,7 @@ public class MyBookTransactionFragment extends Fragment {
 
         bookController.getMyOwnedBook(isbn).handleAsync((bookResult, bookError) -> {
             if (bookError == null) {
-                this.borrowerId = bookResult.getUserBorrowing();
+                this.borrowerId = bookResult.get().getUserBorrowing();
                 userController.getUserProfile(borrowerId).handleAsync((userResult, userError) -> {
                     if (userError == null) {
                         String username = userResult.getUsername();
