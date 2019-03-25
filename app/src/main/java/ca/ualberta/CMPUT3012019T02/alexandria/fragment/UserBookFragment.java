@@ -308,21 +308,8 @@ public class UserBookFragment extends Fragment {
 
     //2nd button for when status is accepted
     private void onClickTempButton() {
-
-        switch (status) {
-            case "available":
-                break;
-            case "requested":
-                break;
-            case "accepted":
-                Intent intent = new Intent(getActivity(), ISBNLookup.class);
-                startActivityForResult(intent, RESULT_ISBN);
-                break;
-            case "borrowed":
-                break;
-            default:
-        }
-
+        Intent intent = new Intent(getActivity(), ISBNLookup.class);
+        startActivityForResult(intent, RESULT_ISBN);
     }
 
     @Override
