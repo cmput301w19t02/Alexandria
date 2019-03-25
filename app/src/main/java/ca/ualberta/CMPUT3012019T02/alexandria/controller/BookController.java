@@ -353,7 +353,13 @@ public class BookController {
                         if (profileError == null) {
                             getBook(isbn).handleAsync((book, bookError) -> {
                                 if (bookError == null) {
-                                    notificationController.sendNotification(borrowerId, myProfile.getUsername(), "Accepted request for " + book.get().getTitle());
+
+                                    notificationController.sendNotification(borrowerId, myProfile.getUsername(), "Accepted your request for " + book.get().getTitle());
+
+                                    for (String user : ownedBook.getRemovedRequests().keySet()) {
+                                        notificationController.sendNotification(user, myProfile.getUsername(), "Declined your request for " + book.get().getTitle());
+                                    }
+
                                 }
                                 return null;
                             });
@@ -808,9 +814,9 @@ public class BookController {
     }
 
     /**
-     * Gets the current user's collection of borrowed books
+     * Gets the current user's collection of owned books
      *
-     * @return a CompletableFuture that contains a collection of borrowed books
+     * @return a CompletableFuture that contains a collection of owned books
      */
     public CompletableFuture<Collection<OwnedBook>> getMyOwnedBooks() {
         if (!userController.isAuthenticated()) {
