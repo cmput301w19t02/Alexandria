@@ -762,8 +762,12 @@ public class BookController {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
 
-                    Map<String, Object> update = new HashMap<>();
-                    update.put(getOwnedBookPath(userController.getMyId(), ownedBook.getIsbn()), ownedBook);
+                    HashMap<String, Object> update = new HashMap<>();
+                    String ownedBookPath = getOwnedBookPath(userController.getMyId(), ownedBook.getIsbn());
+                    update.put(ownedBookPath + "/isbn", ownedBook.getIsbn());
+                    update.put(ownedBookPath + "/status", "available");
+                    update.put(ownedBookPath + "/owner", userController.getMyId());
+                    update.put(ownedBookPath + "/imageId", ownedBook.getImageId());
                     update.put(getBookPath(ownedBook.getIsbn()) + "/availableFrom/" + userController.getMyId(), 1);
                     firebase.getReference().updateChildren(update)
                             .addOnSuccessListener(future::complete)
