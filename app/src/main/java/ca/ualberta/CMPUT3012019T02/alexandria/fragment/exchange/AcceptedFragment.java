@@ -32,6 +32,7 @@ public class AcceptedFragment extends Fragment implements Observer {
     private List<BookListItem> bookListings = new ArrayList<>();
     private BookRecyclerViewAdapter bookAdapter;
     private Activity activity;
+    private View view;
 
     /**
      * Sets up the RecyclerView for the Fragment
@@ -51,6 +52,12 @@ public class AcceptedFragment extends Fragment implements Observer {
         mRecyclerView.setAdapter(bookAdapter);
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        this.view = view;
     }
 
     @Override
@@ -81,6 +88,18 @@ public class AcceptedFragment extends Fragment implements Observer {
                 }
             }
             bookAdapter.notifyDataSetChanged();
+
+            RecyclerView mRecyclerView = view.findViewById(R.id.accepted_recycler);
+            TextView emptyView = view.findViewById(R.id.empty_view);
+            if (mRecyclerView != null && emptyView != null) {
+                if (bookListings.isEmpty() ) {
+                    mRecyclerView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    emptyView.setVisibility(View.GONE);
+                }
+            }
         });
     }
 }
