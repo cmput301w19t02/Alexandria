@@ -1,5 +1,8 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -38,6 +41,17 @@ public class MyBookUserListFragment extends Fragment {
     private UserController userController;
 
     private String isbn;
+    private final int RESULT_ISBN = 1;
+
+    private Activity activity;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            activity = (Activity) context;
+        }
+    }
 
     @Nullable
     @Override
@@ -59,7 +73,7 @@ public class MyBookUserListFragment extends Fragment {
 
                             @Override
                             public void userClick(int position) {
-                                Intent intentViewOwner = new Intent(getActivity(), ViewUserProfileActivity.class);
+                                Intent intentViewOwner = new Intent(activity, ViewUserProfileActivity.class);
                                 intentViewOwner.putExtra("USER_ID", requests.get(position).getBorrowerId());
                                 startActivity(intentViewOwner);
                             }
@@ -70,15 +84,19 @@ public class MyBookUserListFragment extends Fragment {
                                 popup.getMenuInflater().inflate(R.menu.menu_my_book_requested, popup.getMenu());
 
                                 popup.setOnMenuItemClickListener((MenuItem item) -> {
+
+                                    String isbn = requests.get(position).getIsbn();
+                                    String borrowerId = requests.get(position).getBorrowerId();
+
                                     switch (item.getItemId()) {
                                         case R.id.option_view_user:
                                             userClick(position);
                                             break;
                                         case R.id.option_accept_request:
-                                            acceptRequest();
+                                            acceptRequest(isbn, borrowerId);
                                             break;
                                         case R.id.option_reject_request:
-                                            rejectRequest();
+                                            declineRequest(isbn, borrowerId);
                                             break;
                                         default:
                                             throw new RuntimeException("No Button Found");
@@ -89,7 +107,7 @@ public class MyBookUserListFragment extends Fragment {
                             }
                         });
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
         mRecyclerView.setAdapter(userAdapter);
 
         return rootView;
@@ -116,7 +134,7 @@ public class MyBookUserListFragment extends Fragment {
                             if (user.getPicture() != null) {
 
                                 imageController.getImage(user.getPicture()).handleAsync((bitmap, imageError) -> {
-                                    getActivity().runOnUiThread(() -> {
+                                    activity.runOnUiThread(() -> {
                                         if (imageError == null) {
                                             Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
 
@@ -160,15 +178,46 @@ public class MyBookUserListFragment extends Fragment {
         Toast.makeText(getView().getContext(), "Error: " + message, Toast.LENGTH_LONG).show();
     }
 
-    //TODO implement with backend, call test with MyBookFragment.onStatusChange()
-    //Switch status to accepted, and refresh the MyBookFragment
-    private void acceptRequest() {
+    // TODO: call test with MyBookFragment.onStatusChange()
+    // Switch status to accepted, and refresh the MyBookFragment
+    private void acceptRequest(String isbn, String borrowerId) {
+        bookController.acceptRequest(isbn, borrowerId).handleAsync((aVoid, throwable) -> {
+            activity.runOnUiThread(() -> {
+                if (throwable == null) {
 
+                    // Successfully accepted the request
+                    // TODO: MyBookFragment.onStatusChange()
+
+                } else {
+                    throwable.printStackTrace();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("Unable to accept request. Please try again later.");
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+            return null;
+        });
     }
 
-    //TODO implement with backend
-    //Remove the user from list
-    private void rejectRequest() {
+    // Remove the user from list
+    private void declineRequest(String isbn, String borrowerId) {
+        bookController.declineRequest(isbn, borrowerId).handleAsync((aVoid, throwable) -> {
+            activity.runOnUiThread(() -> {
+                if (throwable == null) {
 
+                    // Successfully declined the request
+                    // TODO: MyBookFragment.onStatusChange()
+
+                } else {
+                    throwable.printStackTrace();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("Unable to decline request. Please try again later.");
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+            return null;
+        });
     }
 }

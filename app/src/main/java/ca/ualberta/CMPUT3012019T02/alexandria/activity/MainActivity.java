@@ -9,19 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookParser;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.ExchangeFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.library.LibraryFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 
 /**
  * The main screen that opens when the application opens
@@ -29,11 +21,9 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
  * based on https://www.youtube.com/watch?v=jpaHMcQDaDg on 02/24/2019
  */
 public class MainActivity extends AppCompatActivity
-        implements BottomNavigationView.OnNavigationItemSelectedListener, BookListProvider {
+        implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private UserController userController = UserController.getInstance();
-    private List<BookListItem> borrowedBookListings = new ArrayList<>();
-    private List<BookListItem> ownedBookListings = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,26 +65,7 @@ public class MainActivity extends AppCompatActivity
         if (!userController.isAuthenticated()) {
             Intent startLoginActivity = new Intent(this, LoginActivity.class);
             startActivity(startLoginActivity);
-        } else {
-            BookParser.getMyBorrowedBooksList().thenAcceptAsync(bookListItems -> {
-                borrowedBookListings = bookListItems;
-
-                // Sort by status then alphabetical order of book titles
-                Collections.sort(borrowedBookListings, (o1, o2) -> BookListItem.getComparator().compare(o1, o2));
-
-                updateFragments();
-            });
-
-            BookParser.getMyOwnedBooksList().thenAcceptAsync(bookListItems -> {
-                ownedBookListings = bookListItems;
-
-                // Sort by status then alphabetical order of book titles
-                Collections.sort(ownedBookListings, (o1, o2) -> BookListItem.getComparator().compare(o1, o2));
-
-                updateFragments();
-            });
         }
-
     }
 
     private boolean loadFragment(Fragment fragment) {
@@ -139,16 +110,6 @@ public class MainActivity extends AppCompatActivity
     public void onProfileButtonClick(View view) {
         Intent startProfileActivity = new Intent(this, ViewMyProfileActivity.class);
         startActivity(startProfileActivity);
-    }
-
-    @Override
-    public List<BookListItem> getBorrowedBookList() {
-        return borrowedBookListings;
-    }
-
-    @Override
-    public List<BookListItem> getOwnedBookList() {
-        return ownedBookListings;
     }
 
     private void updateFragments(){

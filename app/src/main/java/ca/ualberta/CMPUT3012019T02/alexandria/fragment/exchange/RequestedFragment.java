@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,9 +15,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.BookListProvider;
+import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookDataAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 
@@ -24,11 +27,11 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
  * Fragment for filtering book list that has the status of Requested
  */
 
-public class RequestedFragment extends Fragment {
+public class RequestedFragment extends Fragment implements Observer {
 
     private List<BookListItem> bookListings = new ArrayList<>();
     private BookRecyclerViewAdapter bookAdapter;
-    private BookListProvider bookListProvider;
+    private Activity activity;
 
     /**
      * Sets up the RecyclerView for the Fragment
@@ -53,42 +56,32 @@ public class RequestedFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
-            this.bookListProvider = (BookListProvider) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement BookListProvider");
-        }
-        if (bookAdapter != null) {
-            update();
+        if (context instanceof Activity) {
+            activity = (Activity) context;
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        update();
+        BookDataAdapter.getInstance().addObserver(this);
+        update(null, null);
     }
 
-    public void update(){
-        List<BookListItem> books = bookListProvider.getBorrowedBookList();
-        bookListings.clear();
-        for (BookListItem book : books) {
-            if (book.getStatus().equals("requested")) {
-                bookListings.add(book);
-            }
+    @Override
+    public void update(Observable o, Object arg) {
+        if (activity == null) {
+            return;
         }
-        bookAdapter.setmBookListItem(bookListings);
-        bookAdapter.notifyDataSetChanged();
-
-        if (bookListings.isEmpty()){
-            RecyclerView mRecyclerView = getView().findViewById(R.id.requested_recycler);
-            TextView emptyView = getView().findViewById(R.id.empty_view);
-
-            if (mRecyclerView != null && emptyView != null) {
-                mRecyclerView.setVisibility(View.GONE);
-                emptyView.setVisibility(View.VISIBLE);
+        activity.runOnUiThread(() -> {
+            bookListings.clear();
+            for (BookListItem book : BookDataAdapter.getInstance().getMyBorrowedBooksList()) {
+                if (book.getStatus().equals("requested")) {
+                    bookListings.add(book);
+                }
             }
-        }
+            bookAdapter.notifyDataSetChanged();
+        });
     }
 }
 

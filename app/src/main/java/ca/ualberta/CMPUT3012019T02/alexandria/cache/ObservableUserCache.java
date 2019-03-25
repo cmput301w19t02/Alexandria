@@ -27,6 +27,8 @@ public class ObservableUserCache extends Observable {
 
     private static ObservableUserCache instance;
     private User user;
+    private DatabaseReference databaseReference;
+    private ValueEventListener valueEventListener;
     private UserController userController = UserController.getInstance();
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
@@ -47,7 +49,7 @@ public class ObservableUserCache extends Observable {
             return;
         }
 
-        database.child("users").child(userController.getMyId()).addValueEventListener(new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
@@ -57,9 +59,22 @@ public class ObservableUserCache extends Observable {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Observable", "Error with firebase listener");
+                Log.e("ObservableUserCache", "Error with firebase listener");
             }
-        });
+        };
+
+        updateReference();
+    }
+
+    /**
+     * Updates the cache database reference
+     */
+    public void updateReference() {
+        if (databaseReference != null) {
+            databaseReference.removeEventListener(valueEventListener);
+        }
+        databaseReference = database.child("users").child(userController.getMyId());
+        databaseReference.addValueEventListener(valueEventListener);
     }
 
     /**
@@ -136,13 +151,6 @@ public class ObservableUserCache extends Observable {
             return Optional.empty();
         }
         return Optional.ofNullable(user.getChatRooms().get(userId));
-    }
-
-    /**
-     * Invalidates cache
-     */
-    public static void invalidate() {
-        instance = null;
     }
 
 }
