@@ -51,7 +51,8 @@ public class AddNewBookActivity extends AppCompatActivity {
     private String isbn = "";
     private String description = "";
     private Date date;
-    private String image;
+    private String imageID;
+    private Bitmap coverBitmap;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +74,7 @@ public class AddNewBookActivity extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
-        if (image == null) {
+        if (imageID == null) {
             inflater.inflate(R.menu.select_take_image_menu, menu);
         } else {
             inflater.inflate(R.menu.select_take_delete_image_menu, menu);
@@ -90,11 +91,11 @@ public class AddNewBookActivity extends AppCompatActivity {
                 break;
             case R.id.option_take_photo:
                 // Take camera picture
-                addPhoto();
+                addPhotoCamera();
                 break;
             case R.id.option_delete_photo:
-                // Remove phore
-                // todo implement
+                // Remove photo
+                removePhoto();
                 break;
             default:
                 throw new RuntimeException("Unknown option");
@@ -102,11 +103,18 @@ public class AddNewBookActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void removePhoto() {
+        ImageView ivCover = findViewById(R.id.new_book_image);
+        ivCover.setImageDrawable(getResources().getDrawable(R.drawable.ic_image));
+
+        coverBitmap = null;
+    }
+
     /**
      * Adds photo from camera
      *
      */
-    public void addPhoto() {
+    public void addPhotoCamera() {
         // Todo: implement other possibilities
 
         int permissionCheck = ContextCompat.checkSelfPermission(
@@ -135,23 +143,9 @@ public class AddNewBookActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == RESULT_CAMERA) {
             // Camera photo
             Bundle extras = data.getExtras();
-            Bitmap bitmap = (Bitmap) extras.get("data");
-            ImageController.getInstance().addImage(bitmap).handleAsync((result, error) -> {
-                if (error == null) {
-                    image = result;
-
-                    Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                            bitmap.getWidth(), bitmap.getHeight());
-
-                    ImageView bookCover = findViewById(R.id.new_book_image);
-                    runOnUiThread(() -> {
-                        bookCover.setImageBitmap(squareBitmap);
-                    });
-                } else {
-                    showError(error.getMessage());
-                }
-                return null;
-            });
+            coverBitmap = (Bitmap) extras.get("data");
+            ImageView bookCover = findViewById(R.id.new_book_image);
+            bookCover.setImageBitmap(coverBitmap);
         } else if (requestCode == RESULT_ISBN && resultCode == RESULT_OK) {
             // ISBN scan
             Bundle extras = data.getExtras();
@@ -168,24 +162,12 @@ public class AddNewBookActivity extends AppCompatActivity {
             });
         } else if (requestCode == RESULT_GALLERY && resultCode == RESULT_OK) {
             // Gallery look up
-            // as described in https://stackoverflow.com/questions/13023788/how-to-load-an-image-in-image-view-from-gallery
             Uri selectedImage = data.getData();
 
-            Bitmap bmp = null;
             try {
-                bmp = getBitmapFromUri(selectedImage);
-                final Bitmap bookCover = bmp;
-                ImageController.getInstance().addImage(bookCover).handleAsync((result, error) -> {
-                    if (error == null) {
-                        ImageView ivCover = (ImageView) findViewById(R.id.new_book_image);
-                        runOnUiThread(() -> {
-                            ivCover.setImageBitmap(bookCover);
-                        });
-                    } else {
-                        showError(error.getMessage());
-                    }
-                    return null;
-                });
+                coverBitmap = getBitmapFromUri(selectedImage);
+                ImageView ivCover = findViewById(R.id.new_book_image);
+                ivCover.setImageBitmap(coverBitmap);
             } catch (IOException e) {
                 showError(e.getMessage());
             }
@@ -224,17 +206,39 @@ public class AddNewBookActivity extends AppCompatActivity {
     public void addBook(View view) {
         fetchData();
         try {
-            book = new Book(isbn, image, title, author, description, date);
-            BookController.getInstance().addBook(book);
-            OwnedBook myOwnedBook = new OwnedBook(isbn);
-            BookController.getInstance().addMyOwnedBook(myOwnedBook);
-
-            Toast.makeText(this , "Book Added", Toast.LENGTH_LONG).show();
-            finish();
+            if (coverBitmap != null) {
+                saveWithImage();
+            } else {
+                saveBook();
+            }
         } catch (IllegalArgumentException e) {
             String errorMessage = e.getMessage();
             showError(errorMessage);
         }
+    }
+
+    private void saveWithImage() {
+        ImageController.getInstance().addImage(coverBitmap).handleAsync((result, error) -> {
+            if (error == null) {
+                imageID = result;
+
+                runOnUiThread(() -> {
+                    saveBook();
+                });
+            } else {
+                showError(error.getMessage());
+            }
+            return null;
+        });
+    }
+
+    private void saveBook() {
+        book = new Book(isbn, imageID, title, author, description, date);
+        BookController.getInstance().addBook(book);
+        OwnedBook myOwnedBook = new OwnedBook(isbn);
+        BookController.getInstance().addMyOwnedBook(myOwnedBook);
+        Toast.makeText(this, "Book Added", Toast.LENGTH_LONG).show();
+        finish();
     }
 
     /**
