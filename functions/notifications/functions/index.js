@@ -41,17 +41,19 @@ exports.sendNotification = functions.https.onCall((data) => {
   }).then((response) => {
     // For each message check if there was an error.
     const tokensToRemove = [];
-    response.results.forEach((result, index) => {
-      const error = result.error;
-      if (error) {
-        console.error('Failure sending notification to', tokens[index], error);
-        // Cleanup the tokens who are not registered anymore.
-        if (error.code === 'messaging/invalid-registration-token' ||
-          error.code === 'messaging/registration-token-not-registered') {
-          tokensToRemove.push(tokensSnapshot.ref.child(tokens[index]).remove());
+    if (response.results) {
+      response.results.forEach((result, index) => {
+        const error = result.error;
+        if (error) {
+          console.error('Failure sending notification to', tokens[index], error);
+          // Cleanup the tokens who are not registered anymore.
+          if (error.code === 'messaging/invalid-registration-token' ||
+            error.code === 'messaging/registration-token-not-registered') {
+            tokensToRemove.push(tokensSnapshot.ref.child(tokens[index]).remove());
+          }
         }
-      }
-    });
+      });
+    }
     return Promise.all(tokensToRemove);
   });
 });
