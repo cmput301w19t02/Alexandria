@@ -962,6 +962,33 @@ public class BookController {
         return future;
     }
 
+    /**
+     * Gets a user's collection of owned books
+     *
+     * @return a CompletableFuture that contains a collection of owned books
+     */
+    public CompletableFuture<Collection<OwnedBook>> getUserOwnedBooks(String userId) {
+        CompletableFuture<Collection<OwnedBook>> future = new CompletableFuture<>();
+        firebase.getReference(getOwnedBooksPath(userId)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Map<String, OwnedBook> ownedBookMap = dataSnapshot.getValue(new GenericTypeIndicator<Map<String, OwnedBook>>() {
+                    });
+                    future.complete(ownedBookMap.values());
+                } else {
+                    future.complete(Collections.emptySet());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                future.completeExceptionally(databaseError.toException());
+            }
+        });
+        return future;
+    }
+
 
     /* Database Paths */
 
