@@ -18,16 +18,20 @@ import android.widget.Toast;
 import java.util.Date;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ISBNLookup;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
+import java9.util.concurrent.CompletableFuture;
 
 /**
  * The Add new book activity.
  */
 public class AddNewBookActivity extends AppCompatActivity {
-    public static final int CAMERA_CODE = 1;
+    private static final int RESULT_CAMERA = 1;
+    private final int RESULT_ISBN = 2;
     private final int REQUEST_PERMISSION_PHONE_STATE = 5;
 
     private Book book;
@@ -69,7 +73,7 @@ public class AddNewBookActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.CAMERA}, REQUEST_PERMISSION_PHONE_STATE);
         } else {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(takePictureIntent, CAMERA_CODE);
+            startActivityForResult(takePictureIntent, RESULT_CAMERA);
         }
     }
 
@@ -82,7 +86,7 @@ public class AddNewBookActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == CAMERA_CODE) {
+        if (resultCode == RESULT_OK && requestCode == RESULT_CAMERA) {
             Bundle extras = data.getExtras();
             Bitmap bitmap = (Bitmap) extras.get("data");
             ImageController.getInstance().addImage(bitmap).handleAsync((result, error) -> {
@@ -101,6 +105,19 @@ public class AddNewBookActivity extends AppCompatActivity {
                 }
                 return null;
             });
+        } else if (requestCode == RESULT_ISBN && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            String isbn = extras.getString("isbn");
+            CompletableFuture<Book> resultFuture = SearchController.getInstance().searchIsbn(isbn);
+            resultFuture.handleAsync((result, error)->{
+                if (error == null) {
+                    Book book = result;
+                    setBook(book);
+                } else{
+                    showError("No result for the search of " + isbn + ".");
+                }
+                return null;
+            });
         }
     }
 
@@ -108,8 +125,8 @@ public class AddNewBookActivity extends AppCompatActivity {
      * Scan isbn.
      */
     public void scanISBN(View view) {
-        // TODO: implement
-        throw new UnsupportedOperationException("Not implemented");
+        Intent intentScan = new Intent(this, ISBNLookup.class);
+        startActivityForResult(intentScan, RESULT_ISBN);
     }
 
     /**
@@ -145,6 +162,22 @@ public class AddNewBookActivity extends AppCompatActivity {
         author = authorField.getText().toString();
         isbn = isbnField.getText().toString();
     }
+
+    /**
+     * sets title, author and ISBN as in the book provided
+     *
+     * @param book book info to set
+     */
+    private void setBook(Book book) {
+        AppCompatEditText nameField = findViewById(R.id.add_book_add_title_field);
+        AppCompatEditText authorField = findViewById(R.id.add_book_add_author_field);
+        AppCompatEditText isbnField = findViewById(R.id.add_book_add_ISBN_field);
+
+        nameField.setText(book.getTitle());
+        authorField.setText(book.getAuthor());
+        isbnField.setText(book.getIsbn());
+    }
+
 
     public void showError(String message) {
         Toast.makeText(this, "Error: " + message, Toast.LENGTH_LONG).show();
