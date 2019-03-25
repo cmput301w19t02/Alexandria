@@ -28,7 +28,6 @@ public class AddNewBookActivity extends AppCompatActivity {
     private String author = "";
     private String isbn = "";
     private String description = "";
-    private Date date;
     private String image;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +101,7 @@ public class AddNewBookActivity extends AppCompatActivity {
     public void addBook(View view) {
         fetchData();
         try {
-            book = new Book(isbn, image, title, author, description, date);
+            book = new Book(isbn, title, author, description, image);
             BookController.getInstance().addBook(book);
             OwnedBook myOwnedBook = new OwnedBook(isbn);
             BookController.getInstance().addMyOwnedBook(myOwnedBook);
@@ -122,7 +121,6 @@ public class AddNewBookActivity extends AppCompatActivity {
         AppCompatEditText titleField = findViewById(R.id.add_book_add_title_field);
         AppCompatEditText authorField = findViewById(R.id.add_book_add_author_field);
         AppCompatEditText isbnField = findViewById(R.id.add_book_add_ISBN_field);
-        date = null;
         description = "default";
 
         title = titleField.getText().toString();

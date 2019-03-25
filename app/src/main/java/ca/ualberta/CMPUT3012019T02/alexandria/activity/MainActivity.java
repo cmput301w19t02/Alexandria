@@ -10,15 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook.AddNewBookActivity;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookParser;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
@@ -75,65 +72,26 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        if(!userController.isAuthenticated()) {
+        if (!userController.isAuthenticated()) {
             Intent startLoginActivity = new Intent(this, LoginActivity.class);
             startActivity(startLoginActivity);
-        }
-        else{
-//            System.out.println("Already logged in");
-            BookController bookController = BookController.getInstance();
-            bookController.getMyBorrowedBooks().thenAcceptAsync(stringBorrowedBookHashMap -> {
-                try {
+        } else {
+            BookParser.getMyBorrowedBooksList().thenAcceptAsync(bookListItems -> {
+                borrowedBookListings = bookListItems;
 
-                    System.out.println("Loading borrowed books");
-                    // Gets accepted book list items
-                    List<BookListItem> bookListItems = BookParser.UserBooksToBookList(stringBorrowedBookHashMap).get(5, TimeUnit.SECONDS);
+                // Sort by status then alphabetical order of book titles
+                Collections.sort(borrowedBookListings, (o1, o2) -> BookListItem.getComparator().compare(o1, o2));
 
-                    borrowedBookListings = bookListItems;
-
-                    updateFragments();
-
-                    // Sort by alphabetical order of book titles
-                    Collections.sort(borrowedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
-                    System.out.println("Loading borrowed books");
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (TimeoutException e) {
-                    e.printStackTrace();
-                }
-            }).exceptionally(throwable -> {
-                throwable.printStackTrace();
-                return null;
+                updateFragments();
             });
 
-            bookController.getMyOwnedBooks().thenAcceptAsync(stringOwnedBookHashMap -> {
-                try {
+            BookParser.getMyOwnedBooksList().thenAcceptAsync(bookListItems -> {
+                ownedBookListings = bookListItems;
 
-                    System.out.println("Loading owned books");
-                    // Gets accepted book list items
-                    List<BookListItem> bookListItems = BookParser.UserBooksToBookList(stringOwnedBookHashMap).get(5, TimeUnit.SECONDS);
+                // Sort by status then alphabetical order of book titles
+                Collections.sort(ownedBookListings, (o1, o2) -> BookListItem.getComparator().compare(o1, o2));
 
-                    ownedBookListings = bookListItems;
-
-                    updateFragments();
-
-                    // Sort by alphabetical order of book titles
-                    Collections.sort(ownedBookListings, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getTitle(), o2.getTitle()));
-                    System.out.println("Finished loading owned books");
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (TimeoutException e) {
-                    e.printStackTrace();
-                }
-            }).exceptionally(throwable -> {
-                throwable.printStackTrace();
-                return null;
+                updateFragments();
             });
         }
 

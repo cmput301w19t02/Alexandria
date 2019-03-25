@@ -110,7 +110,7 @@ public class MyBookUserListFragment extends Fragment {
 
         bookController.getMyOwnedBook(isbn).handleAsync(((ownedBook, bookError) -> {
             if (bookError == null) {
-                for (String userId : ownedBook.getUsersRequesting()) {
+                for (String userId : ownedBook.get().getRequestingUsers()) {
                     userController.getUserProfile(userId).handleAsync((user, userError) -> {
                         if (userError == null) {
                             if (user.getPicture() != null) {
