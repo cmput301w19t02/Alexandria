@@ -11,7 +11,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -53,14 +57,49 @@ public class AddNewBookActivity extends AppCompatActivity {
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v -> finish());
+
+        ImageView addImageButton = findViewById(R.id.add_book_add_image);
+        registerForContextMenu(addImageButton);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        if (image == null) {
+            inflater.inflate(R.menu.select_take_image_menu, menu);
+        } else {
+            inflater.inflate(R.menu.select_take_delete_image_menu, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            //menu switch
+            case R.id.option_select_photo:
+                // Select from gallery
+                // todo implement
+                break;
+            case R.id.option_take_photo:
+                // Take camera picture
+                addPhoto();
+                break;
+            case R.id.option_delete_photo:
+                // Remove phore
+                // todo implement
+                break;
+            default:
+                throw new RuntimeException("Unknown option");
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
      * Adds photo from camera
      *
-     * @param view the add photo button
      */
-    public void addPhoto(View view) {
+    public void addPhoto() {
         // Todo: implement other possibilities
 
         int permissionCheck = ContextCompat.checkSelfPermission(
