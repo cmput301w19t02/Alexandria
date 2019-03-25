@@ -1,9 +1,13 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +27,9 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
  * The Add new book activity.
  */
 public class AddNewBookActivity extends AppCompatActivity {
+    public static final int CAMERA_CODE = 1;
+    private final int REQUEST_PERMISSION_PHONE_STATE = 5;
+
     private Book book;
     private String title = "";
     private String author = "";
@@ -51,9 +58,18 @@ public class AddNewBookActivity extends AppCompatActivity {
      */
     public void addPhoto(View view) {
         // Todo: implement other possibilities
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, 1);
+
+        int permissionCheck = ContextCompat.checkSelfPermission(
+                this, Manifest.permission.CAMERA);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Camera is required. " +
+                    "Please allow camera usage and try again", Toast.LENGTH_LONG).show();
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA}, REQUEST_PERMISSION_PHONE_STATE);
+        } else {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(takePictureIntent, CAMERA_CODE);
         }
     }
 
@@ -66,7 +82,7 @@ public class AddNewBookActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == 1) {
+        if (resultCode == RESULT_OK && requestCode == CAMERA_CODE) {
             Bundle extras = data.getExtras();
             Bitmap bitmap = (Bitmap) extras.get("data");
             ImageController.getInstance().addImage(bitmap).handleAsync((result, error) -> {
