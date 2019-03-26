@@ -130,6 +130,7 @@ public class UserController {
                                             if(profileError==null){
                                                 NotificationController.getInstance().setDeviceToken().handleAsync((result,error)->{
                                                     if(error==null){
+                                                        ObservableUserCache.getInstance().updateReference();
                                                         resultFuture.complete(null);
                                                     }
                                                     else {
