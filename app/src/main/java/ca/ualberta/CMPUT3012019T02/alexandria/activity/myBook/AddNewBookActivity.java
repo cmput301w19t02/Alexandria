@@ -3,7 +3,6 @@ package ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -19,13 +18,11 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
-import java.util.Date;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ISBNLookup;
@@ -65,21 +62,41 @@ public class AddNewBookActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v -> finish());
 
+        // register imageView for menu
         ImageView addImageButton = findViewById(R.id.add_book_add_image);
         registerForContextMenu(addImageButton);
     }
 
+    /**
+     * inflate menu for add photo options based on the presence of the photo
+     * @param menu
+     * @param v
+     * @param menuInfo
+     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
-        if (imageID == null) {
+        if (!this.isImageBitmap()) {
             inflater.inflate(R.menu.select_take_image_menu, menu);
         } else {
             inflater.inflate(R.menu.select_take_delete_image_menu, menu);
         }
     }
 
+    /**
+     * confirms there is a cover in current session
+     * @return
+     */
+    public boolean isImageBitmap() {
+        return this.coverBitmap != null;
+    }
+
+    /**
+     * add photo options
+     * @param item
+     * @return
+     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -102,6 +119,9 @@ public class AddNewBookActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * remove bitmap photo, image id still connected unless saved
+     */
     public void removePhoto() {
         ImageView ivCover = findViewById(R.id.new_book_image);
         ivCover.setImageDrawable(getResources().getDrawable(R.drawable.ic_image));
@@ -194,6 +214,9 @@ public class AddNewBookActivity extends AppCompatActivity {
         startActivityForResult(intentScan, RESULT_ISBN);
     }
 
+    /**
+     * choose image from gallery
+     */
     public void openGallery() {
         Intent intentGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(intentGallery, RESULT_GALLERY);
@@ -216,6 +239,9 @@ public class AddNewBookActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * save book with image saving and attaching
+     */
     private void saveWithImage() {
         ImageController.getInstance().addImage(coverBitmap).handleAsync((result, error) -> {
             if (error == null) {
@@ -231,6 +257,9 @@ public class AddNewBookActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * save book with current details
+     */
     private void saveBook() {
         book = new Book(isbn, title, author, description, imageID);
         BookController.getInstance().addBook(book);
@@ -275,7 +304,10 @@ public class AddNewBookActivity extends AppCompatActivity {
         isbnField.setText(book.getIsbn());
     }
 
-
+    /**
+     * show error in toast
+     * @param message error message
+     */
     public void showError(String message) {
         Toast.makeText(this, "Error: " + message, Toast.LENGTH_LONG).show();
     }
