@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,7 +24,7 @@ import android.widget.Toast;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook.EditBookActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.Activities.ViewMyBook.EditBookActivity;
 
 public class MyBookFragment extends Fragment {
 

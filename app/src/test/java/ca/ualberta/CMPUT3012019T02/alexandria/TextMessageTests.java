@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.message.TextMessage;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.message.TextMessage;
 
 import static org.junit.Assert.assertEquals;
 

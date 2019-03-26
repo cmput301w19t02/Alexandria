@@ -14,9 +14,9 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.ChatRoomActivity;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.ChatViewHolder;
+import ca.ualberta.CMPUT3012019T02.alexandria.Activities.ChatRoomActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.chatroom.ChatRoomItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.holder.ChatViewHolder;
 
 /**
  * Recycler View adapter for the chat room list in MessageFragment. Sets up an on click listener

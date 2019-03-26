@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.Activities.ViewUserProfileActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.UserRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.UserListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.UserListItem;
 
 public class MyBookUserListFragment extends Fragment {
 

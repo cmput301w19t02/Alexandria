@@ -8,8 +8,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.chatroom.ChatRoomItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.UserProfile;
 import java9.util.concurrent.CompletableFuture;
 
 /**

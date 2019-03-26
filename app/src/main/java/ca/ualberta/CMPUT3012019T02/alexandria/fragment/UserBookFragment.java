@@ -14,7 +14,6 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,10 +28,9 @@ import android.widget.Toast;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.ISBNLookup;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.Activities.ISBNLookup;
+import ca.ualberta.CMPUT3012019T02.alexandria.Activities.ViewUserProfileActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 
 import static android.app.Activity.RESULT_OK;

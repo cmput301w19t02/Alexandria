@@ -2,7 +2,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria;
 
 import org.junit.Test;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.chatroom.ChatRoomItem;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertTrue;

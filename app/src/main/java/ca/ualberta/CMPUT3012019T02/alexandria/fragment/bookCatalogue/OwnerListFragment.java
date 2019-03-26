@@ -15,7 +15,7 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.OwnerRecyclerViewAdapter;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.OwnerListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.OwnerListItem;
 
 public class OwnerListFragment extends Fragment {
 

@@ -3,7 +3,6 @@ package ca.ualberta.CMPUT3012019T02.alexandria.adapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
@@ -15,12 +14,8 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.UserBookFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.fragment.bookCatalogue.BookCatalogueFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook.MyBookFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.OwnerListItem;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.BookViewHolder;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.OwnerViewHolder;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.OwnerListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.holder.OwnerViewHolder;
 
 /**
  * Set up RecyclerView for Book Catalogue

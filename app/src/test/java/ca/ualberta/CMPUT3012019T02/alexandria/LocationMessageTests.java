@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Location;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.message.LocationMessage;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.Location;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.message.LocationMessage;
 
 import static org.junit.Assert.assertEquals;
 

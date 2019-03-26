@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.UserListItem;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.UserViewHolder;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.UserListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.holder.UserViewHolder;
 
 /**
  * Set up RecyclerView for user lists

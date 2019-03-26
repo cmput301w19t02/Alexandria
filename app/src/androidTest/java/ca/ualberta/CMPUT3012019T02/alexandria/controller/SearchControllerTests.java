@@ -12,9 +12,8 @@ import java.util.concurrent.TimeoutException;
 
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.MainActivity;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.Activities.MainActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.Book;
 
 /**
  * This class tests the UserController

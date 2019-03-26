@@ -138,13 +138,13 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;java.lang.Void&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#addBook-ca.ualberta.CMPUT3012019T02.alexandria.model.Book-">addBook</a></span>(<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/Book.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model">Book</a>&nbsp;book)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#addBook-ca.ualberta.CMPUT3012019T02.alexandria.model.Book-">addBook</a></span>(<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/Book.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses">Book</a>&nbsp;book)</code>
 <div class="block">Add a book to the database</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;java.lang.Void&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#addMyOwnedBook-ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook-">addMyOwnedBook</a></span>(<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">OwnedBook</a>&nbsp;ownedBook)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#addMyOwnedBook-ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook-">addMyOwnedBook</a></span>(<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">OwnedBook</a>&nbsp;ownedBook)</code>
 <div class="block">Adds an owned book to the current user's collection of owned books</div>
 </td>
 </tr>
@@ -183,7 +183,7 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/Book.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model">Book</a>&gt;</code></td>
+<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/Book.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses">Book</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#getBook-java.lang.String-">getBook</a></span>(java.lang.String&nbsp;isbn)</code>
 <div class="block">Gets a book from the database</div>
 </td>
@@ -195,51 +195,51 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i10" class="altColor">
-<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">BorrowedBook</a>&gt;</code></td>
+<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">BorrowedBook</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#getMyBorrowedBook-java.lang.String-">getMyBorrowedBook</a></span>(java.lang.String&nbsp;isbn)</code>
 <div class="block">Gets a borrowed book from the current user's collection of borrowed books</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
-<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">BorrowedBook</a>&gt;&gt;</code></td>
+<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">BorrowedBook</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#getMyBorrowedBooks--">getMyBorrowedBooks</a></span>()</code>
 <div class="block">Gets the current user's collection of borrowed books</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
-<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">OwnedBook</a>&gt;</code></td>
+<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">OwnedBook</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#getMyOwnedBook-java.lang.String-">getMyOwnedBook</a></span>(java.lang.String&nbsp;isbn)</code>
 <div class="block">Gets an owned book from the current user's collection of owned books</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
-<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">OwnedBook</a>&gt;&gt;</code></td>
+<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">OwnedBook</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#getMyOwnedBooks--">getMyOwnedBooks</a></span>()</code>
 <div class="block">Gets the current user's collection of owned books</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
-<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">BorrowedBook</a>&gt;</code></td>
+<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">BorrowedBook</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#getUserBorrowedBook-java.lang.String-java.lang.String-">getUserBorrowedBook</a></span>(java.lang.String&nbsp;id,
                    java.lang.String&nbsp;isbn)</code>
 <div class="block">Gets a user's borrowed book from the collection of their borrowed books</div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
-<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">BorrowedBook</a>&gt;&gt;</code></td>
+<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">BorrowedBook</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#getUserBorrowedBooks-java.lang.String-">getUserBorrowedBooks</a></span>(java.lang.String&nbsp;id)</code>
 <div class="block">Get's the user's collection of borrowed books</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
-<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">OwnedBook</a>&gt;</code></td>
+<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">OwnedBook</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#getUserOwnedBook-java.lang.String-java.lang.String-">getUserOwnedBook</a></span>(java.lang.String&nbsp;id,
                 java.lang.String&nbsp;isbn)</code>
 <div class="block">Gets an owned book from the user's collection of owned books</div>
 </td>
 </tr>
 <tr id="i17" class="rowColor">
-<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">OwnedBook</a>&gt;&gt;</code></td>
+<td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">OwnedBook</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#getUserOwnedBooks-java.lang.String-">getUserOwnedBooks</a></span>(java.lang.String&nbsp;id)</code>
 <div class="block">Gets the user's collection of owned books</div>
 </td>
@@ -260,13 +260,13 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;java.lang.Void&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#updateBook-ca.ualberta.CMPUT3012019T02.alexandria.model.Book-">updateBook</a></span>(<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/Book.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model">Book</a>&nbsp;book)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#updateBook-ca.ualberta.CMPUT3012019T02.alexandria.model.Book-">updateBook</a></span>(<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/Book.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses">Book</a>&nbsp;book)</code>
 <div class="block">Update a book in the database, or add one if it does not exist</div>
 </td>
 </tr>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>java9.util.concurrent.CompletableFuture&lt;java.lang.Void&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#updateMyOwnedBook-ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook-">updateMyOwnedBook</a></span>(<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">OwnedBook</a>&nbsp;ownedBook)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/controller/BookController.html#updateMyOwnedBook-ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook-">updateMyOwnedBook</a></span>(<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">OwnedBook</a>&nbsp;ownedBook)</code>
 <div class="block">Updates the current user's owned book in the database</div>
 </td>
 </tr>
@@ -306,13 +306,13 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="addBook-ca.ualberta.CMPUT3012019T02.alexandria.model.Book-">
+<a name="addBook-ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.Book-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addBook</h4>
-<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;java.lang.Void&gt;&nbsp;addBook(<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/Book.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model">Book</a>&nbsp;book)</pre>
+<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;java.lang.Void&gt;&nbsp;addBook(<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/Book.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses">Book</a>&nbsp;book)</pre>
 <div class="block">Add a book to the database</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -328,7 +328,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getBook</h4>
-<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/Book.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model">Book</a>&gt;&nbsp;getBook(@NonNull
+<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/Book.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses">Book</a>&gt;&nbsp;getBook(@NonNull
                                                              java.lang.String&nbsp;isbn)</pre>
 <div class="block">Gets a book from the database</div>
 <dl>
@@ -339,14 +339,14 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="updateBook-ca.ualberta.CMPUT3012019T02.alexandria.model.Book-">
+<a name="updateBook-ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.Book-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>updateBook</h4>
 <pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;java.lang.Void&gt;&nbsp;updateBook(@NonNull
-                                                                          <a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/Book.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model">Book</a>&nbsp;book)</pre>
+                                                                          <a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/Book.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses">Book</a>&nbsp;book)</pre>
 <div class="block">Update a book in the database, or add one if it does not exist</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -500,7 +500,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getMyBorrowedBook</h4>
-<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">BorrowedBook</a>&gt;&nbsp;getMyBorrowedBook(@NonNull
+<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">BorrowedBook</a>&gt;&nbsp;getMyBorrowedBook(@NonNull
                                                                                java.lang.String&nbsp;isbn)</pre>
 <div class="block">Gets a borrowed book from the current user's collection of borrowed books</div>
 <dl>
@@ -517,7 +517,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getMyBorrowedBooks</h4>
-<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">BorrowedBook</a>&gt;&gt;&nbsp;getMyBorrowedBooks()</pre>
+<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">BorrowedBook</a>&gt;&gt;&nbsp;getMyBorrowedBooks()</pre>
 <div class="block">Gets the current user's collection of borrowed books</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -525,14 +525,14 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="addMyOwnedBook-ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook-">
+<a name="addMyOwnedBook-ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.OwnedBook-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addMyOwnedBook</h4>
 <pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;java.lang.Void&gt;&nbsp;addMyOwnedBook(@NonNull
-                                                                              <a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">OwnedBook</a>&nbsp;ownedBook)</pre>
+                                                                              <a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">OwnedBook</a>&nbsp;ownedBook)</pre>
 <div class="block">Adds an owned book to the current user's collection of owned books</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -548,7 +548,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getMyOwnedBook</h4>
-<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">OwnedBook</a>&gt;&nbsp;getMyOwnedBook(@NonNull
+<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">OwnedBook</a>&gt;&nbsp;getMyOwnedBook(@NonNull
                                                                          java.lang.String&nbsp;isbn)</pre>
 <div class="block">Gets an owned book from the current user's collection of owned books</div>
 <dl>
@@ -565,7 +565,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getMyOwnedBooks</h4>
-<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">OwnedBook</a>&gt;&gt;&nbsp;getMyOwnedBooks()</pre>
+<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">OwnedBook</a>&gt;&gt;&nbsp;getMyOwnedBooks()</pre>
 <div class="block">Gets the current user's collection of owned books</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -573,14 +573,14 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="updateMyOwnedBook-ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook-">
+<a name="updateMyOwnedBook-ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.OwnedBook-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>updateMyOwnedBook</h4>
 <pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;java.lang.Void&gt;&nbsp;updateMyOwnedBook(@NonNull
-                                                                                 <a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">OwnedBook</a>&nbsp;ownedBook)</pre>
+                                                                                 <a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">OwnedBook</a>&nbsp;ownedBook)</pre>
 <div class="block">Updates the current user's owned book in the database</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -613,7 +613,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getUserBorrowedBook</h4>
-<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">BorrowedBook</a>&gt;&nbsp;getUserBorrowedBook(@NonNull
+<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">BorrowedBook</a>&gt;&nbsp;getUserBorrowedBook(@NonNull
                                                                                  java.lang.String&nbsp;id,
                                                                                  @NonNull
                                                                                  java.lang.String&nbsp;isbn)</pre>
@@ -633,7 +633,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getUserBorrowedBooks</h4>
-<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">BorrowedBook</a>&gt;&gt;&nbsp;getUserBorrowedBooks(@NonNull
+<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/BorrowedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">BorrowedBook</a>&gt;&gt;&nbsp;getUserBorrowedBooks(@NonNull
                                                                                                                       java.lang.String&nbsp;id)</pre>
 <div class="block">Get's the user's collection of borrowed books</div>
 <dl>
@@ -650,7 +650,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getUserOwnedBook</h4>
-<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">OwnedBook</a>&gt;&nbsp;getUserOwnedBook(@NonNull
+<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">OwnedBook</a>&gt;&nbsp;getUserOwnedBook(@NonNull
                                                                            java.lang.String&nbsp;id,
                                                                            @NonNull
                                                                            java.lang.String&nbsp;isbn)</pre>
@@ -670,7 +670,7 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getUserOwnedBooks</h4>
-<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.model.user">OwnedBook</a>&gt;&gt;&nbsp;getUserOwnedBooks(@NonNull
+<pre>public&nbsp;java9.util.concurrent.CompletableFuture&lt;java.util.HashMap&lt;java.lang.String,<a href="../../../../../ca/ualberta/CMPUT3012019T02/alexandria/model/user/OwnedBook.html" title="class in ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user">OwnedBook</a>&gt;&gt;&nbsp;getUserOwnedBooks(@NonNull
                                                                                                                 java.lang.String&nbsp;id)</pre>
 <div class="block">Gets the user's collection of owned books</div>
 <dl>

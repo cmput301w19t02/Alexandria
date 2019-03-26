@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook.AddNewBookActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.Activities.ViewMyBook.AddNewBookActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.TabsAdapter;
 
 /**

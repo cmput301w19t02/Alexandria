@@ -13,8 +13,8 @@ import java.util.concurrent.TimeoutException;
 
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.MainActivity;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
+import ca.ualberta.CMPUT3012019T02.alexandria.Activities.MainActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.UserProfile;
 import java9.util.concurrent.CompletableFuture;
 
 /**

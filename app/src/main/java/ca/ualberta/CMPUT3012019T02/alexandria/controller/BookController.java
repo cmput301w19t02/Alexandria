@@ -18,9 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.BorrowedBook;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.OwnedBook;
 import java9.util.Optional;
 import java9.util.concurrent.CompletableFuture;
 
@@ -860,7 +860,7 @@ public class BookController {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    reference.child("imageId").setValue(ownedBook.getImageId())
+                    reference.child("imageId").setValue(ownedBook.getCoverId())
                             .addOnSuccessListener(future::complete)
                             .addOnFailureListener(future::completeExceptionally);
                 } else {

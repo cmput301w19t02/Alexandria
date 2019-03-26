@@ -10,9 +10,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.BorrowedBook;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.OwnedBook;
 import java9.util.Optional;
 
 import static org.junit.Assert.assertEquals;

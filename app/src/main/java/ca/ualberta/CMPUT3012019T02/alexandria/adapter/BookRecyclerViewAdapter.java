@@ -17,8 +17,8 @@ import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.UserBookFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.bookCatalogue.BookCatalogueFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook.MyBookFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.BookViewHolder;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.BookListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.holder.BookViewHolder;
 
 /**
  * Set up RecyclerView for book lists

@@ -1,9 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
-import android.app.Application;
-import android.content.res.Resources;
-import android.view.View;
-
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
 import com.algolia.search.saas.Query;
@@ -25,7 +21,7 @@ import java.util.ArrayList;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.App;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.Book;
 import java9.util.concurrent.CompletableFuture;
 
 /**

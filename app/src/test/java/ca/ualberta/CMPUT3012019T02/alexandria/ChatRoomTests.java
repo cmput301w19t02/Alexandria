@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoom;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.message.TextMessage;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.chatroom.ChatRoom;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.message.Message;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.message.TextMessage;
 
 import static org.junit.Assert.assertEquals;
 

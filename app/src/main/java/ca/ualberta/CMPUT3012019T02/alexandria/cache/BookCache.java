@@ -2,7 +2,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria.cache;
 
 import java.util.HashMap;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.Book;
 
 /**
  * Cache for books

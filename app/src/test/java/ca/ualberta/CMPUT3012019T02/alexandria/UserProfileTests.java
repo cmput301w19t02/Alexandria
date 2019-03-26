@@ -2,7 +2,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria;
 
 import org.junit.Test;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.UserProfile;
 
 import static org.junit.Assert.assertEquals;
 

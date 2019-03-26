@@ -16,8 +16,8 @@ import java.util.concurrent.TimeoutException;
 import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserBook;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.BookListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.UserBook;
 import java9.util.concurrent.CompletableFuture;
 
 /**

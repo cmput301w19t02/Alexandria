@@ -13,7 +13,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.MainActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.Activities.MainActivity;
 
 import static ca.ualberta.CMPUT3012019T02.alexandria.App.getContext;
 

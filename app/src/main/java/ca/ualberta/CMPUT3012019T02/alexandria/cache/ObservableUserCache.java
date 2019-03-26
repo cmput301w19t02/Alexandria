@@ -14,10 +14,10 @@ import java.util.Map;
 import java.util.Observable;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.User;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.BorrowedBook;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.OwnedBook;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.User;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.UserProfile;
 import java9.util.Optional;
 
 /**

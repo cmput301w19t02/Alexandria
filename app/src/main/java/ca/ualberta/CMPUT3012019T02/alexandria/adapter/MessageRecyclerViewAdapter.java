@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.MessageViewHolder;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.holder.MessageViewHolder;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.message.Message;
 
 
 /**

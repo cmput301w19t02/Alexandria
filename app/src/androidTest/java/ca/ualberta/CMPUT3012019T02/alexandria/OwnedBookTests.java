@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.user.OwnedBook;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -31,7 +31,7 @@ public class OwnedBookTests {
         assertEquals("available", ownedBook.getStatus());
         assertEquals(UserController.getInstance().getMyId(), ownedBook.getOwner());
         assertNull(ownedBook.getUserBorrowing());
-        assertNull(ownedBook.getImageId());
+        assertNull(ownedBook.getCoverId());
         assertTrue(ownedBook.getRequestingUsers().isEmpty());
     }
 
@@ -42,22 +42,22 @@ public class OwnedBookTests {
         assertEquals("available", ownedBook.getStatus());
         assertEquals(UserController.getInstance().getMyId(), ownedBook.getOwner());
         assertNull(ownedBook.getUserBorrowing());
-        assertEquals("fake-image-id", ownedBook.getImageId());
+        assertEquals("fake-image-id", ownedBook.getCoverId());
         assertTrue(ownedBook.getRequestingUsers().isEmpty());
     }
 
     @Test
     public void setImageIdTest() {
         OwnedBook ownedBook = new OwnedBook("0123456789123");
-        ownedBook.setImageId("a-brand-new-image-id");
-        assertEquals("a-brand-new-image-id", ownedBook.getImageId());
+        ownedBook.setCoverId("a-brand-new-image-id");
+        assertEquals("a-brand-new-image-id", ownedBook.getCoverId());
     }
 
     @Test
     public void setNullImageIdTest() {
         OwnedBook ownedBook = new OwnedBook("0123456789123");
-        ownedBook.setImageId(null);
-        assertNull(ownedBook.getImageId());
+        ownedBook.setCoverId(null);
+        assertNull(ownedBook.getCoverId());
     }
 
     @Test(expected = UnsupportedOperationException.class)

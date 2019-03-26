@@ -22,7 +22,7 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.ChatRecyclerViewAdapter;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.ModelClasses.chatroom.ChatRoomItem;
 
 /**
  * Fragment that shows a list of clickable chat rooms to chat with another user.
