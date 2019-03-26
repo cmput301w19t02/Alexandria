@@ -1,31 +1,97 @@
-package ca.ualberta.CMPUT3012019T02.alexandria.controller;
+package ca.ualberta.CMPUT3012019T02.alexandria.adapter;
 
 import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserBook;
 import java9.util.concurrent.CompletableFuture;
 
 /**
  * Functions as an adapter for BookController, ImageController, and UserController
- * to create BookListItems
  */
-public class BookParser {
+public class BookDataAdapter extends Observable {
+
+    private List<BookListItem> myBorrowedBookList;
+    private List<BookListItem> myOwnedBookList;
+
+    private static BookDataAdapter instance;
+
+    public static BookDataAdapter getInstance() {
+        if (instance == null) {
+            instance = new BookDataAdapter();
+        }
+        return instance;
+    }
+
+    private class CacheObserver implements Observer {
+        @Override
+        public void update(Observable o, Object arg) {
+
+            new Thread(() -> {
+                try {
+
+                    myBorrowedBookList = fetchMyBorrowedBooksList().get(5, TimeUnit.SECONDS);
+                    myOwnedBookList = fetchMyOwnedBooksList().get(5, TimeUnit.SECONDS);
+
+                    Collections.sort(myBorrowedBookList, BookListItem.getComparator());
+                    Collections.sort(myOwnedBookList, BookListItem.getComparator());
+
+                    setChanged();
+                    notifyObservers();
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+
+        }
+    }
+
+    private BookDataAdapter() {
+        myBorrowedBookList = new ArrayList<>();
+        myOwnedBookList = new ArrayList<>();
+        ObservableUserCache.getInstance().addObserver(new CacheObserver());
+    }
 
     /**
-     * Gets a list of borrowed books of the current user, in a BookListItem format
+     * Gets a list of borrowed books of the current user, in a BookListItem format.
+     * Items are sorted by status and then by alphabetical order.
      *
      * @return a CompletableFuture that returns a list of book list items
      */
-    public static CompletableFuture<List<BookListItem>> getMyBorrowedBooksList() {
+    public List<BookListItem> getMyBorrowedBooksList() {
+        return myBorrowedBookList;
+    }
+
+    /**
+     * Gets a list of owned books of the current user, in a BookListItem format
+     * Items are sorted by status and then by alphabetical order.
+     *
+     * @return a CompletableFuture that returns a list of book list items
+     */
+    public List<BookListItem> getMyOwnedBooksList() {
+        return myOwnedBookList;
+    }
+
+    private CompletableFuture<List<BookListItem>> fetchMyBorrowedBooksList() {
         CompletableFuture<List<BookListItem>> future = new CompletableFuture<>();
         BookController.getInstance().getMyBorrowedBooks().thenAcceptAsync(
                 borrowedBooks -> userBooksToBookList(borrowedBooks)
@@ -34,19 +100,14 @@ public class BookParser {
                             future.completeExceptionally(throwable);
                             return null;
                         })
-                ).exceptionally(throwable -> {
-                    future.completeExceptionally(throwable);
-                    return null;
-                });
+        ).exceptionally(throwable -> {
+            future.completeExceptionally(throwable);
+            return null;
+        });
         return future;
     }
 
-    /**
-     * Gets a list of owned books of the current user, in a BookListItem format
-     *
-     * @return a CompletableFuture that returns a list of book list items
-     */
-    public static CompletableFuture<List<BookListItem>> getMyOwnedBooksList() {
+    private CompletableFuture<List<BookListItem>> fetchMyOwnedBooksList() {
         CompletableFuture<List<BookListItem>> future = new CompletableFuture<>();
         BookController.getInstance().getMyOwnedBooks().thenAcceptAsync(
                 ownedBooks -> userBooksToBookList(ownedBooks)
@@ -55,14 +116,14 @@ public class BookParser {
                             future.completeExceptionally(throwable);
                             return null;
                         })
-                ).exceptionally(throwable -> {
-                    future.completeExceptionally(throwable);
-                    return null;
-                });
+        ).exceptionally(throwable -> {
+            future.completeExceptionally(throwable);
+            return null;
+        });
         return future;
     }
 
-    private static <T extends UserBook> CompletableFuture<List<BookListItem>> userBooksToBookList(Collection<T> userBooks) {
+    private <T extends UserBook> CompletableFuture<List<BookListItem>> userBooksToBookList(Collection<T> userBooks) {
         CompletableFuture<List<BookListItem>> future = new CompletableFuture<>();
         List<BookListItem> result = new ArrayList<>();
 
