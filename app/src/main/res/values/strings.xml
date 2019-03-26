@@ -83,4 +83,9 @@
     <string name="select_photo">Select Photo</string>
     <string name="take_photo">Take Photo</string>
     <string name="remove_photo">Remove Photo</string>
+    <!-- Strings related to empty lists -->
+    <string name="empty_exchange">Looks like there are no books here\nCheck Back Later</string>
+    <string name="empty_requests">Looks like there are no books here\nSearch Books to Request</string>
+    <string name="empty_library">Looks like you haven\'t added any books\nAdd Books to see them here</string>
+    <string name="empty_users">Can\'t find any Requests\nCheck Back Later</string>
 </resources>

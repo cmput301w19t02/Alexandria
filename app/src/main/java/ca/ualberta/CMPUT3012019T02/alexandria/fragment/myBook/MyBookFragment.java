@@ -1,5 +1,8 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook.EditBookActivity;
 
@@ -32,6 +36,15 @@ public class MyBookFragment extends Fragment {
     private String author;
     private String isbn;
     private String status;
+    private Activity activity;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            activity = (Activity) context;
+        }
+    }
 
     @Nullable
     @Override
@@ -77,6 +90,7 @@ public class MyBookFragment extends Fragment {
                 onClickEditBook();
                 break;
             case R.id.option_delete_book:
+                deleteBook();
                 break;
             case R.id.menu_my_book_ellipses:
                 break;
@@ -133,9 +147,7 @@ public class MyBookFragment extends Fragment {
         bundle.putString("isbn", isbn);
         switch (status) {
             case "available":
-                MyBookUserListFragment availableListFragment = new MyBookUserListFragment();
-                availableListFragment.setArguments(bundle);
-                return availableListFragment;
+                return new MyBookAvailableFragment();
             case "requested":
                 MyBookUserListFragment requestedListFragment = new MyBookUserListFragment();
                 requestedListFragment.setArguments(bundle);
@@ -177,10 +189,28 @@ public class MyBookFragment extends Fragment {
     }
 
 
-    private void onClickEditBook(){
+    private void onClickEditBook() {
         Intent intentEditBook = new Intent(getActivity(), EditBookActivity.class);
         intentEditBook.putExtra("BOOK_ISBN", isbn);
         startActivity(intentEditBook);
     }
 
+    private void deleteBook() {
+        BookController.getInstance().deleteMyOwnedBook(isbn).handleAsync((aVoid, throwable) -> {
+            activity.runOnUiThread(() -> {
+                if (throwable == null) {
+
+                    onStatusChange();
+
+                } else {
+                    throwable.printStackTrace();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("Unable to delete book. Please try again later.");
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+            return null;
+        });
+    }
 }
