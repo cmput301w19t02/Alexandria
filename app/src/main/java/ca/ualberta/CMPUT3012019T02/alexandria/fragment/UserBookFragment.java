@@ -373,9 +373,7 @@ public class UserBookFragment extends Fragment {
     }
 
     private void setStatusBorrowed(String scannedIsbn) {
-//        if (isbn.equals(scannedIsbn)) {
-        // TODO: fix ISBN scanning so that it scans properly
-        if (true) {
+        if (isbn.equals(scannedIsbn)) {
             BookController.getInstance().scanMyBorrowedBook(isbn).handleAsync((aVoid, throwable) -> {
                 if (throwable == null) {
 
@@ -416,9 +414,7 @@ public class UserBookFragment extends Fragment {
     }
 
     private void processReturn(String scannedIsbn) {
-//        if (isbn.equals(scannedIsbn)) {
-        // TODO: fix ISBN scanning so that it scans properly
-        if (true) {
+        if (isbn.equals(scannedIsbn)) {
             BookController.getInstance().scanMyBorrowedBook(isbn).handleAsync((aVoid, throwable) -> {
                 if (throwable == null) {
 
