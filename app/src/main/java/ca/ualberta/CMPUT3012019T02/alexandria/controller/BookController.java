@@ -353,7 +353,13 @@ public class BookController {
                         if (profileError == null) {
                             getBook(isbn).handleAsync((book, bookError) -> {
                                 if (bookError == null) {
-                                    notificationController.sendNotification(borrowerId, myProfile.getUsername(), "Accepted request for " + book.get().getTitle());
+
+                                    notificationController.sendNotification(borrowerId, myProfile.getUsername(), "Accepted your request for " + book.get().getTitle());
+
+                                    for (String user : ownedBook.getRemovedRequests().keySet()) {
+                                        notificationController.sendNotification(user, myProfile.getUsername(), "Declined your request for " + book.get().getTitle());
+                                    }
+
                                 }
                                 return null;
                             });
@@ -756,8 +762,12 @@ public class BookController {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
 
-                    Map<String, Object> update = new HashMap<>();
-                    update.put(getOwnedBookPath(userController.getMyId(), ownedBook.getIsbn()), ownedBook);
+                    HashMap<String, Object> update = new HashMap<>();
+                    String ownedBookPath = getOwnedBookPath(userController.getMyId(), ownedBook.getIsbn());
+                    update.put(ownedBookPath + "/isbn", ownedBook.getIsbn());
+                    update.put(ownedBookPath + "/status", "available");
+                    update.put(ownedBookPath + "/owner", userController.getMyId());
+                    update.put(ownedBookPath + "/imageId", ownedBook.getImageId());
                     update.put(getBookPath(ownedBook.getIsbn()) + "/availableFrom/" + userController.getMyId(), 1);
                     firebase.getReference().updateChildren(update)
                             .addOnSuccessListener(future::complete)
@@ -808,9 +818,9 @@ public class BookController {
     }
 
     /**
-     * Gets the current user's collection of borrowed books
+     * Gets the current user's collection of owned books
      *
-     * @return a CompletableFuture that contains a collection of borrowed books
+     * @return a CompletableFuture that contains a collection of owned books
      */
     public CompletableFuture<Collection<OwnedBook>> getMyOwnedBooks() {
         if (!userController.isAuthenticated()) {
@@ -952,6 +962,33 @@ public class BookController {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 future.complete(Optional.ofNullable(dataSnapshot.getValue(OwnedBook.class)));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                future.completeExceptionally(databaseError.toException());
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Gets a user's collection of owned books
+     *
+     * @return a CompletableFuture that contains a collection of owned books
+     */
+    public CompletableFuture<Collection<OwnedBook>> getUserOwnedBooks(String userId) {
+        CompletableFuture<Collection<OwnedBook>> future = new CompletableFuture<>();
+        firebase.getReference(getOwnedBooksPath(userId)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Map<String, OwnedBook> ownedBookMap = dataSnapshot.getValue(new GenericTypeIndicator<Map<String, OwnedBook>>() {
+                    });
+                    future.complete(ownedBookMap.values());
+                } else {
+                    future.complete(Collections.emptySet());
+                }
             }
 
             @Override

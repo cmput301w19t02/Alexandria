@@ -11,6 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +27,8 @@ import ca.ualberta.CMPUT3012019T02.alexandria.App;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import java9.util.concurrent.CompletableFuture;
+
+import static java.lang.System.in;
 
 /**
  * The type Search controller.
@@ -112,6 +116,58 @@ public class SearchController {
                 });
 
         return resultFuture;
+    }
+
+    public CompletableFuture<Boolean> compareIsbn(String isbn1, String isbn2) {
+        final CompletableFuture<Boolean> compareFuture = new CompletableFuture<>();
+
+        CompletableFuture.runAsync(() -> {
+           String searchUrl1 = GOOGLE_BOOK_URL + isbn1 + "&key=" + booksApiKey;
+           String searchUrl2 = GOOGLE_BOOK_URL + isbn2 + "&key=" + booksApiKey;
+
+           Boolean equalIsbn = false;
+
+            try {
+               URL url1 = new URL(searchUrl1);
+               URL url2 = new URL(searchUrl2);
+
+               HttpURLConnection bookConnection1 = (HttpURLConnection) url1.openConnection();
+               HttpURLConnection bookConnection2 = (HttpURLConnection) url2.openConnection();
+
+               try {
+                   InputStream in1 = bookConnection1.getInputStream();
+                   InputStream in2 = bookConnection2.getInputStream();
+
+                   if (IOUtils.contentEquals( in1, in2 )) {
+                       equalIsbn = true;
+                   }
+
+//                   InputStreamReader bookInput1 = new InputStreamReader(in1);
+//                   InputStreamReader bookInput2 = new InputStreamReader(in2);
+//
+//                   BufferedReader bookReader1 = new BufferedReader(bookInput1);
+//                   BufferedReader bookReader2 = new BufferedReader(bookInput2);
+
+               } catch (Exception e){
+                   e.printStackTrace();
+                   compareFuture.completeExceptionally(e);
+               }
+               finally {
+                   bookConnection1.disconnect();
+                   bookConnection2.disconnect();
+               }
+           } catch (MalformedURLException e) {
+               e.printStackTrace();
+               compareFuture.completeExceptionally(new IOException("Failed to create URL object"));
+           } catch (IOException e) {
+               e.printStackTrace();
+               compareFuture.completeExceptionally(new IOException("Failed to create URL connection"));
+           }
+
+           compareFuture.complete(equalIsbn);
+        });
+
+        return compareFuture;
     }
 
     public CompletableFuture<Book> searchIsbn(String isbn) {
