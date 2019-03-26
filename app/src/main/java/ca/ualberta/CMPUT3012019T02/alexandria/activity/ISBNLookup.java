@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -62,6 +63,7 @@ public class ISBNLookup extends AppCompatActivity implements ZBarScannerView.Res
             Handler handler = new Handler();
             handler.postDelayed(() -> mScannerView.resumeCameraPreview(ISBNLookup.this), 1000);
         } else {
+            Log.e("ISBNLookup", "Scanned ISBN: " + isbn);
             Intent resultIntent = new Intent();
             resultIntent.putExtra("isbn", isbn);
             setResult(-1, resultIntent);

@@ -80,22 +80,20 @@ public class OwnedBook extends UserBook {
     }
 
     /**
-     * Gets a map of user ids to integers, whose user ids are users who are requesting this book
-     * TO BE USED ONLY BY BOOK CONTROLLER
+     * Gets a map of user ids to integers. The user ids are users who are requesting this book.
+     * It is recommended to use {@link OwnedBook#getRequestingUsers()} instead.
      *
      * @return a map of user ids
      */
-    @Deprecated
     public Map<String, Integer> getRequesting() {
         return requesting;
     }
 
     /**
-     * Gets a map of user ids to integers, whose user ids are users whose requests are being removed
+     * Gets a map of user ids to integers. The user ids are users whose requests are being removed.
      *
      * @return a map of user ids
      */
-    @Deprecated
     public Map<String, Integer> getRemovedRequests() {
         return removedRequests;
     }
@@ -132,9 +130,7 @@ public class OwnedBook extends UserBook {
     /**
      * Updates the state of this owned book depending on status.
      * Changes the behavior of transaction methods.
-     * TO BE USED ONLY BY BOOK CONTROLLER
      */
-    @Deprecated
     public void updateState() {
         if (getStatus().equals("available")) {
             state = new Available();
@@ -154,12 +150,12 @@ public class OwnedBook extends UserBook {
     }
 
     /**
-     * Adds a request for this book from a given user
-     * TO BE USED ONLY BY BOOK CONTROLLER
+     * Locally adds a request for this book from a given user. Does not affect the database in any way.
+     * Use {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController#requestBook(String, String)}
+     * for making book requests.
      *
      * @param userId user id
      */
-    @Deprecated
     public void addRequest(@NonNull String userId) {
         if (state == null) {
             throw new IllegalStateException();
@@ -168,12 +164,13 @@ public class OwnedBook extends UserBook {
     }
 
     /**
-     * Cancels a request for this book from a given user
-     * TO BE USED ONLY BY BOOK CONTROLLER
+     * Locally cancels a request for this book from a given user. Does not affect the database in any way.
+     * Use {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController#cancelRequest(String, String)}
+     * to cancel a request or {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController#declineRequest(String, String)}
+     * to decline a request.
      *
      * @param userId user id
      */
-    @Deprecated
     public void cancelRequest(@NonNull String userId) {
         if (state == null) {
             throw new IllegalStateException();
@@ -182,12 +179,11 @@ public class OwnedBook extends UserBook {
     }
 
     /**
-     * Accepts a request for this book from a given user
-     * TO BE USED ONLY BY BOOK CONTROLLER
+     * Locally accepts a request for this book from a given user. Does not affect the database in any way.
+     * Use {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController#acceptRequest(String, String)} to accept a request.
      *
      * @param userId user id
      */
-    @Deprecated
     public void acceptRequest(@NonNull String userId) {
         if (state == null) {
             throw new IllegalStateException();
@@ -196,10 +192,11 @@ public class OwnedBook extends UserBook {
     }
 
     /**
-     * Sets the status of this book to borrowed
-     * TO BE USED ONLY BY BOOK CONTROLLER
+     * Locally sets the status of this book to borrowed. Does not affect the database in any way.
+     * Use {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController#exchangeBook(String, String)} to exchange books.
+     *
+     * @param borrowerScanned Must be true for this operation to succeed.
      */
-    @Deprecated
     public void exchange(@NonNull boolean borrowerScanned) {
         if (state == null) {
             throw new IllegalStateException();
@@ -208,16 +205,18 @@ public class OwnedBook extends UserBook {
     }
 
     /**
-     * Sets the status of this book to available
-     * TO BE USED ONLY BY BOOK CONTROLLER
+     * Locally sets the status of this book to available. Does not affect the database in any way.
+     * Use {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController#returnBook(String, String)} to return books.
+     *
+     * @param borrowerScanned Must be true for this operation to succeed
      */
-    @Deprecated
     public void beReturned(@NonNull boolean borrowerScanned) {
         if (state == null) {
             throw new IllegalStateException();
         }
         state.beReturned(borrowerScanned);
     }
+
 
     /* States */
 

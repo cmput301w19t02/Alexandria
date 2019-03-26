@@ -12,6 +12,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookDataAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 import java9.util.concurrent.CompletableFuture;
@@ -61,8 +62,6 @@ public class UserController {
      * @return a CompletableFuture signifying this operation's success/failure
      */
     public CompletableFuture<Void> authenticate(String username, final String password) {
-        ObservableUserCache.invalidate();
-
         final CompletableFuture<Void> future = new CompletableFuture<>();
 
         CompletableFuture<String> emailFuture = getUserEmail(username);
@@ -70,6 +69,7 @@ public class UserController {
             if (task.isSuccessful()) {
                 NotificationController.getInstance().setDeviceToken().handleAsync((result,error)->{
                     if(error==null){
+                        ObservableUserCache.getInstance().updateReference();
                         future.complete(null);
                     }
                     else {
@@ -95,7 +95,6 @@ public class UserController {
      */
     public void deauthenticate() {
         auth.signOut();
-        ObservableUserCache.invalidate();
         CompletableFuture.runAsync(()->{
             try {
                 FirebaseInstanceId.getInstance().deleteInstanceId();
@@ -131,6 +130,7 @@ public class UserController {
                                             if(profileError==null){
                                                 NotificationController.getInstance().setDeviceToken().handleAsync((result,error)->{
                                                     if(error==null){
+                                                        ObservableUserCache.getInstance().updateReference();
                                                         resultFuture.complete(null);
                                                     }
                                                     else {

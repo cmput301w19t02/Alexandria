@@ -17,8 +17,8 @@ public class User {
     private String id;
 
     /**
-     * No args constructor to maintain compatibility with Firebase deserializer
-     * DO NOT USE
+     * No args constructor to for the Firebase deserializer
+     * TO BE USED BY FIREBASE ONLY
      */
     @Deprecated
     public User() {

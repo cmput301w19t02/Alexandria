@@ -10,8 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import java9.util.Optional;
-
 /**
  * This class holds general information about a book, including its title, author, description, etc.
  */
@@ -171,11 +169,9 @@ public class Book {
     /**
      * Gets a map of user id strings to integers.
      * The keyset of this map is the collection of users that have this book available.
-     * TO BE USED ONLY BY FIREBASE
      *
      * @return a map of user id strings to integers
      */
-    @Deprecated
     public Map<String, Integer> getAvailableFrom() {
         return availableFrom;
     }
