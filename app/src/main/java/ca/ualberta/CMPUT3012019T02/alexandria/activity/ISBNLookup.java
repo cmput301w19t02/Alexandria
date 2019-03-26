@@ -16,14 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.zxing.Result;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import me.dm7.barcodescanner.zbar.Result;
-import me.dm7.barcodescanner.zbar.ZBarScannerView;
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
+public class ISBNLookup extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
-
-public class ISBNLookup extends AppCompatActivity implements ZBarScannerView.ResultHandler {
-    private ZBarScannerView mScannerView;
+    private ZXingScannerView mScannerView;
     private final int REQUEST_PERMISSION_PHONE_STATE = 1;
 
     @Override
@@ -34,7 +34,7 @@ public class ISBNLookup extends AppCompatActivity implements ZBarScannerView.Res
 
         setContentView(R.layout.activity_isbn_scanner);
         ViewGroup contentFrame = (ViewGroup) findViewById(R.id.content_frame);
-        mScannerView = new ZBarScannerView(this);
+        mScannerView = new ZXingScannerView(this);
         contentFrame.addView(mScannerView);
 
         Toolbar toolbar = findViewById(R.id.isbn_scanner_toolbar);
@@ -61,22 +61,17 @@ public class ISBNLookup extends AppCompatActivity implements ZBarScannerView.Res
 
     @Override
     public void handleResult(Result rawResult) {
-        String format = rawResult.getBarcodeFormat().getName();
-        String isbn = rawResult.getContents();
-        // Note:
-        // * Wait 2 seconds to resume the preview.
-        // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
-        // * I don't know why this is the case but I don't have the time to figure out.
-        if (!format.equals("ISBN10") && !format.equals("ISBN13")) {
-            Toast.makeText(this, "ISBN code not found", Toast.LENGTH_SHORT).show();
-            Handler handler = new Handler();
-            handler.postDelayed(() -> mScannerView.resumeCameraPreview(ISBNLookup.this), 1000);
-        } else {
-            Log.e("ISBNLookup", "Scanned ISBN: " + isbn);
+        String isbn = rawResult.getText();
+        Log.e("ISBNLookup", "Scanned ISBN: " + isbn);
+        if (isbn.length() == 10 || isbn.length() == 13) {
             Intent resultIntent = new Intent();
             resultIntent.putExtra("isbn", isbn);
             setResult(-1, resultIntent);
             finish();
+        } else {
+            Toast.makeText(this, "ISBN code not found", Toast.LENGTH_SHORT).show();
+            Handler handler = new Handler();
+            handler.postDelayed(() -> mScannerView.resumeCameraPreview(ISBNLookup.this), 1000);
         }
 
     }
