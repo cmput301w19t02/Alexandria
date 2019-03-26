@@ -29,7 +29,7 @@ function addOrUpdateIndexRecord(book) {
   // Get Firebase object
   const record = book.val();
   // Specify Algolia's objectID using the Firebase object key
-  if(record.availableFrom && Object.keys(record.availableFrom).length>0){
+  if (record.availableFrom && Object.keys(record.availableFrom).length>0) {
 	  record.objectID = book.key;
 	  // Add or update object
 	  index
