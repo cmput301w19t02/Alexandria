@@ -19,13 +19,11 @@ public class BorrowedBook extends UserBook {
 
     /**
      * Creates a new borrowed book with isbn, status, and owner
-     * TO BE USED BY BOOK CONTROLLER ONLY
      *
-     * @param isbn
-     * @param status
-     * @param owner
+     * @param isbn      isbn of book
+     * @param status    status of book
+     * @param owner     user id of book owner
      */
-    @Deprecated
     public BorrowedBook(@NonNull String isbn, @NonNull String status, @NonNull String owner) {
         super(isbn, status, owner);
     }
