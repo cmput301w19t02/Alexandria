@@ -126,7 +126,7 @@ public class EditBookActivity extends AddNewBookActivity {
     }
 
     /**
-     * camera, scan, gallery
+     * camera, gallery
      *
      * @param requestCode result code
      * @param resultCode confirmation code
