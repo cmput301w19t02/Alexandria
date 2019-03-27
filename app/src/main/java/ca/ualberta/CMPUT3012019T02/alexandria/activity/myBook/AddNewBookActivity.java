@@ -14,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -262,17 +263,38 @@ public class AddNewBookActivity extends AppCompatActivity {
      */
     private void saveBook() {
         book = new Book(isbn, title, author, description, imageID);
-        BookController.getInstance().addBook(book);
-        OwnedBook myOwnedBook;
-        if (coverBitmap != null) {
-            myOwnedBook = new OwnedBook(isbn, imageID);
-        } else {
-            myOwnedBook = new OwnedBook(isbn);
-        }
-        BookController.getInstance().addMyOwnedBook(myOwnedBook);
+        BookController.getInstance().addBook(book).handleAsync((aVoid, throwable) -> {
+            if (throwable == null || throwable instanceof IllegalArgumentException) {
 
-        Toast.makeText(this, "Book Added", Toast.LENGTH_LONG).show();
-        finish();
+                OwnedBook myOwnedBook;
+                if (coverBitmap != null) {
+                    myOwnedBook = new OwnedBook(isbn, imageID);
+                } else {
+                    myOwnedBook = new OwnedBook(isbn);
+                }
+                BookController.getInstance().addMyOwnedBook(myOwnedBook).handleAsync((aVoid1, throwable1) -> {
+                    if (throwable1 == null) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "Book Added", Toast.LENGTH_LONG).show();
+                            finish();
+                        });
+                    } else {
+                        throwable1.printStackTrace();
+                        if (throwable1 instanceof IllegalArgumentException) {
+                            runOnUiThread(() -> showError("You already own this book"));
+                        } else {
+                            runOnUiThread(() -> showError("An error occurred while adding your owned book"));
+                        }
+                    }
+                    return null;
+                });
+
+            } else {
+                throwable.printStackTrace();
+                runOnUiThread(() -> showError("An error occurred while adding book"));
+            }
+            return null;
+        });
     }
 
     /**

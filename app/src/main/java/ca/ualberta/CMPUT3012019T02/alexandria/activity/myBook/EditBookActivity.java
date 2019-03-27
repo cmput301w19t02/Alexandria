@@ -234,18 +234,45 @@ public class EditBookActivity extends AddNewBookActivity {
             ImageController.getInstance().deleteImage(imageID);
             imageID = null;
         }
-        Book book = new Book(isbn, title, author, description, imageID);
-        BookController.getInstance().updateBook(book);
-        OwnedBook myOwnedBook;
-        if (coverBitmap != null) {
-            myOwnedBook = new OwnedBook(isbn, imageID);
-        } else {
-            myOwnedBook = new OwnedBook(isbn);
-        }
-        BookController.getInstance().updateMyOwnedBook(myOwnedBook);
+        Book book = new Book(isbn, title, author, description, myBook.getImageId());
+        BookController.getInstance().updateBook(book).handleAsync((aVoid, throwable) -> {
+            if (throwable == null) {
+                // completed successfully
 
-        Toast.makeText(this, "Book Information Updated", Toast.LENGTH_LONG).show();
-        finish();
+                OwnedBook myOwnedBook;
+                if (coverBitmap != null) {
+                    myOwnedBook = new OwnedBook(isbn, imageID);
+                } else {
+                    myOwnedBook = new OwnedBook(isbn);
+                }
+                BookController.getInstance().updateMyOwnedBook(myOwnedBook).handleAsync((aVoid1, throwable1) -> {
+                    if (throwable1 == null) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "Book Information Updated", Toast.LENGTH_LONG).show();
+                            finish();
+                        });
+                    } else {
+                        throwable1.printStackTrace();
+                        if (throwable1 instanceof IllegalArgumentException) {
+                            runOnUiThread(() -> showError("You do not have an owned book with ISBN " + isbn));
+                        } else {
+                            runOnUiThread(() -> showError("An error occurred while updating your owned book"));
+                        }
+                    }
+                    return null;
+                });
+
+
+            } else {
+                throwable.printStackTrace();
+                if (throwable instanceof IllegalArgumentException) {
+                    runOnUiThread(() -> showError("There is no such book with ISBN " + isbn));
+                } else {
+                    runOnUiThread(() -> showError("An error occurred while updating book"));
+                }
+            }
+            return null;
+        });
     }
 
     /**
@@ -256,6 +283,12 @@ public class EditBookActivity extends AddNewBookActivity {
         author = myBook.getAuthor();
         isbn = myBook.getIsbn();
         imageID = myBook.getImageId();
+
+        BookController.getInstance().getMyOwnedBook(isbn).thenAcceptAsync(ownedBookOptional -> {
+            if (ownedBookOptional.isPresent() && ownedBookOptional.get().getImageId() != null) {
+                imageID = ownedBookOptional.get().getImageId();
+            }
+        });
     }
 
     /**
