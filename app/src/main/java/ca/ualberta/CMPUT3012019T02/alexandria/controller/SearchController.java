@@ -1,9 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
-import android.app.Application;
-import android.content.res.Resources;
-import android.view.View;
-
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
 import com.algolia.search.saas.Query;
@@ -24,13 +20,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.App;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import java9.util.concurrent.CompletableFuture;
 
-import static java.lang.System.in;
 
 /**
  * The type Search controller.
@@ -48,6 +44,11 @@ public class SearchController {
      * The Books.
      */
     ArrayList<Book> books = new ArrayList<>();
+
+    /**
+     * The AvailableOwners
+     */
+    Collection<String> owners = new ArrayList<>();
 
 
     private SearchController() {
@@ -110,6 +111,32 @@ public class SearchController {
                 });
 
         return resultFuture;
+    }
+
+    public CompletableFuture<Collection<String>> getAvailableOwners(String isbn) {
+        final CompletableFuture<Collection<String>> ownersFuture = new CompletableFuture<>();
+
+        index.searchAsync(new Query(isbn),
+                (content, error) -> {
+                    owners.clear();
+                    if (error == null) {
+                        try {
+                            JSONArray jsonArray;
+                            jsonArray = content.getJSONArray("hits");
+
+                            Book book = gson.fromJson(jsonArray.getString(0),Book.class);
+
+                            owners = book.getAvailableOwners();
+                        } catch (JSONException e) {
+                            ownersFuture.completeExceptionally(e);
+                        }
+                    }
+                    ownersFuture.complete(owners);
+                }
+
+        );
+
+        return ownersFuture;
     }
 
     public CompletableFuture<Boolean> compareIsbn(String isbn1, String isbn2) {
