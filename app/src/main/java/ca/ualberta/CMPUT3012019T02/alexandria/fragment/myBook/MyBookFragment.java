@@ -3,8 +3,8 @@ package ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -90,7 +90,7 @@ public class MyBookFragment extends Fragment {
                 onClickEditBook();
                 break;
             case R.id.option_delete_book:
-                deleteBook();
+                deleteWarning();
                 break;
             case R.id.menu_my_book_ellipses:
                 break;
@@ -195,12 +195,30 @@ public class MyBookFragment extends Fragment {
         startActivity(intentEditBook);
     }
 
+    private void deleteWarning() {
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog.setTitle("Delete Book?");
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Delete",
+                (DialogInterface dialog, int which) -> deleteBook());
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Cancel",
+                (DialogInterface dialog, int which) -> dialog.dismiss());
+
+        //switch default color
+        alertDialog.setOnShowListener( (DialogInterface dialog) -> {
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorRed));
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorRed));
+        });
+
+        alertDialog.show();
+    }
+
     private void deleteBook() {
         BookController.getInstance().deleteMyOwnedBook(isbn).handleAsync((aVoid, throwable) -> {
             activity.runOnUiThread(() -> {
                 if (throwable == null) {
 
-                    onStatusChange();
+                    getFragmentManager().popBackStack();
 
                 } else {
                     throwable.printStackTrace();
