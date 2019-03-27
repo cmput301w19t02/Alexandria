@@ -11,10 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import ca.ualberta.CMPUT3012019T02.alexandria.model.UserListItem;
+import java9.util.concurrent.CompletableFuture;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.OwnerRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.OwnerListItem;
 
 public class OwnerListFragment extends Fragment {
@@ -23,6 +28,8 @@ public class OwnerListFragment extends Fragment {
     private String author;
     private String isbn;
     private String title;
+
+    private static SearchController searchController = SearchController.getInstance();
 
     @Nullable
     @Override
@@ -44,5 +51,17 @@ public class OwnerListFragment extends Fragment {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+
+        CompletableFuture<ArrayList<OwnerListItem>> availableOwners = searchController.getAvailableOwners(isbn);
+
+        availableOwners.handleAsync(
+                (owners, error) -> {
+                    if (error == null) {
+                       owner.addAll(owners);
+                    } else {
+                        error.printStackTrace();
+                    }
+                    return null;
+                });
     }
 }

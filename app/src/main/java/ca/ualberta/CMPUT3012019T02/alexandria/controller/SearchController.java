@@ -1,5 +1,8 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
+import android.graphics.Bitmap;
+import android.media.Image;
+
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
 import com.algolia.search.saas.Query;
@@ -25,8 +28,9 @@ import java.util.Collection;
 import ca.ualberta.CMPUT3012019T02.alexandria.App;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.OwnerListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 import java9.util.concurrent.CompletableFuture;
-
 
 /**
  * The type Search controller.
@@ -40,6 +44,9 @@ public class SearchController {
     private final String GOOGLE_BOOK_URL = "https://www.googleapis.com/books/v1/volumes?&maxResults=1&projection=lite&q=";
     private final String booksApiKey = App.getContext().getResources().getString(R.string.google_books_api_key);
 
+    private static UserController userController = UserController.getInstance();
+    private static ImageController imageController = ImageController.getInstance();
+
     /**
      * The Books.
      */
@@ -48,7 +55,8 @@ public class SearchController {
     /**
      * The AvailableOwners
      */
-    Collection<String> owners = new ArrayList<>();
+    ArrayList<OwnerListItem> owners = new ArrayList<>();
+    Collection<String> ownerIds = new ArrayList<>();
 
 
     private SearchController() {
@@ -113,8 +121,8 @@ public class SearchController {
         return resultFuture;
     }
 
-    public CompletableFuture<Collection<String>> getAvailableOwners(String isbn) {
-        final CompletableFuture<Collection<String>> ownersFuture = new CompletableFuture<>();
+    public CompletableFuture<ArrayList<OwnerListItem>> getAvailableOwners(String isbn) {
+        final CompletableFuture<ArrayList<OwnerListItem>> ownersFuture = new CompletableFuture<>();
 
         index.searchAsync(new Query(isbn),
                 (content, error) -> {
@@ -124,9 +132,47 @@ public class SearchController {
                             JSONArray jsonArray;
                             jsonArray = content.getJSONArray("hits");
 
-                            Book book = gson.fromJson(jsonArray.getString(0),Book.class);
+                            Book book = gson.fromJson(jsonArray.getString(0), Book.class);
 
-                            owners = book.getAvailableOwners();
+                            ownerIds = book.getAvailableOwners();
+
+                            CompletableFuture<UserProfile> profileFuture;
+
+                            for (int i = 0; i < ownerIds.size(); i++) {
+                                profileFuture = userController.getUserProfile(ownerIds.iterator().next());
+
+                                profileFuture.handleAsync(
+                                        (profile, profileError) -> {
+                                            if (profileError == null) {
+
+                                                CompletableFuture<Bitmap> profileImage = imageController.getImage(profile.getPicture());
+
+                                                profileImage.handleAsync(
+                                                        (image, imageError) -> {
+                                                            if (imageError == null) {
+                                                                owners.add(new OwnerListItem(
+                                                                        image,
+                                                                        profile.getUsername(),
+                                                                        profile.getUsername(),
+                                                                        book.getIsbn(),
+                                                                        "available",
+                                                                        book.getTitle(),
+                                                                        book.getAuthor()
+                                                                ));
+                                                            } else {
+                                                                imageError.printStackTrace();
+                                                            }
+                                                            return null;
+                                                        }
+                                                );
+                                            } else {
+                                                profileError.printStackTrace();
+                                            }
+                                            return null;
+                                        }
+                                );
+
+                            }
                         } catch (JSONException e) {
                             ownersFuture.completeExceptionally(e);
                         }
