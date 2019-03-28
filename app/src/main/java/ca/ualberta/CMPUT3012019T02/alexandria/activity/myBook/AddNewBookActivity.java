@@ -14,12 +14,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import java.io.FileDescriptor;
@@ -33,6 +33,8 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 import java9.util.concurrent.CompletableFuture;
+
+import static ca.ualberta.CMPUT3012019T02.alexandria.App.getContext;
 
 /**
  * The Add new book activity.
@@ -65,25 +67,45 @@ public class AddNewBookActivity extends AppCompatActivity {
 
         // register imageView for menu
         ImageView addImageButton = findViewById(R.id.add_book_add_image);
-        registerForContextMenu(addImageButton);
+        addImageButton.setOnClickListener(this::setPopupMenu);
     }
 
     /**
-     * inflate menu for add photo options based on the presence of the photo
-     * @param menu
+     * Creates popup menu for adding photos
      * @param v
-     * @param menuInfo
      */
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
+    private void setPopupMenu(View v){
+        PopupMenu popup = new PopupMenu(getContext(), v);
+
         if (!this.isImageBitmap()) {
-            inflater.inflate(R.menu.select_take_image_menu, menu);
+           popup.getMenuInflater().inflate(R.menu.select_take_image_menu, popup.getMenu());
         } else {
-            inflater.inflate(R.menu.select_take_delete_image_menu, menu);
+            popup.getMenuInflater().inflate(R.menu.select_take_delete_image_menu, popup.getMenu());
         }
+
+        popup.setOnMenuItemClickListener((MenuItem item) -> {
+            switch (item.getItemId()) {
+                //menu switch
+                case R.id.option_select_photo:
+                    // Select from gallery
+                    openGallery();
+                    break;
+                case R.id.option_take_photo:
+                    // Take camera picture
+                    addPhotoCamera();
+                    break;
+                case R.id.option_delete_photo:
+                    // Remove photo
+                    removePhoto();
+                    break;
+                default:
+                    throw new RuntimeException("Unknown option");
+            }
+            return true;
+        });
+        popup.show();
     }
+
 
     /**
      * confirms there is a cover in current session
@@ -91,33 +113,6 @@ public class AddNewBookActivity extends AppCompatActivity {
      */
     public boolean isImageBitmap() {
         return this.coverBitmap != null;
-    }
-
-    /**
-     * add photo options
-     * @param item
-     * @return
-     */
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            //menu switch
-            case R.id.option_select_photo:
-                // Select from gallery
-                openGallery();
-                break;
-            case R.id.option_take_photo:
-                // Take camera picture
-                addPhotoCamera();
-                break;
-            case R.id.option_delete_photo:
-                // Remove photo
-                removePhoto();
-                break;
-            default:
-                throw new RuntimeException("Unknown option");
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     /**
