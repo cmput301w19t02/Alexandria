@@ -62,15 +62,15 @@ public class ChatController {
             ChatRoomItem chatRoomItem = new ChatRoomItem(chatId, senderId, senderName, receiverId,
                     receiverName, false);
 
-            CompletableFuture<Void> combinedFuture = CompletableFuture
-                    .allOf(addChatRoomItemToId(senderId, chatId, chatRoomItem),
-                            addChatRoomItemToId(receiverId, chatId, chatRoomItem));
-            combinedFuture.join();
-            future.completedFuture(chatId);
+            addChatRoomItemToId(senderId, chatId, chatRoomItem).thenCombine(addChatRoomItemToId(receiverId, chatId, chatRoomItem), (result, error) -> {
+                future.complete(chatId);
+                return null;
+            });
             return future;
         } else {
-            return future.completedFuture(null);
+            future.complete(null);
         }
+        return future;
     }
 
     private String getNewChatRoomId(String userId) {

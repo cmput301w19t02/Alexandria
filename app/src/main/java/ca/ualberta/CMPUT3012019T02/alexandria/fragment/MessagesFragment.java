@@ -22,6 +22,7 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.ChatRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
 
 /**
@@ -43,10 +44,8 @@ public class MessagesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        //myRef = FirebaseDatabase.getInstance().getReference().child("users").child(UserController.getInstance().getMyId());
-        // TODO remove when getMyId is working
-        chatRoomListRef = FirebaseDatabase.getInstance().getReference()
-                .child("users").child("eQgZfhN2Yng9TPHcXvfBZs5ZKxj1").child("chatRoomList");
+        String myId = UserController.getInstance().getMyId();
+        chatRoomListRef = FirebaseDatabase.getInstance().getReference().child("users").child(myId).child("chatRoomList");
 
         // adding current users' chatRooms to chatRoomList
         chatListener = new ValueEventListener() {

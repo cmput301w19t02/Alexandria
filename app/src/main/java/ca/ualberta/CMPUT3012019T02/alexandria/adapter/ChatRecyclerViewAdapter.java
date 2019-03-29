@@ -73,9 +73,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
             public void onClick(View v) {
 
                 String chatId = mChatRoomList.get(mViewHolder.getAdapterPosition()).getChatId();
-                //TODO: After testing add chat room, uncomment and remove 2nd myId
-                //String myId = userController.getMyId();
-                String myId = mChatRoomList.get(mViewHolder.getAdapterPosition()).getUser1Id();
+                String myId = userController.getMyId();
                 String receiverId = mChatRoomList.get(mViewHolder.getAdapterPosition())
                         .getUser1Id();
                 String receiverName = mChatRoomList.get(mViewHolder.getAdapterPosition())
@@ -104,7 +102,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
     public void onBindViewHolder(@NonNull ChatViewHolder myViewHolder, int position) {
         String myId = userController.getMyId();
         String user1Id = mChatRoomList.get(position).getUser1Id();
-        if (myId.equals(user1Id)) {
+        if (!myId.equals(user1Id)) {
             myViewHolder.tvChatReceiverUsername.setText(mChatRoomList.get(position).getUser1Name());
         } else {
             myViewHolder.tvChatReceiverUsername.setText(mChatRoomList.get(position).getUser2Name());

@@ -60,7 +60,7 @@ public class MyBookUserListFragment extends Fragment {
                         //TODO: stop spinner
                         Intent intentChatRoom = new Intent(getContext(), ChatRoomActivity.class);
                         intentChatRoom.putExtra("chatId", chatId);
-                        intentChatRoom.putExtra("recieverId", userId);
+                        intentChatRoom.putExtra("receiverId", userId);
                         intentChatRoom.putExtra("receiverName", userName);
                         startActivity(intentChatRoom);
                     });

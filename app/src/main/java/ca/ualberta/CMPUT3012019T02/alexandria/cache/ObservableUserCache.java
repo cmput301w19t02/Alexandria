@@ -141,7 +141,8 @@ public class ObservableUserCache extends Observable {
      * @return the chat room id
      */
     public String getChatRoomId(String userId) {
-        if (user != null && user.getChatRooms() != null && user.getChatRooms().size() > 0) {
+        Map<String, Map<String, ChatRoomItem>> chatRooms = user.getChatRooms();
+        if (user != null && chatRooms != null) {
             if (user.getChatRooms().get(userId).getUser1Id().equals(userId) ||
                     user.getChatRooms().get(userId).getUser2Id().equals(userId)) {
                 return user.getChatRooms().get(userId).getChatId();
@@ -149,6 +150,24 @@ public class ObservableUserCache extends Observable {
             return null;
         }
         return null;
+    }
+
+    /**
+     * Checks to see my chat room list has a chat room with another user.
+     *
+     * @param userId
+     * @return chat id string
+     */
+
+    public String getChatRoomId(String userId) {
+        List<Map<String, ChatRoomItem>> chatRooms = user.getChatRooms();
+        String chatRoomId = null;
+        for (Map<String, ChatRoomItem> room : chatRooms) {
+            if (room.containsValue(userId)) {
+               chatRoomId = room.get();
+            }
+        }
+        return chatRoomId;
     }
 
     /**

@@ -165,9 +165,11 @@ public class UserTests {
         User user = new User(id, userProfile);
         ChatRoomItem chatRoomItem = new ChatRoomItem("TestRoom213141", id, "John Smith", id, "Hit Menshoj", false);
 
-        HashMap<String, ChatRoomItem> chatRooms = new HashMap<>();
-        chatRooms.put("johnsmith",chatRoomItem);
-        chatRooms.put("htimsnhoj",chatRoomItem);
+        Map<String, Map<String, ChatRoomItem>> chatRooms = new HashMap<>();
+        Map<String, ChatRoomItem> chatRoom = new HashMap<>();
+        chatRoom.put("testchatId1",chatRoomItem);
+        chatRooms.put("johnsmith",chatRoom);
+        chatRooms.put("htimsnhoj",chatRoom);
         user.setChatRooms(chatRooms);
         assertEquals(user.getChatRooms(), chatRooms);
     }
@@ -189,9 +191,11 @@ public class UserTests {
         User user = new User(id, userProfile);
         ChatRoomItem chatRoomItem = new ChatRoomItem("TestRoom213141", id, "John Smith", id, "Hit Menshoj", false);
 
-        HashMap<String, ChatRoomItem> chatRooms = new HashMap<>();
-        chatRooms.put("johnsmith",chatRoomItem);
-        chatRooms.put("htimsnhoj",chatRoomItem);
+        Map<String, Map<String, ChatRoomItem>> chatRooms = new HashMap<>();
+        Map<String, ChatRoomItem> chatRoom = new HashMap<>();
+        chatRoom.put("testchatId1",chatRoomItem);
+        chatRooms.put("johnsmith",chatRoom);
+        chatRooms.put("htimsnhoj",chatRoom);
         user.setChatRooms(chatRooms);
         user.removeChatRoom("htimsnhoj");
         chatRooms.remove("htimsnhoj");

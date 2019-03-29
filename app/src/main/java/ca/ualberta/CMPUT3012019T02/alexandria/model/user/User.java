@@ -14,7 +14,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
  */
 public class User {
 
-    private Map<String, ChatRoomItem> chatRooms;
+    private Map<String, Map<String, ChatRoomItem>> chatRooms;
     private Map<String, OwnedBook> ownedBooks;
     private Map<String, BorrowedBook> borrowedBooks;
     private UserProfile profile;
@@ -67,7 +67,7 @@ public class User {
      *
      * @return the chat rooms
      */
-    public Map<String, ChatRoomItem> getChatRooms() {
+    public Map<String, Map<String, ChatRoomItem>> getChatRooms() {
         return Collections.unmodifiableMap(chatRooms);
     }
 
@@ -76,7 +76,7 @@ public class User {
      *
      * @param chatRooms the chat rooms
      */
-    public void setChatRooms(Map<String, ChatRoomItem> chatRooms) {
+    public void setChatRooms(Map<String, Map<String, ChatRoomItem>> chatRooms) {
         if (chatRooms == null){
             throw new IllegalArgumentException("Chat Rooms cannot be null");
         }
@@ -85,22 +85,31 @@ public class User {
     }
 
     /**
+     * Gets a single chat room.
+     *
+     * @param chatId
+     * @return a map of the chat room with the chat room id as key
+     */
+    public Map<String, ChatRoomItem> getChatRoom(String chatId) {
+        return Collections.unmodifiableMap(chatRooms.get(chatId));
+    }
+
+    /**
      * Add chat room.
      *
-     * @param user the user id of the other user
-     * @param chatRoomItem the uuid
+     * @param chatRoom the chat room object
      */
-    public void addChatRoom(String user, ChatRoomItem chatRoomItem) {
-        this.chatRooms.put(user,chatRoomItem);
+    public void addChatRoom(Map<String, ChatRoomItem> chatRoom) {
+        this.chatRooms.put("chatRoomList", chatRoom);
     }
 
     /**
      * Remove chat room.
      *
-     * @param user the user id of the other user
+     * @param chatId the user id of the other user
      */
-    public void removeChatRoom(String user) {
-        this.chatRooms.remove(user);
+    public void removeChatRoom(String chatId) {
+        this.chatRooms.remove(chatId);
     }
 
 

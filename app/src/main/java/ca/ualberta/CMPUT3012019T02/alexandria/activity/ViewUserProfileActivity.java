@@ -9,6 +9,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -156,16 +157,16 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                         //TODO: stop spinner
                         Intent intentChatRoom = new Intent(this, ChatRoomActivity.class);
                         intentChatRoom.putExtra("chatId", chatId);
-                        intentChatRoom.putExtra("recieverId", userID);
-                        intentChatRoom.putExtra("recieverName", username);
+                        intentChatRoom.putExtra("receiverId", userID);
+                        intentChatRoom.putExtra("receiverName", username);
                         startActivity(intentChatRoom);
                     });
                 } else {
+                    User user = userController.
                     Intent intentChatRoom = new Intent(this, ChatRoomActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("chatId", chatRoomId);
-                    bundle.putString("recieverId", userID);
-                    intentChatRoom.putExtra("bundle", bundle);
+                    intentChatRoom.putExtra("chatId", chatRoomId);
+                    intentChatRoom.putExtra("receiverId", userID);
+                    intentChatRoom.putExtra("receiverName", username);
                     startActivity(intentChatRoom);
                 }
                 break;
