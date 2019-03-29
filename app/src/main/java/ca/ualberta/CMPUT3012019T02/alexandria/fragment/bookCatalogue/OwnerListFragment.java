@@ -11,25 +11,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.UserListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import java9.util.concurrent.CompletableFuture;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.OwnerRecyclerViewAdapter;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.OwnerListItem;
 
 public class OwnerListFragment extends Fragment {
 
-    private List<OwnerListItem> owner = new ArrayList<>();
+    private List<OwnerListItem> owners = new ArrayList<>();
     private String author;
     private String isbn;
     private String title;
+    private ArrayList<String> availableOwners;
 
-    private static SearchController searchController = SearchController.getInstance();
+    private static BookController bookController = BookController.getInstance();
 
     @Nullable
     @Override
@@ -39,7 +38,7 @@ public class OwnerListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_book_catalogue_owners, null);
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.book_catalogue_recycler);
-        OwnerRecyclerViewAdapter userAdapter = new OwnerRecyclerViewAdapter(getContext(),owner);
+        OwnerRecyclerViewAdapter userAdapter = new OwnerRecyclerViewAdapter(getContext(), owners);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(userAdapter);
@@ -47,21 +46,23 @@ public class OwnerListFragment extends Fragment {
         return rootView;
     }
 
-    public void dataGrab(String title, String author, String isbn){
+    public void dataGrab(String title, String author, String isbn, ArrayList<String> availableOwners){
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+        this.availableOwners = availableOwners;
 
-        CompletableFuture<ArrayList<OwnerListItem>> availableOwners = searchController.getAvailableOwners(isbn);
+        CompletableFuture<ArrayList<OwnerListItem>> aoFuture = bookController.getAvailableOwners(isbn, availableOwners, title, author);
 
-        availableOwners.handleAsync(
+        aoFuture.handleAsync(
                 (owners, error) -> {
                     if (error == null) {
-                       owner.addAll(owners);
+                       owners.addAll(owners);
                     } else {
                         error.printStackTrace();
                     }
                     return null;
-                });
+                }
+        );
     }
 }

@@ -118,6 +118,7 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
             b.putString("status", mBookListItem.get(mViewHolder.getAdapterPosition()).getStatus());
         }
         b.putString("ownerId", mBookListItem.get(mViewHolder.getAdapterPosition()).getOwnerId());
+        b.putStringArrayList("availableOwners", mBookListItem.get(mViewHolder.getAdapterPosition()).getAvailableOwners());
 
         return b;
     }

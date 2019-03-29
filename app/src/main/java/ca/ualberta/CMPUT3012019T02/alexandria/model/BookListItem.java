@@ -3,7 +3,9 @@ package ca.ualberta.CMPUT3012019T02.alexandria.model;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class BookListItem {
     private String isbn;
     private String status;
     private String ownerId;
+    private Collection<String> availableOwners = new ArrayList<>();
 
     private static class BookListItemComparator implements Comparator<BookListItem> {
         @Override
@@ -80,13 +83,22 @@ public class BookListItem {
      * @param title  the title
      * @param author the author
      * @param isbn   the isbn
+     * @param availableOwners the available owners
      */
-    public BookListItem(Bitmap cover, String title, String author, String isbn) {
+    public BookListItem(Bitmap cover, String title, String author, String isbn, Collection<String> availableOwners) {
         this.cover = cover;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+        this.availableOwners = availableOwners;
     }
+
+    /**
+     * gets the Collection of available owner ids
+     *
+     * @return Collection<String> availableOwners
+     */
+    public ArrayList<String> getAvailableOwners() { return new ArrayList<>(availableOwners); }
 
     /**
      * gets Bitmap cover of the book

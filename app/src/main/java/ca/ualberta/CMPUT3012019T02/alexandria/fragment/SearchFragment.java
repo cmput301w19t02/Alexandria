@@ -39,7 +39,7 @@ import java9.util.concurrent.CompletableFuture;
  */
 public class SearchFragment extends Fragment {
 
-    private List<BookListItem> searchBooks = new ArrayList<BookListItem>();
+    private List<BookListItem> searchBooks = new ArrayList<>();
     private EditText searchText;
     private CompletableFuture<ArrayList<Book>> results;
     private BookRecyclerViewAdapter bookAdapter;
@@ -106,7 +106,8 @@ public class SearchFragment extends Fragment {
                                                 image,
                                                 book.getTitle(),
                                                 book.getAuthor(),
-                                                book.getIsbn())
+                                                book.getIsbn(),
+                                                book.getAvailableOwners())
                                         );
                                         bookAdapter.setmBookListItem(searchBooks);
                                     } else {

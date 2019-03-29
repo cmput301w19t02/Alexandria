@@ -23,13 +23,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.App;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.OwnerListItem;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 import java9.util.concurrent.CompletableFuture;
 
 /**
@@ -44,20 +41,10 @@ public class SearchController {
     private final String GOOGLE_BOOK_URL = "https://www.googleapis.com/books/v1/volumes?&maxResults=1&projection=lite&q=";
     private final String booksApiKey = App.getContext().getResources().getString(R.string.google_books_api_key);
 
-    private static UserController userController = UserController.getInstance();
-    private static ImageController imageController = ImageController.getInstance();
-
     /**
      * The Books.
      */
     ArrayList<Book> books = new ArrayList<>();
-
-    /**
-     * The AvailableOwners
-     */
-    ArrayList<OwnerListItem> owners = new ArrayList<>();
-    Collection<String> ownerIds = new ArrayList<>();
-
 
     private SearchController() {
         client = new Client("9ETLQT0YZC", App.getContext().getResources().getString(R.string.algolia_api_key));
@@ -119,70 +106,6 @@ public class SearchController {
                 });
 
         return resultFuture;
-    }
-
-    public CompletableFuture<ArrayList<OwnerListItem>> getAvailableOwners(String isbn) {
-        final CompletableFuture<ArrayList<OwnerListItem>> ownersFuture = new CompletableFuture<>();
-
-        index.searchAsync(new Query(isbn),
-                (content, error) -> {
-                    owners.clear();
-                    if (error == null) {
-                        try {
-                            JSONArray jsonArray;
-                            jsonArray = content.getJSONArray("hits");
-
-                            Book book = gson.fromJson(jsonArray.getString(0), Book.class);
-
-                            ownerIds = book.getAvailableOwners();
-
-                            CompletableFuture<UserProfile> profileFuture;
-
-                            for (int i = 0; i < ownerIds.size(); i++) {
-                                profileFuture = userController.getUserProfile(ownerIds.iterator().next());
-
-                                profileFuture.handleAsync(
-                                        (profile, profileError) -> {
-                                            if (profileError == null) {
-
-                                                CompletableFuture<Bitmap> profileImage = imageController.getImage(profile.getPicture());
-
-                                                profileImage.handleAsync(
-                                                        (image, imageError) -> {
-                                                            if (imageError == null) {
-                                                                owners.add(new OwnerListItem(
-                                                                        image,
-                                                                        profile.getUsername(),
-                                                                        profile.getUsername(),
-                                                                        book.getIsbn(),
-                                                                        "available",
-                                                                        book.getTitle(),
-                                                                        book.getAuthor()
-                                                                ));
-                                                            } else {
-                                                                imageError.printStackTrace();
-                                                            }
-                                                            return null;
-                                                        }
-                                                );
-                                            } else {
-                                                profileError.printStackTrace();
-                                            }
-                                            return null;
-                                        }
-                                );
-
-                            }
-                        } catch (JSONException e) {
-                            ownersFuture.completeExceptionally(e);
-                        }
-                    }
-                    ownersFuture.complete(owners);
-                }
-
-        );
-
-        return ownersFuture;
     }
 
     public CompletableFuture<Boolean> compareIsbn(String isbn1, String isbn2) {

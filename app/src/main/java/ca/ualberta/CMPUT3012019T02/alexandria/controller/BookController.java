@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -12,6 +13,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,8 +21,10 @@ import java.util.Map;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.OwnerListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 import java9.util.Optional;
 import java9.util.concurrent.CompletableFuture;
 
@@ -35,6 +39,7 @@ public class BookController {
     private ObservableUserCache observableUserCache;
 
     private static BookController instance;
+    private static ImageController imageController = ImageController.getInstance();
 
     private BookController() {
         firebase = FirebaseDatabase.getInstance();
@@ -297,6 +302,53 @@ public class BookController {
             }
         });
         return future;
+    }
+
+    public CompletableFuture<ArrayList<OwnerListItem>> getAvailableOwners(String isbn, ArrayList<String> availableOwners, String title, String author) {
+
+        final CompletableFuture<ArrayList<OwnerListItem>> ownersFuture = new CompletableFuture<>();
+        ArrayList<OwnerListItem> owners = new ArrayList<>();
+
+        // for each owner id, get their profile
+        for ( String owner : availableOwners) {
+            CompletableFuture<UserProfile> userFuture = userController.getUserProfile(owner);
+
+            userFuture.handleAsync(
+                    (profile, error) -> {
+                        if (error == null) {
+                            CompletableFuture<Bitmap> profileImage = imageController.getImage(profile.getPicture());
+
+                            // get the profile image of the user, then add it the list
+                            profileImage.handleAsync(
+                                    (image, imageError) -> {
+                                        if (imageError == null){
+                                            OwnerListItem completeOwner = new OwnerListItem(
+                                                    image,
+                                                    profile.getUsername(),
+                                                    profile.getUsername(),
+                                                    isbn,
+                                                    "available",
+                                                    title,
+                                                    author
+                                            );
+                                            owners.add(completeOwner);
+                                        } else {
+                                            imageError.printStackTrace();
+                                        }
+                                        return null;
+                                    }
+                            );
+                        } else {
+                            error.printStackTrace();
+                        }
+                        return null;
+                    }
+                );
+        }
+
+        ownersFuture.complete(owners);
+
+        return ownersFuture;
     }
 
 

@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 
 public class BookCatalogueFragment extends Fragment {
@@ -18,6 +20,7 @@ public class BookCatalogueFragment extends Fragment {
     private String title;
     private String author;
     private String isbn;
+    private ArrayList<String> availableOwners;
 
     @Nullable
     @Override
@@ -32,7 +35,7 @@ public class BookCatalogueFragment extends Fragment {
         getActivity().findViewById(R.id.navigation).setVisibility(View.VISIBLE);
 
         OwnerListFragment frag = new OwnerListFragment();
-        frag.dataGrab(title,author,isbn);
+        frag.dataGrab(title,author,isbn, availableOwners);
         loadFragment(frag);
 
         // toolbar
@@ -53,6 +56,7 @@ public class BookCatalogueFragment extends Fragment {
         title = arguments.getString("title");
         author = arguments.getString("author");
         isbn = arguments.getString("isbn");
+        availableOwners = arguments.getStringArrayList("availableOwners");
     }
 
     private void setUI(View v) {
