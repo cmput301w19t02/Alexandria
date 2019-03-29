@@ -1,8 +1,14 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.user;
 
-import java.util.ArrayList;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import com.google.firebase.database.Exclude;
+
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 
@@ -12,133 +18,379 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
  */
 public class OwnedBook extends UserBook {
 
-    private List<String> usersRequesting;
-    private List<String> images;
+    private Map<String, Integer> requesting; // Users requesting this book. Only keys are used. Values are ignored. Required to be Map for Firebase deserializer
+    private Map<String, Integer> removedRequests;
+    private String imageId;
     private String userBorrowing;
 
+    private State state;
+
     /**
-     * No args constructor to maintain compatibility with Firebase deserializer
+     * No args constructor for Firebase to use when deserializing data
      * TO BE USED BY FIREBASE ONLY
      */
     @Deprecated
     public OwnedBook() {
         super(null, null, null);
-        usersRequesting = new ArrayList<>();
-        images = new ArrayList<>();
+        requesting = new HashMap<>();
+        removedRequests = new HashMap<>();
+        state = new Available();
+    }
+
+    /**
+     * Create a new OwnedBook owned by the current logged in user with a status of available
+     *
+     * @param isbn isbn of the book
+     */
+    public OwnedBook(@NonNull String isbn) {
+        super(isbn, "available", UserController.getInstance().getMyId());
+        if (isbn.trim().isEmpty()) {
+            throw new IllegalArgumentException("Isbn can not be empty");
+        }
+        requesting = new HashMap<>();
+        removedRequests = new HashMap<>();
+        state = new Available();
     }
 
     /**
      * Create a new OwnedBook owned by the current logged in user
+     * with a specified image to go along with, and a status of available.
+     *
      * @param isbn isbn of the book
+     * @param imageId image id for the book
      */
-    public OwnedBook(String isbn) {
+    public OwnedBook(@NonNull String isbn, @Nullable String imageId) {
         super(isbn, "available", UserController.getInstance().getMyId());
-
-        this.userBorrowing = null;
-        this.usersRequesting = new ArrayList<>();
-        this.images = new ArrayList<>();
+        if (isbn.trim().isEmpty()) {
+            throw new IllegalArgumentException("Isbn can not be empty");
+        }
+        requesting = new HashMap<>();
+        removedRequests = new HashMap<>();
+        this.imageId = imageId;
     }
 
     /**
-     * Creates a new OwnedBook with the given isbn, status, owner, and user borrowing
-     * @param isbn isbn of the book
-     * @param status status of the book
-     * @param owner owner of the book
-     * @param userBorrowing user borrowing this book
+     * Gets a collection of users requesting this owned book
+     *
+     * @return a collection of user ids
      */
-    public OwnedBook(String isbn, String status, String owner, String userBorrowing) {
-        super(isbn, status, owner);
-        this.userBorrowing = userBorrowing;
-        this.usersRequesting = new ArrayList<>();
-        this.images = new ArrayList<>();
+    @Exclude
+    public Collection<String> getRequestingUsers() {
+        return Collections.unmodifiableSet(requesting.keySet());
     }
 
     /**
-     * Gets a list of users requesting this owned book
-     * @return a list of user ids
+     * Gets a map of user ids to integers. The user ids are users who are requesting this book.
+     * It is recommended to use {@link OwnedBook#getRequestingUsers()} instead.
+     *
+     * @return a map of user ids
      */
-    public List<String> getUsersRequesting() {
-        return Collections.unmodifiableList(usersRequesting);
+    public Map<String, Integer> getRequesting() {
+        return requesting;
     }
 
     /**
-     * Sets the list of users requesting this owned book
-     * TO BE USED BY BOOK CONTROLLER ONLY
-     * @param usersRequesting a list of user ids
+     * Gets a map of user ids to integers. The user ids are users whose requests are being removed.
+     *
+     * @return a map of user ids
      */
-    @Deprecated
-    public void setUsersRequesting(List<String> usersRequesting) {
-        this.usersRequesting = usersRequesting;
+    public Map<String, Integer> getRemovedRequests() {
+        return removedRequests;
     }
 
     /**
-     * Sets the list of users requesting this owned book
-     * TO BE USED BY BOOK CONTROLLER ONLY
-     * @param userRequesting a user id
+     * Get image id of this owned book
+     *
+     * @return an optional that may contain image id
      */
-    @Deprecated
-    public void addUserRequesting(String userRequesting) {
-        this.usersRequesting.add(userRequesting);
-    }
-
-    /**
-     * Sets the list of users requesting this owned book
-     * TO BE USED BY BOOK CONTROLLER ONLY
-     * @param userRequesting a user id
-     */
-    @Deprecated
-    public void removeUserRequesting(String userRequesting) {
-        this.usersRequesting.remove(userRequesting);
-    }
-
-    /**
-     * Get images of this owned book
-     * @return a list of image ids
-     */
-    public List<String> getImages() {
-        return Collections.unmodifiableList(images);
+    @Nullable
+    public String getImageId() {
+        return this.imageId;
     }
 
     /**
      * Sets the list of images of this owned book
-     * @param images a list of image ids
+     *
+     * @param imageId id of the image for this book
      */
-    public void setImages(List<String> images) {
-        this.images = images;
-    }
-
-    /**
-     * Add an image to the list of images of this owned book
-     * @param imageId image id to add
-     */
-    public void addImage(String imageId) {
-        this.images.add(imageId);
-    }
-
-    /**
-     * Remove an image from the list of images of this owned book
-     * @param imageId image id of the image to remove
-     */
-    public void removeImage(String imageId) {
-        this.images.remove(imageId);
+    public void setImageId(@Nullable String imageId) {
+        this.imageId = imageId;
     }
 
     /**
      * Gets the id of the user borrowing this owned book
-     * @return a user id
+     *
+     * @return an optional that may contain the id of the user borrowing this book
      */
+    @Nullable
     public String getUserBorrowing() {
-        return userBorrowing;
+        return this.userBorrowing;
     }
 
     /**
-     * Sets the id of the user borrowing this owned book
-     * TO BE USED BY BOOK CONTROLLER ONLY
-     * @param userBorrowing
+     * Updates the state of this owned book depending on status.
+     * Changes the behavior of transaction methods.
      */
-    @Deprecated
-    public void setUserBorrowing(String userBorrowing) {
-        this.userBorrowing = userBorrowing;
+    public void updateState() {
+        if (getStatus().equals("available")) {
+            state = new Available();
+        } else if (getStatus().equals("requested")) {
+            state = new Requested();
+        } else if (getStatus().equals("accepted")) {
+            state = new Accepted();
+        } else if (getStatus().equals("borrowed")) {
+            state = new Borrowed();
+        } else {
+            throw new IllegalStateException();
+        }
     }
 
+    private void setState(State state) {
+        this.state = state;
+    }
+
+    /**
+     * Locally adds a request for this book from a given user. Does not affect the database in any way.
+     * Use {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController#requestBook(String, String)}
+     * for making book requests.
+     *
+     * @param userId user id
+     */
+    public void addRequest(@NonNull String userId) {
+        if (state == null) {
+            throw new IllegalStateException();
+        }
+        state.addRequest(userId);
+    }
+
+    /**
+     * Locally cancels a request for this book from a given user. Does not affect the database in any way.
+     * Use {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController#cancelRequest(String, String)}
+     * to cancel a request or {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController#declineRequest(String, String)}
+     * to decline a request.
+     *
+     * @param userId user id
+     */
+    public void cancelRequest(@NonNull String userId) {
+        if (state == null) {
+            throw new IllegalStateException();
+        }
+        state.cancelRequest(userId);
+    }
+
+    /**
+     * Locally accepts a request for this book from a given user. Does not affect the database in any way.
+     * Use {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController#acceptRequest(String, String)} to accept a request.
+     *
+     * @param userId user id
+     */
+    public void acceptRequest(@NonNull String userId) {
+        if (state == null) {
+            throw new IllegalStateException();
+        }
+        state.acceptRequest(userId);
+    }
+
+    /**
+     * Locally sets the status of this book to borrowed. Does not affect the database in any way.
+     * Use {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController#exchangeBook(String, String)} to exchange books.
+     *
+     * @param borrowerScanned Must be true for this operation to succeed.
+     */
+    public void exchange(@NonNull boolean borrowerScanned) {
+        if (state == null) {
+            throw new IllegalStateException();
+        }
+        state.exchange(borrowerScanned);
+    }
+
+    /**
+     * Locally sets the status of this book to available. Does not affect the database in any way.
+     * Use {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController#returnBook(String, String)} to return books.
+     *
+     * @param borrowerScanned Must be true for this operation to succeed
+     */
+    public void beReturned(@NonNull boolean borrowerScanned) {
+        if (state == null) {
+            throw new IllegalStateException();
+        }
+        state.beReturned(borrowerScanned);
+    }
+
+
+    /* States */
+
+
+    private interface State {
+        void addRequest(String userId);
+        void cancelRequest(String userId);
+        void acceptRequest(String userId);
+        void exchange(boolean borrowerScanned);
+        void beReturned(boolean borrowerScanned);
+    }
+
+    private class Available implements State {
+
+        Available() {
+            setStatus("available");
+        }
+
+        @Override
+        public void addRequest(String userId) {
+            requesting.put(userId, 1);
+            setState(new Requested());
+        }
+
+        @Override
+        public void cancelRequest(String userId) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void acceptRequest(String userId) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void exchange(boolean borrowerScanned) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void beReturned(boolean borrowerScanned) {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    private class Requested implements State {
+
+        Requested() {
+            setStatus("requested");
+        }
+
+        @Override
+        public void addRequest(String userId) {
+            if (requesting.containsKey(userId)) {
+                throw new IllegalArgumentException("User " + userId + " has already requested this book" + getIsbn());
+            }
+            requesting.put(userId, 1);
+        }
+
+        @Override
+        public void cancelRequest(String userId) {
+            if (!requesting.containsKey(userId)) {
+                throw new IllegalArgumentException("User " + userId + " does not have a request for this book" + getIsbn());
+            }
+            requesting.remove(userId);
+
+            if (requesting.isEmpty()) {
+                setState(new Available());
+            }
+        }
+
+        @Override
+        public void acceptRequest(String userId) {
+            if (requesting.containsKey(userId)) {
+                userBorrowing = userId;
+
+                requesting.remove(userId);
+                removedRequests.putAll(requesting);
+                requesting.clear();
+
+                setState(new Accepted());
+            } else {
+                throw new IllegalArgumentException("User " + userId + " is not currently requesting this book");
+            }
+        }
+
+        @Override
+        public void exchange(boolean borrowerScanned) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void beReturned(boolean borrowerScanned) {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    private class Accepted implements State {
+
+        Accepted() {
+            setStatus("accepted");
+        }
+
+        @Override
+        public void addRequest(String userId) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void cancelRequest(String userId) {
+            if (userBorrowing.equals(userId)) {
+                userBorrowing = null;
+                setState(new Available());
+            } else {
+                throw new IllegalArgumentException("User " + userId + " is not currently requesting this book");
+            }
+        }
+
+        @Override
+        public void acceptRequest(String userId) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void exchange(boolean borrowerScanned) {
+            if (getScanned() && borrowerScanned) {
+                setScanned(false);
+                setState(new Borrowed());
+            } else {
+                throw new IllegalStateException("Both the owner and borrower need to scan");
+            }
+        }
+
+        @Override
+        public void beReturned(boolean borrowerScanned) {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    private class Borrowed implements State {
+
+        Borrowed() {
+            setStatus("borrowed");
+        }
+
+        @Override
+        public void addRequest(String userId) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void cancelRequest(String userId) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void acceptRequest(String userId) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void exchange(boolean borrowerScanned) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void beReturned(boolean borrowerScanned) {
+            if (getScanned() && borrowerScanned) {
+                setScanned(false);
+                userBorrowing = null;
+                setState(new Available());
+            } else {
+                throw new IllegalStateException("Both the owner and borrower need to scan");
+            }
+        }
+    }
 }

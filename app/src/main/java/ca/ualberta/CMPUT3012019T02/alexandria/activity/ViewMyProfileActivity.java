@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -161,12 +160,6 @@ public class ViewMyProfileActivity extends AppCompatActivity {
                 Intent startEditProfile = new Intent(this,
                         EditMyProfileActivity.class);
                 startActivity(startEditProfile);
-                break;
-            case R.id.blocked_users:
-                // black list activity
-                Intent startBlockedUsers = new Intent(this,
-                        BlockedUsersActivity.class);
-                startActivity(startBlockedUsers);
                 break;
             case R.id.sign_out_profile:
                 // Sing Out

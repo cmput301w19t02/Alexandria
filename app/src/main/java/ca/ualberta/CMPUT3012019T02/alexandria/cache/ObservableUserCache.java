@@ -20,6 +20,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.User;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
+import java9.util.Optional;
 
 /**
  * Observable cache for current user
@@ -28,6 +29,8 @@ public class ObservableUserCache extends Observable {
 
     private static ObservableUserCache instance;
     private User user;
+    private DatabaseReference databaseReference;
+    private ValueEventListener valueEventListener;
     private UserController userController = UserController.getInstance();
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
@@ -44,7 +47,11 @@ public class ObservableUserCache extends Observable {
     }
 
     private ObservableUserCache() {
-        database.child("users").child(userController.getMyId()).addValueEventListener(new ValueEventListener() {
+        if (!userController.isAuthenticated()) {
+            return;
+        }
+
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
@@ -54,9 +61,22 @@ public class ObservableUserCache extends Observable {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Observable", "Error with firebase listener");
+                Log.e("ObservableUserCache", "Error with firebase listener");
             }
-        });
+        };
+
+        updateReference();
+    }
+
+    /**
+     * Updates the cache database reference
+     */
+    public void updateReference() {
+        if (databaseReference != null) {
+            databaseReference.removeEventListener(valueEventListener);
+        }
+        databaseReference = database.child("users").child(userController.getMyId());
+        databaseReference.addValueEventListener(valueEventListener);
     }
 
     /**
@@ -65,11 +85,11 @@ public class ObservableUserCache extends Observable {
      * @param isbn the isbn
      * @return the borrowed book
      */
-    public BorrowedBook getBorrowedBook(String isbn) {
-        if (user != null && user.getBorrowedBooks() != null) {
-            return user.getBorrowedBooks().get(isbn);
+    public Optional<BorrowedBook> getBorrowedBook(String isbn) {
+        if (user == null || user.getBorrowedBooks() == null) {
+            return Optional.empty();
         }
-        return null;
+        return Optional.ofNullable(user.getBorrowedBooks().get(isbn));
     }
 
     /**
@@ -78,11 +98,11 @@ public class ObservableUserCache extends Observable {
      * @param isbn the isbn
      * @return the owned book
      */
-    public OwnedBook getOwnedBook(String isbn) {
-        if (user != null && user.getOwnedBooks() != null) {
-            return user.getOwnedBooks().get(isbn);
+    public Optional<OwnedBook> getOwnedBook(String isbn) {
+        if (user == null || user.getOwnedBooks() == null) {
+            return Optional.empty();
         }
-        return null;
+        return Optional.ofNullable(user.getOwnedBooks().get(isbn));
     }
 
 
@@ -91,11 +111,11 @@ public class ObservableUserCache extends Observable {
      *
      * @return the borrowed books
      */
-    public Map<String, BorrowedBook> getBorrowedBooks() {
-        if (user != null && user.getBorrowedBooks() != null) {
-            return Collections.unmodifiableMap(user.getBorrowedBooks());
+    public Optional<Map<String, BorrowedBook>> getBorrowedBooks() {
+        if (user == null || user.getBorrowedBooks() == null) {
+            return Optional.empty();
         }
-        return null;
+        return Optional.of(Collections.unmodifiableMap(user.getBorrowedBooks()));
     }
 
     /**
@@ -103,11 +123,11 @@ public class ObservableUserCache extends Observable {
      *
      * @return the owned books
      */
-    public Map<String, OwnedBook> getOwnedBooks() {
-        if (user != null && user.getOwnedBooks() != null) {
-            return Collections.unmodifiableMap(user.getOwnedBooks());
+    public Optional<Map<String, OwnedBook>> getOwnedBooks() {
+        if (user == null || user.getOwnedBooks() == null) {
+            return Optional.empty();
         }
-        return null;
+        return Optional.of(Collections.unmodifiableMap(user.getOwnedBooks()));
     }
 
     /**
@@ -115,23 +135,11 @@ public class ObservableUserCache extends Observable {
      *
      * @return the profile
      */
-    public UserProfile getProfile() {
-        if (user != null) {
-            return user.getProfile();
+    public Optional<UserProfile> getProfile() {
+        if (user == null) {
+            return Optional.empty();
         }
-        return null;
-    }
-
-    /**
-     * Gets blocked users.
-     *
-     * @return the blocked users
-     */
-    public List<String> getBlockedUsers() {
-        if (user != null) {
-            return user.getBlockedUsers();
-        }
-        return null;
+        return Optional.of(user.getProfile());
     }
 
     /**
@@ -140,41 +148,11 @@ public class ObservableUserCache extends Observable {
      * @param userId the user id
      * @return the chat room id
      */
-    public String getChatRoomId(String userId) {
-        Map<String, Map<String, ChatRoomItem>> chatRooms = user.getChatRooms();
-        if (user != null && chatRooms != null) {
-            if (user.getChatRooms().get(userId).getUser1Id().equals(userId) ||
-                    user.getChatRooms().get(userId).getUser2Id().equals(userId)) {
-                return user.getChatRooms().get(userId).getChatId();
-            }
-            return null;
+    public Optional<String> getChatRoomId(String userId) {
+        if (user == null || user.getChatRooms() == null) {
+            return Optional.empty();
         }
-        return null;
-    }
-
-    /**
-     * Checks to see my chat room list has a chat room with another user.
-     *
-     * @param userId
-     * @return chat id string
-     */
-
-    public String getChatRoomId(String userId) {
-        List<Map<String, ChatRoomItem>> chatRooms = user.getChatRooms();
-        String chatRoomId = null;
-        for (Map<String, ChatRoomItem> room : chatRooms) {
-            if (room.containsValue(userId)) {
-               chatRoomId = room.get();
-            }
-        }
-        return chatRoomId;
-    }
-
-    /**
-     * Invalidates cache
-     */
-    public static void invalidate() {
-        instance = null;
+        return Optional.ofNullable(user.getChatRooms().get(userId));
     }
 
 }

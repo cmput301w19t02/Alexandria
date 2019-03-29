@@ -1,13 +1,18 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.IOException;
+
+import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookDataAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 import java9.util.concurrent.CompletableFuture;
@@ -62,7 +67,16 @@ public class UserController {
         CompletableFuture<String> emailFuture = getUserEmail(username);
         emailFuture.thenAccept(email -> auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                future.complete(null);
+                NotificationController.getInstance().setDeviceToken().handleAsync((result,error)->{
+                    if(error==null){
+                        ObservableUserCache.getInstance().updateReference();
+                        future.complete(null);
+                    }
+                    else {
+                        future.completeExceptionally(error);
+                    }
+                    return null;
+                });
             } else {
                 future.completeExceptionally(task.getException());
             }
@@ -81,7 +95,13 @@ public class UserController {
      */
     public void deauthenticate() {
         auth.signOut();
-        ObservableUserCache.invalidate();
+        CompletableFuture.runAsync(()->{
+            try {
+                FirebaseInstanceId.getInstance().deleteInstanceId();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -106,9 +126,22 @@ public class UserController {
                                 database.getReference().child("usernameToEmail").child(username).setValue(email).addOnCompleteListener(databaseTask -> {
                                     if (databaseTask.isSuccessful()) {
                                         CompletableFuture<Void> profileFuture = updateMyProfile(profile);
-                                        profileFuture.thenAccept(result -> resultFuture.complete(null));
-                                        profileFuture.exceptionally(throwable -> {
-                                            resultFuture.completeExceptionally(throwable);
+                                        profileFuture.handleAsync((profileResult,profileError)->{
+                                            if(profileError==null){
+                                                NotificationController.getInstance().setDeviceToken().handleAsync((result,error)->{
+                                                    if(error==null){
+                                                        ObservableUserCache.getInstance().updateReference();
+                                                        resultFuture.complete(null);
+                                                    }
+                                                    else {
+                                                        resultFuture.completeExceptionally(error);
+                                                    }
+                                                    return null;
+                                                });
+                                            }
+                                            else {
+                                                resultFuture.completeExceptionally(profileError);
+                                            }
                                             return null;
                                         });
                                     } else {
@@ -142,6 +175,7 @@ public class UserController {
      *
      * @return the current user's id
      */
+    @Nullable
     public String getMyId() {
         return auth.getUid();
     }
@@ -209,23 +243,26 @@ public class UserController {
      */
     public CompletableFuture<UserProfile> getMyProfile() {
         ObservableUserCache cache = ObservableUserCache.getInstance();
-        if(cache.getProfile()==null) {
+        if (cache.getProfile().isEmpty()) {
             return getUserProfile(getMyId());
-        }
-        else{
-            return CompletableFuture.completedFuture(cache.getProfile());
+        } else {
+            return CompletableFuture.completedFuture(cache.getProfile().get());
         }
     }
 
     /**
-     * Gets the updates the current user's profile
+     * Updates the current user's profile
      *
      * @param userProfile the updated profile of the current user
      * @return a CompletableFuture signifying this operation's success/failure
      */
     public CompletableFuture<Void> updateMyProfile(UserProfile userProfile) {
-        final CompletableFuture<Void> resultFuture = new CompletableFuture<>();
 
+        if (!isAuthenticated()) {
+            return CompletableFuture.failedFuture(new IllegalStateException("Currently not signed in"));
+        }
+
+        final CompletableFuture<Void> resultFuture = new CompletableFuture<>();
         auth.getCurrentUser().updateEmail(userProfile.getEmail()).addOnCompleteListener(updateEmailTask -> {
             if (updateEmailTask.isSuccessful()) {
                 database.getReference().child("usernameToEmail").child(userProfile.getUsername()).setValue(userProfile.getEmail()).addOnCompleteListener(mappingTask -> {
