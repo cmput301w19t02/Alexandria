@@ -41,22 +41,15 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
-            android:id="@+id/image_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_photo"
-            android:onClick="onAddPhotoClick"/>
-
-        <ImageView
             android:id="@+id/image_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
             android:contentDescription="@string/add_location_description"
             android:src="@drawable/ic_add_location" />
 
         <EditText
             android:id="@+id/edit_message"
-            android:layout_width="0dp"
+            android:layout_width="337dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
@@ -69,7 +62,7 @@
         <ImageView
             android:id="@+id/image_send"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:contentDescription="@string/send_description"
             android:src="@drawable/ic_send" />
 
@@ -79,10 +72,12 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/message_recycler"
         android:layout_width="match_parent"
-        android:layout_height="251dp"
+        android:layout_height="555dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ChatRoom_toolbar" />
 
 </android.support.constraint.ConstraintLayout>

@@ -71,7 +71,8 @@ public class ISBNLookup extends AppCompatActivity implements ZXingScannerView.Re
         } else {
             Toast.makeText(this, "ISBN code not found", Toast.LENGTH_SHORT).show();
             Handler handler = new Handler();
-            handler.postDelayed(() -> mScannerView.resumeCameraPreview(ISBNLookup.this), 1000);
+            handler.postDelayed(() -> mScannerView
+                    .resumeCameraPreview(ISBNLookup.this),1000);
         }
 
     }
@@ -87,12 +88,15 @@ public class ISBNLookup extends AppCompatActivity implements ZXingScannerView.Re
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.CAMERA)) {
-                showExplanation("Permission Needed", "Camera is required to scan the ISBN", Manifest.permission.CAMERA, REQUEST_PERMISSION_PHONE_STATE);
+                showExplanation("Permission Needed",
+                        "Camera is required to scan the ISBN.",
+                        Manifest.permission.CAMERA, REQUEST_PERMISSION_PHONE_STATE);
             } else {
                 requestPermission(Manifest.permission.CAMERA, REQUEST_PERMISSION_PHONE_STATE);
             }
         } else {
-            Toast.makeText(ISBNLookup.this, "Permission already granted!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ISBNLookup.this,
+                    "Permission already granted!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -105,9 +109,11 @@ public class ISBNLookup extends AppCompatActivity implements ZXingScannerView.Re
             case REQUEST_PERMISSION_PHONE_STATE:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(ISBNLookup.this, "Permission Granted!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ISBNLookup.this, "Permission Granted!",
+                            Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(ISBNLookup.this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ISBNLookup.this, "Permission Denied!",
+                            Toast.LENGTH_SHORT).show();
                 }
         }
     }
