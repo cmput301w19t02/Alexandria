@@ -28,6 +28,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -169,18 +170,13 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                 locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
-                        Log.d("LOCATION ACTIVITY",  "COMPLETE CURRENT POSITION");
                         if (task.isSuccessful()) {
-                            Log.d("LOCATION ACTIVITY",  "GETTING CURRENT POSITION SUCCESS");
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = task.getResult();
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(mLastKnownLocation.getLatitude(),
                                             mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                            Log.d("LOCATION ACTIVITY", "location" + mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude());
                         } else {
-                            Log.d("MAP_FRAGMENT", "Current location is null. Using defaults.");
-                            Log.e("MAP_FRAGMENT", "Exception: %s", task.getException());
                             mLastKnownLocation.setLatitude(mDefaultLocation.latitude);
                             mLastKnownLocation.setLongitude(mDefaultLocation.longitude);
                             mMap.moveCamera(CameraUpdateFactory
@@ -190,6 +186,13 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                     }
                 });
 
+            } else {
+                mLastKnownLocation = new Location("");
+                mLastKnownLocation.setLatitude(mDefaultLocation.latitude);
+                mLastKnownLocation.setLongitude(mDefaultLocation.longitude);
+                mMap.moveCamera(CameraUpdateFactory
+                        .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
             }
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
@@ -231,7 +234,11 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
+                } else {
+                    Toast.makeText(this, "Going to default location.", Toast.LENGTH_SHORT).show();
                 }
+                updateLocationUI();
+                return;
             }
         }
         updateLocationUI();
@@ -242,7 +249,6 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
      * Updates the map's UI settings based on whether the user has granted location permission.
      */
     private void updateLocationUI() {
-        Log.d("LOCATION ACTIVITY", "updating location ui");
         if (mMap == null) {
             return;
         }
@@ -253,7 +259,6 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             } else {
                 mMap.setMyLocationEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                getLocationPermission();
             }
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
