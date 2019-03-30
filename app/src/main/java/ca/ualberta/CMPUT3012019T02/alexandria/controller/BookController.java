@@ -1003,24 +1003,23 @@ public class BookController {
     /* Database Paths */
 
 
-    private String getBookPath(@NonNull String isbn) {
+    public String getBookPath(@NonNull String isbn) {
         return "books/" + isbn;
     }
 
-    private String getBorrowedBooksPath(@NonNull String userId) {
+    public String getBorrowedBooksPath(@NonNull String userId) {
         return "users/" + userId + "/borrowedBooks";
     }
 
-    private String getBorrowedBookPath(@NonNull String userId, @NonNull String isbn) {
+    public String getBorrowedBookPath(@NonNull String userId, @NonNull String isbn) {
         return "users/" + userId + "/borrowedBooks/" + isbn;
     }
 
-    private String getOwnedBooksPath(@NonNull String userId) {
+    public String getOwnedBooksPath(@NonNull String userId) {
         return "users/" + userId + "/ownedBooks";
     }
 
-    private String getOwnedBookPath(@NonNull String userId, @NonNull String isbn) {
+    public String getOwnedBookPath(@NonNull String userId, @NonNull String isbn) {
         return "users/" + userId + "/ownedBooks/" + isbn;
     }
-
 }

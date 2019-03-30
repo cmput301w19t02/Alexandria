@@ -91,6 +91,7 @@ public class SearchFragment extends Fragment {
              */
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(s)) {
+                    ArrayList<BookListItem> newBookItems = new ArrayList<>();
                     // search firebase for the string
                     results = searchController.searchBooks(s.toString());
                     results.handleAsync((books, error) -> {
@@ -102,13 +103,12 @@ public class SearchFragment extends Fragment {
 
                                 imageResult.handleAsync((image, imageError)-> {
                                     if (imageError == null) {
-                                        searchBooks.add(new BookListItem(
+                                        newBookItems.add(new BookListItem(
                                                 image,
                                                 book.getTitle(),
                                                 book.getAuthor(),
                                                 book.getIsbn())
                                         );
-                                        bookAdapter.setmBookListItem(searchBooks);
                                     } else {
                                         imageError.printStackTrace();
                                     }
@@ -120,6 +120,8 @@ public class SearchFragment extends Fragment {
                         }
                         return null;
                     });
+                    searchBooks = newBookItems;
+                    bookAdapter.setmBookListItem(searchBooks);
                     bookAdapter.notifyDataSetChanged();
                 }
 
@@ -129,7 +131,7 @@ public class SearchFragment extends Fragment {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                searchBooks.clear();
+
             }
         });
 
