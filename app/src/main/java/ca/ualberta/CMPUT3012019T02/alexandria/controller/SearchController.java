@@ -7,11 +7,10 @@ import com.algolia.search.saas.Query;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,14 +20,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.App;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import java9.util.concurrent.CompletableFuture;
-
-import static java.lang.System.in;
 
 /**
  * The type Search controller.
@@ -42,12 +38,6 @@ public class SearchController {
     private final String GOOGLE_BOOK_URL = "https://www.googleapis.com/books/v1/volumes?&maxResults=1&projection=lite&q=";
     private final String booksApiKey = App.getContext().getResources().getString(R.string.google_books_api_key);
     private static UserController userController = UserController.getInstance();
-
-    /**
-     * The Books.
-     */
-    ArrayList<Book> books = new ArrayList<>();
-
 
     private SearchController() {
         client = new Client("9ETLQT0YZC", App.getContext().getResources().getString(R.string.algolia_api_key));
@@ -89,7 +79,7 @@ public class SearchController {
 
         index.searchAsync(new Query(search),
                 (content, error) -> {
-                    books.clear();
+                    ArrayList<Book> books = new ArrayList<>();
                     if (error == null) {
                         try {
                             JSONArray jsonArray;
