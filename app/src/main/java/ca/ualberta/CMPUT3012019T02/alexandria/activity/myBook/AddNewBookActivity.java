@@ -1,6 +1,7 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,21 +10,32 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextMenu;
-import android.view.MenuInflater;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.FileDescriptor;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ISBNLookup;
@@ -32,7 +44,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
-import java9.util.concurrent.CompletableFuture;
+import java9.util.Optional;
 
 import static ca.ualberta.CMPUT3012019T02.alexandria.App.getContext;
 
@@ -40,12 +52,14 @@ import static ca.ualberta.CMPUT3012019T02.alexandria.App.getContext;
  * The Add new book activity.
  */
 public class AddNewBookActivity extends AppCompatActivity {
+
     public static final int RESULT_CAMERA = 1;
     public static final int RESULT_GALLERY = 2;
     public final int RESULT_ISBN = 3;
     public final int REQUEST_PERMISSION_PHONE_STATE = 5;
 
     private Book book;
+    private Book searchedBook;
     private String title = "";
     private String author = "";
     private String isbn = "";
@@ -156,26 +170,53 @@ public class AddNewBookActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == RESULT_CAMERA) {
+
             // Camera photo
             Bundle extras = data.getExtras();
             coverBitmap = (Bitmap) extras.get("data");
             ImageView bookCover = findViewById(R.id.new_book_image);
             bookCover.setImageBitmap(coverBitmap);
+
         } else if (requestCode == RESULT_ISBN && resultCode == RESULT_OK) {
+
             // ISBN scan
             Bundle extras = data.getExtras();
             String isbn = extras.getString("isbn");
-            CompletableFuture<Book> resultFuture = SearchController.getInstance().searchIsbn(isbn);
-            resultFuture.handleAsync((result, error)->{
-                if (error == null) {
-                    Book book = result;
-                    setBook(book);
-                } else{
-                    showError("No result for the search of " + isbn + ".");
+
+            ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Fetching book data...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
+            SearchController.getInstance().searchIsbn(isbn).handleAsync((searchedBook, throwable) -> {
+                this.searchedBook = searchedBook;
+                try {
+                    coverBitmap = ImageController.getInstance().getImage(searchedBook.getImageId()).get(5, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
                 }
+                runOnUiThread(() -> {
+                    if (throwable == null) {
+                        setBook(searchedBook);
+                        if (coverBitmap != null) {
+                            ImageView bookCover = findViewById(R.id.new_book_image);
+                            bookCover.setImageBitmap(coverBitmap);
+                        }
+                    } else {
+                        throwable.printStackTrace();
+                        showError("Failed to scan ISBN");
+                    }
+                    progressDialog.dismiss();
+                });
                 return null;
             });
+
         } else if (requestCode == RESULT_GALLERY && resultCode == RESULT_OK) {
+
             // Gallery look up
             Uri selectedImage = data.getData();
 
@@ -186,6 +227,7 @@ public class AddNewBookActivity extends AppCompatActivity {
             } catch (IOException e) {
                 showError(e.getMessage());
             }
+
         }
     }
 
@@ -223,73 +265,148 @@ public class AddNewBookActivity extends AppCompatActivity {
      */
     public void addBook(View view) {
         fetchData();
-        try {
-            if (coverBitmap != null) {
-                saveWithImage();
-            } else {
-                saveBook();
-            }
-        } catch (IllegalArgumentException e) {
-            String errorMessage = e.getMessage();
-            showError(errorMessage);
-        }
-    }
-
-    /**
-     * save book with image saving and attaching
-     */
-    private void saveWithImage() {
-        ImageController.getInstance().addImage(coverBitmap).handleAsync((result, error) -> {
-            if (error == null) {
-                imageID = result;
-
-                runOnUiThread(() -> {
-                    saveBook();
-                });
-            } else {
-                showError(error.getMessage());
-            }
-            return null;
-        });
+        saveBook();
     }
 
     /**
      * save book with current details
      */
     private void saveBook() {
-        book = new Book(isbn, title, author, description, imageID);
-        BookController.getInstance().addBook(book).handleAsync((aVoid, throwable) -> {
-            if (throwable == null || throwable instanceof IllegalArgumentException) {
 
-                OwnedBook myOwnedBook;
-                if (coverBitmap != null) {
-                    myOwnedBook = new OwnedBook(isbn, imageID);
-                } else {
-                    myOwnedBook = new OwnedBook(isbn);
+        if (isbn.length() != 10 && isbn.length() != 13) {
+            showError("Invalid ISBN");
+            return;
+        }
+
+        if (title.trim().isEmpty()) {
+            showError("Title can not be empty");
+            return;
+        }
+
+        if (author.trim().isEmpty()) {
+            showError("Author can not be empty");
+            return;
+        }
+
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Adding book...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        new Thread(() -> {
+
+            // if the user provided a bitmap, use it
+
+            if (coverBitmap != null) {
+                try {
+                    imageID = ImageController.getInstance().addImage(coverBitmap).get(5, TimeUnit.SECONDS);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> {
+                        showError("An error occurred while saving image");
+                        progressDialog.dismiss();
+                    });
+                    return;
                 }
-                BookController.getInstance().addMyOwnedBook(myOwnedBook).handleAsync((aVoid1, throwable1) -> {
-                    if (throwable1 == null) {
-                        runOnUiThread(() -> {
-                            Toast.makeText(this, "Book Added", Toast.LENGTH_LONG).show();
-                            finish();
-                        });
-                    } else {
-                        throwable1.printStackTrace();
-                        if (throwable1 instanceof IllegalArgumentException) {
-                            runOnUiThread(() -> showError("You already own this book"));
-                        } else {
-                            runOnUiThread(() -> showError("An error occurred while adding your owned book"));
-                        }
-                    }
-                    return null;
-                });
+            } else {
+                imageID = null;
+            }
+
+            BookController bookController = BookController.getInstance();
+            Optional<Book> bookOptional = Optional.empty();
+            try {
+                bookOptional = bookController.getBook(isbn).get(5, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (bookOptional.isPresent()) {
+
+                // if the book already exists, just update the information
+                book = new Book(isbn, title, author, description, bookOptional.get().getImageId());
+
+                try {
+                    bookController.updateBook(book).get(5, TimeUnit.SECONDS);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> {
+                        showError("An error occurred while adding book");
+                        progressDialog.dismiss();
+                    });
+                    return;
+                }
 
             } else {
-                throwable.printStackTrace();
-                runOnUiThread(() -> showError("An error occurred while adding book"));
+
+                book = new Book(isbn, title, author, description, null);
+
+                // try to get the image for this book from google
+                if (searchedBook == null) {
+                    try {
+                        searchedBook = SearchController.getInstance().searchIsbn(isbn).get(5, TimeUnit.SECONDS);
+                        book = new Book(isbn, title, author, description, searchedBook.getImageId());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    book = new Book(isbn, title, author, description, searchedBook.getImageId());
+                }
+
+                // add a new book
+
+                try {
+                    bookController.addBook(book).get(5, TimeUnit.SECONDS);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> {
+                        showError("An error occurred while adding book");
+                        progressDialog.dismiss();
+                    });
+                    return;
+                }
+
             }
-            return null;
-        });
+
+            if (author.trim().isEmpty()) {
+                runOnUiThread(() -> {
+                    showError("Author can not be empty");
+                    progressDialog.dismiss();
+                });
+                return;
+            }
+
+            if (title.trim().isEmpty()) {
+                runOnUiThread(() -> {
+                    showError("Title can not be empty");
+                    progressDialog.dismiss();
+                });
+                return;
+            }
+
+            // Add owned book
+
+            OwnedBook myOwnedBook = new OwnedBook(isbn, imageID);
+            try {
+                bookController.addMyOwnedBook(myOwnedBook).get(5, TimeUnit.SECONDS);
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Book Added", Toast.LENGTH_LONG).show();
+                    finish();
+                });
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    showError("You already own this book");
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    showError("An error occurred while adding book");
+                });
+            }
+
+            progressDialog.dismiss();
+
+        }).start();
     }
 
     /**
