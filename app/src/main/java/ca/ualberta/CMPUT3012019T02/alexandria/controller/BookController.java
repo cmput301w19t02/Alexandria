@@ -13,6 +13,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,6 +25,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.OwnerListItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.User;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 import java9.util.Optional;
 import java9.util.concurrent.CompletableFuture;
@@ -308,6 +310,23 @@ public class BookController {
 
         final CompletableFuture<ArrayList<OwnerListItem>> ownersFuture = new CompletableFuture<>();
         ArrayList<OwnerListItem> owners = new ArrayList<>();
+
+//        FirebaseDatabase.getInstance().getReference("books/" + isbn + "/availableFrom").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                OwnerListItem owner = dataSnapshot.getValue(OwnerListItem.class);
+//                owners.add(owner);
+//                synchronized(owners){
+//                    owners.notify();
+//                }
+////                BookController.this.notifyAll();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
         // for each owner id, get their profile
         for ( String owner : availableOwners) {

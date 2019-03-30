@@ -27,6 +27,7 @@ public class OwnerListFragment extends Fragment {
     private String isbn;
     private String title;
     private ArrayList<String> availableOwners;
+    private OwnerRecyclerViewAdapter userAdapter;
 
     private static BookController bookController = BookController.getInstance();
 
@@ -38,7 +39,7 @@ public class OwnerListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_book_catalogue_owners, null);
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.book_catalogue_recycler);
-        OwnerRecyclerViewAdapter userAdapter = new OwnerRecyclerViewAdapter(getContext(), owners);
+        userAdapter = new OwnerRecyclerViewAdapter(getContext(), owners);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(userAdapter);
@@ -58,6 +59,7 @@ public class OwnerListFragment extends Fragment {
                 (owners, error) -> {
                     if (error == null) {
                        owners.addAll(owners);
+                        userAdapter.notifyDataSetChanged();
                     } else {
                         error.printStackTrace();
                     }
