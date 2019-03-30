@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -209,6 +210,9 @@ public class MyBookFragment extends Fragment {
                         ImageView ivCover = v.findViewById(R.id.my_book_cover);
                         ivCover.setImageBitmap(bitmap);
                     });
+                } else {
+                    ImageView ivCover = v.findViewById(R.id.my_book_cover);
+                    ivCover.setImageDrawable(null);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
