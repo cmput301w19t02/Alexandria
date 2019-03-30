@@ -82,6 +82,10 @@ public class ChatRoomActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener((View v) -> finish());
 
+        //edit text focus
+        EditText editText = findViewById(R.id.edit_message);
+        editText.requestFocus();
+
         // messages
         messagesRef = FirebaseDatabase.getInstance().getReference().child("chatMessages").child(chatId);
         messagesListener = new ValueEventListener() {
@@ -123,8 +127,17 @@ public class ChatRoomActivity extends AppCompatActivity {
         RecyclerView mRecyclerView = findViewById(R.id.message_recycler);
         adapter = new MessageRecyclerViewAdapter(this, messageList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
         mRecyclerView.setAdapter(adapter);
+
+        //runs once to get scroll to bottom
+        final Handler onceHandler = new Handler();
+        onceHandler.postDelayed(() -> {
+            adapter.updateMessageList(messageList);
+            adapter.notifyDataSetChanged();
+            if (messageList.size() != 0) {
+                mRecyclerView.scrollToPosition(messageList.size()-1);
+            }
+        }, 500);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
