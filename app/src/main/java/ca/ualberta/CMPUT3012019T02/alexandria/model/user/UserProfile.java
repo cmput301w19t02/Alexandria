@@ -59,7 +59,7 @@ public class UserProfile {
 
     /**
      * sets full name of the user to the string passed
-     * if cannot be null or empty
+     * it cannot be null or empty
      *
      * @throws IllegalArgumentException Name cannot be null or empty
      * @param name full name of the user

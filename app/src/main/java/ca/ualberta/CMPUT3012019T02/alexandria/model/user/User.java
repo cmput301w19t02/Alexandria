@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomList;
 
 /**
  * User model class that allows to get and set information
@@ -14,7 +15,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
  */
 public class User {
 
-    private List<ChatRoomItem> chatRoomList;
+    private Map<String, ChatRoomItem> chatRoomList;
     private Map<String, OwnedBook> ownedBooks;
     private Map<String, BorrowedBook> borrowedBooks;
     private UserProfile profile;
@@ -26,7 +27,6 @@ public class User {
      */
     @Deprecated
     public User() {
-        chatRoomList = new ArrayList<>();
         ownedBooks = new HashMap<>();
         borrowedBooks = new HashMap<>();
     }
@@ -36,8 +36,8 @@ public class User {
      *
      * @return the chat rooms
      */
-    public List<ChatRoomItem> getChatRooms() {
-        return chatRoomList;
+    public Map<String, ChatRoomItem> getChatRooms() {
+        return Collections.unmodifiableMap(chatRoomList);
     }
 
     /**

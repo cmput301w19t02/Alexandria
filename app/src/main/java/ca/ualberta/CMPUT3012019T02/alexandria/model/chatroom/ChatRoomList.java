@@ -1,95 +1,55 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
-
 /**
- * model class for ChatRoomList which stores message history
+ * model class for ChatRoomList which stores chat rooms that user is participating with other users
  */
 public class ChatRoomList {
 
-    private List<ChatRoomItem> chatRoomList;
+    private Map<String, ChatRoomItem> chatRoomItems;
 
     /**
-     * ChatRoomList constructor on id, if id null or empty throws error
-     *
-     * @throws IllegalArgumentException Id cannot be null or empty
-     * @param id id
+     * No args constructor to maintain compatibility
+     * with Firebase deserializer
+     * DO NOT USE
      */
-    public ChatRoomList(String id) {
-        if (id == null || id.trim().isEmpty()) {
-            throw new IllegalArgumentException("Id cannot be null or empty");
+    @Deprecated
+    public ChatRoomList(){}
+
+    /**
+     * ChatRoomList constructor on id, if id null throws error
+     *
+     * @throws IllegalArgumentException Id cannot be null
+     * @param chatRoomItems Map of ChatRoomItems
+     */
+    public ChatRoomList(Map<String, ChatRoomItem> chatRoomItems) {
+        if (chatRoomItems == null) {
+            throw new IllegalArgumentException("chatRoomItems cannot be null or empty");
         }
-
-        this.id = id;
-
-        messages = new ArrayList<>();
+        this.chatRoomItems = chatRoomItems;
     }
 
     /**
-     * returns a list of messages
+     * getter for the map of chat rooms in user object
      *
-     * @return List<Message> messages
+     * @return Map of chat room objects
      */
-    public List<Message> getMessages() {
-        return Collections.unmodifiableList(messages);
+    public Map<String, ChatRoomItem> getChatRoomItems() {
+        return chatRoomItems;
     }
 
     /**
-     * sets messages
+     * setter for the map of chat rooms in user object
+     * it cannot be null
      *
-     * @param messages messages
+     * @param chatRoomItems
      */
-    public void setMessages(List<Message> messages) {
-        if (messages == null) {
-            throw new IllegalArgumentException("Messages cannot be null");
+
+    public void setChatRoomItems(Map<String, ChatRoomItem> chatRoomItems) {
+        if (chatRoomItems == null) {
+            throw new IllegalArgumentException("chatRoomItems cannot be null or empty");
         }
-
-        this.messages = messages;
+        this.chatRoomItems = chatRoomItems;
     }
-
-    /**
-     * add message to the list
-     *
-     * @param message message
-     */
-    public void addMessage(Message message) {
-        this.messages.add(message);
-    }
-
-    /**
-     * removes a message from the list
-     *
-     * @param message message
-     */
-    public void removeMessage(Message message) {
-        this.messages.remove(message);
-    }
-
-    /**
-     * gets id of the chatRoom
-     *
-     * @return String id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * sets id of the chatRoom
-     *
-     * @param id idw
-     */
-    public void setId(String id) {
-        if (id == null || id.trim().isEmpty()) {
-            throw new IllegalArgumentException("Id cannot be null or empty");
-        }
-
-        this.id = id;
-    }
-
 }

@@ -16,6 +16,7 @@ import java.util.Observable;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomList;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.User;
@@ -153,8 +154,10 @@ public class ObservableUserCache extends Observable {
         if (user == null || user.getChatRooms() == null) {
             return Optional.of(chatId);
         }
-        List<ChatRoomItem> chatRooms = user.getChatRooms();
-        for (ChatRoomItem room : chatRooms) {
+        //ChatRoomList chatRoomList = user.getChatRooms();
+        Map<String, ChatRoomItem> chatRooms = user.getChatRooms();
+        for (String roomId : chatRooms.keySet()) {
+            ChatRoomItem room = chatRooms.get(roomId);
             if (room.getUser1Id().equals(userId)) {
                 chatId = room.getUser1Id();
             }
