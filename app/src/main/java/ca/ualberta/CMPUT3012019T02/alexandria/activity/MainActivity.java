@@ -108,12 +108,8 @@ public class MainActivity extends AppCompatActivity
      * @param view the button clicked
      */
     public void onProfileButtonClick(View view) {
-        // TODO replace
-        // Intent startProfileActivity = new Intent(this, ViewMyProfileActivity.class);
-        //        startActivity(startProfileActivity);
-        Intent intentViewImage = new Intent(this, ViewImageActivity.class);
-        intentViewImage.putExtra("IMAGE_ID", "a4d0131b-ec92-4f7d-90cf-be1fb3f6427d");
-        startActivity(intentViewImage);
+         Intent startProfileActivity = new Intent(this, ViewMyProfileActivity.class);
+         startActivity(startProfileActivity);
     }
 
     private void updateFragments(){
