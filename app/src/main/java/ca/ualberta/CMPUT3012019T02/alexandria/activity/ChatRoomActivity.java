@@ -71,24 +71,18 @@ public class ChatRoomActivity extends AppCompatActivity {
         receiverName = intent.getStringExtra("receiverName");
         senderId = UserController.getInstance().getMyId();
 
-        TextView receiverUserName = (TextView)findViewById(R.id.receiver_username);
+        TextView receiverUserName = findViewById(R.id.receiver_username);
         receiverUserName.setText(receiverName);
 
         // toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.ChatRoom_toolbar);
+        Toolbar toolbar = findViewById(R.id.ChatRoom_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener((View v) -> finish());
 
         // messages
-
         messagesRef = FirebaseDatabase.getInstance().getReference().child("chatMessages").child(chatId);
         messagesListener = new ValueEventListener() {
             @Override
@@ -110,32 +104,23 @@ public class ChatRoomActivity extends AppCompatActivity {
         messagesRef.addValueEventListener(messagesListener);
 
 
-        ImageView sendButton = (ImageView)findViewById(R.id.image_send);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText input = (EditText)findViewById(R.id.edit_message);
-                String inputText = input.getText().toString();
-                onSendMessageClick(inputText, senderId);
-                input.setText("");
-            }
+        ImageView sendButton = findViewById(R.id.image_send);
+        sendButton.setOnClickListener((View v) -> {
+            EditText input = findViewById(R.id.edit_message);
+            String inputText = input.getText().toString();
+            onSendMessageClick(inputText, senderId);
+            input.setText("");
         });
 
-        ImageView locationButton = (ImageView)findViewById(R.id.image_location);
-        locationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onAddLocationClick();
-            }
-        });
-
+        ImageView locationButton = findViewById(R.id.image_location);
+        locationButton.setOnClickListener((View v) -> onAddLocationClick());
     }
 
     @Override
     public void onStart(){
         super.onStart();
 
-        RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.message_recycler);
+        RecyclerView mRecyclerView = findViewById(R.id.message_recycler);
         adapter = new MessageRecyclerViewAdapter(this, messageList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
