@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewImageActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
@@ -41,7 +42,7 @@ import static android.app.Activity.RESULT_OK;
  * Implements UserBookRecyclerView
  */
 
-public class UserBookFragment extends Fragment {
+public class UserBookFragment extends Fragment implements View.OnClickListener {
 
     private ImageController imageController = ImageController.getInstance();
 
@@ -87,6 +88,9 @@ public class UserBookFragment extends Fragment {
         rootView.findViewById(R.id.user_book_owner_pic).setOnClickListener(mListener);
         rootView.findViewById(R.id.user_book_button_temp).setOnClickListener(mListener);
         rootView.findViewById(R.id.user_book_button).setOnClickListener(mListener);
+
+        ImageView bookCover = rootView.findViewById(R.id.user_book_cover);
+        bookCover.setOnClickListener(this);
 
         return rootView;
     }
@@ -453,4 +457,10 @@ public class UserBookFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        Intent startExpandImage = new Intent(getActivity(), ViewImageActivity.class);
+        startExpandImage.putExtra("IMAGE_ID", coverId);
+        startActivity(startExpandImage);
+    }
 }
