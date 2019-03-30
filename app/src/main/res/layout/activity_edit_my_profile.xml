@@ -61,19 +61,19 @@
                 android:padding="16dp">
 
                 <ImageView
-                    android:id="@+id/user_image"
+                    android:id="@+id/edit_profile_user_image"
                     android:layout_width="140dp"
                     android:layout_height="140dp"
                     android:layout_centerHorizontal="true"
-                    android:background="@drawable/ic_profile"
+                    android:src="@drawable/ic_profile"
                     android:backgroundTint="#646970"
                     android:contentDescription="@string/image_desc" />
 
                 <EditText
-                    android:id="@+id/editText_name"
+                    android:id="@+id/edit_profile_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/user_image"
+                    android:layout_below="@+id/edit_profile_user_image"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="16dp"
                     android:fontFamily="sans-serif"
@@ -83,13 +83,13 @@
                     android:textSize="19sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/user_image" />
+                    app:layout_constraintTop_toBottomOf="@+id/edit_profile_user_image" />
 
                 <EditText
-                    android:id="@+id/editText_username"
+                    android:id="@+id/edit_profile_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/editText_name"
+                    android:layout_below="@+id/edit_profile_name"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
                     android:fontFamily="sans-serif"
@@ -99,13 +99,13 @@
                     android:textSize="19sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_name" />
+                    app:layout_constraintTop_toBottomOf="@+id/edit_profile_name" />
 
                 <EditText
                     android:id="@+id/editText_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/editText_username"
+                    android:layout_below="@+id/edit_profile_username"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
                     android:fontFamily="sans-serif"
@@ -115,10 +115,10 @@
                     android:textSize="19sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_username" />
+                    app:layout_constraintTop_toBottomOf="@+id/edit_profile_username" />
 
                 <EditText
-                    android:id="@+id/editText_email"
+                    android:id="@+id/edit_profile_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/editText_password"
@@ -134,20 +134,20 @@
                     app:layout_constraintTop_toBottomOf="@+id/editText_password" />
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/edit_profile_add_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignEnd="@+id/user_image"
-                    android:layout_alignRight="@+id/user_image"
-                    android:layout_alignBottom="@+id/user_image"
+                    android:layout_alignEnd="@+id/edit_profile_user_image"
+                    android:layout_alignRight="@+id/edit_profile_user_image"
+                    android:layout_alignBottom="@+id/edit_profile_user_image"
                     android:layout_marginEnd="-8dp"
                     android:layout_marginRight="-8dp"
                     android:layout_marginBottom="-10dp"
                     android:src="@drawable/ic_add_circle"
-                    app:layout_constraintBottom_toBottomOf="@+id/user_image"
-                    app:layout_constraintEnd_toEndOf="@+id/user_image"
-                    app:layout_constraintStart_toEndOf="@+id/user_image"
-                    app:layout_constraintTop_toBottomOf="@+id/user_image" />
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_profile_user_image"
+                    app:layout_constraintEnd_toEndOf="@+id/edit_profile_user_image"
+                    app:layout_constraintStart_toEndOf="@+id/edit_profile_user_image"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_profile_user_image" />
 
             </RelativeLayout>
 

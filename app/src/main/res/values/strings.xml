@@ -79,6 +79,10 @@
     <string name="reject_request">Decline Request</string>
     <string name="edit_book_save">Save Changes</string>
     <string name="isbn_scanner">ISBN Scanner</string>
+    <!-- Strings related to photo options -->
+    <string name="select_photo">Select Photo</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="remove_photo">Remove Photo</string>
     <string name="view_image_title">View Image</string>
     <!-- Strings related to empty lists -->
     <string name="empty_exchange">Looks like there are no books here\nCheck Back Later</string>
