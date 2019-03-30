@@ -53,6 +53,7 @@
     <string name="view_profile_title">View Profile</string>
     <string name="message_hint">Type your message</string>
     <!-- Strings related to map -->
+    <string name="location">Send Location</string>
     <string name="save_pin">Save Pin Location</string>
     <string name="place_pin">Place A Pin</string>
     <!-- Strings related to book catalogue -->

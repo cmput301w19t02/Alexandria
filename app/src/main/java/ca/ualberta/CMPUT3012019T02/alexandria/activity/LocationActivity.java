@@ -25,6 +25,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -74,7 +75,14 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             mCameraPosition = savedInstanceState.getParcelable("camera_position");
         }
 
-        setContentView(R.layout.activity_map);
+        setContentView(R.layout.activity_location);
+
+        Toolbar toolbar = findViewById(R.id.send_location_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -96,64 +104,53 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         updateLocationUI();
         getDeviceLocation();
 
-        Button placePin = (Button)findViewById(R.id.button_place_pin);
-        placePin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mLocationPermissionGranted) {
-                    // get current location and put a pin
-                    LatLng lastPosition = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
-                    mMap.addMarker(new MarkerOptions().position(lastPosition).draggable(true));
-                    mMap.addMarker(new MarkerOptions().position(mDefaultLocation).draggable(true));
-                } else {
-                    // set pin to default location
-                    mMap.addMarker(new MarkerOptions().position(mDefaultLocation).draggable(true));
-                }
-                mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                    @Override
-                    public void onMarkerDragStart(Marker marker) {}
+        Button placePin = findViewById(R.id.button_place_pin);
+        placePin.setOnClickListener((View v) -> {
+            if (mLocationPermissionGranted) {
+                // get current location and put a pin
+                LatLng lastPosition = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(lastPosition).draggable(true));
+                mMap.addMarker(new MarkerOptions().position(mDefaultLocation).draggable(true));
+            } else {
+                // set pin to default location
+                mMap.addMarker(new MarkerOptions().position(mDefaultLocation).draggable(true));
+            }
+            mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                @Override
+                public void onMarkerDragStart(Marker marker) {}
 
-                    @Override
-                    public void onMarkerDrag(Marker marker) {}
+                @Override
+                public void onMarkerDrag(Marker marker) {}
 
-                    @Override
-                    public void onMarkerDragEnd(Marker marker) {
+                @Override
+                public void onMarkerDragEnd(Marker marker) {
                         LatLng position = marker.getPosition();
                         mLastKnownLocation.setLatitude(position.latitude);
                         mLastKnownLocation.setLongitude(position.longitude);
                     }
                 });
-            }
         });
 
         // Save current pin location to the location message
-        Button savePin = (Button)findViewById(R.id.button_save_pin);
-        savePin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        Button savePin = findViewById(R.id.button_save_pin);
+        savePin.setOnClickListener((View v) -> {
 
-                Intent intent = new Intent();
-                double lat = mLastKnownLocation.getLatitude();
-                double lng = mLastKnownLocation.getLongitude();
-                intent.putExtra("lat", lat);
-                intent.putExtra("lng", lng);
-                //TODO: start spinner
-                mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
-                    @Override
-                    public void onSnapshotReady(Bitmap bitmap) {
-                        CompletableFuture<String> addImage = imageController.addImage(bitmap);
-                        addImage.thenAccept(imageId -> {
-                            //TODO: stop spinner
-                            imageCache.putImage(imageId, bitmap);
-                            intent.putExtra("imageId", imageId);
-                            setResult(RESULT_OK, intent);
-                            finish();
-                        });
-
-                    }
+            Intent intent = new Intent();
+            double lat = mLastKnownLocation.getLatitude();
+            double lng = mLastKnownLocation.getLongitude();
+            intent.putExtra("lat", lat);
+            intent.putExtra("lng", lng);
+            //TODO: start spinner
+            mMap.snapshot((Bitmap bitmap) -> {
+                CompletableFuture<String> addImage = imageController.addImage(bitmap);
+                addImage.thenAccept(imageId -> {
+                    //TODO: stop spinner
+                    imageCache.putImage(imageId, bitmap);
+                    intent.putExtra("imageId", imageId);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 });
-
-            }
+            });
         });
     }
 
@@ -170,22 +167,19 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         try {
             if (mLocationPermissionGranted) {
                 Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful()) {
-                            // Set the map's camera position to the current location of the device.
-                            mLastKnownLocation = task.getResult();
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                        } else {
-                            mLastKnownLocation.setLatitude(mDefaultLocation.latitude);
-                            mLastKnownLocation.setLongitude(mDefaultLocation.longitude);
-                            mMap.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                        }
+                locationResult.addOnCompleteListener(this, (@NonNull Task<Location> task) -> {
+                    if (task.isSuccessful()) {
+                        // Set the map's camera position to the current location of the device.
+                        mLastKnownLocation = task.getResult();
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                new LatLng(mLastKnownLocation.getLatitude(),
+                                        mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                    } else {
+                        mLastKnownLocation.setLatitude(mDefaultLocation.latitude);
+                        mLastKnownLocation.setLongitude(mDefaultLocation.longitude);
+                        mMap.moveCamera(CameraUpdateFactory
+                                .newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                        mMap.getUiSettings().setMyLocationButtonEnabled(false);
                     }
                 });
 
