@@ -34,13 +34,14 @@ import java.util.concurrent.TimeUnit;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook.EditBookActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewImageActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 
-public class MyBookFragment extends Fragment {
+public class MyBookFragment extends Fragment implements View.OnClickListener {
 
     private ImageController imageController = ImageController.getInstance();
     private BookController bookController = BookController.getInstance();
@@ -137,6 +138,9 @@ public class MyBookFragment extends Fragment {
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener((View v) -> getFragmentManager().popBackStack());
+
+        ImageView bookCover = rootView.findViewById(R.id.my_book_cover);
+        bookCover.setOnClickListener(this);
 
         return rootView;
     }
@@ -303,5 +307,12 @@ public class MyBookFragment extends Fragment {
             });
             return null;
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent startExpandImage = new Intent(getActivity(), ViewImageActivity.class);
+        startExpandImage.putExtra("IMAGE_ID", coverId);
+        startActivity(startExpandImage);
     }
 }

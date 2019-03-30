@@ -108,8 +108,8 @@ public class MainActivity extends AppCompatActivity
      * @param view the button clicked
      */
     public void onProfileButtonClick(View view) {
-        Intent startProfileActivity = new Intent(this, ViewMyProfileActivity.class);
-        startActivity(startProfileActivity);
+         Intent startProfileActivity = new Intent(this, ViewMyProfileActivity.class);
+         startActivity(startProfileActivity);
     }
 
     private void updateFragments(){
