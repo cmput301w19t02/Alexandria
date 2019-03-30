@@ -149,10 +149,23 @@ public class ObservableUserCache extends Observable {
      * @return the chat room id
      */
     public Optional<String> getChatRoomId(String userId) {
+        String chatId = null;
         if (user == null || user.getChatRooms() == null) {
-            return Optional.empty();
+            return Optional.of(chatId);
         }
-        return Optional.ofNullable(user.getChatRooms().get(userId));
+        List<ChatRoomItem> chatRooms = user.getChatRooms();
+        for (ChatRoomItem room : chatRooms) {
+            if (room.getUser1Id().equals(userId)) {
+                chatId = room.getUser1Id();
+            }
+            if (room.getUser2Id().equals(userId)) {
+                chatId = room.getUser2Id();
+            }
+        }
+        if (chatId == null){
+            return Optional.of(chatId);
+        } else {
+            return Optional.of(chatId);
+        }
     }
-
 }

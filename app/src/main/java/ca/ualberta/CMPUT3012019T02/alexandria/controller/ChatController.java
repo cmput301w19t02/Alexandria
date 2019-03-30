@@ -54,10 +54,10 @@ public class ChatController {
     private CompletableFuture<String> addChatRoomPrivate(String senderId, String receiverId,
                                                        String receiverName) {
         CompletableFuture<String> future = new CompletableFuture<>();
-        String chatRoomExists = userCache.getChatRoomId(receiverId);
+        String chatRoomExists = userCache.getChatRoomId(receiverId).get();
 
         if (chatRoomExists == null) {
-            String senderName = userCache.getProfile().getName();
+            String senderName = userCache.getProfile().get().getName();
             String chatId = getNewChatRoomId(senderId);
             ChatRoomItem chatRoomItem = new ChatRoomItem(chatId, senderId, senderName, receiverId,
                     receiverName, false);

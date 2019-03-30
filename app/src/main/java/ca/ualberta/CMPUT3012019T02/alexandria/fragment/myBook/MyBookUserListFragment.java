@@ -78,7 +78,7 @@ public class MyBookUserListFragment extends Fragment {
                                 UserListItem item = requests.get(position);
                                 String userId = item.getBorrowerId();
                                 String userName = item.getBorrowerUsername();
-                                String chatRoomId = userCache.getChatRoomId(userId);
+                                String chatRoomId = userCache.getChatRoomId(userId).get() ;
                                 if (chatRoomId == null) {
                                     //TODO: Start spinner
                                     CompletableFuture<String> addChatRoom = chatController.addChatRoom(userController.getMyId(), userId, userName);

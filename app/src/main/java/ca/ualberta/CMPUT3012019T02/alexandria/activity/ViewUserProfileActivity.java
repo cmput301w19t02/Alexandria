@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java9.util.Optional;
 import java9.util.concurrent.CompletableFuture;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
@@ -149,7 +150,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             //TODO make use of actual user name
             case R.id.message_user_option:
-                Map<> chatRoom = userCache.getChatRoom(userID);
+                String chatRoomId = userCache.getChatRoomId(userID).get();
                 if (chatRoomId == null) {
                     //TODO: Start spinner
                     CompletableFuture<String> addChatRoom = chatController.addChatRoom(userController.getMyId(), userID, username);
