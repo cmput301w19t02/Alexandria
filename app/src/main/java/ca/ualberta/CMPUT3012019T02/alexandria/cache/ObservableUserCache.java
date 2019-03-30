@@ -10,13 +10,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomList;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.User;
@@ -151,11 +149,11 @@ public class ObservableUserCache extends Observable {
      */
     public Optional<String> getChatRoomId(String userId) {
         String chatId = null;
-        if (user == null || user.getChatRooms() == null) {
+        if (user == null || user.getChatRoomList() == null) {
             return Optional.of(chatId);
         }
-        //ChatRoomList chatRoomList = user.getChatRooms();
-        Map<String, ChatRoomItem> chatRooms = user.getChatRooms();
+        //ChatRoomList chatRoomList = user.getChatRoomList();
+        Map<String, ChatRoomItem> chatRooms = user.getChatRoomList();
         for (String roomId : chatRooms.keySet()) {
             ChatRoomItem room = chatRooms.get(roomId);
             if (room.getUser1Id().equals(userId)) {

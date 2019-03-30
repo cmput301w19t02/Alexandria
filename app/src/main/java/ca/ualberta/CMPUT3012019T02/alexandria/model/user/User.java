@@ -36,7 +36,7 @@ public class User {
      *
      * @return the chat rooms
      */
-    public Map<String, ChatRoomItem> getChatRooms() {
+    public Map<String, ChatRoomItem> getChatRoomList() {
         return Collections.unmodifiableMap(chatRoomList);
     }
 
