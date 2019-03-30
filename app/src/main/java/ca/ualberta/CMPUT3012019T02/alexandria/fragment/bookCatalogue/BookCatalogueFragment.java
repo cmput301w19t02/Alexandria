@@ -35,7 +35,7 @@ public class BookCatalogueFragment extends Fragment {
         getActivity().findViewById(R.id.navigation).setVisibility(View.VISIBLE);
 
         OwnerListFragment frag = new OwnerListFragment();
-        frag.dataGrab(title,author,isbn, availableOwners);
+        frag.dataGrab(title, author, isbn, availableOwners);
         loadFragment(frag);
 
         // toolbar

@@ -311,31 +311,20 @@ public class BookController {
         final CompletableFuture<ArrayList<OwnerListItem>> ownersFuture = new CompletableFuture<>();
         ArrayList<OwnerListItem> owners = new ArrayList<>();
 
-//        FirebaseDatabase.getInstance().getReference("books/" + isbn + "/availableFrom").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                OwnerListItem owner = dataSnapshot.getValue(OwnerListItem.class);
-//                owners.add(owner);
-//                synchronized(owners){
-//                    owners.notify();
-//                }
-////                BookController.this.notifyAll();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
         // for each owner id, get their profile
+
         for ( String owner : availableOwners) {
             CompletableFuture<UserProfile> userFuture = userController.getUserProfile(owner);
 
             userFuture.handleAsync(
                     (profile, error) -> {
                         if (error == null) {
-                            CompletableFuture<Bitmap> profileImage = imageController.getImage(profile.getPicture());
+                            CompletableFuture<Bitmap> profileImage;
+                            if (profile.getPicture() != null) {
+                                profileImage = imageController.getImage(profile.getPicture());
+                            } else {
+                                profileImage = imageController.getImage("nullImage");
+                            }
 
                             // get the profile image of the user, then add it the list
                             profileImage.handleAsync(
@@ -351,6 +340,7 @@ public class BookController {
                                                     author
                                             );
                                             owners.add(completeOwner);
+                                            ownersFuture.complete(owners);
                                         } else {
                                             imageError.printStackTrace();
                                         }
@@ -365,7 +355,6 @@ public class BookController {
                 );
         }
 
-        ownersFuture.complete(owners);
 
         return ownersFuture;
     }

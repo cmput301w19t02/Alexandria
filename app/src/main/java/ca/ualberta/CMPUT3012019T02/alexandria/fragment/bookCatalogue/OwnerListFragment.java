@@ -1,5 +1,7 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.bookCatalogue;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,9 +29,19 @@ public class OwnerListFragment extends Fragment {
     private String isbn;
     private String title;
     private ArrayList<String> availableOwners;
+
+    private Activity activity;
     private OwnerRecyclerViewAdapter userAdapter;
 
     private static BookController bookController = BookController.getInstance();
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            activity = (Activity) context;
+        }
+    }
 
     @Nullable
     @Override
@@ -39,7 +51,9 @@ public class OwnerListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_book_catalogue_owners, null);
 
         RecyclerView mRecyclerView = rootView.findViewById(R.id.book_catalogue_recycler);
-        userAdapter = new OwnerRecyclerViewAdapter(getContext(), owners);
+        if (userAdapter == null) {
+            userAdapter = new OwnerRecyclerViewAdapter(getContext(), owners);
+        }
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(userAdapter);
@@ -53,18 +67,27 @@ public class OwnerListFragment extends Fragment {
         this.isbn = isbn;
         this.availableOwners = availableOwners;
 
+        if (userAdapter == null) {
+            userAdapter = new OwnerRecyclerViewAdapter(getContext(), owners);
+        }
+
         CompletableFuture<ArrayList<OwnerListItem>> aoFuture = bookController.getAvailableOwners(isbn, availableOwners, title, author);
 
         aoFuture.handleAsync(
                 (owners, error) -> {
-                    if (error == null) {
-                       owners.addAll(owners);
-                        userAdapter.notifyDataSetChanged();
-                    } else {
-                        error.printStackTrace();
-                    }
+                    activity.runOnUiThread(() -> {
+                                if (error == null) {
+                                    owners.addAll(owners);
+                                } else {
+                                    error.printStackTrace();
+                                }
+
+                            }
+                    );
+                    userAdapter.notifyDataSetChanged();
                     return null;
                 }
         );
+
     }
 }
