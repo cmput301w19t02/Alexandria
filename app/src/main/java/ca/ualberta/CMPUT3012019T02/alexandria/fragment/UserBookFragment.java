@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -189,6 +188,9 @@ public class UserBookFragment extends Fragment {
                         ImageView ivCover = v.findViewById(R.id.user_book_cover);
                         ivCover.setImageBitmap(bitmap);
                     });
+                } else {
+                    ImageView ivCover = v.findViewById(R.id.user_book_cover);
+                    ivCover.setImageBitmap(null);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
