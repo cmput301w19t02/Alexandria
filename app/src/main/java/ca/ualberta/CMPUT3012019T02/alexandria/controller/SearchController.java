@@ -1,10 +1,7 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
-import android.app.Application;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.view.View;
 
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
@@ -33,8 +30,6 @@ import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import java9.util.concurrent.CompletableFuture;
 
-import static java.lang.System.in;
-
 /**
  * The type Search controller.
  */
@@ -46,6 +41,7 @@ public class SearchController {
     private static SearchController instance;
     private final String GOOGLE_BOOK_URL = "https://www.googleapis.com/books/v1/volumes?&maxResults=1&projection=lite&q=";
     private final String booksApiKey = App.getContext().getResources().getString(R.string.google_books_api_key);
+    private static UserController userController = UserController.getInstance();
 
     /**
      * The Books.
@@ -100,7 +96,14 @@ public class SearchController {
                             jsonArray = content.getJSONArray("hits");
                             for (int i = 0; i < jsonArray.length(); i++){
                                 Book book = gson.fromJson(jsonArray.getString(i),Book.class);
-                                books.add(book);
+                                // && !(book.getAvailableOwners())
+                                boolean isOwner = book.getAvailableOwners().contains(userController.getMyId());
+
+                                if (!(book.getAvailableOwners() == null)
+                                        && !(book.getAvailableOwners().size() == 0)
+                                        && !(isOwner && book.getAvailableOwners().size() == 1)) {
+                                    books.add(book);
+                                }
                             }
                             resultFuture.complete(books);
                         } catch (JSONException e) {
