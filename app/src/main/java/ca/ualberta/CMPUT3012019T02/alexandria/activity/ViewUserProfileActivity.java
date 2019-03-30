@@ -149,7 +149,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             //TODO make use of actual user name
             case R.id.message_user_option:
-                String chatRoomId = userCache.getChatRoomId(userID);
+                Map<> chatRoom = userCache.getChatRoom(userID);
                 if (chatRoomId == null) {
                     //TODO: Start spinner
                     CompletableFuture<String> addChatRoom = chatController.addChatRoom(userController.getMyId(), userID, username);
@@ -162,7 +162,6 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                         startActivity(intentChatRoom);
                     });
                 } else {
-                    User user = userController.
                     Intent intentChatRoom = new Intent(this, ChatRoomActivity.class);
                     intentChatRoom.putExtra("chatId", chatRoomId);
                     intentChatRoom.putExtra("receiverId", userID);
