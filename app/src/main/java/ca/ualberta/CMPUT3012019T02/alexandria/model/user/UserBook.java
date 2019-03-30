@@ -1,7 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.user;
 
-import java.util.Arrays;
-import java.util.List;
+import com.google.firebase.database.Exclude;
 
 /**
  * This class represents some relationship between a User and a Book.
@@ -11,9 +10,11 @@ public abstract class UserBook {
     private String isbn;
     private String status;
     private String owner;
+    private boolean scanned;
 
     /**
      * Creates a new UserBook given an isbn, status, and owner
+     *
      * @param isbn isbn of the book
      * @param status status of the book
      * @param owner owner of the book
@@ -22,10 +23,12 @@ public abstract class UserBook {
         this.isbn = isbn;
         this.status = status;
         this.owner = owner;
+        this.scanned = false;
     }
 
     /**
      * Gets the isbn of this user book
+     *
      * @return the isbn of this user book
      */
     public String getIsbn() {
@@ -33,21 +36,8 @@ public abstract class UserBook {
     }
 
     /**
-     * Sets the isbn of this user book
-     * TO BE USED BY BOOK CONTROLLER ONLY
-     * @param isbn
-     */
-    @Deprecated
-    public void setIsbn(String isbn) {
-        if (isbn == null || isbn.trim().isEmpty()) {
-            throw new IllegalArgumentException("Isbn cannot be null or empty");
-        }
-
-        this.isbn = isbn;
-    }
-
-    /**
      * Gets the status of this user book
+     *
      * @return status of this book
      */
     public String getStatus() {
@@ -55,21 +45,22 @@ public abstract class UserBook {
     }
 
     /**
-     * Sets the status of this user book
-     * TO BE USED BY BOOK CONTROLLER ONLY
-     * @param status status to set this user book to
+     * Locally sets the status of this user book. Does not affect the database in any way.
+     * All status changes happen through the {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController}
+     *
+     * @param status status to set
      */
-    @Deprecated
     public void setStatus(String status) {
-        List<String> validStatuses = Arrays.asList("available", "requested", "accepted", "borrowed");
-        if (!validStatuses.contains(status)) {
-            throw new IllegalArgumentException("Invalid status");
+        if (status.equals("available") || status.equals("requested") || status.equals("accepted") || status.equals("borrowed")) {
+            this.status = status;
+            return;
         }
-        this.status = status;
+        throw new IllegalArgumentException("Invalid status '" + status + "'");
     }
 
     /**
      * Gets the owner of this user book
+     *
      * @return the user id of the owner
      */
     public String getOwner() {
@@ -77,15 +68,30 @@ public abstract class UserBook {
     }
 
     /**
-     * Sets the owner of this user book
-     * TO BE USED BY BOOK CONTROLLER ONLY
-     * @param owner the owner user id to set
+     * Whether or not this book has been scanned
+     *
+     * @return True if this book has been scanned. False otherwise
      */
-    @Deprecated
-    public void setOwner(String owner) {
-        if (owner == null || owner.trim().isEmpty()) {
-            throw new IllegalArgumentException("Owner cannot be null or empty");
+    public boolean getScanned() {
+        return scanned;
+    }
+
+    /**
+     * Locally sets 'scanned' status of this book to true. Does not affect the database in any way.
+     * Use {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController#scanMyBorrowedBook(String)}
+     * and {@link ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController#scanMyOwnedBook(String)}
+     * to scan books.
+     *
+     * @param b True if this book should be scanned. False otherwise.
+     */
+    @Exclude
+    public void setScanned(boolean b) {
+        if (b && (status.equals("accepted") || status.equals("borrowed"))) {
+            scanned = true;
+        } else if (!b) {
+            scanned = false;
+        } else {
+            throw new UnsupportedOperationException("Can not scan book unless it is accepted or borrowed");
         }
-        this.owner = owner;
     }
 }

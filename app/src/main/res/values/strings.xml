@@ -6,6 +6,7 @@
     <string name="title_activity_login">Sign in</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
+    <string name="login_error">Username or Password is Incorrect</string>
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -32,7 +33,6 @@
     <string name="edit_profile_password">Password</string>
     <string name="edit_profile_email">Email</string>
     <string name="edit_profile">Edit Profile</string>
-    <string name="blocked_users">Blocked Users</string>
     <string name="edit_profile_save">Save Changes</string>
     <!-- String related to sign up -->
     <string name="sign_up">Sign Up</string>
@@ -46,7 +46,6 @@
     <string name="view_user_name">Full Name</string>
     <string name="view_user_available_books">Available Books</string>
     <string name="message_user_title">Message</string>
-    <string name="block_user_title">Block User</string>
     <!-- Strings related to chat room -->
     <string name="joe_message">Joe Message</string>
     <string name="add_location_description">add_location</string>
@@ -81,4 +80,9 @@
     <string name="edit_book_save">Save Changes</string>
     <string name="isbn_scanner">ISBN Scanner</string>
     <string name="view_image_title">View Image</string>
+    <!-- Strings related to empty lists -->
+    <string name="empty_exchange">Looks like there are no books here\nCheck Back Later</string>
+    <string name="empty_requests">Looks like there are no books here\nSearch Books to Request</string>
+    <string name="empty_library">Looks like you haven\'t added any books\nAdd Books to see them here</string>
+    <string name="empty_users">Can\'t find any Requests\nCheck Back Later</string>
 </resources>

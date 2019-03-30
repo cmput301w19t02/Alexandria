@@ -1,8 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
-import android.app.Application;
-import android.content.res.Resources;
-import android.view.View;
 
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
@@ -14,6 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,11 +21,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.App;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import java9.util.concurrent.CompletableFuture;
+
+import static java.lang.System.in;
 
 /**
  * The type Search controller.
@@ -39,6 +41,7 @@ public class SearchController {
     private static SearchController instance;
     private final String GOOGLE_BOOK_URL = "https://www.googleapis.com/books/v1/volumes?&maxResults=1&projection=lite&q=";
     private final String booksApiKey = App.getContext().getResources().getString(R.string.google_books_api_key);
+    private static UserController userController = UserController.getInstance();
 
     /**
      * The Books.
@@ -93,7 +96,14 @@ public class SearchController {
                             jsonArray = content.getJSONArray("hits");
                             for (int i = 0; i < jsonArray.length(); i++){
                                 Book book = gson.fromJson(jsonArray.getString(i),Book.class);
-                                books.add(book);
+                                // && !(book.getAvailableOwners())
+                                boolean isOwner = book.getAvailableOwners().contains(userController.getMyId());
+
+                                if (!(book.getAvailableOwners() == null)
+                                        && !(book.getAvailableOwners().size() == 0)
+                                        && !(isOwner && book.getAvailableOwners().size() == 1)) {
+                                    books.add(book);
+                                }
                             }
                             resultFuture.complete(books);
                         } catch (JSONException e) {
@@ -106,6 +116,58 @@ public class SearchController {
                 });
 
         return resultFuture;
+    }
+
+    public CompletableFuture<Boolean> compareIsbn(String isbn1, String isbn2) {
+        final CompletableFuture<Boolean> compareFuture = new CompletableFuture<>();
+
+        CompletableFuture.runAsync(() -> {
+           String searchUrl1 = GOOGLE_BOOK_URL + isbn1 + "&key=" + booksApiKey;
+           String searchUrl2 = GOOGLE_BOOK_URL + isbn2 + "&key=" + booksApiKey;
+
+           Boolean equalIsbn = false;
+
+            try {
+               URL url1 = new URL(searchUrl1);
+               URL url2 = new URL(searchUrl2);
+
+               HttpURLConnection bookConnection1 = (HttpURLConnection) url1.openConnection();
+               HttpURLConnection bookConnection2 = (HttpURLConnection) url2.openConnection();
+
+               try {
+                   InputStream in1 = bookConnection1.getInputStream();
+                   InputStream in2 = bookConnection2.getInputStream();
+
+                   if (IOUtils.contentEquals( in1, in2 )) {
+                       equalIsbn = true;
+                   }
+
+//                   InputStreamReader bookInput1 = new InputStreamReader(in1);
+//                   InputStreamReader bookInput2 = new InputStreamReader(in2);
+//
+//                   BufferedReader bookReader1 = new BufferedReader(bookInput1);
+//                   BufferedReader bookReader2 = new BufferedReader(bookInput2);
+
+               } catch (Exception e){
+                   e.printStackTrace();
+                   compareFuture.completeExceptionally(e);
+               }
+               finally {
+                   bookConnection1.disconnect();
+                   bookConnection2.disconnect();
+               }
+           } catch (MalformedURLException e) {
+               e.printStackTrace();
+               compareFuture.completeExceptionally(new IOException("Failed to create URL object"));
+           } catch (IOException e) {
+               e.printStackTrace();
+               compareFuture.completeExceptionally(new IOException("Failed to create URL connection"));
+           }
+
+           compareFuture.complete(equalIsbn);
+        });
+
+        return compareFuture;
     }
 
     public CompletableFuture<Book> searchIsbn(String isbn) {
