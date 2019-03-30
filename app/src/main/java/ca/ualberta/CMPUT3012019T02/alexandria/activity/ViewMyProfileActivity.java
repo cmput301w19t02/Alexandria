@@ -139,6 +139,11 @@ public class ViewMyProfileActivity extends AppCompatActivity {
         Toast.makeText(this, "Error: " + message, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * profile options
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

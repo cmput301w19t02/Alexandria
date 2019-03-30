@@ -82,18 +82,18 @@ public class AllTabFragment extends Fragment implements Observer {
             bookListings.clear();
             bookListings.addAll(BookDataAdapter.getInstance().getMyOwnedBooksList());
             bookAdapter.notifyDataSetChanged();
-        });
 
-        RecyclerView mRecyclerView = view.findViewById(R.id.all_recycler);
-        TextView emptyView = view.findViewById(R.id.empty_view);
-        if (mRecyclerView != null && emptyView != null) {
-            if (bookListings.isEmpty() ) {
-                mRecyclerView.setVisibility(View.GONE);
-                emptyView.setVisibility(View.VISIBLE);
-            } else {
-                mRecyclerView.setVisibility(View.VISIBLE);
-                emptyView.setVisibility(View.GONE);
+            RecyclerView mRecyclerView = view.findViewById(R.id.all_recycler);
+            TextView emptyView = view.findViewById(R.id.empty_view);
+            if (mRecyclerView != null && emptyView != null) {
+                if (bookListings.isEmpty() ) {
+                    mRecyclerView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    emptyView.setVisibility(View.GONE);
+                }
             }
-        }
+        });
     }
 }
