@@ -58,7 +58,6 @@ public class ChatRoomActivity extends AppCompatActivity {
     private String receiverId;
     private String senderId;
     private String receiverName;
-    private Bitmap receiverImage;
     private MessageRecyclerViewAdapter adapter;
 
     @Override
@@ -172,13 +171,13 @@ public class ChatRoomActivity extends AppCompatActivity {
      * @param item
      * @return
      */
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
             case R.id.view_profile:
                 Intent startViewProfile = new Intent(this, ViewUserProfileActivity.class);
+                startViewProfile.putExtra("USER_ID",receiverId);
                 startActivity(startViewProfile);
             case R.id.messaging_setting:
                 // open menu
@@ -187,16 +186,6 @@ public class ChatRoomActivity extends AppCompatActivity {
                 throw new RuntimeException("Unknown option");
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * On add image message to database.
-     *
-     * @param view the view
-     */
-    public void onAddPhotoClick(View view) {
-        //TODO implement function
-        Toast.makeText(this , "Add Photo", Toast.LENGTH_LONG).show();
     }
 
     /**
