@@ -14,7 +14,6 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,14 +25,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.concurrent.TimeUnit;
+
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ISBNLookup;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.ISBNLookup;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.SearchController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -44,6 +52,7 @@ import static android.app.Activity.RESULT_OK;
 public class UserBookFragment extends Fragment {
 
     private ImageController imageController = ImageController.getInstance();
+    private BookController bookController = BookController.getInstance();
 
     private String coverId;
     private String title;
@@ -53,6 +62,9 @@ public class UserBookFragment extends Fragment {
     private String ownerId;
     private final int RESULT_ISBN = 1;
     private Activity activity;
+    private AlertDialog scanSuccessfulDialog;
+    private ValueEventListener valueEventListener;
+    private DatabaseReference databaseReference;
 
     @Override
     public void onAttach(Context context) {
@@ -61,7 +73,6 @@ public class UserBookFragment extends Fragment {
             activity = (Activity) context;
         }
     }
-
 
     @Nullable
     @Override
@@ -78,10 +89,54 @@ public class UserBookFragment extends Fragment {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener((View v) -> getFragmentManager().popBackStack());
 
-        extractData();
-        setBookInfo(rootView);
-        setStatusBar(rootView);
-        setButtons(rootView);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Scan successful. Please wait for the other member to confirm.");
+        scanSuccessfulDialog = builder.create();
+
+        Bundle arguments = getArguments();
+        isbn = arguments.getString("isbn");
+        ownerId = arguments.getString("ownerId");
+        status = null;
+
+        valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                new Thread(() -> {
+                    if (!isAdded()) {
+                        return;
+                    }
+                    OwnedBook ownedBook = dataSnapshot.getValue(OwnedBook.class);
+                    if (ownedBook != null) {
+                        status = ownedBook.getStatus();
+                        coverId = ownedBook.getImageId();
+                        try {
+                            Book book = bookController.getBook(isbn).get(5, TimeUnit.SECONDS).get();
+                            title = book.getTitle();
+                            author = book.getAuthor();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            activity.runOnUiThread(() -> getFragmentManager().popBackStack());
+                        }
+
+                        activity.runOnUiThread(() -> {
+                            setImage(rootView);
+                            setBookInfo(rootView);
+                            setStatusBar(rootView);
+                            setButtons(rootView);
+                            scanSuccessfulDialog.dismiss();
+                        });
+                    } else {
+                        activity.runOnUiThread(() -> getFragmentManager().popBackStack());
+                    }
+                }).start();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        };
+
+        databaseReference = FirebaseDatabase.getInstance().getReference(bookController.getOwnedBookPath(ownerId, isbn));
+        databaseReference.addValueEventListener(valueEventListener);
 
         rootView.findViewById(R.id.user_book_owner).setOnClickListener(mListener);
         rootView.findViewById(R.id.user_book_owner_pic).setOnClickListener(mListener);
@@ -89,6 +144,12 @@ public class UserBookFragment extends Fragment {
         rootView.findViewById(R.id.user_book_button).setOnClickListener(mListener);
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        databaseReference.removeEventListener(valueEventListener);
     }
 
     //Instantiate the options menu
@@ -119,16 +180,23 @@ public class UserBookFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-
-    private void extractData() {
-        Bundle arguments = getArguments();
-
-        coverId = arguments.getString("coverId");
-        title = arguments.getString("title");
-        author = arguments.getString("author");
-        isbn = arguments.getString("isbn");
-        status = arguments.getString("status");
-        ownerId = arguments.getString("ownerId");
+    private void setImage(View v) {
+        new Thread(() -> {
+            try {
+                if (coverId != null) {
+                    Bitmap bitmap = imageController.getImage(coverId).get(5, TimeUnit.SECONDS);
+                    activity.runOnUiThread(() -> {
+                        ImageView ivCover = v.findViewById(R.id.user_book_cover);
+                        ivCover.setImageBitmap(bitmap);
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                activity.runOnUiThread(() -> {
+                    showError("Failed to get image from server");
+                });
+            }
+        }).start();
     }
 
     private void setBookInfo(View v) {
@@ -137,22 +205,11 @@ public class UserBookFragment extends Fragment {
         TextView tvIsbn = v.findViewById(R.id.user_book_isbn);
         Button tvOwner = v.findViewById(R.id.user_book_owner);
 
-        ImageView ivCover = v.findViewById(R.id.user_book_cover);
         ImageView ivOwnerPic = v.findViewById(R.id.user_book_owner_pic);
 
         tvTitle.setText(title);
         tvAuthor.setText(author);
         tvIsbn.setText(isbn);
-
-        imageController.getImage(coverId).handleAsync((result,error)->{
-            if(error==null){
-                ivCover.setImageBitmap(result);
-            }
-            else{
-                showError("Failed to get image from server");
-            }
-            return null;
-        });
 
         // sets owner name and avatar
         UserController userController = UserController.getInstance();
@@ -243,7 +300,10 @@ public class UserBookFragment extends Fragment {
         //For the button that only appears when status is accepted
         if (!status.equals("accepted")) {
             tempButton.setVisibility(View.GONE);
+        } else {
+            tempButton.setVisibility(View.VISIBLE);
         }
+
         //Button text for the main button
         switch (status){
             case "available": button.setText(availText); break;
@@ -253,13 +313,6 @@ public class UserBookFragment extends Fragment {
             default: throw new RuntimeException("Status out of bounds");
         }
 
-    }
-
-    //TODO Implement
-    //To be called when the status changes in order to reload the page
-    private void onStatusChange() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(this).attach(this).commit();
     }
 
     private final View.OnClickListener mListener = (View v) -> {
@@ -320,7 +373,7 @@ public class UserBookFragment extends Fragment {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 Bundle extras = data.getExtras();
-                String maybeIsbn = extras.getString("isbn").trim();
+                String isbn = extras.getString("isbn").trim();
                 switch (status) {
                     case "accepted":
                         setStatusBorrowed(isbn);
@@ -338,15 +391,13 @@ public class UserBookFragment extends Fragment {
         BookController.getInstance().requestBook(isbn, ownerId).handleAsync((aVoid, throwable) -> {
             activity.runOnUiThread(() -> {
                 if (throwable == null) {
-
-                    onStatusChange();
-
+                    Toast.makeText(activity, "Book request sent", Toast.LENGTH_LONG).show();
                 } else {
                     throwable.printStackTrace();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setMessage("Request failed. Please try again later.");
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    throwable.printStackTrace();
+                    activity.runOnUiThread(() -> {
+                        Toast.makeText(activity, "Request failed. Try again later", Toast.LENGTH_LONG).show();
+                    });
                 }
             });
             return null;
@@ -357,15 +408,12 @@ public class UserBookFragment extends Fragment {
         BookController.getInstance().cancelRequest(isbn, ownerId).handleAsync((aVoid, throwable) -> {
             activity.runOnUiThread(() -> {
                 if (throwable == null) {
-
-                    onStatusChange();
-
+                    Toast.makeText(activity, "Book request cancelled", Toast.LENGTH_LONG).show();
                 } else {
                     throwable.printStackTrace();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setMessage("Request could not be cancelled. Please try again later.");
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    activity.runOnUiThread(() -> {
+                        Toast.makeText(activity, "Request cancel failed. Try again later", Toast.LENGTH_LONG).show();
+                    });
                 }
             });
             return null;
@@ -380,36 +428,24 @@ public class UserBookFragment extends Fragment {
                     BookController.getInstance().exchangeBook(isbn, ownerId).handleAsync((aVoid1, throwable1) -> {
                         activity.runOnUiThread(() -> {
                             if (throwable1 == null) {
-
-                                onStatusChange();
-
+                                Toast.makeText(activity, "Book borrowed", Toast.LENGTH_LONG).show();
                             } else {
-                                throwable1.printStackTrace();
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                builder.setMessage("Scan successful. Please wait for the other member to confirm.");
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
+                                scanSuccessfulDialog.show();
                             }
                         });
                         return null;
                     });
 
                 } else {
-                    getActivity().runOnUiThread(() -> {
-                        throwable.printStackTrace();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setMessage("Was not able to scan ISBN. Please try again later.");
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+                    throwable.printStackTrace();
+                    activity.runOnUiThread(() -> {
+                        Toast.makeText(activity, "Was not able to scan ISBN", Toast.LENGTH_LONG).show();
                     });
                 }
                 return null;
             });
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setMessage("Scanned ISBN does not match the book you are returning");
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            Toast.makeText(activity, "Scanned ISBN does not match", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -421,36 +457,24 @@ public class UserBookFragment extends Fragment {
                     BookController.getInstance().returnBook(isbn, ownerId).handleAsync((aVoid1, throwable1) -> {
                         activity.runOnUiThread(() -> {
                             if (throwable1 == null) {
-
-                                onStatusChange();
-
+                                Toast.makeText(activity, "Book returned", Toast.LENGTH_LONG).show();
                             } else {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                builder.setMessage("Scan successful. Please wait for the other member to confirm.");
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
+                                scanSuccessfulDialog.show();
                             }
                         });
                         return null;
                     });
 
                 } else {
+                    throwable.printStackTrace();
                     activity.runOnUiThread(() -> {
-                        throwable.printStackTrace();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setMessage("Was not able to scan ISBN. Please try again later.");
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+                        Toast.makeText(activity, "Was not able to scan ISBN", Toast.LENGTH_LONG).show();
                     });
                 }
                 return null;
             });
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setMessage("Scanned ISBN does not match the book you are returning");
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            Toast.makeText(activity, "Scanned ISBN does not match", Toast.LENGTH_LONG).show();
         }
     }
-
 }

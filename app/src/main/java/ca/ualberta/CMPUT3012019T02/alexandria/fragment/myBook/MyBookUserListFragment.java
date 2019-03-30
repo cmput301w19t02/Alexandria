@@ -1,7 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +12,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,8 +20,15 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
@@ -30,6 +37,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.UserListItem;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
 public class MyBookUserListFragment extends Fragment {
 
@@ -41,9 +49,10 @@ public class MyBookUserListFragment extends Fragment {
     private UserController userController;
 
     private String isbn;
-    private final int RESULT_ISBN = 1;
 
     private Activity activity;
+    private ChildEventListener childEventListener;
+    private DatabaseReference databaseReference;
 
     @Override
     public void onAttach(Context context) {
@@ -126,47 +135,74 @@ public class MyBookUserListFragment extends Fragment {
         imageController = ImageController.getInstance();
         userController = UserController.getInstance();
 
-        bookController.getMyOwnedBook(isbn).handleAsync(((ownedBook, bookError) -> {
-            if (bookError == null) {
-                for (String userId : ownedBook.get().getRequestingUsers()) {
-                    userController.getUserProfile(userId).handleAsync((user, userError) -> {
-                        if (userError == null) {
-                            if (user.getPicture() != null) {
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                new Thread(() -> {
+                    Log.e("MyBookUserListFragment", "Child added!");
+                    if (!isAdded()) {
+                        return;
+                    }
+                    String userId = dataSnapshot.getKey();
+                    try {
+                        UserProfile userProfile = userController.getUserProfile(userId).get(5, TimeUnit.SECONDS);
 
-                                imageController.getImage(user.getPicture()).handleAsync((bitmap, imageError) -> {
-                                    activity.runOnUiThread(() -> {
-                                        if (imageError == null) {
-                                            Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                        Bitmap userImage = null;
+                        if (userProfile.getPicture() != null) {
+                            userImage = imageController.getImage(userProfile.getPicture()).get(5, TimeUnit.SECONDS);
+                        }
 
-                                            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);
-                                            drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
-                                            drawable.setAntiAlias(true);
+                        Bitmap finalUserImage = userImage;
+                        activity.runOnUiThread(() -> {
+                            if (finalUserImage != null) {
+                                Bitmap squareBitmap = Bitmap.createBitmap(finalUserImage, 0, 0, Math.min(finalUserImage.getWidth(), finalUserImage.getHeight()), Math.min(finalUserImage.getWidth(), finalUserImage.getHeight()));
 
-                                            requests.add(new UserListItem(drawable, user.getUsername(), isbn, userId));
-                                        } else {
-                                            requests.add(new UserListItem(null, user.getUsername(), isbn, userId));
-                                            showError("Failed to get user image.");
-                                        }
-                                        userAdapter.notifyDataSetChanged();
-                                    });
-                                    return null;
-                                });
+                                RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), squareBitmap);
+                                drawable.setCornerRadius(Math.min(finalUserImage.getWidth(), finalUserImage.getHeight()));
+                                drawable.setAntiAlias(true);
+
+                                requests.add(new UserListItem(drawable, userProfile.getUsername(), isbn, userId));
                             } else {
-                                requests.add(new UserListItem(null, user.getUsername(), isbn, userId));
+                                requests.add(new UserListItem(null, userProfile.getUsername(), isbn, userId));
                             }
 
-                        } else {
-                            showError("Failed to get user information.");
-                        }
-                        return null;
-                    });
-                }
-            } else {
-                showError("Failed to get users requesting.");
+                            userAdapter.notifyDataSetChanged();
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();
             }
-            return null;
-        }));
 
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                String userId = dataSnapshot.getKey();
+                for (UserListItem userListItem : requests) {
+                    if (userListItem.getBorrowerId().equals(userId)) {
+                        requests.remove(userListItem);
+                        userAdapter.notifyDataSetChanged();
+                        return;
+                    }
+                }
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        };
+
+        databaseReference = FirebaseDatabase.getInstance().getReference(bookController.getOwnedBookPath(userController.getMyId(), isbn) + "/requesting");
+        databaseReference.addChildEventListener(childEventListener);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        databaseReference.removeEventListener(childEventListener);
     }
 
     /**
@@ -178,22 +214,15 @@ public class MyBookUserListFragment extends Fragment {
         Toast.makeText(getView().getContext(), "Error: " + message, Toast.LENGTH_LONG).show();
     }
 
-    // TODO: call test with MyBookFragment.onStatusChange()
     // Switch status to accepted, and refresh the MyBookFragment
     private void acceptRequest(String isbn, String borrowerId) {
         bookController.acceptRequest(isbn, borrowerId).handleAsync((aVoid, throwable) -> {
             activity.runOnUiThread(() -> {
                 if (throwable == null) {
-
-                    // Successfully accepted the request
-                    // TODO: MyBookFragment.onStatusChange()
-
+                    Toast.makeText(activity, "Book request accepted", Toast.LENGTH_LONG).show();
                 } else {
                     throwable.printStackTrace();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setMessage("Unable to accept request. Please try again later.");
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    Toast.makeText(activity, "Unable to accept request. Please try again later", Toast.LENGTH_LONG).show();
                 }
             });
             return null;
@@ -205,16 +234,10 @@ public class MyBookUserListFragment extends Fragment {
         bookController.declineRequest(isbn, borrowerId).handleAsync((aVoid, throwable) -> {
             activity.runOnUiThread(() -> {
                 if (throwable == null) {
-
-                    // Successfully declined the request
-                    // TODO: MyBookFragment.onStatusChange()
-
+                    Toast.makeText(activity, "Book request declined", Toast.LENGTH_LONG).show();
                 } else {
                     throwable.printStackTrace();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setMessage("Unable to decline request. Please try again later.");
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    Toast.makeText(activity, "Unable to decline request. Please try again later", Toast.LENGTH_LONG).show();
                 }
             });
             return null;
