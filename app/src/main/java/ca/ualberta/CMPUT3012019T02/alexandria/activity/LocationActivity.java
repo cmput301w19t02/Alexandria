@@ -44,6 +44,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.cache.ImageCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import java9.util.concurrent.CompletableFuture;
 
@@ -54,6 +55,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private Location mLastKnownLocation;
 
     private ImageController imageController = ImageController.getInstance();
+    private ImageCache imageCache = ImageCache.getInstance();
 
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
@@ -142,6 +144,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                         CompletableFuture<String> addImage = imageController.addImage(bitmap);
                         addImage.thenAccept(imageId -> {
                             //TODO: stop spinner
+                            imageCache.putImage(imageId, bitmap);
                             intent.putExtra("imageId", imageId);
                             setResult(RESULT_OK, intent);
                             finish();
