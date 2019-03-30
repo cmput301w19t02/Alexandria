@@ -3,24 +3,24 @@ package ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 
 /**
- * model class for ChatRoom which stores message history
+ * model class for ChatRoomList which stores message history
  */
-public class  ChatRoom {
+public class ChatRoomList {
 
-    private List<Message> messages;
-    private String id;
+    private List<ChatRoomItem> chatRoomList;
 
     /**
-     * ChatRoom constructor on id, if id null or empty throws error
+     * ChatRoomList constructor on id, if id null or empty throws error
      *
      * @throws IllegalArgumentException Id cannot be null or empty
      * @param id id
      */
-    public ChatRoom(String id) {
+    public ChatRoomList(String id) {
         if (id == null || id.trim().isEmpty()) {
             throw new IllegalArgumentException("Id cannot be null or empty");
         }

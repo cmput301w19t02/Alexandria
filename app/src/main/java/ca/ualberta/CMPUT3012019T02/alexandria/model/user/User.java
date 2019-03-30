@@ -14,7 +14,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
  */
 public class User {
 
-    private List<ChatRoomItem> chatRooms;
+    private List<ChatRoomItem> chatRoomList;
     private Map<String, OwnedBook> ownedBooks;
     private Map<String, BorrowedBook> borrowedBooks;
     private UserProfile profile;
@@ -26,7 +26,7 @@ public class User {
      */
     @Deprecated
     public User() {
-        chatRooms = new ArrayList<>();
+        chatRoomList = new ArrayList<>();
         ownedBooks = new HashMap<>();
         borrowedBooks = new HashMap<>();
     }
@@ -37,7 +37,7 @@ public class User {
      * @return the chat rooms
      */
     public List<ChatRoomItem> getChatRooms() {
-        return chatRooms;
+        return chatRoomList;
     }
 
     /**
