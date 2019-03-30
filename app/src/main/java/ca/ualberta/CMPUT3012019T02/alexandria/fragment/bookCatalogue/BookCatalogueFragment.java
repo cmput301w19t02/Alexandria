@@ -74,8 +74,6 @@ public class BookCatalogueFragment extends Fragment {
 
         Bundle bundle = new Bundle();
         bundle.putString("isbn", isbn);
-        bundle.putString("title", title);
-        bundle.putString("author", author);
         OwnerListFragment frag = new OwnerListFragment();
         frag.setArguments(bundle);
         loadFragment(frag);

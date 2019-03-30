@@ -111,8 +111,6 @@ public class OwnerRecyclerViewAdapter extends RecyclerView.Adapter<OwnerViewHold
     private Bundle dataBundler(OwnerViewHolder mViewHolder) {
         Bundle b = new Bundle();
 
-        b.putString("title", mOwnerListItem.get(mViewHolder.getAdapterPosition()).getTitle());
-        b.putString("author", mOwnerListItem.get(mViewHolder.getAdapterPosition()).getAuthor());
         b.putString("isbn", mOwnerListItem.get(mViewHolder.getAdapterPosition()).getIsbn());
         b.putString("ownerId", mOwnerListItem.get(mViewHolder.getAdapterPosition()).getOwnerId());
         b.putString("status", mOwnerListItem.get(mViewHolder.getAdapterPosition()).getStatus());

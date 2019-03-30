@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -36,8 +37,6 @@ public class OwnerListFragment extends Fragment {
 
     private List<OwnerListItem> owners = new ArrayList<>();
     private String isbn;
-    private String title;
-    private String author;
 
     private Activity activity;
     private OwnerRecyclerViewAdapter userAdapter;
@@ -66,8 +65,6 @@ public class OwnerListFragment extends Fragment {
 
         Bundle bundle = getArguments();
         isbn = bundle.getString("isbn");
-        title = bundle.getString("title");
-        author = bundle.getString("author");
 
         childEventListener = new ChildEventListener() {
             @Override
@@ -86,8 +83,9 @@ public class OwnerListFragment extends Fragment {
                         }
                         Bitmap finalProfilePic = profilePic;
                         activity.runOnUiThread(() -> {
-                            OwnerListItem ownerListItem = new OwnerListItem(finalProfilePic, userProfile.getUsername(), ownerId, isbn, ownedBook.getStatus(), title, author);
+                            OwnerListItem ownerListItem = new OwnerListItem(finalProfilePic, userProfile.getUsername(), ownerId, isbn, ownedBook.getStatus());
                             owners.add(ownerListItem);
+                            Collections.sort(owners, OwnerListItem.getComparator());
                             userAdapter.notifyDataSetChanged();
                         });
                     } catch (Exception e) {
