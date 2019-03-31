@@ -76,6 +76,7 @@ public class MessagesFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    chatRoomList.clear();
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         ChatRoomItem chatRoom = childSnapshot.getValue(ChatRoomItem.class);
                         chatRoomList.add(chatRoom);
