@@ -5,6 +5,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
@@ -18,7 +19,7 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
     /**
      * The Item chat.
      */
-    public ConstraintLayout itemChat;
+    public RelativeLayout itemChat;
     /**
      * The TextView chat receiver username.
      */
