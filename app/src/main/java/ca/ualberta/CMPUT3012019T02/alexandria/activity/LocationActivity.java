@@ -105,11 +105,11 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
         Button placePin = findViewById(R.id.button_place_pin);
         placePin.setOnClickListener((View v) -> {
+            mMap.clear();
             if (mLocationPermissionGranted) {
                 // get current location and put a pin
                 LatLng lastPosition = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
                 mMap.addMarker(new MarkerOptions().position(lastPosition).draggable(true));
-                mMap.addMarker(new MarkerOptions().position(mDefaultLocation).draggable(true));
             } else {
                 // set pin to default location
                 mMap.addMarker(new MarkerOptions().position(mDefaultLocation).draggable(true));
