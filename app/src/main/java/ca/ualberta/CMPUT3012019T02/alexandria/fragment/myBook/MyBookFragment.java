@@ -33,8 +33,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook.EditBookActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewImageActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.myBook.EditBookActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;

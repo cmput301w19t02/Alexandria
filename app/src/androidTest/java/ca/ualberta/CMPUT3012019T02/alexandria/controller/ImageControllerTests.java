@@ -12,8 +12,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
-
 public class ImageControllerTests {
 
     private final String TEST_IMAGE_1 = "ac543736-b355-4eac-b9b8-a11165f0aa43"; // exists in database
