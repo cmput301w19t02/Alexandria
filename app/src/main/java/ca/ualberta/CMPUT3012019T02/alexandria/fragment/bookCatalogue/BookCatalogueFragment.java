@@ -97,6 +97,7 @@ public class BookCatalogueFragment extends Fragment {
     }
 
     private void setUI(View v) {
+        //TODO SET Cover IMAGE
         TextView tvTitle = v.findViewById(R.id.bc_title);
         TextView tvAuthor = v.findViewById(R.id.bc_author);
         TextView tvIsbn = v.findViewById(R.id.bc_isbn);
