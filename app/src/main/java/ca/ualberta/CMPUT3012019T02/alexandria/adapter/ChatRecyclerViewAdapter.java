@@ -32,6 +32,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
 
     private Context mContext;
     private List<ChatRoomItem> mChatRoomList;
+    private Map<String, RoundedBitmapDrawable> mProfileImageMap;
 
     private UserController userController = UserController.getInstance();
     private ChatController chatController = ChatController.getInstance();
@@ -43,9 +44,11 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
      * @param mContext      the application context
      * @param mChatRoomList the chat room list
      */
-    public ChatRecyclerViewAdapter(Context mContext, List<ChatRoomItem> mChatRoomList) {
+    public ChatRecyclerViewAdapter(Context mContext, List<ChatRoomItem> mChatRoomList,
+                                   Map<String, RoundedBitmapDrawable> mProfileImageMap) {
         this.mContext = mContext;
         this.mChatRoomList = mChatRoomList;
+        this.mProfileImageMap = mProfileImageMap;
     }
 
     @Override
@@ -107,34 +110,19 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
     public void onBindViewHolder(@NonNull ChatViewHolder myViewHolder, int position) {
         String myId = userController.getMyId();
         String user1Id = mChatRoomList.get(position).getUser1Id();
+        String user2Id = mChatRoomList.get(position).getUser2Id();
         if (!myId.equals(user1Id)) {
             myViewHolder.tvChatReceiverUsername.setText(mChatRoomList.get(position).getUser1Name());
-            imageController.getImage(mChatRoomList.get(position).getUser1UserPic()).handleAsync((resultImage, error) -> {
-                if (error == null) {
-                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), resultImage);
-                    drawable.setCornerRadius(Math.min(resultImage.getWidth(), resultImage.getHeight()));
-                    drawable.setAntiAlias(true);
-                    myViewHolder.ivChatUserPic.setImageDrawable(drawable);
-                    myViewHolder.ivChatUserPic.setBackground(null);
-                } else {
-                    // handle error
-                }
-                return null;
-            });
+            if (mProfileImageMap.get(user1Id) != null) {
+                myViewHolder.ivChatUserPic.setBackground(null);
+                myViewHolder.ivChatUserPic.setImageDrawable(mProfileImageMap.get(user1Id));
+            }
         } else {
             myViewHolder.tvChatReceiverUsername.setText(mChatRoomList.get(position).getUser2Name());
-            imageController.getImage(mChatRoomList.get(position).getUser2UserPic()).handleAsync((resultImage, error) -> {
-                if (error == null) {
-                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), resultImage);
-                    drawable.setCornerRadius(Math.min(resultImage.getWidth(), resultImage.getHeight()));
-                    drawable.setAntiAlias(true);
-                    myViewHolder.ivChatUserPic.setImageDrawable(drawable);
-                    myViewHolder.ivChatUserPic.setBackground(null);
-                } else {
-                    // handle error
-                }
-                return null;
-            });
+            if (mProfileImageMap.get(user2Id) != null) {
+                myViewHolder.ivChatUserPic.setBackground(null);
+                myViewHolder.ivChatUserPic.setImageDrawable(mProfileImageMap.get(user2Id));
+            }
         }
     }
 
