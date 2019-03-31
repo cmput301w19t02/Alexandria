@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.fragment.SearchFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.TabsAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.fragment.SearchFragment;
 
 /**
  * Created as a fragment by MainActivity

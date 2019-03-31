@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import androidx.test.rule.ActivityTestRule;
