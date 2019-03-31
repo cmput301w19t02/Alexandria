@@ -113,8 +113,10 @@ public class ChatRoomActivity extends AppCompatActivity {
         sendButton.setOnClickListener((View v) -> {
             EditText input = findViewById(R.id.edit_message);
             String inputText = input.getText().toString();
-            onSendMessageClick(inputText, senderId);
-            input.setText("");
+            if (!inputText.matches("")) {
+                onSendMessageClick(inputText, senderId);
+                input.setText("");
+            }
         });
 
         ImageView locationButton = findViewById(R.id.image_location);
