@@ -31,7 +31,7 @@ public class ObservableUserCache extends Observable {
     private ValueEventListener valueEventListener;
     private UserController userController = UserController.getInstance();
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-
+    private boolean isAvailable = false;
     /**
      * Gets instance.
      *
@@ -53,6 +53,7 @@ public class ObservableUserCache extends Observable {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
+                isAvailable = true;
                 setChanged();
                 notifyObservers();
             }
@@ -73,6 +74,7 @@ public class ObservableUserCache extends Observable {
         if (databaseReference != null) {
             databaseReference.removeEventListener(valueEventListener);
         }
+        isAvailable = false;
         databaseReference = database.child("users").child(userController.getMyId());
         databaseReference.addValueEventListener(valueEventListener);
     }
@@ -153,4 +155,12 @@ public class ObservableUserCache extends Observable {
         return Optional.ofNullable(user.getChatRooms().get(userId));
     }
 
+    /**
+     * Returns true is the cache is available
+     *
+     * @return if the cache is available
+     */
+    public boolean isAvailable() {
+        return isAvailable;
+    }
 }
