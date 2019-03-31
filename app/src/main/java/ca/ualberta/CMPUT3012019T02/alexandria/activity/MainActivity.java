@@ -1,6 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +17,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.ExchangeFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.library.LibraryFragment;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 
 /**
  * The main screen that opens when the application opens
@@ -27,9 +27,9 @@ import ca.ualberta.CMPUT3012019T02.alexandria.fragment.library.LibraryFragment;
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
 
+    private boolean fetching = true;
     private UserController userController = UserController.getInstance();
     private BookDataAdapter bookDataAdapter = BookDataAdapter.getInstance();
-    private ProgressDialog progressDialog;
     private Observer bookDataObserver;
 
     @Override
@@ -43,14 +43,8 @@ public class MainActivity extends AppCompatActivity
         navigation.setOnNavigationItemSelectedListener(this);
 
         // Loading dialog for initial population of book lists
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading book lists..."); // TODO: change to spinner
-        progressDialog.setCancelable(false);
-
-        progressDialog.show();
         bookDataObserver = (o, arg) -> {
-            progressDialog.dismiss();
-            bookDataAdapter.deleteObserver(bookDataObserver);
+            this.fetching = false;
         };
         bookDataAdapter.addObserver(bookDataObserver);
 
@@ -81,7 +75,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        progressDialog.dismiss();
         bookDataAdapter.deleteObserver(bookDataObserver);
     }
 
@@ -138,12 +131,7 @@ public class MainActivity extends AppCompatActivity
          startActivity(startProfileActivity);
     }
 
-    private void updateFragments(){
-        for (Fragment parent:getSupportFragmentManager().getFragments()){
-            for(Fragment child:parent.getChildFragmentManager().getFragments()){
-                parent.getChildFragmentManager().beginTransaction()
-                        .detach(child).attach(child).commit();
-            }
-        }
+    public boolean isFetching(){
+        return this.fetching;
     }
 }

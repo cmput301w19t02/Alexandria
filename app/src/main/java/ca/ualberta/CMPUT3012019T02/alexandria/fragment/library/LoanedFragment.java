@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.MainActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookDataAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
@@ -30,7 +32,7 @@ public class LoanedFragment extends Fragment implements Observer {
 
     private List<BookListItem> bookListings = new ArrayList<>();
     private BookRecyclerViewAdapter bookAdapter;
-    private Activity activity;
+    private MainActivity mainActivity;
     private View view;
 
     /**
@@ -61,8 +63,8 @@ public class LoanedFragment extends Fragment implements Observer {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof Activity) {
-            activity = (Activity) context;
+        if (context instanceof MainActivity) {
+            mainActivity = (MainActivity) context;
         }
     }
 
@@ -75,10 +77,10 @@ public class LoanedFragment extends Fragment implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (activity == null) {
+        if (mainActivity == null) {
             return;
         }
-        activity.runOnUiThread(() -> {
+        mainActivity.runOnUiThread(() -> {
             bookListings.clear();
             for (BookListItem book : BookDataAdapter.getInstance().getMyOwnedBooksList()) {
                 if (book.getStatus().equals("accepted") || book.getStatus().equals("borrowed")) {
@@ -87,15 +89,18 @@ public class LoanedFragment extends Fragment implements Observer {
             }
             bookAdapter.notifyDataSetChanged();
 
-            RecyclerView mRecyclerView = view.findViewById(R.id.loaned_recycler);
-            TextView emptyView = view.findViewById(R.id.empty_view);
-            if (mRecyclerView != null && emptyView != null) {
-                if (bookListings.isEmpty() ) {
-                    mRecyclerView.setVisibility(View.GONE);
+            //spinner
+            if (!mainActivity.isFetching()) {
+                RecyclerView mRecyclerView = view.findViewById(R.id.loaned_recycler);
+                TextView emptyView = view.findViewById(R.id.empty_view);
+                ProgressBar spinner = view.findViewById(R.id.loaned_spinner);
+
+                spinner.setVisibility(View.GONE);
+
+                if (bookListings.isEmpty()) {
                     emptyView.setVisibility(View.VISIBLE);
                 } else {
                     mRecyclerView.setVisibility(View.VISIBLE);
-                    emptyView.setVisibility(View.GONE);
                 }
             }
         });
