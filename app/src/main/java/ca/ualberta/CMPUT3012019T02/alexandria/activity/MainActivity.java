@@ -17,7 +17,6 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.ExchangeFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.library.LibraryFragment;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 
 /**
  * The main screen that opens when the application opens

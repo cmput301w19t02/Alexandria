@@ -1,7 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.message;
 
-import java.util.Date;
-
 /**
  * The type Image message. NOT YET USED (11/03/2019).
  */

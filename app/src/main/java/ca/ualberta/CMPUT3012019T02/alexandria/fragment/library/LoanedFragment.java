@@ -1,6 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.library;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;

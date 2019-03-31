@@ -1,6 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,8 +20,8 @@ import java.util.Observer;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.MainActivity;
-import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookDataAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.BookListItem;
 
 /**

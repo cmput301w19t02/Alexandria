@@ -12,7 +12,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookDataAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 import java9.util.concurrent.CompletableFuture;
