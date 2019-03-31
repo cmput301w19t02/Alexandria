@@ -13,6 +13,7 @@ import java.util.Observer;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookDataAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.ExchangeFragment;
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity
             this.fetching = false;
         };
         bookDataAdapter.addObserver(bookDataObserver);
+        if(ObservableUserCache.getInstance().isAvailable()){
+            this.fetching = false;
+        }
 
         // get a specific fragment to show, otherwise, shows exchange tab be default
         Intent intent = getIntent();
