@@ -242,7 +242,7 @@ public class MyBookTransactionFragment extends Fragment {
 
     //navigate to message fragment
     private void onClickMessageUser() {
-        String chatRoomId = userCache.getChatRoomId(borrowerId).get();
+        String chatRoomId = userCache.getChatRoomId(borrowerId).orElse(null);;
         if (chatRoomId == null) {
             //TODO: Start spinner
             CompletableFuture<String> addChatRoom = chatController.addChatRoom(userController.getMyId(), borrowerId, borrowerName);

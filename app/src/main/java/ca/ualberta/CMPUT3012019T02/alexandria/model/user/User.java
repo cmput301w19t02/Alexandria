@@ -27,6 +27,7 @@ public class User {
      */
     @Deprecated
     public User() {
+        chatRoomList = new HashMap<>();
         ownedBooks = new HashMap<>();
         borrowedBooks = new HashMap<>();
     }

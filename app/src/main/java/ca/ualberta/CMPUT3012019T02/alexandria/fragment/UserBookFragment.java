@@ -350,7 +350,7 @@ public class UserBookFragment extends Fragment implements View.OnClickListener {
 
     //navigate to message fragment
     private void onClickMessageUser() {
-        String chatRoomId = userCache.getChatRoomId(ownerId).get();
+        String chatRoomId = userCache.getChatRoomId(ownerId).orElse(null);
         if (chatRoomId == null) {
             //TODO: Start spinner
             CompletableFuture<String> addChatRoom = chatController.addChatRoom(userController.getMyId(), ownerId, ownerName);
