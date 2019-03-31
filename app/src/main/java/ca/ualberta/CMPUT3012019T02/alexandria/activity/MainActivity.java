@@ -26,7 +26,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.fragment.library.LibraryFragment;
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private boolean fetching = true;
+    private boolean fetching;
     private UserController userController = UserController.getInstance();
     private BookDataAdapter bookDataAdapter = BookDataAdapter.getInstance();
     private Observer bookDataObserver;
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.fetching = true;
         setContentView(R.layout.activity_main);
 
 //        userController.deauthenticate(); // show login page on every app startup
