@@ -90,13 +90,13 @@ public class MessagesFragment extends Fragment {
                            String user2Id = chatRoom.getUser2Id();
 
                            Bitmap user1Image = null;
-                           if (user1PicId != null & !user1PicId.equals("temp")) {
+                           if (user1PicId != null && !user1PicId.equals("temp")) {
                                 user1Image = imageController.getImage(user1PicId)
                                         .get(5, TimeUnit.SECONDS);
                            }
 
                            Bitmap user2Image = null;
-                           if (user2PicId != null & !user2PicId.equals("temp")) {
+                           if (user2PicId != null && !user2PicId.equals("temp")) {
                                user2Image = imageController.getImage(user2PicId)
                                        .get(5, TimeUnit.SECONDS);
                            }
@@ -139,7 +139,7 @@ public class MessagesFragment extends Fragment {
                                    profileImageMap.put(user2Id, drawable2);
 
                                }
-
+                               adapter.updateProfileImageMap(profileImageMap);
                                adapter.notifyDataSetChanged();
                            });
                            } catch (Exception e) {
@@ -203,12 +203,11 @@ public class MessagesFragment extends Fragment {
             @Override
             public void run() {
                 adapter.updateChatRoomList(chatRoomList);
+                adapter.updateProfileImageMap(profileImageMap);
                 adapter.notifyDataSetChanged();
                 handler.postDelayed(this, 2000);
             }
         }, 500);
-        //adapter.updateChatRoomList(chatRoomList);
-        //adapter.notifyDataSetChanged();
     }
 
     @Override

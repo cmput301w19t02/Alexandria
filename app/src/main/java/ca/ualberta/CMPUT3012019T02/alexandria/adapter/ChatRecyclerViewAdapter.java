@@ -139,4 +139,8 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
     public void updateChatRoomList(List<ChatRoomItem> newList){
         mChatRoomList = newList;
     }
+
+    public void updateProfileImageMap(Map<String, RoundedBitmapDrawable> newMap) {
+        mProfileImageMap = newMap;
+    }
 }
