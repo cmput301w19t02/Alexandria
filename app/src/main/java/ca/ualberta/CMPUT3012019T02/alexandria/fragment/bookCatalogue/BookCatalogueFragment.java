@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.fragment.bookCatalogue;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -17,7 +19,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.concurrent.TimeUnit;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 
 public class BookCatalogueFragment extends Fragment {
@@ -25,6 +30,7 @@ public class BookCatalogueFragment extends Fragment {
     private String title;
     private String author;
     private String isbn;
+    private Bitmap coverBitmap;
 
     private ValueEventListener valueEventListener;
     private DatabaseReference databaseReference;
@@ -51,6 +57,13 @@ public class BookCatalogueFragment extends Fragment {
 
                         title = book.getTitle();
                         author = book.getAuthor();
+
+                        String coverId = book.getImageId();
+                        try {
+                            coverBitmap = ImageController.getInstance().getImage(coverId).get(5, TimeUnit.SECONDS);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
                         getActivity().runOnUiThread(() -> {
                             setUI(rootView);
@@ -97,15 +110,15 @@ public class BookCatalogueFragment extends Fragment {
     }
 
     private void setUI(View v) {
-        //TODO SET Cover IMAGE
         TextView tvTitle = v.findViewById(R.id.bc_title);
         TextView tvAuthor = v.findViewById(R.id.bc_author);
         TextView tvIsbn = v.findViewById(R.id.bc_isbn);
+        ImageView ivCover = v.findViewById(R.id.bc_cover);
 
         tvTitle.setText(title);
         tvAuthor.setText(author);
         tvIsbn.setText(isbn);
-
+        ivCover.setImageBitmap(coverBitmap);
     }
 
     private void loadFragment(Fragment fragment) {
