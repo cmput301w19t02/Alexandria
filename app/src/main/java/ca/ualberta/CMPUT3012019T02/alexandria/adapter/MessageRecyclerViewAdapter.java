@@ -12,16 +12,14 @@ import android.view.ViewGroup;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.cache.ImageCache;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.ReceivedLocationMessageViewHolder;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.ReceivedMessageViewHolder;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.SentLocationMessageViewHolder;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.SentMessageViewHolder;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.message.LocationMessage;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
 
 
@@ -39,7 +37,7 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter {
     private List<Message> mMessageList;
 
     private UserController userController = UserController.getInstance();
-    private ImageCache imageCache = ImageCache.getInstance();
+    private ImageController imageController = ImageController.getInstance();
 
     /**
      * Instantiates a new Message recycler view adapter.
@@ -117,40 +115,51 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter {
              String imageId = content[0];
              String lat = content[1];
              String lng = content[2];
-             Bitmap image = imageCache.getImage(imageId);
-            ((SentLocationMessageViewHolder) myViewHolder).ivLocationImage.setImageBitmap(image);
-            ((SentLocationMessageViewHolder) myViewHolder).ivLocationImage
-                    .setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String zoom = "15";
-                    String geoString = "geo:" + lat + "," + lng + "?z=" + zoom;
-                    Uri intentUri = Uri.parse(geoString);
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, intentUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    mContext.startActivity(mapIntent);
-                }
-                    });
-
+             imageController.getImage(imageId).handleAsync((result,error) -> {
+                 if (error == null) {
+                     ((SentLocationMessageViewHolder) myViewHolder).ivLocationImage.setImageBitmap(result);
+                     ((SentLocationMessageViewHolder) myViewHolder).ivLocationImage
+                             .setOnClickListener(new View.OnClickListener() {
+                                 @Override
+                                 public void onClick(View v) {
+                                     String zoom = "15";
+                                     String geoString = "geo:" + lat + "," + lng + "?z=" + zoom;
+                                     Uri intentUri = Uri.parse(geoString);
+                                     Intent mapIntent = new Intent(Intent.ACTION_VIEW, intentUri);
+                                     mapIntent.setPackage("com.google.android.apps.maps");
+                                     mContext.startActivity(mapIntent);
+                                 }
+                             });
+                 } else {
+                     //handle if there is an error
+                 }
+                 return null;
+             });
         } else {
             String[] content = mMessageList.get(position).getContent().split(",");
             String imageId = content[0];
             String lat = content[1];
             String lng = content[2];
-            Bitmap image = imageCache.getImage(imageId);
-            ((ReceivedLocationMessageViewHolder) myViewHolder).ivLocationImage.setImageBitmap(image);
-            ((ReceivedLocationMessageViewHolder) myViewHolder).ivLocationImage
-                    .setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String zoom = "15";
-                            String geoString = "geo:" + lat + "," + lng + "?z=" + zoom;
-                            Uri intentUri = Uri.parse(geoString);
-                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, intentUri);
-                            mapIntent.setPackage("com.google.android.apps.maps");
-                            mContext.startActivity(mapIntent);
-                        }
-                    });
+            imageController.getImage(imageId).handleAsync((result,error) -> {
+                if (error == null) {
+                    ((ReceivedLocationMessageViewHolder) myViewHolder).ivLocationImage.setImageBitmap(result);
+                    ((ReceivedLocationMessageViewHolder) myViewHolder).ivLocationImage
+                            .setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String zoom = "15";
+                                    String geoString = "geo:" + lat + "," + lng + "?z=" + zoom;
+                                    Uri intentUri = Uri.parse(geoString);
+                                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, intentUri);
+                                    mapIntent.setPackage("com.google.android.apps.maps");
+                                    mContext.startActivity(mapIntent);
+                                }
+                            });
+                } else {
+                    //handle if there is an error
+                }
+                return null;
+            });
         }
     }
 
