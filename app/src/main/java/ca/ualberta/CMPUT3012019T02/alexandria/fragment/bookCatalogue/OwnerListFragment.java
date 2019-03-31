@@ -74,6 +74,9 @@ public class OwnerListFragment extends Fragment {
                         return;
                     }
                     String ownerId = dataSnapshot.getKey();
+                    if (ownerId.equals(userController.getMyId())) {
+                        return;
+                    }
                     try {
                         OwnedBook ownedBook = bookController.getUserOwnedBook(isbn, ownerId).get(5, TimeUnit.SECONDS).get();
                         UserProfile userProfile = userController.getUserProfile(ownerId).get(5, TimeUnit.SECONDS);

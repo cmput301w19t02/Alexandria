@@ -2,6 +2,7 @@ package ca.ualberta.CMPUT3012019T02.alexandria.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -79,11 +80,13 @@ public class OwnerRecyclerViewAdapter extends RecyclerView.Adapter<OwnerViewHold
     public void onBindViewHolder(@NonNull OwnerViewHolder myViewHolder, int position) {
 
         Bitmap bitmap = mOwnerListItem.get(position).getOwnerPic();
-        Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
-
-        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), squareBitmap);
-        drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
-        drawable.setAntiAlias(true);
+        RoundedBitmapDrawable drawable = null;
+        if (bitmap != null) {
+            Bitmap squareBitmap = squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
+            drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), squareBitmap);
+            drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
+            drawable.setAntiAlias(true);
+        }
 
         myViewHolder.ownerPic.setImageDrawable(drawable);
         myViewHolder.ownerUsername.setText(mOwnerListItem.get(position).getOwnerUsername());
