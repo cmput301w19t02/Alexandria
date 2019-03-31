@@ -1,5 +1,6 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,7 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.Observer;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.adapter.BookDataAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.MessagesFragment;
 import ca.ualberta.CMPUT3012019T02.alexandria.fragment.exchange.ExchangeFragment;
@@ -24,6 +28,9 @@ public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private UserController userController = UserController.getInstance();
+    private BookDataAdapter bookDataAdapter = BookDataAdapter.getInstance();
+    private ProgressDialog progressDialog;
+    private Observer bookDataObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,18 @@ public class MainActivity extends AppCompatActivity
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
+
+        // Loading dialog for initial population of book lists
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading book lists..."); // TODO: change to spinner
+        progressDialog.setCancelable(false);
+
+        progressDialog.show();
+        bookDataObserver = (o, arg) -> {
+            progressDialog.dismiss();
+            bookDataAdapter.deleteObserver(bookDataObserver);
+        };
+        bookDataAdapter.addObserver(bookDataObserver);
 
         // get a specific fragment to show, otherwise, shows exchange tab be default
         Intent intent = getIntent();
@@ -57,6 +76,13 @@ public class MainActivity extends AppCompatActivity
         } else {
             loadFragment(new ExchangeFragment());
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        progressDialog.dismiss();
+        bookDataAdapter.deleteObserver(bookDataObserver);
     }
 
     @Override
@@ -108,8 +134,8 @@ public class MainActivity extends AppCompatActivity
      * @param view the button clicked
      */
     public void onProfileButtonClick(View view) {
-        Intent startProfileActivity = new Intent(this, ViewMyProfileActivity.class);
-        startActivity(startProfileActivity);
+         Intent startProfileActivity = new Intent(this, ViewMyProfileActivity.class);
+         startActivity(startProfileActivity);
     }
 
     private void updateFragments(){

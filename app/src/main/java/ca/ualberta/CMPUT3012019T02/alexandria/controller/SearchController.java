@@ -1,8 +1,7 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
-import android.app.Application;
-import android.content.res.Resources;
-import android.view.View;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
@@ -10,11 +9,10 @@ import com.algolia.search.saas.Query;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,13 +22,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.App;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import java9.util.concurrent.CompletableFuture;
-
-import static java.lang.System.in;
 
 /**
  * The type Search controller.
@@ -43,12 +40,7 @@ public class SearchController {
     private static SearchController instance;
     private final String GOOGLE_BOOK_URL = "https://www.googleapis.com/books/v1/volumes?&maxResults=1&projection=lite&q=";
     private final String booksApiKey = App.getContext().getResources().getString(R.string.google_books_api_key);
-
-    /**
-     * The Books.
-     */
-    ArrayList<Book> books = new ArrayList<>();
-
+    private static UserController userController = UserController.getInstance();
 
     private SearchController() {
         client = new Client("9ETLQT0YZC", App.getContext().getResources().getString(R.string.algolia_api_key));
@@ -90,14 +82,21 @@ public class SearchController {
 
         index.searchAsync(new Query(search),
                 (content, error) -> {
-                    books.clear();
+                    ArrayList<Book> books = new ArrayList<>();
                     if (error == null) {
                         try {
                             JSONArray jsonArray;
                             jsonArray = content.getJSONArray("hits");
                             for (int i = 0; i < jsonArray.length(); i++){
                                 Book book = gson.fromJson(jsonArray.getString(i),Book.class);
-                                books.add(book);
+                                // && !(book.getAvailableOwners())
+                                boolean isOwner = book.getAvailableOwners().contains(userController.getMyId());
+
+                                if (!(book.getAvailableOwners() == null)
+                                        && !(book.getAvailableOwners().size() == 0)
+                                        && !(isOwner && book.getAvailableOwners().size() == 1)) {
+                                    books.add(book);
+                                }
                             }
                             resultFuture.complete(books);
                         } catch (JSONException e) {
@@ -165,71 +164,67 @@ public class SearchController {
     }
 
     public CompletableFuture<Book> searchIsbn(String isbn) {
-        final CompletableFuture<Book> resultFuture = new CompletableFuture<>();
+        final CompletableFuture<Book> future = new CompletableFuture<>();
 
         // information retrieved from https://code.tutsplus.com/tutorials/android-sdk-create-a-book-scanning-app-interface-book-search--mobile-17790
-        CompletableFuture.runAsync(() -> {
+        new Thread(() -> {
+
             String searchUrl = GOOGLE_BOOK_URL + isbn + "&key=" + booksApiKey;
-
-            StringBuilder bookBuilder = new StringBuilder();
-            bookBuilder.append("{'isbn':" + isbn + ",");
-
-            Book resultBook = null;
+            StringBuilder stringBuilder = new StringBuilder();
 
             try {
+
                 URL url = new URL(searchUrl);
-                HttpURLConnection bookConnection = (HttpURLConnection) url.openConnection();
-
-                try {
-                    InputStream in = bookConnection.getInputStream();
-
-                    InputStreamReader bookInput = new InputStreamReader(in);
-                    BufferedReader bookReader = new BufferedReader(bookInput);
-
-                    String lineIn;
-                    Boolean volumeInfo = false;
-                    while ((lineIn = bookReader.readLine())!= null) {
-                        if (lineIn.contains("]") && volumeInfo) {
-                            volumeInfo = false;
-                            bookBuilder.append("}");
-                        }
-
-                        if (volumeInfo) {
-                            if (lineIn.contains("authors")) {
-                                bookBuilder.append("author:");
-                            } else {
-                                bookBuilder.append(lineIn);
-                            }
-                        }
-
-                        if (lineIn.contains("volumeInfo")) {
-                            volumeInfo = true;
-                        }
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                try (
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                ) {
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line);
                     }
-                    resultBook = new Gson().fromJson(bookBuilder.toString(), Book.class);
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                    resultFuture.completeExceptionally(e);
-                }
-                finally {
-                    bookConnection.disconnect();
+                } finally {
+                    httpURLConnection.disconnect();
                 }
 
-            } catch (MalformedURLException e) {
+                JSONObject volumeInfo = new JSONObject(stringBuilder.toString()).getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo");
+                String title = "N/A", author = "N/A", thumbnail = null, imageId = null;
+                try {
+                    title = volumeInfo.getString("title");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    author = volumeInfo.getJSONArray("authors").getString(0);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    thumbnail = volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (thumbnail != null) {
+                    Bitmap bitmap = BitmapFactory.decodeStream(new URL(thumbnail).openConnection().getInputStream());
+                    if (bitmap != null) {
+                        imageId = ImageController.getInstance().addImage(bitmap).get(5, TimeUnit.SECONDS);
+                    }
+                }
+
+                Book book = new Book(isbn, title, author, null, imageId);
+                future.complete(book);
+
+            } catch (Exception e) {
                 e.printStackTrace();
-                resultFuture.completeExceptionally(new IOException("Failed to create URL object"));
-            } catch (IOException e) {
-                e.printStackTrace();
-                resultFuture.completeExceptionally(new IOException("Failed to create URL connection"));
+                future.completeExceptionally(e);
             }
 
-            resultFuture.complete(resultBook);
-        });
-        return resultFuture;
+        }).start();
+
+        return future;
     }
-
-
-
 
 }

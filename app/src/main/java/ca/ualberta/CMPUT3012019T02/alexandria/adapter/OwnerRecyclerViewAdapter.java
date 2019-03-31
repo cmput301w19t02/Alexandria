@@ -1,11 +1,15 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,7 +79,16 @@ public class OwnerRecyclerViewAdapter extends RecyclerView.Adapter<OwnerViewHold
     @Override
     public void onBindViewHolder(@NonNull OwnerViewHolder myViewHolder, int position) {
 
-        myViewHolder.ownerPic.setImageBitmap(mOwnerListItem.get(position).getOwnerPic());
+        Bitmap bitmap = mOwnerListItem.get(position).getOwnerPic();
+        RoundedBitmapDrawable drawable = null;
+        if (bitmap != null) {
+            Bitmap squareBitmap = squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
+            drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), squareBitmap);
+            drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
+            drawable.setAntiAlias(true);
+        }
+
+        myViewHolder.ownerPic.setImageDrawable(drawable);
         myViewHolder.ownerUsername.setText(mOwnerListItem.get(position).getOwnerUsername());
 
         if (mOwnerListItem.get(position).getStatus() != null) {
@@ -101,8 +114,6 @@ public class OwnerRecyclerViewAdapter extends RecyclerView.Adapter<OwnerViewHold
     private Bundle dataBundler(OwnerViewHolder mViewHolder) {
         Bundle b = new Bundle();
 
-        b.putString("title", mOwnerListItem.get(mViewHolder.getAdapterPosition()).getTitle());
-        b.putString("author", mOwnerListItem.get(mViewHolder.getAdapterPosition()).getAuthor());
         b.putString("isbn", mOwnerListItem.get(mViewHolder.getAdapterPosition()).getIsbn());
         b.putString("ownerId", mOwnerListItem.get(mViewHolder.getAdapterPosition()).getOwnerId());
         b.putString("status", mOwnerListItem.get(mViewHolder.getAdapterPosition()).getStatus());
