@@ -12,7 +12,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:background="@color/colorMaroon"
-        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -61,7 +60,8 @@
         <ImageView
             android:id="@+id/user_book_cover"
             android:layout_width="100dp"
-            android:layout_height="152dp" />
+            android:layout_height="152dp"
+            android:background="@drawable/ic_broken_image"/>
 
         <TextView
             android:id="@+id/user_book_title"
