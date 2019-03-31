@@ -1,13 +1,10 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.user;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomList;
 
 /**
  * User model class that allows to get and set information
