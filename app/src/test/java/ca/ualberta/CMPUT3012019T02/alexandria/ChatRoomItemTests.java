@@ -56,7 +56,7 @@ public class ChatRoomItemTests {
 
     @Test(expected = IllegalArgumentException.class)
     public void emptyUser2UserPicConstructorTest(){
-        new ChatRoomItem("Testasdf1234", "asdf","Heff",  "temp","lkjh", "Leff",  "temp",true );
+        new ChatRoomItem("Testasdf1234", "asdf","Heff",  "temp","lkjh", "Leff",  "",true );
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -239,7 +239,7 @@ public class ChatRoomItemTests {
         ChatRoomItem chatRoomItem = new ChatRoomItem("Testasdf1234", "asdf","Heff"
                 , "temp","lkjh", "Leff", "temp",true );
         chatRoomItem.setUser2UserPic("asdf;lkj");
-        assertEquals("asdf;lkj",chatRoomItem.getUser1UserPic());
+        assertEquals("asdf;lkj",chatRoomItem.getUser2UserPic());
     }
 
     //negative setUserId1Test

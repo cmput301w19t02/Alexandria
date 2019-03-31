@@ -58,8 +58,8 @@ public class ChatRoomItem {
         if (user2Name == null || user2Name.isEmpty()) {
             throw new IllegalArgumentException("user2Name cannot be null or empty");
         }
-        if ( user2UserPic == null || user1UserPic.isEmpty()) {
-
+        if ( user2UserPic == null || user2UserPic.isEmpty()) {
+            throw new IllegalArgumentException("user2UserPic cannot be null or empty");
         }
         this.chatId = chatRoomId;
         this.user1Id = user1Id;
@@ -151,6 +151,9 @@ public class ChatRoomItem {
      * @param user1UserPic the user 1 name
      */
     public void setUser1UserPic(String user1UserPic) {
+        if (user1UserPic == null || user1UserPic.isEmpty()) {
+            throw new IllegalArgumentException("user1UserPic cannot be null or empty");
+        }
         this.user1UserPic = user1UserPic;
     }
 
@@ -211,6 +214,9 @@ public class ChatRoomItem {
      * @param user2UserPic the user 1 name
      */
     public void setUser2UserPic(String user2UserPic) {
+        if ( user2UserPic == null || user2UserPic.isEmpty()) {
+            throw new IllegalArgumentException("user2UserPic cannot be null or empty");
+        }
         this.user2UserPic = user2UserPic;
     }
 
