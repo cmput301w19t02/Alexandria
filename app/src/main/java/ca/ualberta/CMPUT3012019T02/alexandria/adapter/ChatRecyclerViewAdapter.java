@@ -3,16 +3,20 @@ package ca.ualberta.CMPUT3012019T02.alexandria.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
+import java.util.Map;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ChatRoomActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ChatController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.holder.ChatViewHolder;
@@ -31,6 +35,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
 
     private UserController userController = UserController.getInstance();
     private ChatController chatController = ChatController.getInstance();
+    private ImageController imageController = ImageController.getInstance();
 
     /**
      * Instantiates a new Chat recycler view adapter.
@@ -104,8 +109,32 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatViewHolder
         String user1Id = mChatRoomList.get(position).getUser1Id();
         if (!myId.equals(user1Id)) {
             myViewHolder.tvChatReceiverUsername.setText(mChatRoomList.get(position).getUser1Name());
+            imageController.getImage(mChatRoomList.get(position).getUser1UserPic()).handleAsync((resultImage, error) -> {
+                if (error == null) {
+                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), resultImage);
+                    drawable.setCornerRadius(Math.min(resultImage.getWidth(), resultImage.getHeight()));
+                    drawable.setAntiAlias(true);
+                    myViewHolder.ivChatUserPic.setImageDrawable(drawable);
+                    myViewHolder.ivChatUserPic.setBackground(null);
+                } else {
+                    // handle error
+                }
+                return null;
+            });
         } else {
             myViewHolder.tvChatReceiverUsername.setText(mChatRoomList.get(position).getUser2Name());
+            imageController.getImage(mChatRoomList.get(position).getUser2UserPic()).handleAsync((resultImage, error) -> {
+                if (error == null) {
+                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), resultImage);
+                    drawable.setCornerRadius(Math.min(resultImage.getWidth(), resultImage.getHeight()));
+                    drawable.setAntiAlias(true);
+                    myViewHolder.ivChatUserPic.setImageDrawable(drawable);
+                    myViewHolder.ivChatUserPic.setBackground(null);
+                } else {
+                    // handle error
+                }
+                return null;
+            });
         }
     }
 

@@ -16,9 +16,9 @@ import java9.util.concurrent.CompletableFuture;
  */
 public class ChatController {
 
-
-
     private static ChatController instance;
+
+    private UserController userController = UserController.getInstance();
     private FirebaseDatabase database;
     private ObservableUserCache userCache;
 
@@ -59,8 +59,17 @@ public class ChatController {
         if (chatRoomExists == null) {
             String senderName = userCache.getProfile().get().getName();
             String chatId = getNewChatRoomId(senderId);
-            ChatRoomItem chatRoomItem = new ChatRoomItem(chatId, senderId, senderName, receiverId,
-                    receiverName, false);
+            String senderPicId = userCache.getProfile().get().getPicture();
+            ChatRoomItem chatRoomItem = new ChatRoomItem(chatId, senderId, senderName, senderPicId, receiverId, receiverName, "temp", false);
+
+            userController.getUserProfile(receiverId).handleAsync((result, error) -> {
+                if (error == null) {
+                    chatRoomItem.setUser2UserPic(result.getPicture());
+                } else {
+                    //handle error
+                }
+                return null;
+            });
 
             addChatRoomItemToId(senderId, chatId, chatRoomItem).thenCombine(addChatRoomItemToId(receiverId, chatId, chatRoomItem), (result, error) -> {
                 future.complete(chatId);

@@ -1,5 +1,7 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom;
 
+import android.graphics.drawable.Drawable;
+
 import com.google.firebase.database.Exclude;
 
 import java.util.HashMap;

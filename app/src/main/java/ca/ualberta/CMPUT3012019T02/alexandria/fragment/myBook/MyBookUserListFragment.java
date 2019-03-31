@@ -192,7 +192,6 @@ public class MyBookUserListFragment extends Fragment {
                             } else {
                                 requests.add(new UserListItem(null, userProfile.getUsername(), isbn, userId));
                             }
-
                             userAdapter.notifyDataSetChanged();
                         });
                     } catch (Exception e) {
