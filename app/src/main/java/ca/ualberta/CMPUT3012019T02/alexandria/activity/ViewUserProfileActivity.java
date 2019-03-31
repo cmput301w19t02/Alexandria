@@ -20,7 +20,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
 /**
- * The shows the a user's profile.
+ * Shows a profile of a user
  */
 public class ViewUserProfileActivity extends AppCompatActivity {
 
@@ -50,10 +50,9 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
 
+        // back button
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v -> finish());
-
-        //TODO implement book list
     }
 
     /**
@@ -116,11 +115,22 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * shows error message on the screen
+     *
+     * @param message error message
+     */
     private void showError(String message) {
         Toast.makeText(ViewUserProfileActivity.this,
                 "Error: " + message, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * inflates menu for options on view user page
+     *
+     * @param menu menu
+     * @return boolean of the successes
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

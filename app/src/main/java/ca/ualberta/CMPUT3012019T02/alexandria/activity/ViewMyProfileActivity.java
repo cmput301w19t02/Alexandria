@@ -25,8 +25,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 /**
  * Activity for my profile of a current user
  * Shows its name, username, email address,
- * provides navigation to blocked users activity
- * and edit my profile activity
+ * provides and edit my profile activity
  */
 public class ViewMyProfileActivity extends AppCompatActivity {
 
@@ -42,12 +41,13 @@ public class ViewMyProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
 
+        // back button
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     /**
-     * sets  user details as in user profile
+     * sets user details as in user profile: name, username, email and image
      */
     @Override
     public void onResume() {
@@ -121,7 +121,7 @@ public class ViewMyProfileActivity extends AppCompatActivity {
     }
 
     /**
-     * Removes spinner when data is loaded
+     * Removes spinner
      */
     private void stopSpinner() {
         ProgressBar spinner = findViewById(R.id.view_my_profile_spinner);
@@ -140,9 +140,9 @@ public class ViewMyProfileActivity extends AppCompatActivity {
     }
 
     /**
-     * profile options
-     * @param menu
-     * @return
+     * inflate menu for user profile options
+     * @param menu menu
+     * @return boolean of successes
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -166,9 +166,9 @@ public class ViewMyProfileActivity extends AppCompatActivity {
                         EditMyProfileActivity.class);
                 startActivity(startEditProfile);
                 break;
+
             case R.id.sign_out_profile:
                 // Sing Out
-                // TODO show warning
                 UserController.getInstance().deauthenticate();
                 Intent start_new_main_intent = new Intent(this,
                         MainActivity.class);
@@ -176,9 +176,11 @@ public class ViewMyProfileActivity extends AppCompatActivity {
                         start_new_main_intent.FLAG_ACTIVITY_CLEAR_TASK);  // clear activity  history
                 startActivity(start_new_main_intent);
                 break;
+
             case R.id.profile_setting:
                 // open menu
                 break;
+
             default:
                 throw new RuntimeException("Unknown option");
         }
