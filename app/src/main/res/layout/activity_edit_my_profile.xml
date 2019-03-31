@@ -102,26 +102,10 @@
                     app:layout_constraintTop_toBottomOf="@+id/edit_profile_name" />
 
                 <EditText
-                    android:id="@+id/editText_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/edit_profile_username"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="sans-serif"
-                    android:hint="@string/edit_profile_password"
-                    android:inputType="textPassword"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="19sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_profile_username" />
-
-                <EditText
                     android:id="@+id/edit_profile_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/editText_password"
+                    android:layout_below="@+id/edit_profile_name"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
                     android:fontFamily="sans-serif"
@@ -131,7 +115,7 @@
                     android:textSize="19sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editText_password" />
+                    app:layout_constraintTop_toBottomOf="@+id/edit_profile_name" />
 
                 <ImageView
                     android:id="@+id/edit_profile_add_image"

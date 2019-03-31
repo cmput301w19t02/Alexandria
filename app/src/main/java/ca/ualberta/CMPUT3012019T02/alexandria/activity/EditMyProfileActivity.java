@@ -55,7 +55,6 @@ public class EditMyProfileActivity extends AppCompatActivity {
 
     private EditText editText_name;
     private EditText editText_username;
-    // private EditText editText_password;
     private EditText editText_email;
 
     @Override
@@ -236,7 +235,6 @@ public class EditMyProfileActivity extends AppCompatActivity {
     private void initializePageAndData() {
         editText_name = findViewById(R.id.edit_profile_name);
         editText_username = findViewById(R.id.edit_profile_username);
-        //editText_password = findViewById(R.id.editText_password);
         editText_email = findViewById(R.id.edit_profile_email);
         ImageView image_avatar = findViewById(R.id.edit_profile_user_image);
 
@@ -403,7 +401,6 @@ public class EditMyProfileActivity extends AppCompatActivity {
      */
     private void fetchData() {
         name = editText_name.getText().toString();
-        //String newPassword = editText_password.getText().toString();
         email = editText_email.getText().toString();
     }
 
