@@ -1,13 +1,9 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +30,7 @@ import java.util.List;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ChatController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.NotificationController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.MessageRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Location;
@@ -49,6 +46,8 @@ public class ChatRoomActivity extends AppCompatActivity {
     static final int MEET_LOCATION_REQUEST = 1;
 
     private ChatController chatController = ChatController.getInstance();
+    private UserController userController = UserController.getInstance();
+    private NotificationController notificationController = NotificationController.getInstance();
 
     private DatabaseReference messagesRef;
     private ValueEventListener messagesListener;
@@ -230,7 +229,13 @@ public class ChatRoomActivity extends AppCompatActivity {
                 messageList.add(message);
                 adapter.updateMessageList(messageList);
                 adapter.notifyDataSetChanged();
-                //TODO: transaction location
+
+                userController.getMyProfile().handleAsync((result, error) -> {
+                    notificationController.sendNotification(receiverId,
+                            "New Meet up Location from " + result.getName(),
+                            "Go to your messages to see the new place to meet");
+                    return null;
+                });
             }
             if (resultCode == Activity.RESULT_CANCELED){
                 Toast.makeText(this , "No Location Added", Toast.LENGTH_LONG).show();

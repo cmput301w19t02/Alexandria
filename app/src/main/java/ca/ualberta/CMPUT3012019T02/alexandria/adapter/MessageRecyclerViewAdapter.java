@@ -93,7 +93,7 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter {
 
         } else {
             mView = LayoutInflater.from(mContext)
-                    .inflate(R.layout.item_location_message_sent, viewGroup, false);
+                    .inflate(R.layout.item_location_message_recieved, viewGroup, false);
             return new ReceivedLocationMessageViewHolder(mView);
         }
     }
