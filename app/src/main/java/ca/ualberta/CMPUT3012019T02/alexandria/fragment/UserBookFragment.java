@@ -69,6 +69,7 @@ public class UserBookFragment extends Fragment implements View.OnClickListener {
     private String isbn;
     private String status;
     private String ownerId;
+    private String ownerName;
     private final int RESULT_ISBN = 1;
     private Activity activity;
     private AlertDialog scanSuccessfulDialog;
