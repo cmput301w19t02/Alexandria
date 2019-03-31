@@ -97,8 +97,8 @@ public class MessagesFragment extends Fragment {
      * {@inheritDoc}
      */
     @Override
-    public void onStart(){
-        super.onStart();
+    public void onResume(){
+        super.onResume();
 
         /**
          * Code adapted from https://stackoverflow.com/questions/37404521/how-to-make-listview-to-refresh-after-every-5-sec-when-data-come-from-a-server

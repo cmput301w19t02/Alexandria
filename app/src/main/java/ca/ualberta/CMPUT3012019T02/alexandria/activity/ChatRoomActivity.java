@@ -231,9 +231,13 @@ public class ChatRoomActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
 
                 userController.getMyProfile().handleAsync((result, error) -> {
-                    notificationController.sendNotification(receiverId,
-                            "New Meet up Location from " + result.getName(),
-                            "Go to your messages to see the new place to meet");
+                    if (error == null) {
+                        notificationController.sendNotification(receiverId,
+                                "New Meet up Location from " + result.getName(),
+                                "Go to your messages to see the new place to meet");
+                    } else {
+                        //handle error
+                    }
                     return null;
                 });
             }

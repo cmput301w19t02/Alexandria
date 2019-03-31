@@ -232,7 +232,7 @@ public class UserBookFragment extends Fragment implements View.OnClickListener {
             if (error == null) {
                 // Update ui here
                 String name = result.getName();
-                ownerName = name;
+                ownerName = result.getUsername();
                 String photoId = result.getPicture();
                 activity.runOnUiThread(() -> {
                     tvOwner.setText(name);
