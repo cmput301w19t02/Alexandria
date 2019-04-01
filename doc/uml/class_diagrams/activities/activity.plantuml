@@ -1,0 +1,359 @@
+@startuml
+
+title __MISC. ACTIVITY's Class Diagram__\n
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class NotificationController {
+      - database : FirebaseDatabase
+      - functions : FirebaseFunctions
+      {static} - instance : NotificationController
+      {static} + getInstance()
+      + setDeviceToken()
+      + sendNotification()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class ChatController {
+      {static} - instance : ChatController
+      - database : FirebaseDatabase
+      - ChatController()
+      - userController : UserController
+      - userCache : ObservableUserCache
+      {static} + getInstance()
+      + addChatRoom()
+      - addChatRoomPrivate()
+      - getNewChatRoomId()
+      - addChatRoomItemToId()
+      + setUserChatRoomReadStatus()
+      - setChatRoomReadStatusPrivate()
+      + addTextMessage()
+      - addTextMessagePrivate()
+      + addLocationMessage()
+      - addLocationMessagePrivate()
+      - getUserChatRoomListReference()
+      - getChatMessagesReference()
+    }
+  }
+}
+
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.adapter {
+    class MessageRecyclerViewAdapter {
+      {static} - SENT_TEXT : int
+      {static} - SENT_LOCATION : int
+      {static} - RECEIVED_TEXT : int
+      {static} - RECEIVED_LOCATION : int
+      - mContext : Context
+      - mMessageList : List<Message>
+      - userController : UserController
+      - imageController : ImageController
+      + MessageRecyclerViewAdapter()
+      + getItemViewType()
+      + onCreateViewHolder()
+      + onBindViewHolder()
+      + getItemCount()
+      + updateMessageList()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+    class ChatRoomActivity {
+      {static} ~ MEET_LOCATION_REQUEST : int
+      - messagesRef : DatabaseReference
+      - messagesListener : ValueEventListener
+      - messageList : List<Message>
+      - chatId : String
+      - receiverId : String
+      - senderId : String
+      - receiverName : String
+      - chatController : ChatController
+      - userController : UserController
+      - notificationController : NotificationController
+      - adapter : MessageRecyclerViewAdapter
+      # onCreate()
+      + onResume()
+      + onStop()
+      + onCreateOptionsMenu()
+      + onOptionsItemSelected()
+      + onAddLocationClick()
+      + onSendMessageClick()
+      # onActivityResult()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+      class UserProfile {
+        - name : String
+        - email : String
+        - phone : String
+        - picture : String
+        - username : String
+        + UserProfile()
+        + UserProfile()
+        + getName()
+        + setName()
+        + getEmail()
+        + setEmail()
+        + getPhone()
+        + setPhone()
+        + getPicture()
+        + setPicture()
+        + getUsername()
+        + setUsername()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class ImageController {
+      - IMAGE_FORMAT : String
+      - storage : StorageReference
+      - cache : ImageCache
+      {static} - instance : ImageController
+      - ImageController()
+      {static} + getInstance()
+      + addImage()
+      + getImage()
+      + updateImage()
+      + deleteImage()
+      - getImageReference()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class UserController {
+      - auth : FirebaseAuth
+      - database : FirebaseDatabase
+      {static} - instance : UserController
+      - UserController()
+      {static} + getInstance()
+      + isAuthenticated()
+      + authenticate()
+      + deauthenticate()
+      + createUser()
+      + getMyId()
+      - getUserEmail()
+      + getUserProfile()
+      + getMyProfile()
+      + updateMyProfile()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+    class ChatRoomActivity {
+      - messagesRef : DatabaseReference
+      - messagesListener : ValueEventListener
+      - messageList : List<Message>
+      - chatId : String
+      - recieverId : String
+      - senderId : String
+      # onCreate()
+      + onStart()
+      + onStop()
+      + onCreateOptionsMenu()
+      + onOptionsItemSelected()
+      + onAddPhotoClick()
+      + onAddLocationClick()
+      # onSendMessageClick()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+    class EditMyProfileActivity {
+      {static} + RESULT_CAMERA : int
+      {static} + RESULT_GALLERY : int
+      + REQUEST_PERMISSION_PHONE_STATE : int
+      - name : String
+      - email : String
+      - userAvatar : Bitmap
+      - imageID : String
+      - editText_name : EditText
+      - editText_username : EditText
+      - editText_email : EditText
+      - userController : UserController
+      - myUserProfile : UserProfile
+      # onCreate()
+      + onCreateContextMenu()
+      + onContextItemSelected()
+      + removePhoto()
+      + openGallery()
+      + addPhotoCamera()
+      # onActivityResult()
+      - getBitmapFromUri()
+      - initializePageAndData()
+      - stopSpinner()
+      - startSpinner()
+      - showError()
+      - showMessage()
+      + onSaveButtonClick()
+      - saveUserWithImage()
+      - saveUser()
+      - fetchData()
+      - delayedClose()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+    class ISBNLookup {
+      - mScannerView : ZXingScannerView
+      - REQUEST_PERMISSION_PHONE_STATE : int
+      + onCreate()
+      + onResume()
+      + onPause()
+      + handleResult()
+      - checkCameraPermissions()
+      + onRequestPermissionsResult()
+      - showExplanation()
+      - requestPermission()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+    class LoginActivity {
+      - userController : UserController
+      # onCreate()
+      + signIn()
+      + navigateToSignUp()
+      - validator()
+      + onBackPressed()
+      - stopSpinner()
+      - startSpinner()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+    class SignUpActivity {
+      - photoId : String
+      - userController : UserController
+      - imageController : ImageController
+      # onCreate()
+      + addPhoto()
+      + signUp()
+      # onActivityResult()
+      - showError()
+      - validateUsername()
+      - validateName()
+      - validateEmail()
+      - validatePassword()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+    class ViewImageActivity {
+      {static} + IMAGE_ID : String
+      - image_id : String
+      # onCreate()
+      - load_imageID()
+      - set_toolbar()
+      - setImage()
+      + showError()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+    class ViewMyProfileActivity {
+      - myUserProfile : UserProfile
+      # onCreate()
+      + onResume()
+      - stopSpinner()
+      - showError()
+      + onCreateOptionsMenu()
+      + onOptionsItemSelected()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.activity {
+    class ViewUserProfileActivity {
+      - username : String
+      - name : String
+      - photoId : String
+      - userID : String
+      - userProfile : UserProfile
+      - imageController : ImageController
+      - userController : UserController
+      # onCreate()
+      + onResume()
+      - showError()
+      + onCreateOptionsMenu()
+      + onOptionsItemSelected()
+    }
+  }
+}
+
+
+ChatRoomActivity -up-|> AppCompatActivity
+ChatRoomActivity o-- "1" ChatController
+ChatRoomActivity o-- "1" UserController
+ChatRoomActivity o-- "1" NotificationController
+ChatRoomActivity o-- "1" MessageRecyclerViewAdapter
+EditMyProfileActivity -up-|> AppCompatActivity
+EditMyProfileActivity o-- "1" UserController
+EditMyProfileActivity o-- "1" UserProfile
+ISBNLookup -up-|> ResultHandler
+ISBNLookup -up-|> AppCompatActivity
+LoginActivity -up-|> AppCompatActivity
+LoginActivity o-- "1" UserController
+SignUpActivity -up-|> AppCompatActivity
+SignUpActivity o-- "1" UserController
+SignUpActivity o-- "1" ImageController
+ViewImageActivity -up-|> AppCompatActivity
+ViewMyProfileActivity -up-|> AppCompatActivity
+ViewMyProfileActivity o-- "1" UserProfile
+ViewUserProfileActivity -up-|> AppCompatActivity
+ViewUserProfileActivity o-- "1" UserProfile
+ViewUserProfileActivity o-- "1" ImageController
+ViewUserProfileActivity o-- "1" UserController
+
+
+right footer
+
+
+  PlantUML diagram partly generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+  For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

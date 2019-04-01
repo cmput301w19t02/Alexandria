@@ -1,0 +1,281 @@
+@startuml
+
+title __CHAT & MESSAGE ADAPTER's Class Diagram__\n
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class ChatController {
+      {static} - instance : ChatController
+      - database : FirebaseDatabase
+      - ChatController()
+      - userController : UserController
+      - userCache : ObservableUserCache
+      {static} + getInstance()
+      + addChatRoom()
+      - addChatRoomPrivate()
+      - getNewChatRoomId()
+      - addChatRoomItemToId()
+      + setUserChatRoomReadStatus()
+      - setChatRoomReadStatusPrivate()
+      + addTextMessage()
+      - addTextMessagePrivate()
+      + addLocationMessage()
+      - addLocationMessagePrivate()
+      - getUserChatRoomListReference()
+      - getChatMessagesReference()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class UserController {
+      - auth : FirebaseAuth
+      - database : FirebaseDatabase
+      {static} - instance : UserController
+      - UserController()
+      {static} + getInstance()
+      + isAuthenticated()
+      + authenticate()
+      + deauthenticate()
+      + createUser()
+      + getMyId()
+      - getUserEmail()
+      + getUserProfile()
+      + getMyProfile()
+      + updateMyProfile()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class ImageController {
+      - IMAGE_FORMAT : String
+      - storage : StorageReference
+      - cache : ImageCache
+      {static} - instance : ImageController
+      - ImageController()
+      {static} + getInstance()
+      + addImage()
+      + getImage()
+      + updateImage()
+      + deleteImage()
+      - getImageReference()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.adapter {
+    class MessageRecyclerViewAdapter {
+      {static} - SENT_TEXT : int
+      {static} - SENT_LOCATION : int
+      {static} - RECEIVED_TEXT : int
+      {static} - RECEIVED_LOCATION : int
+      - mContext : Context
+      - mMessageList : List<Message>
+      - userController : UserController
+      - imageController : ImageController
+      + MessageRecyclerViewAdapter()
+      + getItemViewType()
+      + onCreateViewHolder()
+      + onBindViewHolder()
+      + getItemCount()
+      + updateMessageList()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.adapter {
+    class ChatRecyclerViewAdapter {
+      {static} - MESSAGE_READ : int
+      {static} - MESSAGE_UNREAD : int
+      - mContext : Context
+      - mChatRoomList : List<ChatRoomItem>
+      - mProfileImageMap : Map<String, RoundedBitmapDrawable>
+      - userController : UserController
+      - chatController : ChatController
+      - imageController : ImageController
+      + ChatRecyclerViewAdapter()
+      + getItemViewType()
+      + onCreateViewHolder()
+      + onBindViewHolder()
+      + getItemCount()
+      + updateChatRoomList()
+      + updateProfileImageMap()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.message {
+      abstract class Message {
+        - id : String
+        - type : String
+        - content : String
+        - status : String
+        - date : Long
+        - sender : String
+        + Message()
+        + Message()
+        + toMap()
+        + getId()
+        + setId()
+        + getType()
+        + setType()
+        + getContent()
+        + setContent()
+        + getStatus()
+        + setStatus()
+        + getDate()
+        + setDate()
+        + getSender()
+        + setSender()
+      }
+    }
+  }
+}
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom {
+      class ChatRoomItem {
+        - chatId : String
+        - user1Id : String
+        - user1Name : String
+        - user1UserPic : String
+        - user2Id : String
+        - user2Name : String
+        - user2UserPic : String
+        - readStatus : boolean
+        + ChatRoomItem()
+        + ChatRoomItem()
+        + toMap()
+        + getUser1Id()
+        + setUser1Id()
+        + getUser1Name()
+        + setUser1Name()
+        + getUser1UserPic()
+        + setUser1UserPic()
+        + getUser2Id()
+        + setUser2Id()
+        + getUser2Name()
+        + setUser2Name()
+        + getUser2UserPic()
+        + setUser2UserPic()
+        + getChatId()
+        + setChatId()
+        + getReadStatus()
+        + setReadStatus()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.holder {
+      class ChatViewHolder {
+        + itemChat : RelativeLayout
+        + tvChatReceiverUsername : TextView
+        + ivChatUserPic : ImageView
+        + ivReadStatus : ImageView
+        + ChatViewHolder()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.holder {
+      class ReceivedLocationMessageViewHolder {
+        + itemMessage : ConstraintLayout
+        + tvTimeStamp : TextView
+        + ivLocationImage : ImageView
+        + ReceivedLocationMessageViewHolder()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.holder {
+      class ReceivedMessageViewHolder {
+        + itemMessage : ConstraintLayout
+        + tvContent : TextView
+        + tvTimeStamp : TextView
+        + ReceivedMessageViewHolder()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.holder {
+      class SentLocationMessageViewHolder {
+        + itemMessage : ConstraintLayout
+        + tvTimeStamp : TextView
+        + ivLocationImage : ImageView
+        + SentLocationMessageViewHolder()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.holder {
+      class SentMessageViewHolder {
+        + itemMessage : ConstraintLayout
+        + tvContent : TextView
+        + tvTimeStamp : TextView
+        + SentMessageViewHolder()
+      }
+    }
+  }
+}
+
+
+ReceivedLocationMessageViewHolder -down-|> ViewHolder
+ReceivedMessageViewHolder -down-|> ViewHolder
+SentLocationMessageViewHolder -down-|> ViewHolder
+SentMessageViewHolder -down-|> ViewHolder
+ChatRecyclerViewAdapter -up-|> Adapter
+ChatRecyclerViewAdapter o-- "1" UserController
+ChatRecyclerViewAdapter o-- "1" ChatController
+ChatRecyclerViewAdapter o-- "1" ImageController
+ChatRecyclerViewAdapter o-- "*" ChatRoomItem
+ChatRecyclerViewAdapter "1" -- "*" ChatViewHolder : creates >
+MessageRecyclerViewAdapter -up-|> Adapter
+MessageRecyclerViewAdapter o-- "1" UserController
+MessageRecyclerViewAdapter o-- "1" ImageController
+MessageRecyclerViewAdapter o-- "*" Message
+MessageRecyclerViewAdapter "1" -- "*" ReceivedLocationMessageViewHolder : creates >
+MessageRecyclerViewAdapter "1" -- "*" ReceivedMessageViewHolder : creates >
+MessageRecyclerViewAdapter "1" -- "*" SentLocationMessageViewHolder : creates >
+MessageRecyclerViewAdapter "1" -- "*" SentMessageViewHolder : creates >
+
+right footer
+
+
+  PlantUML diagram partly generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+  For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

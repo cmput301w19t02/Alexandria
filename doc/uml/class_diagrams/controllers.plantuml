@@ -1,0 +1,222 @@
+@startuml
+
+title __CONTROLLER's Class Diagram__\n
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class ChatController {
+      {static} - instance : ChatController
+      - database : FirebaseDatabase
+      - ChatController()
+      - userController : UserController
+      - userCache : ObservableUserCache
+      {static} + getInstance()
+      + addChatRoom()
+      - addChatRoomPrivate()
+      - getNewChatRoomId()
+      - addChatRoomItemToId()
+      + setUserChatRoomReadStatus()
+      - setChatRoomReadStatusPrivate()
+      + addTextMessage()
+      - addTextMessagePrivate()
+      + addLocationMessage()
+      - addLocationMessagePrivate()
+      - getUserChatRoomListReference()
+      - getChatMessagesReference()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.service {
+    class NotificationService {
+      + onMessageReceived()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class BookController {
+      - firebase : FirebaseDatabase
+      - userController : UserController
+      - notificationController : NotificationController
+      - observableUserCache : ObservableUserCache
+      {static} - instance : BookController
+      - BookController()
+      {static} + getInstance()
+      + addBook()
+      + getBook()
+      + updateBook()
+      + requestBook()
+      + cancelRequest()
+      + acceptRequest()
+      + declineRequest()
+      + scanMyBorrowedBook()
+      + scanMyOwnedBook()
+      + exchangeBook()
+      + returnBook()
+      + getMyBorrowedBook()
+      + getMyBorrowedBooks()
+      + addMyOwnedBook()
+      + getMyOwnedBook()
+      + getMyOwnedBooks()
+      + updateMyOwnedBook()
+      + deleteMyOwnedBook()
+      + getUserOwnedBook()
+      + getUserOwnedBooks()
+      + getBookPath()
+      + getBorrowedBooksPath()
+      + getBorrowedBookPath()
+      + getOwnedBooksPath()
+      + getOwnedBookPath()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class ImageController {
+      - IMAGE_FORMAT : String
+      - storage : StorageReference
+      - cache : ImageCache
+      {static} - instance : ImageController
+      - ImageController()
+      {static} + getInstance()
+      + addImage()
+      + getImage()
+      + updateImage()
+      + deleteImage()
+      - getImageReference()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class NotificationController {
+      - database : FirebaseDatabase
+      - functions : FirebaseFunctions
+      {static} - instance : NotificationController
+      {static} + getInstance()
+      + setDeviceToken()
+      + sendNotification()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class SearchController {
+      - client : Client
+      - index : Index
+      - gson : Gson
+      {static} - instance : SearchController
+      - GOOGLE_BOOK_URL : String
+      - booksApiKey : String
+      {static} - userController : UserController
+      - SearchController()
+      {static} + getInstance()
+      + searchBooks()
+      + compareIsbn()
+      + searchIsbn()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class UserController {
+      - auth : FirebaseAuth
+      - database : FirebaseDatabase
+      {static} - instance : UserController
+      - UserController()
+      {static} + getInstance()
+      + isAuthenticated()
+      + authenticate()
+      + deauthenticate()
+      + createUser()
+      + getMyId()
+      - getUserEmail()
+      + getUserProfile()
+      + getMyProfile()
+      + updateMyProfile()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.cache {
+    class ObservableUserCache {
+      {static} - instance : ObservableUserCache
+      - databaseReference : DatabaseReference
+      - valueEventListener : ValueEventListener
+      - userController : UserController
+      - user : User
+      - database : DatabaseReference
+      {static} + getInstance()
+      - ObservableUserCache()
+      + updateReference()
+      + getBorrowedBook()
+      + getOwnedBook()
+      + getBorrowedBooks()
+      + getOwnedBooks()
+      + getProfile()
+      + getChatRoomId()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.cache {
+    class ImageCache {
+      {static} - instance : ImageCache
+      - cache : HashMap<String, Bitmap>
+      {static} + getInstance()
+      - ImageCache()
+      + getImage()
+      + putImage()
+      + deleteImage()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  class App {
+    {static} - mContext : Context
+    + onCreate()
+    {static} + getContext()
+  }
+}
+
+
+App -up-|> Application
+BookController o-- "1" UserController
+BookController o-- "1" NotificationController
+BookController o-- "1" ObservableUserCache
+SearchController o-- "1" UserController
+ChatController o-- UserController
+ChatController o-- ObservableUserCache
+App "1" -- "1" SearchController : initializes >
+ImageController o-- ImageCache
+
+NotificationService -up-|> FirebaseMessagingService
+NotificationController -- NotificationService
+
+right footer
+
+
+  PlantUML diagram partly generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+  For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml
