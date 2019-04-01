@@ -29,6 +29,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -132,6 +133,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
         // Save current pin location to the location message
         Button savePin = findViewById(R.id.button_save_pin);
+        ProgressBar spinner = findViewById(R.id.location_spinner);
         savePin.setOnClickListener((View v) -> {
 
             Intent intent = new Intent();
@@ -139,11 +141,14 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             double lng = mLastKnownLocation.getLongitude();
             intent.putExtra("lat", lat);
             intent.putExtra("lng", lng);
-            //TODO: start spinner
+
+            savePin.setVisibility(View.INVISIBLE);
+            placePin.setVisibility(View.INVISIBLE);
+            spinner.setVisibility(View.VISIBLE);
+
             mMap.snapshot((Bitmap bitmap) -> {
                 CompletableFuture<String> addImage = imageController.addImage(bitmap);
                 addImage.thenAccept(imageId -> {
-                    //TODO: stop spinner
                     intent.putExtra("imageId", imageId);
                     setResult(RESULT_OK, intent);
                     finish();
