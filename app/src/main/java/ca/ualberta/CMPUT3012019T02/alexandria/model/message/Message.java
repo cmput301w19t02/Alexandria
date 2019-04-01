@@ -12,7 +12,7 @@ public abstract class Message {
     private String type;
     private String content;
     private String status;
-    private String date;
+    private Long date;
     private String sender;
 
     /**
@@ -30,7 +30,7 @@ public abstract class Message {
      * @param date    the date
      * @param sender  the sender
      */
-    public Message(String type, String content, String status, String date, String sender) {
+    public Message(String type, String content, String status, Long date, String sender) {
         if (type == null || type.isEmpty()) {
             throw new IllegalArgumentException("Type cannot be null or empty");
         }
@@ -172,7 +172,7 @@ public abstract class Message {
      *
      * @return the date
      */
-    public String getDate() {
+    public Long getDate() {
         return date;
     }
 
@@ -181,7 +181,7 @@ public abstract class Message {
      *
      * @param date the date
      */
-    public void setDate(String date) {
+    public void setDate(Long date) {
         if (date == null) {
             throw new IllegalArgumentException("Date cannot be null");
         }

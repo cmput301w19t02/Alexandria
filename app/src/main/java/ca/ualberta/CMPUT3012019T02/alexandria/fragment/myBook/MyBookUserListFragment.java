@@ -30,12 +30,16 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ChatRoomActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.adapter.UserRecyclerViewAdapter;
+import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ChatController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.UserListItem;
+import java9.util.concurrent.CompletableFuture;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
 
 public class MyBookUserListFragment extends Fragment {
@@ -46,6 +50,9 @@ public class MyBookUserListFragment extends Fragment {
     private BookController bookController;
     private ImageController imageController;
     private UserController userController;
+    private ChatController chatController = ChatController.getInstance();
+    private ObservableUserCache userCache = ObservableUserCache.getInstance();
+
 
     private String isbn;
 
@@ -76,7 +83,29 @@ public class MyBookUserListFragment extends Fragment {
                             //Sets up onClick functions for each user
                             @Override
                             public void messageClick(int position) {
-                                //TODO implement
+                                UserListItem item = requests.get(position);
+                                String userId = item.getBorrowerId();
+                                String userName = item.getBorrowerUsername();
+                                String chatRoomId = userCache.getChatRoomId(userId).orElse(null);
+                                if (chatRoomId == null) {
+                                    //TODO: Start spinner
+                                    CompletableFuture<String> addChatRoom = chatController.addChatRoom(userController.getMyId(), userId, userName);
+                                    addChatRoom.thenAccept(chatId -> {
+                                        //TODO: stop spinner
+                                        Intent intentChatRoom = new Intent(getContext(), ChatRoomActivity.class);
+                                        intentChatRoom.putExtra("chatId", chatId);
+                                        intentChatRoom.putExtra("receiverId", userId);
+                                        intentChatRoom.putExtra("receiverName", userName);
+                                        startActivity(intentChatRoom);
+                                    });
+                                } else {
+                                    Intent intentChatRoom = new Intent(getContext(), ChatRoomActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("chatId", chatRoomId);
+                                    bundle.putString("recieverId", userId);
+                                    intentChatRoom.putExtra("bundle", bundle);
+                                    startActivity(intentChatRoom);
+                                }
                             }
 
                             @Override
@@ -163,7 +192,6 @@ public class MyBookUserListFragment extends Fragment {
                             } else {
                                 requests.add(new UserListItem(null, userProfile.getUsername(), isbn, userId));
                             }
-
                             userAdapter.notifyDataSetChanged();
                         });
                     } catch (Exception e) {

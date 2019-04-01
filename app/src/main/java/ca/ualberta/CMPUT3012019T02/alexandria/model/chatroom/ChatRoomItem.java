@@ -1,5 +1,7 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom;
 
+import android.graphics.drawable.Drawable;
+
 import com.google.firebase.database.Exclude;
 
 import java.util.HashMap;
@@ -10,11 +12,13 @@ import java.util.Map;
  */
 public class ChatRoomItem {
 
+    private String chatId;
     private String user1Id;
     private String user1Name;
+    private String user1UserPic;
     private String user2Id;
     private String user2Name;
-    private String chatId;
+    private String user2UserPic;
     private boolean readStatus;
 
     /**
@@ -34,28 +38,36 @@ public class ChatRoomItem {
      * @param readStatus the read status
      */
 // TODO: Checks on setters for tests
-    public ChatRoomItem(String chatRoomId, String user1Id, String user1Name,
-                        String user2Id, String user2Name, boolean readStatus) {
+    public ChatRoomItem(String chatRoomId, String user1Id, String user1Name, String user1UserPic,
+                        String user2Id, String user2Name, String user2UserPic, boolean readStatus) {
         if (chatRoomId == null || chatRoomId.isEmpty()) {
-            throw new IllegalArgumentException("Type cannot be null or empty");
+            throw new IllegalArgumentException("chatRoomId cannot be null or empty");
         }
         if (user1Id == null || user1Id.isEmpty()) {
-            throw new IllegalArgumentException("Type cannot be null or empty");
+            throw new IllegalArgumentException("user1Id cannot be null or empty");
         }
         if (user1Name == null || user1Name.isEmpty()) {
-            throw new IllegalArgumentException("Type cannot be null or empty");
+            throw new IllegalArgumentException("user1Name cannot be null or empty");
+        }
+        if (user1UserPic == null || user1UserPic.isEmpty()) {
+            throw new IllegalArgumentException("user1UserPic cannot be null or empty");
         }
         if (user2Id == null || user2Id.isEmpty()) {
-            throw new IllegalArgumentException("Type cannot be null or empty");
+            throw new IllegalArgumentException("user2Id cannot be null or empty");
         }
         if (user2Name == null || user2Name.isEmpty()) {
-            throw new IllegalArgumentException("Type cannot be null or empty");
+            throw new IllegalArgumentException("user2Name cannot be null or empty");
+        }
+        if ( user2UserPic == null || user2UserPic.isEmpty()) {
+            throw new IllegalArgumentException("user2UserPic cannot be null or empty");
         }
         this.chatId = chatRoomId;
         this.user1Id = user1Id;
         this.user1Name = user1Name;
+        this.user1UserPic = user1UserPic;
         this.user2Id = user2Id;
         this.user2Name = user2Name;
+        this.user2UserPic = user2UserPic;
         this.readStatus = readStatus;
     }
 
@@ -71,8 +83,10 @@ public class ChatRoomItem {
         res.put("chatRoomId", chatId);
         res.put("user1Id", user1Id);
         res.put("user1Name",user1Name);
+        res.put("user1UserPic", user1UserPic);
         res.put("user2Id", user2Id);
         res.put("user2Name", user2Name);
+        res.put("user2UserPic", user2UserPic);
         res.put("readStatus", readStatus);
 
         return res;
@@ -123,6 +137,27 @@ public class ChatRoomItem {
     }
 
     /**
+     * gets user 1 user pic id.
+     *
+     * @return user 1 user pic id
+     */
+    public String getUser1UserPic() {
+        return user1UserPic;
+    }
+
+    /**
+     * gets user 1 name.
+     *
+     * @param user1UserPic the user 1 name
+     */
+    public void setUser1UserPic(String user1UserPic) {
+        if (user1UserPic == null || user1UserPic.isEmpty()) {
+            throw new IllegalArgumentException("user1UserPic cannot be null or empty");
+        }
+        this.user1UserPic = user1UserPic;
+    }
+
+    /**
      * Gets user 2 id.
      *
      * @return the user 2 id
@@ -162,6 +197,27 @@ public class ChatRoomItem {
             throw new IllegalArgumentException("Type cannot be null or empty");
         }
         this.user2Name = user2Name;
+    }
+
+    /**
+     * gets user 1 user pic id.
+     *
+     * @return user 1 user pic id
+     */
+    public String getUser2UserPic() {
+        return user2UserPic;
+    }
+
+    /**
+     * gets user 1 name.
+     *
+     * @param user2UserPic the user 1 name
+     */
+    public void setUser2UserPic(String user2UserPic) {
+        if ( user2UserPic == null || user2UserPic.isEmpty()) {
+            throw new IllegalArgumentException("user2UserPic cannot be null or empty");
+        }
+        this.user2UserPic = user2UserPic;
     }
 
     /**

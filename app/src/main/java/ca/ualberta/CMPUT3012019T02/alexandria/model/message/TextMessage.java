@@ -20,7 +20,7 @@ public class TextMessage extends Message {
      * @param date    the date
      * @param sender  the sender
      */
-    public TextMessage(String content, String status, String date, String sender) {
+    public TextMessage(String content, String status, Long date, String sender) {
         super("text", content, status, date, sender);
     }
 

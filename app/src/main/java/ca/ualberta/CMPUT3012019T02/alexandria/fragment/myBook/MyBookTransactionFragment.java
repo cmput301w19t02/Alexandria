@@ -29,12 +29,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ChatRoomActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ISBNLookup;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ChatController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
+import java9.util.concurrent.CompletableFuture;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -43,10 +47,13 @@ public class MyBookTransactionFragment extends Fragment {
     private String status;
     private String isbn;
     private String borrowerId;
+    private String borrowerName;
 
     private BookController bookController = BookController.getInstance();
     private UserController userController = UserController.getInstance();
     private ImageController imageController = ImageController.getInstance();
+    private ChatController chatController = ChatController.getInstance();
+    private ObservableUserCache userCache = ObservableUserCache.getInstance();
 
     private final int RESULT_ISBN = 1;
 
@@ -137,7 +144,7 @@ public class MyBookTransactionFragment extends Fragment {
                     if (userError == null) {
                         String username = userResult.getUsername();
                         String pictureId = userResult.getPicture();
-
+                        borrowerName = username;
                         if (pictureId != null) {
                             imageController.getImage(pictureId)
                                     .handleAsync((imageResult, imageError) -> {
@@ -232,9 +239,27 @@ public class MyBookTransactionFragment extends Fragment {
         startActivity(intentViewOwner);
     }
 
-    //TODO navigate to message fragment
+    //navigate to message fragment
     private void onClickMessageUser() {
-
+        String chatRoomId = userCache.getChatRoomId(borrowerId).orElse(null);;
+        if (chatRoomId == null) {
+            //TODO: Start spinner
+            CompletableFuture<String> addChatRoom = chatController.addChatRoom(userController.getMyId(), borrowerId, borrowerName);
+            addChatRoom.thenAccept(chatId -> {
+                //TODO: stop spinner
+                Intent intentChatRoom = new Intent(getActivity(), ChatRoomActivity.class);
+                intentChatRoom.putExtra("chatId", chatId);
+                intentChatRoom.putExtra("receiverId", borrowerId);
+                intentChatRoom.putExtra("receiverName", borrowerName);
+                startActivity(intentChatRoom);
+            });
+        } else {
+            Intent intentChatRoom = new Intent(getActivity(), ChatRoomActivity.class);
+            intentChatRoom.putExtra("chatId", chatRoomId);
+            intentChatRoom.putExtra("receiverId", borrowerId);
+            intentChatRoom.putExtra("receiverName", borrowerName);
+            startActivity(intentChatRoom);
+        }
     }
 
     //creates a popup menu for user to select options
