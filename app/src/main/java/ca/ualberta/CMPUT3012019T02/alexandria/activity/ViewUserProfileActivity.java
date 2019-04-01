@@ -103,9 +103,17 @@ public class ViewUserProfileActivity extends AppCompatActivity {
 
                                 ImageView imageView = findViewById(R.id.user_profile_image);
                                 runOnUiThread(() -> {
+                                    imageView.setBackgroundResource(0);
                                     imageView.setImageDrawable(drawable);
                                 });
+                            } else {
+                                ImageView imageView = findViewById(R.id.user_profile_image);
+                                runOnUiThread(() -> {
+                                    imageView.setBackgroundResource(R.drawable.ic_profile);
+                                });
                             }
+
+
                         } else {
                             showError(errorImage.getMessage());
                         }
