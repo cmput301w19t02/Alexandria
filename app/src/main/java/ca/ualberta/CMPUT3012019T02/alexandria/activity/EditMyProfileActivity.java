@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -33,6 +34,8 @@ import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
+
+import static ca.ualberta.CMPUT3012019T02.alexandria.App.getContext;
 
 /**
  * Edit current user profile activity
@@ -81,7 +84,7 @@ public class EditMyProfileActivity extends AppCompatActivity {
 
         // register imageView for menu
         ImageView addImageButton = findViewById(R.id.edit_profile_add_image);
-        registerForContextMenu(addImageButton);
+        addImageButton.setOnClickListener(this::setPopupMenu);
 
         // turn of username editing
         EditText etUsername = findViewById(R.id.edit_profile_username);
@@ -91,51 +94,50 @@ public class EditMyProfileActivity extends AppCompatActivity {
         initializePageAndData();
     }
 
+
     /**
-     * inflate menu for add photo options based on the presence of the photo
-     * @param menu menu
-     * @param v view
-     * @param menuInfo context menu info
+     * confirms there is a cover in current session
+     *
+     * @return boolean
      */
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        if (userAvatar == null) {   // if no image
-            inflater.inflate(R.menu.select_take_image_menu, menu);
-        } else {
-            inflater.inflate(R.menu.select_take_delete_image_menu, menu);
-        }
+    public boolean isImageBitmap() {
+        return this.userAvatar != null;
     }
 
     /**
-     * respond to actions when item from options is picked
-     * @param item item clicked
-     * @return boolean
+     * Creates popup menu for adding photos
+     * @param v
      */
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            //menu switch
-            case R.id.option_select_photo:
-                // Select from gallery
-                openGallery();
-                break;
+    private void setPopupMenu(View v){
+        PopupMenu popup = new PopupMenu(getContext(), v);
 
-            case R.id.option_take_photo:
-                // Take camera picture
-                addPhotoCamera();
-                break;
-
-            case R.id.option_delete_photo:
-                // Remove photo
-                removePhoto();
-                break;
-
-            default:
-                throw new RuntimeException("Unknown option");
+        if (!this.isImageBitmap()) {
+            popup.getMenuInflater().inflate(R.menu.select_take_image_menu, popup.getMenu());
+        } else {
+            popup.getMenuInflater().inflate(R.menu.select_take_delete_image_menu, popup.getMenu());
         }
-        return super.onOptionsItemSelected(item);
+
+        popup.setOnMenuItemClickListener((MenuItem item) -> {
+            switch (item.getItemId()) {
+                //menu switch
+                case R.id.option_select_photo:
+                    // Select from gallery
+                    openGallery();
+                    break;
+                case R.id.option_take_photo:
+                    // Take camera picture
+                    addPhotoCamera();
+                    break;
+                case R.id.option_delete_photo:
+                    // Remove photo
+                    removePhoto();
+                    break;
+                default:
+                    throw new RuntimeException("Unknown option");
+            }
+            return true;
+        });
+        popup.show();
     }
 
     /**

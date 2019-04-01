@@ -76,12 +76,17 @@ public class OwnerRecyclerViewAdapter extends RecyclerView.Adapter<OwnerViewHold
         Bitmap bitmap = mOwnerListItem.get(position).getOwnerPic();
         RoundedBitmapDrawable drawable = null;
         if (bitmap != null) {
-            Bitmap squareBitmap = squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
+            Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0, Math.min(bitmap.getWidth(), bitmap.getHeight()), Math.min(bitmap.getWidth(), bitmap.getHeight()));
             drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), squareBitmap);
             drawable.setCornerRadius(Math.min(bitmap.getWidth(), bitmap.getHeight()));
             drawable.setAntiAlias(true);
         }
 
+        if (drawable != null) {
+            myViewHolder.ownerPic.setBackgroundResource(0);
+        } else {
+            myViewHolder.ownerPic.setBackgroundResource(R.drawable.ic_profile);
+        }
         myViewHolder.ownerPic.setImageDrawable(drawable);
         myViewHolder.ownerUsername.setText(mOwnerListItem.get(position).getOwnerUsername());
 

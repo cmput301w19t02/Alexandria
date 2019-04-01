@@ -76,6 +76,7 @@ public class ObservableUserCache extends Observable {
         if (databaseReference != null) {
             databaseReference.removeEventListener(valueEventListener);
         }
+        user = null;
         isAvailable = false;
         databaseReference = database.child("users").child(userController.getMyId());
         databaseReference.addValueEventListener(valueEventListener);
