@@ -95,6 +95,13 @@ public class ChatController {
         return future;
     }
 
+    /**
+     * Change the read status of a chat room for specific user.
+     *
+     * @param chatId chat room id
+     * @param otherUserId the user who needs the read status changed
+     * @param status the status to be changed to
+     */
     public void setUserChatRoomReadStatus(String chatId, String otherUserId, boolean status) {
         setChatRoomReadStatusPrivate(chatId, otherUserId, status);
     }
@@ -108,6 +115,12 @@ public class ChatController {
 
     /* Messaging */
 
+    /**
+     * Send a text message to chat room.
+     *
+     * @param chatId chat room id
+     * @param textMessage text message to send
+     */
     public void addTextMessage(String chatId, TextMessage textMessage){
         addTextMessagePrivate(chatId, textMessage);
     }
@@ -117,6 +130,12 @@ public class ChatController {
         chatMessagesReference.push().setValue(textMessage);
     }
 
+    /**
+     * Send a message with a location to chat room.
+     *
+     * @param chatId chat room id
+     * @param locationMessage location message to send
+     */
     public void addLocationMessage(String chatId, LocationMessage locationMessage){
         addLocationMessagePrivate(chatId, locationMessage);
     }
