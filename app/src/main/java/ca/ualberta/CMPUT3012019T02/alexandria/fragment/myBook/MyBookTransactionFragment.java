@@ -165,6 +165,7 @@ public class MyBookTransactionFragment extends Fragment {
 
                                             activity.runOnUiThread(() -> {
                                                 ivBorrowerPic.setImageDrawable(drawable);
+                                                ivBorrowerPic.setBackgroundResource(0);
                                                 ivBorrowerPic.refreshDrawableState();
                                                 btBorrowerName.setText(username);
                                             });
@@ -173,6 +174,12 @@ public class MyBookTransactionFragment extends Fragment {
                                         }
                                         return null;
                                     });
+                        } else {
+                            activity.runOnUiThread(() -> {
+                                ivBorrowerPic.setBackgroundResource(R.drawable.ic_profile);
+                                ivBorrowerPic.refreshDrawableState();
+                                btBorrowerName.setText(username);
+                            });
                         }
                     } else {
                         Log.e("Error", "Error getting user");
