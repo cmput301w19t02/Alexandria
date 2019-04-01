@@ -137,25 +137,28 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         Button savePin = findViewById(R.id.button_save_pin);
         ProgressBar spinner = findViewById(R.id.location_spinner);
         savePin.setOnClickListener((View v) -> {
+            if (markerExists) {
+                Intent intent = new Intent();
+                double lat = mLastKnownLocation.getLatitude();
+                double lng = mLastKnownLocation.getLongitude();
+                intent.putExtra("lat", lat);
+                intent.putExtra("lng", lng);
 
-            Intent intent = new Intent();
-            double lat = mLastKnownLocation.getLatitude();
-            double lng = mLastKnownLocation.getLongitude();
-            intent.putExtra("lat", lat);
-            intent.putExtra("lng", lng);
+                savePin.setVisibility(View.INVISIBLE);
+                placePin.setVisibility(View.INVISIBLE);
+                spinner.setVisibility(View.VISIBLE);
 
-            savePin.setVisibility(View.INVISIBLE);
-            placePin.setVisibility(View.INVISIBLE);
-            spinner.setVisibility(View.VISIBLE);
-
-            mMap.snapshot((Bitmap bitmap) -> {
-                CompletableFuture<String> addImage = imageController.addImage(bitmap);
-                addImage.thenAccept(imageId -> {
-                    intent.putExtra("imageId", imageId);
-                    setResult(RESULT_OK, intent);
-                    finish();
+                mMap.snapshot((Bitmap bitmap) -> {
+                    CompletableFuture<String> addImage = imageController.addImage(bitmap);
+                    addImage.thenAccept(imageId -> {
+                        intent.putExtra("imageId", imageId);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    });
                 });
-            });
+            } else {
+                Toast.makeText(this , "Add a pin for a location.", Toast.LENGTH_LONG).show();
+            }
         });
     }
 
