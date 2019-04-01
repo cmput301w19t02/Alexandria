@@ -3,7 +3,6 @@ package ca.ualberta.CMPUT3012019T02.alexandria.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -34,6 +33,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.adapter.ChatRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
+import java9.util.concurrent.CompletableFuture;
 
 /**
  * Fragment that shows a list of clickable chat rooms to chat with another user.
@@ -65,7 +65,7 @@ public class MessagesFragment extends Fragment {
      * {@inheritDoc}
      */
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         String myId = UserController.getInstance().getMyId();
@@ -80,73 +80,73 @@ public class MessagesFragment extends Fragment {
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         ChatRoomItem chatRoom = childSnapshot.getValue(ChatRoomItem.class);
                         chatRoomList.add(chatRoom);
-                        new Thread(() -> {
-                           if (!isAdded()) {
-                               return;
-                           }
-                           try {
-                           String user1PicId = chatRoom.getUser1UserPic();
-                           String user2PicId = chatRoom.getUser2UserPic();
-                           String user1Id = chatRoom.getUser1Id();
-                           String user2Id = chatRoom.getUser2Id();
+                        CompletableFuture.runAsync(() -> {
+                            if (!isAdded()) {
+                                return;
+                            }
+                            try {
+                                String user1PicId = chatRoom.getUser1UserPic();
+                                String user2PicId = chatRoom.getUser2UserPic();
+                                String user1Id = chatRoom.getUser1Id();
+                                String user2Id = chatRoom.getUser2Id();
 
-                           Bitmap user1Image = null;
-                           if (user1PicId != null && !user1PicId.equals("temp")) {
-                                user1Image = imageController.getImage(user1PicId)
-                                        .get(5, TimeUnit.SECONDS);
-                           }
+                                Bitmap user1Image = null;
+                                if (user1PicId != null && !user1PicId.equals("temp")) {
+                                    user1Image = imageController.getImage(user1PicId)
+                                            .get(5, TimeUnit.SECONDS);
+                                }
 
-                           Bitmap user2Image = null;
-                           if (user2PicId != null && !user2PicId.equals("temp")) {
-                               user2Image = imageController.getImage(user2PicId)
-                                       .get(5, TimeUnit.SECONDS);
-                           }
+                                Bitmap user2Image = null;
+                                if (user2PicId != null && !user2PicId.equals("temp")) {
+                                    user2Image = imageController.getImage(user2PicId)
+                                            .get(5, TimeUnit.SECONDS);
+                                }
 
-                           Bitmap finalUser1Image = user1Image;
-                           Bitmap finalUser2Image = user2Image;
-                           activity.runOnUiThread(() -> {
-                               if (finalUser1Image != null) {
-                                   Bitmap squareBitmap1 = Bitmap.createBitmap(finalUser1Image,
-                                           0, 0, Math.min(finalUser1Image.getWidth(),
-                                                   finalUser1Image.getHeight()),
-                                           Math.min(finalUser1Image.getWidth(),
-                                                   finalUser1Image.getHeight()));
+                                Bitmap finalUser1Image = user1Image;
+                                Bitmap finalUser2Image = user2Image;
+                                if (finalUser1Image != null) {
+                                    Bitmap squareBitmap1 = Bitmap.createBitmap(finalUser1Image,
+                                            0, 0, Math.min(finalUser1Image.getWidth(),
+                                                    finalUser1Image.getHeight()),
+                                            Math.min(finalUser1Image.getWidth(),
+                                                    finalUser1Image.getHeight()));
 
-                                   RoundedBitmapDrawable drawable1 = RoundedBitmapDrawableFactory
-                                           .create(getResources(), squareBitmap1);
+                                    RoundedBitmapDrawable drawable1 = RoundedBitmapDrawableFactory
+                                            .create(getResources(), squareBitmap1);
 
-                                   drawable1.setCornerRadius(Math.min(finalUser1Image.getWidth(),
-                                           finalUser1Image.getHeight()));
-                                   drawable1.setAntiAlias(true);
+                                    drawable1.setCornerRadius(Math.min(finalUser1Image.getWidth(),
+                                            finalUser1Image.getHeight()));
+                                    drawable1.setAntiAlias(true);
 
-                                   profileImageMap.put(user1Id, drawable1);
+                                    profileImageMap.put(user1Id, drawable1);
 
-                               }
+                                }
 
-                               if (finalUser2Image != null) {
-                                   Bitmap squareBitmap2 = Bitmap.createBitmap(finalUser2Image,
-                                           0, 0, Math.min(finalUser2Image.getWidth(),
-                                                   finalUser2Image.getHeight()),
-                                           Math.min(finalUser2Image.getWidth(),
-                                                   finalUser2Image.getHeight()));
+                                if (finalUser2Image != null) {
+                                    Bitmap squareBitmap2 = Bitmap.createBitmap(finalUser2Image,
+                                            0, 0, Math.min(finalUser2Image.getWidth(),
+                                                    finalUser2Image.getHeight()),
+                                            Math.min(finalUser2Image.getWidth(),
+                                                    finalUser2Image.getHeight()));
 
-                                   RoundedBitmapDrawable drawable2 = RoundedBitmapDrawableFactory
-                                           .create(getResources(), squareBitmap2);
+                                    RoundedBitmapDrawable drawable2 = RoundedBitmapDrawableFactory
+                                            .create(getResources(), squareBitmap2);
 
-                                   drawable2.setCornerRadius(Math.min(finalUser2Image.getWidth(),
-                                           finalUser2Image.getHeight()));
-                                   drawable2.setAntiAlias(true);
+                                    drawable2.setCornerRadius(Math.min(finalUser2Image.getWidth(),
+                                            finalUser2Image.getHeight()));
+                                    drawable2.setAntiAlias(true);
 
-                                   profileImageMap.put(user2Id, drawable2);
+                                    profileImageMap.put(user2Id, drawable2);
 
-                               }
-                               adapter.updateProfileImageMap(profileImageMap);
-                               adapter.notifyDataSetChanged();
-                           });
-                           } catch (Exception e) {
-                               e.printStackTrace();
-                           }
-                        }).start();
+                                }
+                                getActivity().runOnUiThread(() -> {
+                                    adapter.updateProfileImageMap(profileImageMap);
+                                    adapter.notifyDataSetChanged();
+                                });
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
 
                     }
                 } else {
@@ -166,8 +166,9 @@ public class MessagesFragment extends Fragment {
 
     /**
      * Assigns ChatRecyclerViewAdapter to the chat recycler view, and creates the view
-     *
+     * <p>
      * {@inheritDoc}
+     *
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -192,7 +193,7 @@ public class MessagesFragment extends Fragment {
      * {@inheritDoc}
      */
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 
         /**
