@@ -30,6 +30,11 @@ public class BookDataAdapter extends Observable {
 
     private static BookDataAdapter instance;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static BookDataAdapter getInstance() {
         if (instance == null) {
             instance = new BookDataAdapter();

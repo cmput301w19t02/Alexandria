@@ -33,9 +33,9 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
     /**
      * Instantiates a new Book recycler view adapter.
      *
-     * @param mContext    the application context
-     * @param mBookListItem   the book list
-     * @param destination the destination
+     * @param mContext      the application context
+     * @param mBookListItem the book list
+     * @param destination   the destination
      */
     public BookRecyclerViewAdapter(Context mContext,
                                    List<BookListItem> mBookListItem, String destination) {
@@ -122,6 +122,11 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
         return b;
     }
 
+    /**
+     * Sets book list item.
+     *
+     * @param bookListItem the book list item
+     */
     public void setmBookListItem(List<BookListItem> bookListItem) {
         this.mBookListItem = bookListItem;
     }

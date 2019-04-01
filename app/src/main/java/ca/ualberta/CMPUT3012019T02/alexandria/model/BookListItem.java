@@ -55,11 +55,12 @@ public class BookListItem {
     /**
      * Constructor for BookListItem
      *
-     * @param cover  bitmap of cover image
-     * @param title  title of the book
-     * @param author author of the book
-     * @param isbn   isbn of the book
-     * @param status status
+     * @param cover   bitmap of cover image
+     * @param coverId the cover id
+     * @param title   title of the book
+     * @param author  author of the book
+     * @param isbn    isbn of the book
+     * @param status  status
      * @param ownerId the id of the owner
      */
     public BookListItem(Bitmap cover, String coverId, String title, String author,
@@ -192,10 +193,20 @@ public class BookListItem {
      */
     public void setOwnerId(String owner) { this.ownerId = owner; }
 
+    /**
+     * Gets cover id.
+     *
+     * @return the cover id
+     */
     public String getCoverId() {
         return coverId;
     }
 
+    /**
+     * Sets cover id.
+     *
+     * @param coverId the cover id
+     */
     public void setCoverId(String coverId) {
         this.coverId = coverId;
     }

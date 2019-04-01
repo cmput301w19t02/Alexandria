@@ -17,6 +17,9 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
  */
 public class ViewImageActivity extends AppCompatActivity {
 
+    /**
+     * The bundle constant IMAGE_ID.
+     */
     public static final String IMAGE_ID = "IMAGE_ID";
     private String image_id;
 

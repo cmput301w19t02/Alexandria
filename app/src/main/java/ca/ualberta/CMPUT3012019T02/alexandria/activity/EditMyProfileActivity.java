@@ -42,8 +42,17 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
  */
 public class EditMyProfileActivity extends AppCompatActivity {
 
+    /**
+     * The RESULT_CAMERA intent constant
+     */
     public static final int RESULT_CAMERA = 1;
+    /**
+     * The RESULT_GALLERY intent constant
+     */
     public static final int RESULT_GALLERY = 2;
+    /**
+     * The Request permission phone state intent constant
+     */
     public final int REQUEST_PERMISSION_PHONE_STATE = 5;
 
     private UserController userController;
@@ -341,6 +350,7 @@ public class EditMyProfileActivity extends AppCompatActivity {
     /**
      * attempts to set editTexts to values entered, if no error
      * saves userProfile, otherwise, shows an error
+     *
      * @param view View
      */
     public void onSaveButtonClick(View view) {

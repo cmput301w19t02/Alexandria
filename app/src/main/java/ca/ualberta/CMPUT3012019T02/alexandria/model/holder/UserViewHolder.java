@@ -19,16 +19,36 @@ import ca.ualberta.CMPUT3012019T02.alexandria.adapter.UserRecyclerViewAdapter;
  * https://stackoverflow.com/questions/30284067/handle-button-click-inside-a-row-in-recyclerview
  * on March 17, 2018
  */
-
 public class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+    /**
+     * The Item user.
+     */
     public RelativeLayout itemUser;
+    /**
+     * The Iv user pic.
+     */
     public ImageView ivUserPic;
+    /**
+     * The Bt user.
+     */
     public Button btUser;
+    /**
+     * The Ibt message.
+     */
     public ImageButton ibtMessage;
+    /**
+     * The Ibt ellipses.
+     */
     public ImageButton ibtEllipses;
     private WeakReference<UserRecyclerViewAdapter.UserRecyclerListener> listenerRef;
 
+    /**
+     * Instantiates a new User view holder.
+     *
+     * @param itemView  the item view
+     * @param mListener the a UserRecyclerListener listener
+     */
     public UserViewHolder(@NonNull View itemView,
                           UserRecyclerViewAdapter.UserRecyclerListener mListener) {
         super(itemView);

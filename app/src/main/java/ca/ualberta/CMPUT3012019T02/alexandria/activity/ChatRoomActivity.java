@@ -118,9 +118,6 @@ public class ChatRoomActivity extends AppCompatActivity {
                 input.setText("");
             }
         });
-
-        ImageView locationButton = findViewById(R.id.image_location);
-        locationButton.setOnClickListener((View v) -> onAddLocationClick());
     }
 
     @Override
@@ -154,7 +151,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStop(){
+    protected void onStop(){
         super.onStop();
         messagesRef.removeEventListener(messagesListener);
     }

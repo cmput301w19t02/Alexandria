@@ -33,6 +33,7 @@ public class ObservableUserCache extends Observable {
     private UserController userController = UserController.getInstance();
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
     private boolean isAvailable = false;
+
     /**
      * Gets instance.
      *
