@@ -20,13 +20,12 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-
+import static org.hamcrest.CoreMatchers.allOf;
 
 /**
  * This class tests the LoginActivity
@@ -60,7 +59,7 @@ public class LoginActivityTests {
         String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
         String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
 
-        onView(withId(R.id.login_usernname_field)).perform(scrollTo(), typeText(username));
+        onView(withId(R.id.login_username_field)).perform(scrollTo(), typeText(username));
         onView(withId(R.id.login_password_field)).perform(scrollTo(), typeText(password));
 
         onView(withId(R.id.login_button)).perform(click());
@@ -74,24 +73,24 @@ public class LoginActivityTests {
     public void testInvalidPassword() throws InterruptedException {
         String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
 
-        onView(withId(R.id.login_usernname_field)).perform(scrollTo(), typeText(username));
-        onView(withId(R.id.login_password_field)).perform(scrollTo(), typeText("5"));
+        onView(withId(R.id.login_username_field)).perform(scrollTo(), typeText(username));
+        onView(withId(R.id.login_password_field)).perform(scrollTo(), typeText(""));
 
         onView(withId(R.id.login_button)).perform(click());
 
-        onView(withText("Error: Password is invalid! Password must contain at least 8 characters.")).inRoot(withDecorView(not(is(loginActivityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        onView(withId(R.id.error_message)).check(matches(withText(R.string.login_error)));
     }
 
     @Test
     public void testInvalidUsername() {
         String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
 
-        onView(withId(R.id.login_usernname_field)).perform(scrollTo(), typeText("0"));
+        onView(withId(R.id.login_username_field)).perform(scrollTo(), typeText(""));
         onView(withId(R.id.login_password_field)).perform(scrollTo(), typeText(password));
 
         onView(withId(R.id.login_button)).perform(click());
 
-        onView(withText("Error: Username is invalid! Username must contain at least 4 character.")).inRoot(withDecorView(not(is(loginActivityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        onView(withId(R.id.error_message)).check(matches(withText(R.string.login_error)));
     }
 
     @Test
@@ -103,7 +102,7 @@ public class LoginActivityTests {
 
         onView(withId(R.id.sign_up_button)).check(matches(isDisplayed()));
 
-        onView(withId(R.id.sign_up_back)).perform(forcedClick);
+        onView(allOf(withParent(withId(R.id.sign_up_toolbar)),isClickable())).perform(forcedClick);
 
         Thread.sleep(1000);
 
