@@ -124,8 +124,8 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart(){
-        super.onStart();
+    public void onResume(){
+        super.onResume();
 
         RecyclerView mRecyclerView = findViewById(R.id.message_recycler);
         adapter = new MessageRecyclerViewAdapter(this, messageList);
@@ -237,7 +237,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 userController.getMyProfile().handleAsync((result, error) -> {
                     if (error == null) {
                         notificationController.sendNotification(receiverId,
-                                "New Meet up Location from " + result.getName(),
+                                "New Meet up Location from " + result.getUsername(),
                                 "Go to your messages to see the new place to meet");
                     } else {
                         //handle error

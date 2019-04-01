@@ -123,7 +123,7 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter {
                                  @Override
                                  public void onClick(View v) {
                                      String zoom = "15";
-                                     String geoString = "geo:" + lat + "," + lng + "?z=" + zoom;
+                                     String geoString = "geo:" + lat + "," + lng + "?z=" + zoom + "&q=" + lat + "," + lng;
                                      Uri intentUri = Uri.parse(geoString);
                                      Intent mapIntent = new Intent(Intent.ACTION_VIEW, intentUri);
                                      mapIntent.setPackage("com.google.android.apps.maps");
