@@ -54,6 +54,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
     private Location mLastKnownLocation;
+    private boolean markerExists = false;
 
     private ImageController imageController = ImageController.getInstance();
 
@@ -114,6 +115,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                 // set pin to default location
                 mMap.addMarker(new MarkerOptions().position(mDefaultLocation).draggable(true));
             }
+            markerExists = true;
             mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                 @Override
                 public void onMarkerDragStart(Marker marker) {}
@@ -133,22 +135,25 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         // Save current pin location to the location message
         Button savePin = findViewById(R.id.button_save_pin);
         savePin.setOnClickListener((View v) -> {
-
-            Intent intent = new Intent();
-            double lat = mLastKnownLocation.getLatitude();
-            double lng = mLastKnownLocation.getLongitude();
-            intent.putExtra("lat", lat);
-            intent.putExtra("lng", lng);
-            //TODO: start spinner
-            mMap.snapshot((Bitmap bitmap) -> {
-                CompletableFuture<String> addImage = imageController.addImage(bitmap);
-                addImage.thenAccept(imageId -> {
-                    //TODO: stop spinner
-                    intent.putExtra("imageId", imageId);
-                    setResult(RESULT_OK, intent);
-                    finish();
+            if (markerExists) {
+                Intent intent = new Intent();
+                double lat = mLastKnownLocation.getLatitude();
+                double lng = mLastKnownLocation.getLongitude();
+                intent.putExtra("lat", lat);
+                intent.putExtra("lng", lng);
+                //TODO: start spinner
+                mMap.snapshot((Bitmap bitmap) -> {
+                    CompletableFuture<String> addImage = imageController.addImage(bitmap);
+                    addImage.thenAccept(imageId -> {
+                        //TODO: stop spinner
+                        intent.putExtra("imageId", imageId);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    });
                 });
-            });
+            } else {
+                Toast.makeText(this , "Please add a specific location.", Toast.LENGTH_LONG).show();
+            }
         });
     }
 
