@@ -30,7 +30,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import java9.util.concurrent.CompletableFuture;
 
 /**
- * The type Search controller.
+ * The controller for Search operations
  */
 public class SearchController {
 
@@ -111,6 +111,13 @@ public class SearchController {
         return resultFuture;
     }
 
+    /**
+     * Compares two isbns
+     *
+     * @param isbn1 the isbn 1
+     * @param isbn2 the isbn 2
+     * @return the completable future with result
+     */
     public CompletableFuture<Boolean> compareIsbn(String isbn1, String isbn2) {
         final CompletableFuture<Boolean> compareFuture = new CompletableFuture<>();
 
@@ -163,6 +170,12 @@ public class SearchController {
         return compareFuture;
     }
 
+    /**
+     * Search isbn
+     *
+     * @param isbn the isbn
+     * @return the completable future with book information
+     */
     public CompletableFuture<Book> searchIsbn(String isbn) {
         final CompletableFuture<Book> future = new CompletableFuture<>();
 

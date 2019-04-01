@@ -17,6 +17,9 @@ import ca.ualberta.CMPUT3012019T02.alexandria.activity.MainActivity;
 
 import static ca.ualberta.CMPUT3012019T02.alexandria.App.getContext;
 
+/**
+ * The service for handling notifications
+ */
 public class NotificationService extends FirebaseMessagingService {
 
 

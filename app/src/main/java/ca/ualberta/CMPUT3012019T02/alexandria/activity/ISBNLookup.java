@@ -19,7 +19,9 @@ import com.google.zxing.Result;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
-
+/**
+ * Activity for scanning isbns
+ */
 public class ISBNLookup extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     private ZXingScannerView mScannerView;

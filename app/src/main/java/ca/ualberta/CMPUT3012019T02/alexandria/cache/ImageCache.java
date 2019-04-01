@@ -41,7 +41,7 @@ public class ImageCache {
      * Put book into cache
      *
      * @param imageId of the image
-     * @param image the image
+     * @param image   the image
      */
     public void putImage(String imageId, Bitmap image) {
         cache.put(imageId, image);

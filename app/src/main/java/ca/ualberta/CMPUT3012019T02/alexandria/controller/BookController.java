@@ -493,6 +493,12 @@ public class BookController {
         return future;
     }
 
+    /**
+     * Updates db after scaning my owned book
+     *
+     * @param isbn the isbn
+     * @return future completable future
+     */
     public CompletableFuture<Void> scanMyOwnedBook(@NonNull String isbn) {
         if (!userController.isAuthenticated()) {
             return CompletableFuture.failedFuture(new IllegalStateException("Not currently logged in"));
@@ -952,8 +958,8 @@ public class BookController {
     /**
      * Gets an owned book from the user's collection of owned books
      *
-     * @param userId id of the user
      * @param isbn   isbn of the book
+     * @param userId id of the user
      * @return a CompletableFuture that returns an optional that may or may not contain the owned book
      */
     public CompletableFuture<Optional<OwnedBook>> getUserOwnedBook(@NonNull String isbn, @NonNull String userId) {
@@ -975,6 +981,7 @@ public class BookController {
     /**
      * Gets a user's collection of owned books
      *
+     * @param userId the user id
      * @return a CompletableFuture that contains a collection of owned books
      */
     public CompletableFuture<Collection<OwnedBook>> getUserOwnedBooks(String userId) {
@@ -1003,22 +1010,29 @@ public class BookController {
     /* Database Paths */
 
 
-    public String getBookPath(@NonNull String isbn) {
+    private String getBookPath(@NonNull String isbn) {
         return "books/" + isbn;
     }
 
-    public String getBorrowedBooksPath(@NonNull String userId) {
+    private String getBorrowedBooksPath(@NonNull String userId) {
         return "users/" + userId + "/borrowedBooks";
     }
 
-    public String getBorrowedBookPath(@NonNull String userId, @NonNull String isbn) {
+    private String getBorrowedBookPath(@NonNull String userId, @NonNull String isbn) {
         return "users/" + userId + "/borrowedBooks/" + isbn;
     }
 
-    public String getOwnedBooksPath(@NonNull String userId) {
+    private String getOwnedBooksPath(@NonNull String userId) {
         return "users/" + userId + "/ownedBooks";
     }
 
+    /**
+     * Gets owned book path.
+     *
+     * @param userId the user id
+     * @param isbn   the isbn
+     * @return the owned book path
+     */
     public String getOwnedBookPath(@NonNull String userId, @NonNull String isbn) {
         return "users/" + userId + "/ownedBooks/" + isbn;
     }

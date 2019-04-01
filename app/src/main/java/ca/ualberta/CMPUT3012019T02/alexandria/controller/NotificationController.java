@@ -10,6 +10,9 @@ import java.util.Map;
 
 import java9.util.concurrent.CompletableFuture;
 
+/**
+ * The controller for Notifications
+ */
 public class NotificationController {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseFunctions functions = FirebaseFunctions.getInstance();
@@ -28,6 +31,11 @@ public class NotificationController {
         return instance;
     }
 
+    /**
+     * Sets device token for current device
+     *
+     * @return a future with the success of the operation
+     */
     public CompletableFuture<Void> setDeviceToken() {
         CompletableFuture<Void> future = new java9.util.concurrent.CompletableFuture<>();
         CompletableFuture.runAsync(() -> {
@@ -52,6 +60,14 @@ public class NotificationController {
         return future;
     }
 
+    /**
+     * Send notification completable future.
+     *
+     * @param userId  the user id
+     * @param title   the title
+     * @param message the message
+     * @return a future with the success of the operation
+     */
     public CompletableFuture<Void> sendNotification(String userId, String title, String message) {
         CompletableFuture<Void> future = new java9.util.concurrent.CompletableFuture<>();
         Map<String, Object> data = new HashMap<>();

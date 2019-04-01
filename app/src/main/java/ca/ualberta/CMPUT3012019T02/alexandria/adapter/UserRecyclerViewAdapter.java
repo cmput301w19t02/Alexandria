@@ -23,6 +23,13 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserViewHolder
     private List<UserListItem> mUserListItem;
     private UserRecyclerListener mListener;
 
+    /**
+     * Instantiates a new User recycler view adapter.
+     *
+     * @param mContext      the application context
+     * @param mUserListItem the user list item list
+     * @param mListener     the a UserRecyclerListener
+     */
     public UserRecyclerViewAdapter(
             Context mContext, List<UserListItem> mUserListItem, UserRecyclerListener mListener) {
         this.mContext = mContext;
@@ -58,12 +65,31 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserViewHolder
         return mUserListItem.size();
     }
 
-    //sets up click functions for the user item
+    /**
+     * The interface User recycler listener.
+     */
+//sets up click functions for the user item
     public interface UserRecyclerListener {
+        /**
+         * Message click.
+         *
+         * @param position the position
+         */
         void messageClick(int position);
 
+        /**
+         * User click.
+         *
+         * @param position the position
+         */
         void userClick(int position);
 
+        /**
+         * Ellipses click.
+         *
+         * @param v        the v
+         * @param position the position
+         */
         void ellipsesClick(View v, int position);
     }
 

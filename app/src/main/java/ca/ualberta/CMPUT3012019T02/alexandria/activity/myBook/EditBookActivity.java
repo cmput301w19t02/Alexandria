@@ -35,8 +35,7 @@ import static ca.ualberta.CMPUT3012019T02.alexandria.App.getContext;
  */
 public class EditBookActivity extends AddNewBookActivity {
 
-    public static final String EDIT_BOOK_TITLE = "Edit Book";
-    public static final String ISBN_KEY = "BOOK_ISBN";
+    private static final String ISBN_KEY = "BOOK_ISBN";
 
     private Book myBook;
     private OwnedBook myOwnedBook;
@@ -214,7 +213,7 @@ public class EditBookActivity extends AddNewBookActivity {
 
         // Set new title
         TextView tvTitle = findViewById(R.id.add_book_title);
-        tvTitle.setText(EDIT_BOOK_TITLE);
+        tvTitle.setText(R.string.edit_book);
 
         Button saveButton = findViewById(R.id.add_book_save);
         saveButton.setText(getString(R.string.edit_book_save));

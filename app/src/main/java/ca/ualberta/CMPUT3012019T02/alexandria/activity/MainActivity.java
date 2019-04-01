@@ -135,6 +135,11 @@ public class MainActivity extends AppCompatActivity
          startActivity(startProfileActivity);
     }
 
+    /**
+     * Returns if the activity is fetching
+     *
+     * @return the boolean
+     */
     public boolean isFetching(){
         return this.fetching;
     }

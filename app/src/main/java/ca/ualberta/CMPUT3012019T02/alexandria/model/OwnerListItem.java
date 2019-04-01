@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * The type Owner list item.
+ */
 public class OwnerListItem {
 
     private Bitmap ownerPic;
@@ -41,10 +44,22 @@ public class OwnerListItem {
         return new OwnerListItemComparator();
     }
 
+    /**
+     * Instantiates a new Owner list item.
+     */
     public OwnerListItem() {
     }
 
 
+    /**
+     * Instantiates a new Owner list item.
+     *
+     * @param ownerPic      the owner pic
+     * @param ownerUsername the owner username
+     * @param ownerId       the owner id
+     * @param isbn          the isbn
+     * @param status        the status
+     */
     public OwnerListItem(Bitmap ownerPic, String ownerUsername, String ownerId, String isbn, String status) {
         this.ownerPic = ownerPic;
         this.ownerUsername = ownerUsername;
@@ -54,42 +69,92 @@ public class OwnerListItem {
     }
 
 
+    /**
+     * Gets owner pic.
+     *
+     * @return the owner pic
+     */
     public Bitmap getOwnerPic() {
         return ownerPic;
     }
 
+    /**
+     * Sets owner pic.
+     *
+     * @param ownerPic the owner pic
+     */
     public void setOwnerPic(Bitmap ownerPic) {
         this.ownerPic = ownerPic;
     }
 
+    /**
+     * Gets owner username.
+     *
+     * @return the owner username
+     */
     public String getOwnerUsername() {
         return ownerUsername;
     }
 
+    /**
+     * Sets owner username.
+     *
+     * @param ownerUsername the owner username
+     */
     public void setOwnerUsername(String ownerUsername) {
         this.ownerUsername = ownerUsername;
     }
 
+    /**
+     * Gets owner id.
+     *
+     * @return the owner id
+     */
     public String getOwnerId() {
         return ownerId;
     }
 
+    /**
+     * Sets owner id.
+     *
+     * @param ownerId the owner id
+     */
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
 
+    /**
+     * Gets isbn.
+     *
+     * @return the isbn
+     */
     public String getIsbn() {
         return isbn;
     }
 
+    /**
+     * Sets isbn.
+     *
+     * @param isbn the isbn
+     */
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 
+    /**
+     * Gets status.
+     *
+     * @return the status
+     */
     public String getStatus() {
         return status;
     }
 
+    /**
+     * Sets status.
+     *
+     * @param status the status
+     */
     public void setStatus(String status) {
         this.status = status;
     }

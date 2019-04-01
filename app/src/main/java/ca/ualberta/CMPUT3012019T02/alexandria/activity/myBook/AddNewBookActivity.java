@@ -43,9 +43,21 @@ import static ca.ualberta.CMPUT3012019T02.alexandria.App.getContext;
  */
 public class AddNewBookActivity extends AppCompatActivity {
 
+    /**
+     * The RESULT_CAMERA intent constant.
+     */
     public static final int RESULT_CAMERA = 1;
+    /**
+     * The RESULT_GALLERY intent constant.
+     */
     public static final int RESULT_GALLERY = 2;
+    /**
+     * The Result isbn.
+     */
     public final int RESULT_ISBN = 3;
+    /**
+     * The Request permission phone state.
+     */
     public final int REQUEST_PERMISSION_PHONE_STATE = 5;
 
     private Book book;
@@ -113,7 +125,8 @@ public class AddNewBookActivity extends AppCompatActivity {
 
     /**
      * confirms there is a cover in current session
-     * @return
+     *
+     * @return boolean
      */
     public boolean isImageBitmap() {
         return this.coverBitmap != null;
@@ -131,7 +144,6 @@ public class AddNewBookActivity extends AppCompatActivity {
 
     /**
      * Adds photo from camera
-     *
      */
     public void addPhotoCamera() {
         // Todo: implement other possibilities
@@ -236,6 +248,8 @@ public class AddNewBookActivity extends AppCompatActivity {
 
     /**
      * Scan isbn.
+     *
+     * @param view the view
      */
     public void scanISBN(View view) {
         Intent intentScan = new Intent(this, ISBNLookup.class);
@@ -252,6 +266,8 @@ public class AddNewBookActivity extends AppCompatActivity {
 
     /**
      * Adds a book to the database and sets a user as one of the owners for that book. Quits.
+     *
+     * @param view the view
      */
     public void addBook(View view) {
         fetchData();
@@ -430,6 +446,7 @@ public class AddNewBookActivity extends AppCompatActivity {
 
     /**
      * show error in toast
+     *
      * @param message error message
      */
     public void showError(String message) {

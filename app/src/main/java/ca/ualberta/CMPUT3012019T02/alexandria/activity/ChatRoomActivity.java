@@ -106,7 +106,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart(){
+    protected void onStart(){
         super.onStart();
 
         RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.message_recycler);
@@ -126,7 +126,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStop(){
+    protected void onStop(){
         super.onStop();
         messagesRef.removeEventListener(messagesListener);
     }

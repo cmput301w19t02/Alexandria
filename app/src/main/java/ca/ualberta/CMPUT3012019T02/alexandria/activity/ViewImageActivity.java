@@ -12,8 +12,14 @@ import android.widget.Toast;
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 
+/**
+ * The type View image activity.
+ */
 public class ViewImageActivity extends AppCompatActivity {
 
+    /**
+     * The bundle constant IMAGE_ID.
+     */
     public static final String IMAGE_ID = "IMAGE_ID";
     private String image_id;
 
@@ -79,6 +85,11 @@ public class ViewImageActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Show error.
+     *
+     * @param message the message
+     */
     public void showError(String message) {
         Toast.makeText(this, "Error: " + message, Toast.LENGTH_LONG).show();
     }
