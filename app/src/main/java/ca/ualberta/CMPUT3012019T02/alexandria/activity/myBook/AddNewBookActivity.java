@@ -39,7 +39,8 @@ import java9.util.Optional;
 import static ca.ualberta.CMPUT3012019T02.alexandria.App.getContext;
 
 /**
- * The Add new book activity.
+ * Activity to add an instance of a book with title, author, and ISBN, optionally image,
+ * to the database
  */
 public class AddNewBookActivity extends AppCompatActivity {
 
@@ -66,10 +67,11 @@ public class AddNewBookActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
 
+        // back button
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        // register imageView for menu
+        // register imageView for creating menu of image input
         ImageView addImageButton = findViewById(R.id.add_book_add_image);
         addImageButton.setOnClickListener(this::setPopupMenu);
     }
@@ -131,11 +133,10 @@ public class AddNewBookActivity extends AppCompatActivity {
 
     /**
      * Adds photo from camera
+     * asks for permission if not granted already
      *
      */
     public void addPhotoCamera() {
-        // Todo: implement other possibilities
-
         int permissionCheck = ContextCompat.checkSelfPermission(
                 this, Manifest.permission.CAMERA);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -151,7 +152,7 @@ public class AddNewBookActivity extends AppCompatActivity {
     }
 
     /**
-     * camera, scan, gallery
+     * on return to activity with result, deals with camera, scan, gallery
      *
      * @param requestCode result code
      * @param resultCode confirmation code
@@ -178,10 +179,12 @@ public class AddNewBookActivity extends AppCompatActivity {
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            SearchController.getInstance().searchIsbn(isbn).handleAsync((searchedBook, throwable) -> {
+            SearchController.getInstance().searchIsbn(isbn)
+                    .handleAsync((searchedBook, throwable) -> {
                 this.searchedBook = searchedBook;
                 try {
-                    coverBitmap = ImageController.getInstance().getImage(searchedBook.getImageId()).get(5, TimeUnit.SECONDS);
+                    coverBitmap = ImageController.getInstance().getImage(searchedBook.getImageId())
+                            .get(5, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {
@@ -223,7 +226,7 @@ public class AddNewBookActivity extends AppCompatActivity {
 
     /**
      * https://stackoverflow.com/questions/13023788/how-to-load-an-image-in-image-view-from-gallery
-     * returns bitmap image from uri
+     * returns bitmap image from uri on return from gallery
      */
     private Bitmap getBitmapFromUri(Uri uri) throws IOException {
         ParcelFileDescriptor parcelFileDescriptor =
@@ -235,7 +238,7 @@ public class AddNewBookActivity extends AppCompatActivity {
     }
 
     /**
-     * Scan isbn.
+     * opens up a camera for isbn scanning from a book
      */
     public void scanISBN(View view) {
         Intent intentScan = new Intent(this, ISBNLookup.class);
@@ -243,7 +246,7 @@ public class AddNewBookActivity extends AppCompatActivity {
     }
 
     /**
-     * choose image from gallery
+     * opens phone files to choose image from the gallery
      */
     public void openGallery() {
         Intent intentGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
@@ -251,7 +254,8 @@ public class AddNewBookActivity extends AppCompatActivity {
     }
 
     /**
-     * Adds a book to the database and sets a user as one of the owners for that book. Quits.
+     * Adds a book to the database from the input obtained from the user
+     * and sets a user as one of the owners for that book. Quits.
      */
     public void addBook(View view) {
         fetchData();
@@ -263,6 +267,7 @@ public class AddNewBookActivity extends AppCompatActivity {
      */
     private void saveBook() {
 
+        // ISBN, title, author check
         if (isbn.length() != 10 && isbn.length() != 13) {
             showError("Invalid ISBN");
             return;
@@ -289,7 +294,8 @@ public class AddNewBookActivity extends AppCompatActivity {
 
             if (coverBitmap != null) {
                 try {
-                    imageID = ImageController.getInstance().addImage(coverBitmap).get(5, TimeUnit.SECONDS);
+                    imageID = ImageController.getInstance()
+                            .addImage(coverBitmap).get(5, TimeUnit.SECONDS);
                 } catch (Exception e) {
                     e.printStackTrace();
                     runOnUiThread(() -> {
@@ -333,8 +339,10 @@ public class AddNewBookActivity extends AppCompatActivity {
                 // try to get the image for this book from google
                 if (searchedBook == null) {
                     try {
-                        searchedBook = SearchController.getInstance().searchIsbn(isbn).get(5, TimeUnit.SECONDS);
-                        book = new Book(isbn, title, author, description, searchedBook.getImageId());
+                        searchedBook = SearchController.getInstance()
+                                .searchIsbn(isbn).get(5, TimeUnit.SECONDS);
+                        book = new Book(isbn, title, author, description,
+                                searchedBook.getImageId());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -400,7 +408,7 @@ public class AddNewBookActivity extends AppCompatActivity {
     }
 
     /**
-     * Collects data from input fields/
+     * Collects data from input fields
      */
     private void fetchData() {
         AppCompatEditText titleField = findViewById(R.id.add_book_add_title_field);
