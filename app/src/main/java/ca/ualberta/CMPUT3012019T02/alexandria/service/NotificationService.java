@@ -25,7 +25,7 @@ public class NotificationService extends FirebaseMessagingService {
 
     // Based on https://stackoverflow.com/questions/16045722/notification-not-showing
     // And https://github.com/firebase/quickstart-android/blob/d307afe958a672bebdf3394c10017cc671c027e2/messaging/app/src/main/java/com/google/firebase/quickstart/fcm/java/MyFirebaseMessagingService.java
-    // Both licensed under cc by-sa 3.0 and Apache License, Version 2.0 respectively
+    // Both licensed under MIT License and Apache License, Version 2.0 respectively
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
