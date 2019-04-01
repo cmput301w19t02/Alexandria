@@ -1,0 +1,291 @@
+@startuml
+
+title __USER's Class Diagram__\n
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom {
+      class ChatRoomItem {
+        - chatId : String
+        - user1Id : String
+        - user1Name : String
+        - user1UserPic : String
+        - user2Id : String
+        - user2Name : String
+        - user2UserPic : String
+        - readStatus : boolean
+        + ChatRoomItem()
+        + ChatRoomItem()
+        + toMap()
+        + getUser1Id()
+        + setUser1Id()
+        + getUser1Name()
+        + setUser1Name()
+        + getUser1UserPic()
+        + setUser1UserPic()
+        + getUser2Id()
+        + setUser2Id()
+        + getUser2Name()
+        + setUser2Name()
+        + getUser2UserPic()
+        + setUser2UserPic()
+        + getChatId()
+        + setChatId()
+        + getReadStatus()
+        + setReadStatus()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    class Book {
+      - isbn : String
+      - title : String
+      - author : String
+      - description : String
+      - imageId : String
+      - availableFrom : Map<String, Integer>
+      + Book()
+      + Book()
+      + Book()
+      + getIsbn()
+      + getTitle()
+      + setTitle()
+      + getAuthor()
+      + setAuthor()
+      + getDescription()
+      + setDescription()
+      + getImageId()
+      + setImageId()
+      + getAvailableOwners()
+      + getAvailableFrom()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+      class BorrowedBook {
+        + BorrowedBook()
+        + BorrowedBook()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+      class OwnedBook {
+        - requesting : Map<String, Integer>
+        - removedRequests : Map<String, Integer>
+        - state : State
+        - imageId : String
+        - userBorrowing : String
+        + OwnedBook()
+        + OwnedBook()
+        + OwnedBook()
+        + getRequestingUsers()
+        + getRequesting()
+        + getRemovedRequests()
+        + getImageId()
+        + setImageId()
+        + getUserBorrowing()
+        + updateState()
+        - setState()
+        + addRequest()
+        + cancelRequest()
+        + acceptRequest()
+        + exchange()
+        + beReturned()
+      }
+    }
+  }
+}
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+      interface State {
+        {abstract} + addRequest()
+        {abstract} + cancelRequest()
+        {abstract} + acceptRequest()
+        {abstract} + exchange()
+        {abstract} + beReturned()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+      class Available {
+        ~ Available()
+        + addRequest()
+        + cancelRequest()
+        + acceptRequest()
+        + exchange()
+        + beReturned()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+      class Requested {
+        ~ Requested()
+        + addRequest()
+        + cancelRequest()
+        + acceptRequest()
+        + exchange()
+        + beReturned()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+      class Accepted {
+        ~ Accepted()
+        + addRequest()
+        + cancelRequest()
+        + acceptRequest()
+        + exchange()
+        + beReturned()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+      class Borrowed {
+        ~ Borrowed()
+        + addRequest()
+        + cancelRequest()
+        + acceptRequest()
+        + exchange()
+        + beReturned()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+      class User {
+        - chatRoomList : Map<String, ChatRoomItem>
+        - ownedBooks : Map<String, OwnedBook>
+        - borrowedBooks : Map<String, BorrowedBook>
+        - userProfile : UserProfile
+        - id : String
+        + User()
+        + getChatRoomList()
+        + getOwnedBooks()
+        + getBorrowedBooks()
+        + getProfile()
+        + getId()
+      }
+    }
+  }
+}
+
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+      abstract class UserBook {
+        - isbn : String
+        - status : String
+        - owner : String
+        - scanned : boolean
+        ~ UserBook()
+        + getIsbn()
+        + getStatus()
+        + setStatus()
+        + getOwner()
+        + getScanned()
+        + setScanned()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.user {
+      class UserProfile {
+        - name : String
+        - email : String
+        - phone : String
+        - picture : String
+        - username : String
+        + UserProfile()
+        + UserProfile()
+        + getName()
+        + setName()
+        + getEmail()
+        + setEmail()
+        + getPhone()
+        + setPhone()
+        + getPicture()
+        + setPicture()
+        + getUsername()
+        + setUsername()
+      }
+    }
+  }
+}
+
+
+note left of State
+  State Pattern
+end note
+
+BorrowedBook -up-|> UserBook
+OwnedBook -up-|> UserBook
+OwnedBook o-- "1" State
+OwnedBook +-- State
+OwnedBook +-- Available
+OwnedBook +-- Requested
+OwnedBook +-- Accepted
+OwnedBook +-- Borrowed
+Available -up-|> State
+Requested -up-|> State
+Accepted -up-|> State
+Borrowed -up-|> State
+User o-- "1" UserProfile
+User o-- "*" BorrowedBook
+User o-- "*" OwnedBook
+User o-- "*" ChatRoomItem
+
+Book "1" -- "1" UserBook : isbn
+
+right footer
+
+
+  PlantUML diagram partly generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+  For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

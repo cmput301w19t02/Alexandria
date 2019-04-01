@@ -1,0 +1,263 @@
+@startuml
+
+title __MISC. FRAGMENT's Class Diagram__\n
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.adapter {
+    class ChatRecyclerViewAdapter {
+      {static} - MESSAGE_READ : int
+      {static} - MESSAGE_UNREAD : int
+      - mContext : Context
+      - mChatRoomList : List<ChatRoomItem>
+      - mProfileImageMap : Map<String, RoundedBitmapDrawable>
+      - userController : UserController
+      - chatController : ChatController
+      - imageController : ImageController
+      + ChatRecyclerViewAdapter()
+      + getItemViewType()
+      + onCreateViewHolder()
+      + onBindViewHolder()
+      + getItemCount()
+      + updateChatRoomList()
+      + updateProfileImageMap()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.fragment {
+    class MessagesFragment {
+      - chatRoomList : List<ChatRoomItem>
+      - profileImageMap : Map<String, RoundedBitmapDrawable>
+      - activity : Activity
+      - chatRoomListRef : DatabaseReference
+      - chatListener : ValueEventListener
+      - adapter : ChatRecyclerViewAdapter
+      - imageController : ImageController
+      + onAttach()
+      + onCreate()
+      + onCreateView()
+      + onResume()
+      + onStop()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class BookController {
+      - firebase : FirebaseDatabase
+      - userController : UserController
+      - notificationController : NotificationController
+      - observableUserCache : ObservableUserCache
+      {static} - instance : BookController
+      - BookController()
+      {static} + getInstance()
+      + addBook()
+      + getBook()
+      + updateBook()
+      + requestBook()
+      + cancelRequest()
+      + acceptRequest()
+      + declineRequest()
+      + scanMyBorrowedBook()
+      + scanMyOwnedBook()
+      + exchangeBook()
+      + returnBook()
+      + getMyBorrowedBook()
+      + getMyBorrowedBooks()
+      + addMyOwnedBook()
+      + getMyOwnedBook()
+      + getMyOwnedBooks()
+      + updateMyOwnedBook()
+      + deleteMyOwnedBook()
+      + getUserOwnedBook()
+      + getUserOwnedBooks()
+      + getBookPath()
+      + getBorrowedBooksPath()
+      + getBorrowedBookPath()
+      + getOwnedBooksPath()
+      + getOwnedBookPath()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class ImageController {
+      - IMAGE_FORMAT : String
+      - storage : StorageReference
+      - cache : ImageCache
+      {static} - instance : ImageController
+      - ImageController()
+      {static} + getInstance()
+      + addImage()
+      + getImage()
+      + updateImage()
+      + deleteImage()
+      - getImageReference()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.adapter {
+    class BookRecyclerViewAdapter {
+      - mContext : Context
+      - mBookListItem : List<BookListItem>
+      - destination : String
+      + BookRecyclerViewAdapter()
+      + onCreateViewHolder()
+      + onBindViewHolder()
+      + getItemCount()
+      - dataBundler()
+      + setmBookListItem()
+      - setDestination()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class SearchController {
+      - client : Client
+      - index : Index
+      - gson : Gson
+      {static} - instance : SearchController
+      - GOOGLE_BOOK_URL : String
+      - booksApiKey : String
+      {static} - userController : UserController
+      - SearchController()
+      {static} + getInstance()
+      + searchBooks()
+      + compareIsbn()
+      + searchIsbn()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.fragment {
+    class SearchFragment {
+      - searchBooks : List<BookListItem>
+      - searchText : EditText
+      - results : CompletableFuture<ArrayList<Book>>
+      - imageController : ImageController
+      - bookController : BookController
+      - bookAdapter : BookRecyclerViewAdapter
+      + onCreateView()
+      + onStart()
+      + onPause()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.fragment {
+    class UserBookFragment {
+      - coverId : String
+      - title : String
+      - author : String
+      - isbn : String
+      - status : String
+      - ownerId : String
+      - RESULT_ISBN : int
+      - activity : Activity
+      - scanSuccessfulDialog : AlertDialog
+      - valueEventListener : ValueEventListener
+      - databaseReference : DatabaseReference
+      - mListener : OnClickListener
+      - imageController : ImageController
+      - bookController : BookController
+      + onAttach()
+      + onCreateView()
+      + onDestroyView()
+      + onCreate()
+      + onCreateOptionsMenu()
+      + onOptionsItemSelected()
+      - setImage()
+      - setBookInfo()
+      - showError()
+      - setStatusBar()
+      - setButtons()
+      - onClickUser()
+      - onClickMessageUser()
+      - onClickButton()
+      - onClickTempButton()
+      + onActivityResult()
+      - sendRequest()
+      - cancelRequest()
+      - setStatusBorrowed()
+      - processReturn()
+      + onClick()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    package ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom {
+      class ChatRoomItem {
+        - chatId : String
+        - user1Id : String
+        - user1Name : String
+        - user1UserPic : String
+        - user2Id : String
+        - user2Name : String
+        - user2UserPic : String
+        - readStatus : boolean
+        + ChatRoomItem()
+        + ChatRoomItem()
+        + toMap()
+        + getUser1Id()
+        + setUser1Id()
+        + getUser1Name()
+        + setUser1Name()
+        + getUser1UserPic()
+        + setUser1UserPic()
+        + getUser2Id()
+        + setUser2Id()
+        + getUser2Name()
+        + setUser2Name()
+        + getUser2UserPic()
+        + setUser2UserPic()
+        + getChatId()
+        + setChatId()
+        + getReadStatus()
+        + setReadStatus()
+      }
+    }
+  }
+}
+
+
+MessagesFragment -up-|> Fragment
+MessagesFragment o-- "1" ChatRecyclerViewAdapter
+MessagesFragment o-- "1" ImageController
+MessagesFragment o-- "*" ChatRoomItem
+SearchFragment -up-|> Fragment
+SearchFragment o-- "1" BookRecyclerViewAdapter
+SearchFragment o-- "1" SearchController
+SearchFragment o-- "1" ImageController
+UserBookFragment -up-|> OnClickListener
+UserBookFragment -up-|> Fragment
+UserBookFragment o-- "1" ImageController
+UserBookFragment o-- "1" BookController
+
+
+right footer
+
+
+  PlantUML diagram partly generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+  For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml
