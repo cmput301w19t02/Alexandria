@@ -39,10 +39,8 @@ import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewImageActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 
-import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ChatController;
-import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
@@ -258,8 +256,11 @@ public class UserBookFragment extends Fragment implements View.OnClickListener {
                             drawable.setAntiAlias(true);
 
                             activity.runOnUiThread(() -> {
+                                ivOwnerPic.setBackgroundResource(0);
                                 ivOwnerPic.setImageDrawable(drawable);
                             });
+                        } else {
+                            ivOwnerPic.setBackgroundResource(R.drawable.ic_profile);
                         }
                     } else {
                         showError(errorImage.getMessage());
