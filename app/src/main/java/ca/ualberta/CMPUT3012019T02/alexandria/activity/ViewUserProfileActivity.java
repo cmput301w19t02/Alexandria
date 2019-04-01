@@ -7,6 +7,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,7 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java9.util.Optional;
+import java9.util.concurrent.CompletableFuture;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ChatController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
@@ -32,6 +38,8 @@ public class ViewUserProfileActivity extends AppCompatActivity {
 
     private ImageController imageController = ImageController.getInstance();
     private UserController userController = UserController.getInstance();
+    private ChatController chatController = ChatController.getInstance();
+    private ObservableUserCache userCache = ObservableUserCache.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,10 +158,25 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             //TODO make use of actual user name
             case R.id.message_user_option:
-                Intent intentMain = new Intent(this, MainActivity.class);
-                String fragment_name = "message";
-                intentMain.putExtra("fragment_name", fragment_name);
-                startActivity(intentMain);
+                String chatRoomId = userCache.getChatRoomId(userID).orElse(null);
+                if (chatRoomId == null) {
+                    //TODO: Start spinner
+                    CompletableFuture<String> addChatRoom = chatController.addChatRoom(userController.getMyId(), userID, username);
+                    addChatRoom.thenAccept(chatId -> {
+                        //TODO: stop spinner
+                        Intent intentChatRoom = new Intent(this, ChatRoomActivity.class);
+                        intentChatRoom.putExtra("chatId", chatId);
+                        intentChatRoom.putExtra("receiverId", userID);
+                        intentChatRoom.putExtra("receiverName", username);
+                        startActivity(intentChatRoom);
+                    });
+                } else {
+                    Intent intentChatRoom = new Intent(this, ChatRoomActivity.class);
+                    intentChatRoom.putExtra("chatId", chatRoomId);
+                    intentChatRoom.putExtra("receiverId", userID);
+                    intentChatRoom.putExtra("receiverName", username);
+                    startActivity(intentChatRoom);
+                }
                 break;
             case R.id.user_profile_setting:
                 // open menu

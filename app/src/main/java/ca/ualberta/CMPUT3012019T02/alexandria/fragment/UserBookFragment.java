@@ -33,14 +33,21 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.concurrent.TimeUnit;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.activity.ChatRoomActivity;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ISBNLookup;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewImageActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
+
+import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ViewUserProfileActivity;
+import ca.ualberta.CMPUT3012019T02.alexandria.controller.ChatController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.BookController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
+import java9.util.concurrent.CompletableFuture;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -52,6 +59,9 @@ public class UserBookFragment extends Fragment implements View.OnClickListener {
 
     private ImageController imageController = ImageController.getInstance();
     private BookController bookController = BookController.getInstance();
+    private ChatController chatController = ChatController.getInstance();
+    private UserController userController = UserController.getInstance();
+    private ObservableUserCache userCache = ObservableUserCache.getInstance();
 
     private String coverId;
     private String title;
@@ -59,6 +69,7 @@ public class UserBookFragment extends Fragment implements View.OnClickListener {
     private String isbn;
     private String status;
     private String ownerId;
+    private String ownerName;
     private final int RESULT_ISBN = 1;
     private Activity activity;
     private AlertDialog scanSuccessfulDialog;
@@ -173,6 +184,7 @@ public class UserBookFragment extends Fragment implements View.OnClickListener {
                 onClickUser();
                 break;
             case R.id.option_message_user:
+                onClickMessageUser();
                 break;
             case R.id.menu_user_book_ellipses:
                 break;
@@ -222,6 +234,7 @@ public class UserBookFragment extends Fragment implements View.OnClickListener {
             if (error == null) {
                 // Update ui here
                 String name = result.getName();
+                ownerName = result.getUsername();
                 String photoId = result.getPicture();
                 activity.runOnUiThread(() -> {
                     tvOwner.setText(name);
@@ -337,9 +350,27 @@ public class UserBookFragment extends Fragment implements View.OnClickListener {
         startActivity(intentViewOwner);
     }
 
-    //TODO navigate to message fragment
+    //navigate to message fragment
     private void onClickMessageUser() {
-
+        String chatRoomId = userCache.getChatRoomId(ownerId).orElse(null);
+        if (chatRoomId == null) {
+            //TODO: Start spinner
+            CompletableFuture<String> addChatRoom = chatController.addChatRoom(userController.getMyId(), ownerId, ownerName);
+            addChatRoom.thenAccept(chatId -> {
+                //TODO: stop spinner
+                Intent intentChatRoom = new Intent(getActivity(), ChatRoomActivity.class);
+                intentChatRoom.putExtra("chatId", chatId);
+                intentChatRoom.putExtra("receiverId", ownerId);
+                intentChatRoom.putExtra("receiverName", ownerName);
+                startActivity(intentChatRoom);
+            });
+        } else {
+            Intent intentChatRoom = new Intent(getActivity(), ChatRoomActivity.class);
+            intentChatRoom.putExtra("chatId", chatRoomId);
+            intentChatRoom.putExtra("receiverId", ownerId);
+            intentChatRoom.putExtra("receiverName", ownerName);
+            startActivity(intentChatRoom);
+        }
     }
 
     //main button with multiple actions
