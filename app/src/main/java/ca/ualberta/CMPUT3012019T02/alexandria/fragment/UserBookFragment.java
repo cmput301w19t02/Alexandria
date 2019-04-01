@@ -30,7 +30,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.activity.ChatRoomActivity;
@@ -44,7 +46,9 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.ChatController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Book;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
+import java9.util.Optional;
 import java9.util.concurrent.CompletableFuture;
 
 import static android.app.Activity.RESULT_OK;
@@ -109,33 +113,55 @@ public class UserBookFragment extends Fragment implements View.OnClickListener {
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+
                 new Thread(() -> {
                     if (!isAdded()) {
                         return;
                     }
-                    OwnedBook ownedBook = dataSnapshot.getValue(OwnedBook.class);
-                    if (ownedBook != null) {
-                        status = ownedBook.getStatus();
-                        coverId = ownedBook.getImageId();
-                        try {
-                            Book book = bookController.getBook(isbn).get(5, TimeUnit.SECONDS).get();
-                            title = book.getTitle();
-                            author = book.getAuthor();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            activity.runOnUiThread(() -> getFragmentManager().popBackStack());
-                        }
 
+                    OwnedBook ownedBook;
+                    try {
+                        ownedBook = bookController.getUserOwnedBook(isbn, ownerId).get(5, TimeUnit.SECONDS).get();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                         activity.runOnUiThread(() -> {
-                            setImage(rootView);
-                            setBookInfo(rootView);
-                            setStatusBar(rootView);
-                            setButtons(rootView);
-                            scanSuccessfulDialog.dismiss();
+                            showError("Could not find owned book");
+                            getFragmentManager().popBackStack();
                         });
-                    } else {
-                        activity.runOnUiThread(() -> getFragmentManager().popBackStack());
+                        return;
                     }
+
+                    BorrowedBook borrowedBook = dataSnapshot.getValue(BorrowedBook.class);
+                    if (borrowedBook == null) {
+                        status = "available";
+                    } else {
+                        status = borrowedBook.getStatus();
+                    }
+                    coverId = ownedBook.getImageId();
+
+                    try {
+                        Book book = bookController.getBook(isbn).get(5, TimeUnit.SECONDS).get();
+                        title = book.getTitle();
+                        author = book.getAuthor();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        activity.runOnUiThread(() -> {
+                            showError(e.getMessage());
+                            getFragmentManager().popBackStack();
+                        });
+                        return;
+                    }
+
+                    activity.runOnUiThread(() -> {
+                        setImage(rootView);
+                        setBookInfo(rootView);
+                        setStatusBar(rootView);
+                        setButtons(rootView);
+                        scanSuccessfulDialog.dismiss();
+                    });
+
                 }).start();
             }
 
@@ -143,7 +169,7 @@ public class UserBookFragment extends Fragment implements View.OnClickListener {
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         };
 
-        databaseReference = FirebaseDatabase.getInstance().getReference(bookController.getOwnedBookPath(ownerId, isbn));
+        databaseReference = FirebaseDatabase.getInstance().getReference(bookController.getBorrowedBookPath(userController.getMyId(), isbn));
         databaseReference.addValueEventListener(valueEventListener);
 
         rootView.findViewById(R.id.user_book_owner).setOnClickListener(mListener);

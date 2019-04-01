@@ -1018,7 +1018,14 @@ public class BookController {
         return "users/" + userId + "/borrowedBooks";
     }
 
-    private String getBorrowedBookPath(@NonNull String userId, @NonNull String isbn) {
+    /**
+     * Gets borrowed book path.
+     *
+     * @param userId the user id
+     * @param isbn   the isbn
+     * @return the owned book path
+     */
+    public String getBorrowedBookPath(@NonNull String userId, @NonNull String isbn) {
         return "users/" + userId + "/borrowedBooks/" + isbn;
     }
 
