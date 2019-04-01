@@ -1,27 +1,30 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.controller;
 
-import android.support.annotation.NonNull;
+import android.graphics.Bitmap;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
-import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.message.LocationMessage;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.message.TextMessage;
 import java9.util.concurrent.CompletableFuture;
 
 /**
  * The controller for chat functionality
  */
 public class ChatController {
-    private FirebaseDatabase database;
 
     private static ChatController instance;
 
+    private UserController userController = UserController.getInstance();
+    private FirebaseDatabase database;
+    private ObservableUserCache userCache;
+
     private ChatController() {
         database = FirebaseDatabase.getInstance();
+        userCache = ObservableUserCache.getInstance();
     }
 
     /**
@@ -40,111 +43,96 @@ public class ChatController {
      * already a chat between the two.
      *
      * @param senderId   my user id
-     * @param recieverId the person I want to message's id
+     * @param receiverId the person I want to message's id
      * @return the completable future
      */
-    public CompletableFuture<Void> addChatRoom(String senderId, String recieverId){
-        return addChatRoomPrivate(senderId, recieverId);
+    public CompletableFuture<String> addChatRoom(String senderId, String receiverId,
+                                               String receiverName) {
+        return addChatRoomPrivate(senderId, receiverId, receiverName);
     }
 
-    private CompletableFuture<Void> addChatRoomPrivate(String senderId, String recieverId){
-        final CompletableFuture<Void> resultFuture = new CompletableFuture<>(); // might not be necessary
+    private CompletableFuture<String> addChatRoomPrivate(String senderId, String receiverId,
+                                                       String receiverName) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        String chatRoomExists = userCache.getChatRoomId(receiverId).orElse(null);
 
-        DatabaseReference senderListRef = database.getReference().child("users").child(senderId).child("chatRoomList");
-        DatabaseReference recieverListRef = database.getReference().child("users").child(recieverId).child("chatRoomList");
-        DatabaseReference chatroomsRef = database.getReference().child("chatrooms");
+        if (chatRoomExists == null) {
+            String senderName = userCache.getProfile().get().getName();
+            String chatId = getNewChatRoomId(senderId);
+            String senderPicId = userCache.getProfile().get().getPicture();
+            ChatRoomItem chatRoomItem = new ChatRoomItem(chatId, senderId, senderName, senderPicId, receiverId, receiverName, "temp", false);
 
-        CompletableFuture<UserProfile> user1Future = UserController.getInstance().getUserProfile(senderId);
-        CompletableFuture<UserProfile> user2Future = UserController.getInstance().getUserProfile(recieverId);
-
-        //UserProfile user1 = user1Future.getNow();
-        //UserProfile user2 = user2Future.getNow();
-
-        String user1Name = "Joe";
-        String user2Name = "Sandy";
-        //String user1Name = user1.getUsername();
-        //String user2Name = user2.getUsername();
-
-        String chatId1 = "chat" + senderId + "_" + recieverId;
-        ChatRoomItem chatRoomItem = new ChatRoomItem(chatId1, senderId, user1Name, recieverId, user2Name, false);
-
-        senderListRef.child(chatId1).child("chatId").setValue(chatRoomItem.getChatId());
-        senderListRef.child(chatId1).child("user1Id").setValue(chatRoomItem.getUser1Id());
-        senderListRef.child(chatId1).child("user1Name").setValue(chatRoomItem.getUser1Name());
-        senderListRef.child(chatId1).child("user2Id").setValue(chatRoomItem.getUser2Id());
-        senderListRef.child(chatId1).child("user2Name").setValue(chatRoomItem.getUser2Name());
-        senderListRef.child(chatId1).child("readStatus").setValue(chatRoomItem.getReadStatus());
-
-        // TODO: generate a unique identifier for chat room, following a specific schema/ordering
-        // String chatId2 = "chat" + recieverId + "_" + senderId;
-        /** TODO: check if chat already exists between the two users
-        CompletableFuture<String> checkSendChatId1 = checkChatRoomExists(senderListRef, chatId1);
-        CompletableFuture<String> checkSendChatId2 = checkChatRoomExists(senderListRef, chatId2);
-        CompletableFuture<String> checkReciChatId1 = checkChatRoomExists(recieverListRef, chatId1);
-        CompletableFuture<String> checkReciChatId2 = checkChatRoomExists(recieverListRef, chatId2);
-        CompletableFuture<String> checkChatRoomListId1 = checkChatRoomExists(chatroomsRef, chatId1);
-        CompletableFuture<String> checkChatRoomListId2 = checkChatRoomExists(chatroomsRef, chatId2);
-        boolean check1 = checkSendChatId1.equals("true");
-        boolean check2 = checkSendChatId2.equals("true");
-        boolean check3 = checkReciChatId1.equals("true");
-        boolean check4 = checkReciChatId2.equals("true");
-        boolean checkList1 = checkChatRoomListId1.equals("true");
-        boolean checkList2 = checkChatRoomListId2.equals("true");
-        if (check1 || check2 || check3 || check4 || checkList1 || checkList2) {
-            // check if a chat room is shared between the two ids
-            // add the chat room to the missing one
-        } else {
-            // if a chat room is in neither id lists
-            // add chat room to both ids
-            senderListRef.push().setValue(chatId1);
-            recieverListRef.push().setValue(chatId1);
-            chatroomsRef.child().setValue(chatId1);
-        }
-        */
-
-
-        return resultFuture;
-    }
-
-    /**
-     * A check if a chat room exists at databaseReference.child(userId).child("chatRoomList")
-     * @param ref
-     * @param chatRoomId
-     * @return boolean, true for the chat room exists in both database references, false if not
-     */
-    private CompletableFuture<String> checkChatRoomExists(DatabaseReference ref, String chatRoomId){
-        final CompletableFuture<String> resultFuture = new CompletableFuture<>();
-
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    // check list
-                    boolean doesExists = false;
-                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()){
-                        String key = childSnapshot.getKey();
-                        String idFromList = childSnapshot.child(key).getValue(String.class);
-                        if (chatRoomId.equals(idFromList)){
-                            doesExists = true;
-                        }
-                    }
-                    if (!doesExists){
-                        resultFuture.complete("false");
-                    } else {
-                        resultFuture.complete("true");
-                    }
+            userController.getUserProfile(receiverId).handleAsync((result, error) -> {
+                if (error == null) {
+                    chatRoomItem.setUser2UserPic(result.getPicture());
                 } else {
-                    resultFuture.complete("false");
+                    //handle error
                 }
+                return null;
+            });
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                resultFuture.completeExceptionally(databaseError.toException());
-            }
-        });
-        return resultFuture;
+            addChatRoomItemToId(senderId, chatId, chatRoomItem).thenCombine(addChatRoomItemToId(receiverId, chatId, chatRoomItem), (result, error) -> {
+                future.complete(chatId);
+                return null;
+            });
+            return future;
+        } else {
+            future.complete(null);
+        }
+        return future;
     }
 
+    private String getNewChatRoomId(String userId) {
+        return getUserChatRoomListReference(userId).push().getKey();
+    }
+
+    private CompletableFuture<Void> addChatRoomItemToId(String userId, String chatId,
+                                                        ChatRoomItem chatRoomItem) {
+        final CompletableFuture<Void> future = new CompletableFuture<>();
+        getUserChatRoomListReference(userId).child(chatId).setValue(chatRoomItem)
+                .addOnSuccessListener(future::complete)
+                .addOnFailureListener(future::completeExceptionally);
+        return future;
+    }
+
+    public void setUserChatRoomReadStatus(String chatId, String otherUserId, boolean status) {
+        setChatRoomReadStatusPrivate(chatId, otherUserId, status);
+    }
+
+    private void setChatRoomReadStatusPrivate(String chatId, String otherUserId, boolean status) {
+        final CompletableFuture<Void> future = new CompletableFuture<>();
+        getUserChatRoomListReference(otherUserId).child(chatId).child("readStatus").setValue(status)
+                .addOnSuccessListener(future::complete)
+                .addOnFailureListener(future::completeExceptionally);
+    }
+
+    /* Messaging */
+
+    public void addTextMessage(String chatId, TextMessage textMessage){
+        addTextMessagePrivate(chatId, textMessage);
+    }
+
+    private void addTextMessagePrivate(String chatId, TextMessage textMessage) {
+        DatabaseReference chatMessagesReference = getChatMessagesReference(chatId);
+        chatMessagesReference.push().setValue(textMessage);
+    }
+
+    public void addLocationMessage(String chatId, LocationMessage locationMessage){
+        addLocationMessagePrivate(chatId, locationMessage);
+    }
+
+    private void addLocationMessagePrivate(String chatId, LocationMessage locationMessage) {
+        DatabaseReference chatMessagesReference = getChatMessagesReference(chatId);
+        chatMessagesReference.push().setValue(locationMessage);
+    }
+
+    /* Database Reference Methods */
+
+    private DatabaseReference getUserChatRoomListReference(String userId) {
+        return database.getReference().child("users").child(userId).child("chatRoomList");
+    }
+
+    private DatabaseReference getChatMessagesReference(String chatId) {
+        return database.getReference().child("chatMessages").child(chatId);
+    }
 }

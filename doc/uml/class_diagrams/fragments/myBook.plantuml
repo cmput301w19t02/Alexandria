@@ -1,0 +1,258 @@
+@startuml
+
+title __MYBOOK FRAGMENT's Class Diagram__\n
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class UserController {
+      - auth : FirebaseAuth
+      - database : FirebaseDatabase
+      {static} - instance : UserController
+      - UserController()
+      {static} + getInstance()
+      + isAuthenticated()
+      + authenticate()
+      + deauthenticate()
+      + createUser()
+      + getMyId()
+      - getUserEmail()
+      + getUserProfile()
+      + getMyProfile()
+      + updateMyProfile()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class ImageController {
+      - IMAGE_FORMAT : String
+      - storage : StorageReference
+      - cache : ImageCache
+      {static} - instance : ImageController
+      - ImageController()
+      {static} + getInstance()
+      + addImage()
+      + getImage()
+      + updateImage()
+      + deleteImage()
+      - getImageReference()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.controller {
+    class BookController {
+      - firebase : FirebaseDatabase
+      - userController : UserController
+      - notificationController : NotificationController
+      - observableUserCache : ObservableUserCache
+      {static} - instance : BookController
+      - BookController()
+      {static} + getInstance()
+      + addBook()
+      + getBook()
+      + updateBook()
+      + requestBook()
+      + cancelRequest()
+      + acceptRequest()
+      + declineRequest()
+      + scanMyBorrowedBook()
+      + scanMyOwnedBook()
+      + exchangeBook()
+      + returnBook()
+      + getMyBorrowedBook()
+      + getMyBorrowedBooks()
+      + addMyOwnedBook()
+      + getMyOwnedBook()
+      + getMyOwnedBooks()
+      + updateMyOwnedBook()
+      + deleteMyOwnedBook()
+      + getUserOwnedBook()
+      + getUserOwnedBooks()
+      + getBookPath()
+      + getBorrowedBooksPath()
+      + getBorrowedBookPath()
+      + getOwnedBooksPath()
+      + getOwnedBookPath()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.adapter {
+    class UserRecyclerViewAdapter {
+      - mContext : Context
+      - mUserListItem : List<UserListItem>
+      - mListener : UserRecyclerListener
+      + UserRecyclerViewAdapter()
+      + onCreateViewHolder()
+      + onBindViewHolder()
+      + getItemCount()
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.fragment {
+    package ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook {
+      class MyBookAvailableFragment {
+        + onCreateView()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.fragment {
+    package ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook {
+      class MyBookFragment {
+        - coverId : String
+        - title : String
+        - author : String
+        - isbn : String
+        - status : String
+        - activity : Activity
+        - valueEventListener : ValueEventListener
+        - databaseReference : DatabaseReference
+        - bookController : BookController
+        - userController : UserController
+        - imageController : ImageController
+        + onAttach()
+        + onCreateView()
+        + onDestroyView()
+        + onCreate()
+        + onCreateOptionsMenu()
+        + onOptionsItemSelected()
+        - setUI()
+        - setImage()
+        - fragmentSelector()
+        - loadFragment()
+        - showError()
+        - onClickEditBook()
+        - deleteWarning()
+        - deleteBook()
+        + onClick()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.fragment {
+    package ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook {
+      class MyBookTransactionFragment {
+        - status : String
+        - isbn : String
+        - borrowerId : String
+        - RESULT_ISBN : int
+        - activity : Activity
+        - scanSuccessfulDialog : AlertDialog
+        - valueEventListener : ValueEventListener
+        - databaseReference : DatabaseReference
+        - mListener : OnClickListener
+        - bookController : BookController
+        - userController : UserController
+        - imageController : ImageController
+        + onAttach()
+        + onCreateView()
+        + onDestroyView()
+        - getUserInfo()
+        - setStatusBar()
+        - onClickUser()
+        - onClickMessageUser()
+        - onClickEllipses()
+        - getStatusMenu()
+        + onActivityResult()
+        - setBorrowed()
+        - acceptReturn()
+        - cancelOrder()
+      }
+    }
+  }
+}
+
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.fragment {
+    package ca.ualberta.CMPUT3012019T02.alexandria.fragment.myBook {
+      class MyBookUserListFragment {
+        - requests : List<UserListItem>
+        - isbn : String
+        - activity : Activity
+        - childEventListener : ChildEventListener
+        - databaseReference : DatabaseReference
+        - bookController : BookController
+        - userController : UserController
+        - imageController : ImageController
+        - userAdapter : UserRecyclerViewAdapter
+        + onAttach()
+        + onCreateView()
+        + onCreate()
+        + onDestroy()
+        - showError()
+        - acceptRequest()
+        - declineRequest()
+      }
+    }
+  }
+}
+
+package ca.ualberta.CMPUT3012019T02.alexandria {
+  package ca.ualberta.CMPUT3012019T02.alexandria.model {
+    class UserListItem {
+      - borrowerPic : Drawable
+      - borrowerUsername : String
+      - isbn : String
+      - borrowerId : String
+      + UserListItem()
+      + UserListItem()
+      + getBorrowerPic()
+      + setBorrowerPic()
+      + getBorrowerUsername()
+      + setBorrowerUsername()
+      + getIsbn()
+      + setIsbn()
+      + getBorrowerId()
+      + setBorrowerId()
+    }
+  }
+}
+
+
+MyBookFragment "1" -- "1" MyBookAvailableFragment : creates >
+MyBookFragment "1" -- "1" MyBookUserListFragment : creates >
+MyBookFragment "1" -- "1" MyBookTransactionFragment : creates >
+MyBookAvailableFragment -up-|> Fragment
+MyBookFragment -up-|> OnClickListener
+MyBookFragment -up-|> Fragment
+MyBookFragment o-- "1" ImageController
+MyBookFragment o-- "1" BookController
+MyBookFragment o-- "1" UserController
+MyBookTransactionFragment -up-|> Fragment
+MyBookTransactionFragment o-- "1" BookController
+MyBookTransactionFragment o-- "1" UserController
+MyBookTransactionFragment o-- "1" ImageController
+MyBookUserListFragment -up-|> Fragment
+MyBookUserListFragment o-- "1" UserRecyclerViewAdapter
+MyBookUserListFragment o-- "1" BookController
+MyBookUserListFragment o-- "1" ImageController
+MyBookUserListFragment o-- "1" UserController
+MyBookUserListFragment o-- "*" UserListItem
+
+
+right footer
+
+
+  PlantUML diagram partly generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+  For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

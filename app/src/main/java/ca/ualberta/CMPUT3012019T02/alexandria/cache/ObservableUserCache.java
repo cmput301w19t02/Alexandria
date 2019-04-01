@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Observable;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
+import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.BorrowedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.OwnedBook;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.User;
@@ -150,10 +151,27 @@ public class ObservableUserCache extends Observable {
      * @return the chat room id
      */
     public Optional<String> getChatRoomId(String userId) {
-        if (user == null || user.getChatRooms() == null) {
+        String chatId = null;
+        if (user == null || user.getChatRoomList() == null) {
             return Optional.empty();
         }
-        return Optional.ofNullable(user.getChatRooms().get(userId));
+        Map<String, ChatRoomItem> chatRooms = user.getChatRoomList();
+        if(chatRooms != null) {
+            for (String roomId : chatRooms.keySet()) {
+                ChatRoomItem room = chatRooms.get(roomId);
+                if (room.getUser1Id().equals(userId)) {
+                    chatId = room.getUser1Id();
+                }
+                if (room.getUser2Id().equals(userId)) {
+                    chatId = room.getUser2Id();
+                }
+            }
+        }
+        if (chatId == null){
+            return Optional.empty();
+        } else {
+            return Optional.of(chatId);
+        }
     }
 
     /**

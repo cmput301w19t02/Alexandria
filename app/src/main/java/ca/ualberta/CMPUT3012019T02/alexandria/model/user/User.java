@@ -4,13 +4,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom.ChatRoomItem;
+
 /**
  * User model class that allows to get and set information
  * relevant to a user
  */
 public class User {
 
-    private Map<String, String> chatRooms;
+    private Map<String, ChatRoomItem> chatRoomList;
     private Map<String, OwnedBook> ownedBooks;
     private Map<String, BorrowedBook> borrowedBooks;
     private UserProfile profile;
@@ -22,7 +24,7 @@ public class User {
      */
     @Deprecated
     public User() {
-        chatRooms = new HashMap<>();
+        chatRoomList = new HashMap<>();
         ownedBooks = new HashMap<>();
         borrowedBooks = new HashMap<>();
     }
@@ -32,8 +34,8 @@ public class User {
      *
      * @return the chat rooms
      */
-    public Map<String, String> getChatRooms() {
-        return Collections.unmodifiableMap(chatRooms);
+    public Map<String, ChatRoomItem> getChatRoomList() {
+        return Collections.unmodifiableMap(chatRoomList);
     }
 
     /**

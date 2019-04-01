@@ -13,7 +13,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 
 /**
- * The type View image activity.
+ * Activity to display an image in full screen
  */
 public class ViewImageActivity extends AppCompatActivity {
 
@@ -32,6 +32,9 @@ public class ViewImageActivity extends AppCompatActivity {
         load_imageID();
     }
 
+    /**
+     * get image id from extras
+     */
     private void load_imageID() {
         Bundle extras = getIntent().getExtras();
         if (extras.getString(IMAGE_ID) == null) {
@@ -44,6 +47,9 @@ public class ViewImageActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * set toolbar to activity
+     */
     private void set_toolbar() {
         // toolbar
         Toolbar toolbar = findViewById(R.id.view_image_toolbar);
@@ -60,7 +66,7 @@ public class ViewImageActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * set image that is being extended from database
      */
     private void setImage() {
         ImageView imageExpand = findViewById(R.id.view_image_expand);
@@ -86,9 +92,8 @@ public class ViewImageActivity extends AppCompatActivity {
     }
 
     /**
-     * Show error.
-     *
-     * @param message the message
+     * show error message on a screen
+     * @param message error message
      */
     public void showError(String message) {
         Toast.makeText(this, "Error: " + message, Toast.LENGTH_LONG).show();

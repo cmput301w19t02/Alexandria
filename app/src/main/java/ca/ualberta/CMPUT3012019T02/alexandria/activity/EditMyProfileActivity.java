@@ -64,7 +64,6 @@ public class EditMyProfileActivity extends AppCompatActivity {
 
     private EditText editText_name;
     private EditText editText_username;
-    // private EditText editText_password;
     private EditText editText_email;
 
     @Override
@@ -94,15 +93,15 @@ public class EditMyProfileActivity extends AppCompatActivity {
 
     /**
      * inflate menu for add photo options based on the presence of the photo
-     * @param menu
-     * @param v
-     * @param menuInfo
+     * @param menu menu
+     * @param v view
+     * @param menuInfo context menu info
      */
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
-        if (userAvatar == null) {
+        if (userAvatar == null) {   // if no image
             inflater.inflate(R.menu.select_take_image_menu, menu);
         } else {
             inflater.inflate(R.menu.select_take_delete_image_menu, menu);
@@ -110,9 +109,9 @@ public class EditMyProfileActivity extends AppCompatActivity {
     }
 
     /**
-     * add photo options
-     * @param item
-     * @return
+     * respond to actions when item from options is picked
+     * @param item item clicked
+     * @return boolean
      */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -122,14 +121,17 @@ public class EditMyProfileActivity extends AppCompatActivity {
                 // Select from gallery
                 openGallery();
                 break;
+
             case R.id.option_take_photo:
                 // Take camera picture
                 addPhotoCamera();
                 break;
+
             case R.id.option_delete_photo:
                 // Remove photo
                 removePhoto();
                 break;
+
             default:
                 throw new RuntimeException("Unknown option");
         }
@@ -150,16 +152,16 @@ public class EditMyProfileActivity extends AppCompatActivity {
      * choose image from gallery
      */
     public void openGallery() {
-        Intent intentGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        Intent intentGallery = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(intentGallery, RESULT_GALLERY);
     }
 
     /**
-     * Add photo camera.
+     * allows camera input of an image to be added
+     * asks for permission if needed
      */
     public void addPhotoCamera() {
-        // Todo: implement other possibilities
-
         int permissionCheck = ContextCompat.checkSelfPermission(
                 this, Manifest.permission.CAMERA);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -175,7 +177,7 @@ public class EditMyProfileActivity extends AppCompatActivity {
     }
 
     /**
-     * camera, scan, gallery
+     * on return to activity with result, deals with camera, scan, gallery
      *
      * @param requestCode result code
      * @param resultCode confirmation code
@@ -242,7 +244,6 @@ public class EditMyProfileActivity extends AppCompatActivity {
     private void initializePageAndData() {
         editText_name = findViewById(R.id.edit_profile_name);
         editText_username = findViewById(R.id.edit_profile_username);
-        //editText_password = findViewById(R.id.editText_password);
         editText_email = findViewById(R.id.edit_profile_email);
         ImageView image_avatar = findViewById(R.id.edit_profile_user_image);
 
@@ -309,7 +310,7 @@ public class EditMyProfileActivity extends AppCompatActivity {
     }
 
     /**
-     * Removes spinner when data is loaded
+     * Removes spinner, shows content
      */
     private void stopSpinner() {
         ProgressBar spinner = findViewById(R.id.edit_my_profile_spinner);
@@ -319,6 +320,9 @@ public class EditMyProfileActivity extends AppCompatActivity {
         mainContent.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * start spinner, remove content
+     */
     private void startSpinner() {
         ProgressBar spinner = findViewById(R.id.edit_my_profile_spinner);
         spinner.setVisibility(View.VISIBLE);
@@ -336,7 +340,7 @@ public class EditMyProfileActivity extends AppCompatActivity {
     }
 
     /**
-     * shows message
+     * shows message on screen
      * @param message  message
      */
     private void showMessage(String message) {
@@ -366,6 +370,9 @@ public class EditMyProfileActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * save user profile with image saving and attaching, removes old avatar if exists
+     */
     private void saveUserWithImage() {
         final String imageIdToDelete = imageID;
         ImageController.getInstance().addImage(userAvatar).handleAsync((result, error) -> {
@@ -385,6 +392,9 @@ public class EditMyProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * saves user profile to database
+     */
     private void saveUser() {
         if (imageID != null && userAvatar == null) {
             ImageController.getInstance().deleteImage(imageID);
@@ -396,15 +406,17 @@ public class EditMyProfileActivity extends AppCompatActivity {
         userController.updateMyProfile(myUserProfile);
     }
 
+    /**
+     * get user input
+     */
     private void fetchData() {
         name = editText_name.getText().toString();
-        //String newPassword = editText_password.getText().toString();
         email = editText_email.getText().toString();
     }
 
+    // close with delay  for info storing to be processed
     private void delayedClose() {
         startSpinner();
-
 
         int finishTime = 3; // x seconds
         Handler handler = new Handler();

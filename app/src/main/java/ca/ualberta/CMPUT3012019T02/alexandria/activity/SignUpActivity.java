@@ -94,7 +94,7 @@ public class SignUpActivity extends AppCompatActivity {
                 startMainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(startMainActivity);
             } else {
-                showError(error.getMessage());
+                runOnUiThread(()->showError(error.getMessage()));
             }
             return null;
         });
@@ -118,7 +118,7 @@ public class SignUpActivity extends AppCompatActivity {
                     ImageView imageView = findViewById(R.id.sign_up_user_image);
                     imageView.setImageDrawable(drawable);
                 } else {
-                    showError(error.getMessage());
+                    runOnUiThread(()->showError(error.getMessage()));
                 }
                 return null;
             });
@@ -126,7 +126,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void showError(String message) {
-        Toast.makeText(SignUpActivity.this, "Error: " + message, Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Error: " + message, Toast.LENGTH_LONG).show();
     }
 
     private boolean validateUsername(String username) {

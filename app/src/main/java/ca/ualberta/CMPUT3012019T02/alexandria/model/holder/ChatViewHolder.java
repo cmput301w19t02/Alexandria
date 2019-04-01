@@ -1,10 +1,11 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.holder;
 
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
@@ -18,11 +19,11 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
     /**
      * The Item chat.
      */
-    public LinearLayout itemChat;
+    public RelativeLayout itemChat;
     /**
-     * The TextView chat reciever username.
+     * The TextView chat receiver username.
      */
-    public TextView tvChatRecieverUsername;
+    public TextView tvChatReceiverUsername;
     /**
      * The ImageView chat user pic.
      */
@@ -41,7 +42,7 @@ public class ChatViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         itemChat = itemView.findViewById(R.id.item_chat);
-        tvChatRecieverUsername = itemView.findViewById(R.id.chat_reciever_username);
+        tvChatReceiverUsername = itemView.findViewById(R.id.chat_receiver_username);
         ivChatUserPic = itemView.findViewById(R.id.chat_user_pic);
         ivReadStatus = itemView.findViewById(R.id.read_status);
     }

@@ -1,5 +1,7 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.message;
 
+import java.util.concurrent.ExecutionException;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Location;
 
 /**
@@ -7,6 +9,8 @@ import ca.ualberta.CMPUT3012019T02.alexandria.model.Location;
  */
 public class LocationMessage extends Message {
 
+    private String imageId;
+    private Location location;
     /**
      * Instantiates a new Location message.
      *
@@ -15,9 +19,10 @@ public class LocationMessage extends Message {
      * @param date     the date
      * @param sender   the sender
      */
-    public LocationMessage(Location location, String status, String/*Date*/ date, String sender) {
+    public LocationMessage(Location location, String status, Long date, String sender, String imageId) {
         super("location", "temp", status, date, sender);
         this.setLocation(location);
+        this.setImageId(imageId);
     }
 
     /**
@@ -26,10 +31,7 @@ public class LocationMessage extends Message {
      * @return the location
      */
     public Location getLocation() {
-        String[] tokens = getContent().split(",");
-        double latitude =  Double.parseDouble(tokens[0]);
-        double longitude =  Double.parseDouble(tokens[1]);
-        return new Location(latitude,longitude);
+        return this.location;
     }
 
     /**
@@ -39,11 +41,21 @@ public class LocationMessage extends Message {
      */
     public void setLocation(Location location) {
         if(location!=null) {
-            String serializedLocation = location.getLatitude() + "," + location.getLongitude();
-            setContent(serializedLocation);
+            this.location = location;
         }
         else{
             throw new IllegalArgumentException("Location cannot be null.");
         }
+    }
+
+    public String getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(String imageId) {
+        if (imageId == null || imageId.isEmpty()) {
+            throw new IllegalArgumentException("Image id cannot be null or empty");
+        }
+        this.imageId = imageId;
     }
 }

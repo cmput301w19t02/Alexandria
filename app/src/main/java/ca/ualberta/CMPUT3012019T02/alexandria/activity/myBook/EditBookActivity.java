@@ -31,7 +31,7 @@ import java9.util.Optional;
 import static ca.ualberta.CMPUT3012019T02.alexandria.App.getContext;
 
 /**
- * The Edit book activity.
+ * Takes isbn of a book, and allows editing its title, author and image
  */
 public class EditBookActivity extends AddNewBookActivity {
 
@@ -66,6 +66,7 @@ public class EditBookActivity extends AddNewBookActivity {
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v -> finish());
 
+        // get ISBN number of the book being edited
         Bundle extras = getIntent().getExtras();
         if (extras.getString(ISBN_KEY) == null) {
             isbn = null;
@@ -82,8 +83,10 @@ public class EditBookActivity extends AddNewBookActivity {
             new Thread(() -> {
                 Optional<Book> bookOptional = null;
                 try {
-                    myBook = BookController.getInstance().getBook(isbn).get(5, TimeUnit.SECONDS).get();
-                    myOwnedBook = BookController.getInstance().getMyOwnedBook(isbn).get(5, TimeUnit.SECONDS).get();
+                    myBook = BookController.getInstance().getBook(isbn)
+                            .get(5, TimeUnit.SECONDS).get();
+                    myOwnedBook = BookController.getInstance().getMyOwnedBook(isbn)
+                            .get(5, TimeUnit.SECONDS).get();
                     runOnUiThread(() -> {
                         extractBookInfo();
                         setData();
@@ -113,7 +116,7 @@ public class EditBookActivity extends AddNewBookActivity {
 
     /**
      * Creates popup menu for adding photos
-     * @param v
+     * @param v view
      */
     private void setPopupMenu(View v){
         PopupMenu popup = new PopupMenu(getContext(), v);
@@ -159,7 +162,7 @@ public class EditBookActivity extends AddNewBookActivity {
     }
 
     /**
-     * camera, gallery
+     * on return to activity with result, deals with camera, gallery
      *
      * @param requestCode result code
      * @param resultCode confirmation code
@@ -168,12 +171,15 @@ public class EditBookActivity extends AddNewBookActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == RESULT_CAMERA) {
+
             // Camera photo
             Bundle extras = data.getExtras();
             coverBitmap = (Bitmap) extras.get("data");
             ImageView bookCover = findViewById(R.id.new_book_image);
             bookCover.setImageBitmap(coverBitmap);
+
         } else if (requestCode == RESULT_GALLERY && resultCode == RESULT_OK) {
+
             // Gallery look up
             Uri selectedImage = data.getData();
 
@@ -204,10 +210,12 @@ public class EditBookActivity extends AddNewBookActivity {
      * Sets new title. Disallows isbn changes, makes colour grey. Updates save button text
      */
     private void updateUItoEdit() {
+        // preset ISBN
         AppCompatEditText etIsbn = findViewById(R.id.add_book_add_ISBN_field);
         etIsbn.setEnabled(false);
         etIsbn.setTextColor(getResources().getColor(R.color.colorGrey));
 
+        // remove scan button
         ImageView ivScan = findViewById(R.id.image_location);
         ivScan.setVisibility(View.GONE);
 
@@ -238,7 +246,7 @@ public class EditBookActivity extends AddNewBookActivity {
     }
 
     /**
-     * save book with image saving and attaching, removes old id if exists
+     * save book with image saving and attaching, removes old image of the cover if exists
      */
     private void saveWithImage() {
         final String imageIdToDelete = imageID;
@@ -264,6 +272,7 @@ public class EditBookActivity extends AddNewBookActivity {
      */
     private void saveBook() {
 
+        // author and title check
         if (author.trim().isEmpty()) {
             showError("Author can not be empty");
             return;
@@ -285,7 +294,8 @@ public class EditBookActivity extends AddNewBookActivity {
 
             if (coverBitmap != null) {
                 try {
-                    imageID = ImageController.getInstance().addImage(coverBitmap).get(5, TimeUnit.SECONDS);
+                    imageID = ImageController.getInstance().addImage(coverBitmap)
+                            .get(5, TimeUnit.SECONDS);
                 } catch (Exception e) {
                     e.printStackTrace();
                     runOnUiThread(() -> {
@@ -308,7 +318,8 @@ public class EditBookActivity extends AddNewBookActivity {
                 bookController.updateBook(myBook).get(5, TimeUnit.SECONDS);
                 bookController.updateMyOwnedBook(myOwnedBook).get(5, TimeUnit.SECONDS);
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Book Information Updated", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Book Information Updated",
+                            Toast.LENGTH_LONG).show();
                     progressDialog.dismiss();
                     finish();
                 });
