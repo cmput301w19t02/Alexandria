@@ -199,8 +199,8 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
       - userController : UserController
       - myUserProfile : UserProfile
       # onCreate()
-      + onCreateContextMenu()
-      + onContextItemSelected()
+      + isImageBitmap()
+      - setPopupMenu()
       + removePhoto()
       + openGallery()
       + addPhotoCamera()
@@ -254,17 +254,26 @@ package ca.ualberta.CMPUT3012019T02.alexandria {
   }
 }
 
-
 package ca.ualberta.CMPUT3012019T02.alexandria {
   package ca.ualberta.CMPUT3012019T02.alexandria.activity {
     class SignUpActivity {
-      - photoId : String
+      {static} + RESULT_CAMERA : int
+      {static} + RESULT_GALLERY : int
+      + REQUEST_PERMISSION_PHONE_STATE : int
+      - coverBitmap : Bitmap
+      - progressDialog : ProgressDialog
       - userController : UserController
       - imageController : ImageController
       # onCreate()
-      + addPhoto()
+      # onDestroy()
+      + openGallery()
+      + removePhoto()
+      + addPhotoCamera()
+      + isImageBitmap()
+      - setPopupMenu()
       + signUp()
       # onActivityResult()
+      - getBitmapFromUri()
       - showError()
       - validateUsername()
       - validateName()
