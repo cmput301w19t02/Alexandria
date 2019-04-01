@@ -31,11 +31,6 @@ public class BookControllerTests {
         }
     }
 
-    private final Book theHobbit = new Book("9780547928227", "The Hobbit", "J.R.R. Tolkien", "Bilbo Baggins is a hobbit who enjoys a comfortable, unambitious life, rarely traveling further than the pantry of his hobbit-hole in Bag End. But his contentment is disturbed when the wizard, Gandalf, and a company of thirteen dwarves arrive on his doorstep one day to whisk him away on an unexpected journey ‘there and back again’. They have a plot to raid the treasure hoard of Smaug the Magnificent, a large and very dangerous dragon.", "ac543736-b355-4eac-b9b8-a11165f0aa43");
-    private final Book chamberOfSecrets = new Book("0747538492", "Harry Potter and the Chamber of Secrets", "J. K. Rowling", "Harry Potter and the Chamber of Secrets is a fantasy novel written by British author J. K. Rowling and the second novel in the Harry Potter series. The plot follows Harry's second year at Hogwarts School of Witchcraft and Wizardry, during which a series of messages on the walls of the school's corridors warn that the \"Chamber of Secrets\" has been opened and that the \"heir of Slytherin\" would kill all pupils who do not come from all-magical families. These threats are found after attacks which leave residents of the school petrified. Throughout the year, Harry and his friends Ron and Hermione investigate the attacks.", "a4d0131b-ec92-4f7d-90cf-be1fb3f6427d");
-    private final Book prisonerOfAzkaban = new Book("0747542155", "Harry Potter and the Prisoner of Azkaban", "J. K. Rowling", "Harry Potter and the Prisoner of Azkaban is a fantasy novel written by British author J. K. Rowling and the third in the Harry Potter series. The book follows Harry Potter, a young wizard, in his third year at Hogwarts School of Witchcraft and Wizardry. Along with friends Ronald Weasley and Hermione Granger, Harry investigates Sirius Black, an escaped prisoner from Azkaban who they believe is one of Lord Voldemort's old allies.", "209f71c9-2f68-4d8b-9ac9-ee7d68202474");
-    private final Book gobletOfFire = new Book("074754624X", "Harry Potter and the Goblet of Fire", "J. K. Rowling", "Harry Potter and the Goblet of Fire is a fantasy book written by British author J. K. Rowling and the fourth novel in the Harry Potter series. It follows Harry Potter, a wizard in his fourth year at Hogwarts School of Witchcraft and Wizardry and the mystery surrounding the entry of Harry's name into the Triwizard Tournament, in which he is forced to compete.", "e0fb4b87-13aa-4126-b530-b3d296eb5440");
-
     private BookController bookController = BookController.getInstance();
     private UserController userController = UserController.getInstance();
 
@@ -43,16 +38,17 @@ public class BookControllerTests {
 
     private LoginInfo generateRandomUser() throws InterruptedException, ExecutionException, TimeoutException {
         // Assumes that UserController is working correctly
+        userController.deauthenticate();
         String username = "test_" + UUID.randomUUID().toString().replace('-', '_');
         String password = UUID.randomUUID().toString();
         String email = username + "@example.com";
-        userController.createUser("John Smith", email, "7801234567", null, username, password).get(5, TimeUnit.SECONDS);
+        userController.createUser("John Smith", email, "7801234567", null, username, password).get();
         return new LoginInfo(username, password);
     }
 
     private void authenticate(LoginInfo loginInfo) throws InterruptedException, ExecutionException, TimeoutException {
         userController.deauthenticate(); // Invalidates cache as well
-        userController.authenticate(loginInfo.username, loginInfo.password).get(5, TimeUnit.SECONDS);
+        userController.authenticate(loginInfo.username, loginInfo.password).get();
     }
 
     private void assertBooksEqual(Book expected, Book actual) {
@@ -563,245 +559,6 @@ public class BookControllerTests {
         Collection<OwnedBook> ownedBookCollection = bookController.getMyOwnedBooks().get(5, TimeUnit.SECONDS);
         assertEquals(3, ownedBookCollection.size());
     }
-
-    // TODO: more tests
-
-//
-//    /* Current User (My) BorrowedBook and OwnedBook queries tests */
-//
-//
-//    // My borrowed books
-//
-//    @Test
-//    public void testGetMyBorrowedBook() throws InterruptedException, ExecutionException, TimeoutException {
-//        // Assumes this user has borrowed The Hobbit
-//        userController.authenticate(borrower.username, borrower.password).get(5, TimeUnit.SECONDS);
-//        BorrowedBook borrowedBook = bookController.getMyBorrowedBook(theHobbit.getIsbn()).get(5, TimeUnit.SECONDS).get();
-//        Assert.assertEquals(theHobbit.getIsbn(), borrowedBook.getIsbn());
-//    }
-//
-//    @Test(expected = ExecutionException.class)
-//    public void testGetNullMyBorrowedBook() throws InterruptedException, ExecutionException, TimeoutException {
-//        userController.authenticate(borrower.username, borrower.password).get(5, TimeUnit.SECONDS);
-//        Optional<BorrowedBook> borrowedBookOptional = bookController.getMyBorrowedBook(generateRandomBook().getIsbn()).get(5, TimeUnit.SECONDS);
-//        assertTrue(borrowedBookOptional.isEmpty());
-//    }
-//
-//    @Test
-//    public void testGetMyBorrowedBooks() throws InterruptedException, ExecutionException, TimeoutException {
-//        userController.authenticate(username, password).get(10, TimeUnit.SECONDS);
-//
-//        HashMap<String, BorrowedBook> borrowedBookHashMap = bookController.getMyBorrowedBooks().get(5, TimeUnit.SECONDS);
-//        Assert.assertEquals(1, borrowedBookHashMap.size());
-//        Assert.assertTrue("9780547928227".equals(borrowedBookHashMap.get("9780547928227").getIsbn()));
-//    }
-//
-//    @Test
-//    public void testGetNullMyBorrowedBooks() throws InterruptedException, ExecutionException, TimeoutException {
-//        UserController userController = UserController.getInstance();
-//        BookController bookController = BookController.getInstance();
-//
-//        String username = "342c495e_fdfa_44fa_8ab6_a8a74385b1be";
-//        String password = "c32271c9-eb3f-4313-8f1e-db54c0158e5b";
-//        userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
-//
-//        HashMap<String, BorrowedBook> borrowedBookHashMap = bookController.getMyBorrowedBooks().get(5, TimeUnit.SECONDS);
-//        Assert.assertEquals(0, borrowedBookHashMap.size());
-//    }
-//
-//
-//    // My owned books
-//
-//    @Test
-//    public void testAddMyOwnedBook() throws InterruptedException, ExecutionException, TimeoutException {
-//        // Depends on BookController#getMyOwnedBook working correctly
-//        UserController userController = UserController.getInstance();
-//        BookController bookController = BookController.getInstance();
-//
-//        String username = "0265747f_72d4_4ea4_a471_8af60f87017e";
-//        String password = "0ece7cb6-e601-45a1-a93c-0bbd159c31c5";
-//        userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
-//
-//        bookController.deleteMyOwnedBook("9781781102459").get(5, TimeUnit.SECONDS);
-//
-//        OwnedBook expected = new OwnedBook("9781781102459");
-//        bookController.addMyOwnedBook(expected).get(5, TimeUnit.SECONDS);
-//
-//        OwnedBook actual = bookController.getMyOwnedBook("9781781102459").get(5, TimeUnit.SECONDS);
-//        Assert.assertTrue(expected.getIsbn().equals(actual.getIsbn()) && expected.getStatus().equals(actual.getStatus()));
-//
-//        // Clean up
-//        bookController.deleteMyOwnedBook("9781781102459").get(5, TimeUnit.SECONDS);
-//    }
-//
-//    @Test(expected = ExecutionException.class)
-//    public void testAddDuplicateMyOwnedBook() throws InterruptedException, ExecutionException, TimeoutException {
-//        UserController userController = UserController.getInstance();
-//        BookController bookController = BookController.getInstance();
-//
-//        String username = "0265747f_72d4_4ea4_a471_8af60f87017e";
-//        String password = "0ece7cb6-e601-45a1-a93c-0bbd159c31c5";
-//        userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
-//
-//        OwnedBook ownedBook = new OwnedBook("0000000000000");
-//        bookController.addMyOwnedBook(ownedBook).get(5, TimeUnit.SECONDS);
-//        bookController.addMyOwnedBook(ownedBook).get(5, TimeUnit.SECONDS);
-//    }
-//
-//    @Test
-//    public void testGetMyOwnedBook() throws InterruptedException, ExecutionException, TimeoutException {
-//        UserController userController = UserController.getInstance();
-//        BookController bookController = BookController.getInstance();
-//
-//        String username = "0265747f_72d4_4ea4_a471_8af60f87017e";
-//        String password = "0ece7cb6-e601-45a1-a93c-0bbd159c31c5";
-//        userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
-//
-//        OwnedBook ownedBook = bookController.getMyOwnedBook("9780547928227").get(5, TimeUnit.SECONDS);
-//        Assert.assertTrue("9780547928227".equals(ownedBook.getIsbn()));
-//    }
-//
-//    @Test(expected = ExecutionException.class)
-//    public void testGetNullMyOwnedBook() throws InterruptedException, ExecutionException, TimeoutException {
-//        UserController userController = UserController.getInstance();
-//        BookController bookController = BookController.getInstance();
-//
-//        String username = "0265747f_72d4_4ea4_a471_8af60f87017e";
-//        String password = "0ece7cb6-e601-45a1-a93c-0bbd159c31c5";
-//        userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
-//
-//        bookController.deleteMyOwnedBook("0000000000000").get(5, TimeUnit.SECONDS);
-//        bookController.getMyOwnedBook("0000000000000").get(5, TimeUnit.SECONDS);
-//    }
-//
-//    @Test
-//    public void testGetMyOwnedBooks() throws InterruptedException, ExecutionException, TimeoutException {
-//        UserController userController = UserController.getInstance();
-//        BookController bookController = BookController.getInstance();
-//
-//        String username = "0265747f_72d4_4ea4_a471_8af60f87017e";
-//        String password = "0ece7cb6-e601-45a1-a93c-0bbd159c31c5";
-//        userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
-//
-//        HashMap<String, OwnedBook> ownedBookHashMap = bookController.getMyOwnedBooks().get(5, TimeUnit.SECONDS);
-//        Assert.assertEquals(1, ownedBookHashMap.size());
-//        Assert.assertTrue("9780547928227".equals(ownedBookHashMap.get("9780547928227").getIsbn()));
-//    }
-//
-//    @Test
-//    public void testGetNullMyOwnedBooks() throws InterruptedException, ExecutionException, TimeoutException {
-//        UserController userController = UserController.getInstance();
-//        BookController bookController = BookController.getInstance();
-//
-//        String username = "342c495e_fdfa_44fa_8ab6_a8a74385b1be";
-//        String password = "c32271c9-eb3f-4313-8f1e-db54c0158e5b";
-//        userController.authenticate(username, password).get(5, TimeUnit.SECONDS);
-//
-//        HashMap<String, OwnedBook> ownedBookHashMap = bookController.getMyOwnedBooks().get(5, TimeUnit.SECONDS);
-//        Assert.assertEquals(0, ownedBookHashMap.size());
-//    }
-//
-//    @Test
-//    public void testUpdateMyOwnedBook() throws InterruptedException, ExecutionException, TimeoutException {
-//        // Depends on BookController#getMyOwnedBook working correctly
-//        UserController userController = UserController.getInstance();
-//        BookController bookController = BookController.getInstance();
-//
-//        String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
-//        String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
-//        userController.authenticate(username, password).get(10, TimeUnit.SECONDS);
-//
-//        OwnedBook expected = new OwnedBook("9781781102459");
-//        bookController.updateMyOwnedBook(expected).get(10, TimeUnit.SECONDS);
-//        OwnedBook actual = bookController.getMyOwnedBook("9781781102459").get(5, TimeUnit.SECONDS);
-//
-//        Assert.assertTrue(expected.getIsbn().equals(actual.getIsbn()) && expected.getStatus().equals(actual.getStatus()));
-//
-//        // Clean up
-//        bookController.deleteMyOwnedBook("9781781102459").get(10, TimeUnit.SECONDS);
-//    }
-//
-//    @Test(expected = ExecutionException.class)
-//    public void testDeleteMyOwnedBook() throws InterruptedException, ExecutionException, TimeoutException {
-//        // Depends on BookController#getMyOwnedBook working correctly
-//        UserController userController = UserController.getInstance();
-//        BookController bookController = BookController.getInstance();
-//
-//        String username = "0457de6b_0a85_481a_9093_c73de1ba0020";
-//        String password = "4b5e9592-8c9e-4c37-b7d6-f5aed797e791";
-//        userController.authenticate(username, password).get(10, TimeUnit.SECONDS);
-//
-//        bookController.deleteMyOwnedBook("9781781102459").get(10, TimeUnit.SECONDS);
-//        bookController.getMyOwnedBook("9781781102459").get(10, TimeUnit.SECONDS);
-//    }
-//
-//
-//    /* User BorrowedBook and OwnedBook queries tests */
-//
-//
-//    @Test
-//    public void testGetUserBorrowedBook() throws InterruptedException, ExecutionException, TimeoutException {
-//        BookController bookController = BookController.getInstance();
-//
-//        BorrowedBook borrowedBook = bookController.getUserBorrowedBook("eQgZfhN2Yng9TPHcXvfBZs5ZKxj1", "9780547928227").get(5, TimeUnit.SECONDS);
-//        Assert.assertEquals("9780547928227", borrowedBook.getIsbn());
-//    }
-//
-//    @Test(expected = ExecutionException.class)
-//    public void testGetNullUserBorrowedBook() throws InterruptedException, ExecutionException, TimeoutException {
-//        BookController bookController = BookController.getInstance();
-//
-//        bookController.getUserBorrowedBook("eQgZfhN2Yng9TPHcXvfBZs5ZKxj1", "0000000000000").get(5, TimeUnit.SECONDS);
-//    }
-//
-//    @Test
-//    public void testGetUserBorrowedBooks() throws InterruptedException, ExecutionException, TimeoutException {
-//        BookController bookController = BookController.getInstance();
-//
-//        HashMap<String, BorrowedBook> borrowedBookHashMap = bookController.getUserBorrowedBooks("eQgZfhN2Yng9TPHcXvfBZs5ZKxj1").get(5, TimeUnit.SECONDS);
-//        Assert.assertEquals(1, borrowedBookHashMap.size());
-//        Assert.assertTrue("9780547928227".equals(borrowedBookHashMap.get("9780547928227").getIsbn()));
-//    }
-//
-//    @Test
-//    public void testGetNullUserBorrowedBooks() throws InterruptedException, ExecutionException, TimeoutException {
-//        BookController bookController = BookController.getInstance();
-//
-//        HashMap<String, BorrowedBook> borrowedBookHashMap = bookController.getUserBorrowedBooks("bJyo1fjcj0aYJejnJSfz6tugpca2").get(5, TimeUnit.SECONDS);
-//        Assert.assertEquals(0, borrowedBookHashMap.size());
-//    }
-//
-//    @Test
-//    public void testGetUserOwnedBook() throws InterruptedException, ExecutionException, TimeoutException {
-//        BookController bookController = BookController.getInstance();
-//
-//        OwnedBook ownedBook = bookController.getUserOwnedBook("AQiv4J6BTsX5kYHgLChH7xFlir02", "9780547928227").get(5, TimeUnit.SECONDS);
-//        Assert.assertTrue("9780547928227".equals(ownedBook.getIsbn()));
-//    }
-//
-//    @Test(expected = ExecutionException.class)
-//    public void testGetNullUserOwnedBook() throws InterruptedException, ExecutionException, TimeoutException {
-//        BookController bookController = BookController.getInstance();
-//
-//        bookController.getUserOwnedBook("bJyo1fjcj0aYJejnJSfz6tugpca2", "0000000000000").get(5, TimeUnit.SECONDS);
-//    }
-//
-//    @Test
-//    public void testGetUserOwnedBooks() throws InterruptedException, ExecutionException, TimeoutException {
-//        BookController bookController = BookController.getInstance();
-//
-//        HashMap<String, OwnedBook> ownedBookHashMap = bookController.getUserOwnedBooks("AQiv4J6BTsX5kYHgLChH7xFlir02").get(5, TimeUnit.SECONDS);
-//        Assert.assertEquals(1, ownedBookHashMap.size());
-//        Assert.assertTrue("9780547928227".equals(ownedBookHashMap.get("9780547928227").getIsbn()));
-//    }
-//
-//    @Test
-//    public void testGetNullUserOwnedBooks() throws InterruptedException, ExecutionException, TimeoutException {
-//        BookController bookController = BookController.getInstance();
-//
-//        HashMap<String, OwnedBook> ownedBookHashMap = bookController.getUserOwnedBooks("bJyo1fjcj0aYJejnJSfz6tugpca2").get(5, TimeUnit.SECONDS);
-//        Assert.assertEquals(0, ownedBookHashMap.size());
-//    }
 
 }
 
