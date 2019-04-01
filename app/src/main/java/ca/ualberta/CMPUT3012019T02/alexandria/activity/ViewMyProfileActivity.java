@@ -95,8 +95,13 @@ public class ViewMyProfileActivity extends AppCompatActivity {
                                     drawable.setAntiAlias(true);
 
                                     runOnUiThread(() -> {
+                                        image_avatar.setBackgroundResource(0);
                                         image_avatar.setImageDrawable(drawable);
                                         stopSpinner();
+                                    });
+                                } else {
+                                    runOnUiThread(() -> {
+                                        image_avatar.setBackgroundResource(R.drawable.ic_profile);
                                     });
                                 }
                             } else {
