@@ -76,7 +76,9 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookViewHolder
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder myViewHolder, int position) {
 
-        myViewHolder.ivCover.setImageBitmap(mBookListItem.get(position).getCover());
+        if(mBookListItem.get(position).getCover()!=null) {
+            myViewHolder.ivCover.setImageBitmap(mBookListItem.get(position).getCover());
+        }
         myViewHolder.tvTitle.setText(mBookListItem.get(position).getTitle());
         myViewHolder.tvAuthor.setText(mBookListItem.get(position).getAuthor());
         myViewHolder.tvISBN.setText(mBookListItem.get(position).getIsbn());

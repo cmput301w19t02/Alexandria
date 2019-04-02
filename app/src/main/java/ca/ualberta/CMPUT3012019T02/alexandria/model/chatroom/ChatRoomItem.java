@@ -1,7 +1,5 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.model.chatroom;
 
-import android.graphics.drawable.Drawable;
-
 import com.google.firebase.database.Exclude;
 
 import java.util.HashMap;
@@ -49,17 +47,11 @@ public class ChatRoomItem {
         if (user1Name == null || user1Name.isEmpty()) {
             throw new IllegalArgumentException("user1Name cannot be null or empty");
         }
-        if (user1UserPic == null || user1UserPic.isEmpty()) {
-            throw new IllegalArgumentException("user1UserPic cannot be null or empty");
-        }
         if (user2Id == null || user2Id.isEmpty()) {
             throw new IllegalArgumentException("user2Id cannot be null or empty");
         }
         if (user2Name == null || user2Name.isEmpty()) {
             throw new IllegalArgumentException("user2Name cannot be null or empty");
-        }
-        if ( user2UserPic == null || user2UserPic.isEmpty()) {
-            throw new IllegalArgumentException("user2UserPic cannot be null or empty");
         }
         this.chatId = chatRoomId;
         this.user1Id = user1Id;

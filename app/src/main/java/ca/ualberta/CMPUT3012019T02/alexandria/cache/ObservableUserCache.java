@@ -160,11 +160,11 @@ public class ObservableUserCache extends Observable {
         if(chatRooms != null) {
             for (String roomId : chatRooms.keySet()) {
                 ChatRoomItem room = chatRooms.get(roomId);
-                if (room.getUser1Id().equals(userId)) {
-                    chatId = room.getUser1Id();
+                if (room.getUser1Id().equals(userId) && room.getUser1Id()!=userController.getMyId()) {
+                    chatId = room.getChatId();
                 }
-                if (room.getUser2Id().equals(userId)) {
-                    chatId = room.getUser2Id();
+                else if (room.getUser2Id().equals(userId)&& room.getUser1Id()!=userController.getMyId()) {
+                    chatId = room.getChatId();
                 }
             }
         }
