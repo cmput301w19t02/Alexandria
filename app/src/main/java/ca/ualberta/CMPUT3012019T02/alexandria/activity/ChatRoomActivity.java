@@ -118,6 +118,9 @@ public class ChatRoomActivity extends AppCompatActivity {
                 input.setText("");
             }
         });
+
+        ImageView locationButton = findViewById(R.id.image_location);
+        locationButton.setOnClickListener((View v) -> onAddLocationClick());
     }
 
     @Override
