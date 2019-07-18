@@ -41,7 +41,7 @@ public class Book {
      * @param title title of the book
      * @param author author of the book
      */
-    public Book(@NonNull String isbn, @NonNull String title, @NonNull String author) {
+    public Book(@Nullable String isbn, @NonNull String title, @NonNull String author) {
         this(isbn, title, author, null, null);
     }
 
@@ -54,11 +54,12 @@ public class Book {
      * @param author author of the book
      * @param description description of the book
      */
-    public Book(@NonNull String isbn, @NonNull String title, @NonNull String author, @Nullable String description, @Nullable String imageId) {
-        if (isbn.trim().isEmpty()) {
-            throw new IllegalArgumentException("Isbn cannot be null or empty");
+    public Book(@Nullable String isbn, @NonNull String title, @NonNull String author, @Nullable String description, @Nullable String imageId) {
+        if (!isbn.trim().isEmpty()) {
+//            throw new IllegalArgumentException("Isbn cannot be null or empty");
+            this.isbn = isbn;
         }
-        this.isbn = isbn;
+
         setImageId(imageId);
         setTitle(title);
         setAuthor(author);

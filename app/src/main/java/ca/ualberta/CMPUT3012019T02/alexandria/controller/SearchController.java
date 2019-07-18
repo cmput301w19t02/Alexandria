@@ -34,7 +34,6 @@ import java9.util.concurrent.CompletableFuture;
  */
 public class SearchController {
 
-    private Client client;
     private Index index;
     private Gson gson;
     private static SearchController instance;
@@ -43,7 +42,7 @@ public class SearchController {
     private static UserController userController = UserController.getInstance();
 
     private SearchController() {
-        client = new Client("9ETLQT0YZC", App.getContext().getResources().getString(R.string.algolia_api_key));
+        Client client = new Client("9ETLQT0YZC", App.getContext().getResources().getString(R.string.algolia_api_key));
         index = client.getIndex("search");
         try {
             index.setSettingsAsync(new JSONObject().put(
