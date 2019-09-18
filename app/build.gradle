@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.debug
     }
     buildTypes {
         release {
@@ -23,6 +24,7 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+    buildToolsVersion = '28.0.3'
 }
 
 dependencies {
