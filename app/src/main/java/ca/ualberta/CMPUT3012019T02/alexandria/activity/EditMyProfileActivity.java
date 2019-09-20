@@ -17,8 +17,6 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextMenu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -29,6 +27,7 @@ import android.widget.Toast;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
+import java.util.Objects;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
@@ -77,7 +76,7 @@ public class EditMyProfileActivity extends AppCompatActivity {
         // toolbar
         Toolbar toolbar = findViewById(R.id.edit_my_profile_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);    // remove default title
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v -> finish());
@@ -108,7 +107,7 @@ public class EditMyProfileActivity extends AppCompatActivity {
      * Creates popup menu for adding photos
      * @param v
      */
-    private void setPopupMenu(View v){
+    protected void setPopupMenu(View v){
         PopupMenu popup = new PopupMenu(getContext(), v);
 
         if (!this.isImageBitmap()) {

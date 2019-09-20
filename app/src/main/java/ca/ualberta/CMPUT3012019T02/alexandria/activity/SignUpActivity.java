@@ -25,14 +25,12 @@ import android.widget.Toast;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
-import java9.util.concurrent.CompletableFuture;
 
 import static ca.ualberta.CMPUT3012019T02.alexandria.App.getContext;
 
@@ -68,7 +66,7 @@ public class SignUpActivity extends AppCompatActivity {
         // toolbar
         Toolbar toolbar = findViewById(R.id.sign_up_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);    // remove default title
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v -> finish());
@@ -183,10 +181,10 @@ public class SignUpActivity extends AppCompatActivity {
         AppCompatEditText passwordField = findViewById(R.id.sign_up_password_field);
         AppCompatEditText emailField = findViewById(R.id.sign_up_email_field);
 
-        String name = nameField.getText().toString().trim();
-        String username = usernameField.getText().toString().trim();
-        String password = passwordField.getText().toString();
-        String email = emailField.getText().toString().trim();
+        String name = Objects.requireNonNull(nameField.getText()).toString().trim();
+        String username = Objects.requireNonNull(usernameField.getText()).toString().trim();
+        String password = Objects.requireNonNull(passwordField.getText()).toString();
+        String email = Objects.requireNonNull(emailField.getText()).toString().trim();
 
         if (!validateName(name)) {
             showError("Name is invalid! Name must contain at least 4 character.");
@@ -244,6 +242,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             // Camera photo
             Bundle extras = data.getExtras();
+            assert extras != null;
             coverBitmap = (Bitmap) extras.get("data");
             ImageView imageView = findViewById(R.id.sign_up_user_image);
 
@@ -286,7 +285,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Bitmap getBitmapFromUri(Uri uri) throws IOException {
         ParcelFileDescriptor parcelFileDescriptor =
                 getContentResolver().openFileDescriptor(uri, "r");
-        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        FileDescriptor fileDescriptor = Objects.requireNonNull(parcelFileDescriptor).getFileDescriptor();
         Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
         parcelFileDescriptor.close();
         return image;

@@ -6,10 +6,10 @@ import android.graphics.BitmapFactory;
 import com.algolia.search.saas.Client;
 import com.algolia.search.saas.Index;
 import com.algolia.search.saas.Query;
+import com.google.android.gms.common.util.IOUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +34,6 @@ import java9.util.concurrent.CompletableFuture;
  */
 public class SearchController {
 
-    private Client client;
     private Index index;
     private Gson gson;
     private static SearchController instance;
@@ -43,7 +42,7 @@ public class SearchController {
     private static UserController userController = UserController.getInstance();
 
     private SearchController() {
-        client = new Client("9ETLQT0YZC", App.getContext().getResources().getString(R.string.algolia_api_key));
+        Client client = new Client("9ETLQT0YZC", App.getContext().getResources().getString(R.string.algolia_api_key));
         index = client.getIndex("search");
         try {
             index.setSettingsAsync(new JSONObject().put(
@@ -121,26 +120,26 @@ public class SearchController {
     public CompletableFuture<Boolean> compareIsbn(String isbn1, String isbn2) {
         final CompletableFuture<Boolean> compareFuture = new CompletableFuture<>();
 
-        CompletableFuture.runAsync(() -> {
-           String searchUrl1 = GOOGLE_BOOK_URL + isbn1 + "&key=" + booksApiKey;
-           String searchUrl2 = GOOGLE_BOOK_URL + isbn2 + "&key=" + booksApiKey;
+        CompletableFuture.runAsync(new Runnable() {
+            @Override
+            public void run() {
+                String searchUrl1 = GOOGLE_BOOK_URL + isbn1 + "&key=" + booksApiKey;
+                String searchUrl2 = GOOGLE_BOOK_URL + isbn2 + "&key=" + booksApiKey;
 
-           Boolean equalIsbn = false;
+                Boolean equalIsbn = false;
 
-            try {
-               URL url1 = new URL(searchUrl1);
-               URL url2 = new URL(searchUrl2);
+                try {
+                    URL url1 = new URL(searchUrl1);
+                    URL url2 = new URL(searchUrl2);
 
-               HttpURLConnection bookConnection1 = (HttpURLConnection) url1.openConnection();
-               HttpURLConnection bookConnection2 = (HttpURLConnection) url2.openConnection();
+                    HttpURLConnection bookConnection1 = (HttpURLConnection) url1.openConnection();
+                    HttpURLConnection bookConnection2 = (HttpURLConnection) url2.openConnection();
 
-               try {
-                   InputStream in1 = bookConnection1.getInputStream();
-                   InputStream in2 = bookConnection2.getInputStream();
+                    try {
+                        InputStream in1 = bookConnection1.getInputStream();
+                        InputStream in2 = bookConnection2.getInputStream();
 
-                   if (IOUtils.contentEquals( in1, in2 )) {
-                       equalIsbn = true;
-                   }
+                        if (in1== in2) equalIsbn = true;
 
 //                   InputStreamReader bookInput1 = new InputStreamReader(in1);
 //                   InputStreamReader bookInput2 = new InputStreamReader(in2);
@@ -148,23 +147,23 @@ public class SearchController {
 //                   BufferedReader bookReader1 = new BufferedReader(bookInput1);
 //                   BufferedReader bookReader2 = new BufferedReader(bookInput2);
 
-               } catch (Exception e){
-                   e.printStackTrace();
-                   compareFuture.completeExceptionally(e);
-               }
-               finally {
-                   bookConnection1.disconnect();
-                   bookConnection2.disconnect();
-               }
-           } catch (MalformedURLException e) {
-               e.printStackTrace();
-               compareFuture.completeExceptionally(new IOException("Failed to create URL object"));
-           } catch (IOException e) {
-               e.printStackTrace();
-               compareFuture.completeExceptionally(new IOException("Failed to create URL connection"));
-           }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        compareFuture.completeExceptionally(e);
+                    } finally {
+                        bookConnection1.disconnect();
+                        bookConnection2.disconnect();
+                    }
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                    compareFuture.completeExceptionally(new IOException("Failed to create URL object"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    compareFuture.completeExceptionally(new IOException("Failed to create URL connection"));
+                }
 
-           compareFuture.complete(equalIsbn);
+                compareFuture.complete(equalIsbn);
+            }
         });
 
         return compareFuture;

@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -77,7 +78,7 @@ public class AddNewBookActivity extends AppCompatActivity {
         // toolbar
         Toolbar toolbar = findViewById(R.id.add_new_book_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);    // remove default title
 
         // back button
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
@@ -196,6 +197,7 @@ public class AddNewBookActivity extends AppCompatActivity {
                     .handleAsync((searchedBook, throwable) -> {
                 this.searchedBook = searchedBook;
                 try {
+                    assert searchedBook.getImageId() != null;
                     coverBitmap = ImageController.getInstance().getImage(searchedBook.getImageId())
                             .get(5, TimeUnit.SECONDS);
                 } catch (InterruptedException e) {
@@ -244,6 +246,7 @@ public class AddNewBookActivity extends AppCompatActivity {
     private Bitmap getBitmapFromUri(Uri uri) throws IOException {
         ParcelFileDescriptor parcelFileDescriptor =
                 getContentResolver().openFileDescriptor(uri, "r");
+        assert parcelFileDescriptor != null;
         FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
         Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
         parcelFileDescriptor.close();

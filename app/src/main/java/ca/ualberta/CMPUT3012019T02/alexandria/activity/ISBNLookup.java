@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
+
+import java.util.Objects;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -40,7 +43,7 @@ public class ISBNLookup extends AppCompatActivity implements ZXingScannerView.Re
 
         Toolbar toolbar = findViewById(R.id.isbn_scanner_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);    // remove default title
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v -> finish());
@@ -89,11 +92,10 @@ public class ISBNLookup extends AppCompatActivity implements ZXingScannerView.Re
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.CAMERA)) {
-                showExplanation("Permission Needed",
-                        "Camera is required to scan the ISBN.",
-                        Manifest.permission.CAMERA, REQUEST_PERMISSION_PHONE_STATE);
+                showExplanation(
+                );
             } else {
-                requestPermission(Manifest.permission.CAMERA, REQUEST_PERMISSION_PHONE_STATE);
+                requestPermission();
             }
         } else {
             Toast.makeText(ISBNLookup.this,
@@ -104,12 +106,11 @@ public class ISBNLookup extends AppCompatActivity implements ZXingScannerView.Re
     @Override
     public void onRequestPermissionsResult(
             int requestCode,
-            String permissions[],
-            int[] grantResults) {
+            @NonNull String permissions[],
+            @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_PERMISSION_PHONE_STATE:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(ISBNLookup.this, "Permission Granted!",
                             Toast.LENGTH_SHORT).show();
                 } else {
@@ -119,23 +120,20 @@ public class ISBNLookup extends AppCompatActivity implements ZXingScannerView.Re
         }
     }
 
-    private void showExplanation(String title,
-                                 String message,
-                                 final String permission,
-                                 final int permissionRequestCode) {
+    private void showExplanation() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(title)
-                .setMessage(message)
+        builder.setTitle("Permission Needed")
+                .setMessage("Camera is required to scan the ISBN.")
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        requestPermission(permission, permissionRequestCode);
+                        requestPermission();
                     }
                 });
         builder.create().show();
     }
 
-    private void requestPermission(String permissionName, int permissionRequestCode) {
+    private void requestPermission() {
         ActivityCompat.requestPermissions(this,
-                new String[]{permissionName}, permissionRequestCode);
+                new String[]{Manifest.permission.CAMERA}, 1);
     }
 }
