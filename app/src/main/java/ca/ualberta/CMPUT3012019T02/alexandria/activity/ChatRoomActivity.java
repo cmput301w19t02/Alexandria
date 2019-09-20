@@ -1,13 +1,12 @@
 package ca.ualberta.CMPUT3012019T02.alexandria.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -29,12 +28,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
+import ca.ualberta.CMPUT3012019T02.alexandria.adapter.MessageRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ChatController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.NotificationController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
-import ca.ualberta.CMPUT3012019T02.alexandria.adapter.MessageRecyclerViewAdapter;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.Location;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.LocationMessage;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.message.Message;
@@ -58,7 +58,6 @@ public class ChatRoomActivity extends AppCompatActivity {
     private String chatId;
     private String receiverId;
     private String senderId;
-    private String receiverName;
     private MessageRecyclerViewAdapter adapter;
 
     @Override
@@ -69,7 +68,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         Intent intent = getIntent();
         chatId = intent.getStringExtra("chatId");
         receiverId = intent.getStringExtra("receiverId");
-        receiverName = intent.getStringExtra("receiverName");
+        String receiverName = intent.getStringExtra("receiverName");
         senderId = UserController.getInstance().getMyId();
 
         TextView receiverUserName = findViewById(R.id.receiver_username);
@@ -78,13 +77,13 @@ public class ChatRoomActivity extends AppCompatActivity {
         // toolbar
         Toolbar toolbar = findViewById(R.id.ChatRoom_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);    // remove default title
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener((View v) -> finish());
 
         //edit text focus
-        EditText editText = findViewById(R.id.edit_message);
+        @SuppressLint("CutPasteId") EditText editText = findViewById(R.id.edit_message);
         editText.requestFocus();
 
         // messages
@@ -109,9 +108,9 @@ public class ChatRoomActivity extends AppCompatActivity {
         messagesRef.addValueEventListener(messagesListener);
 
 
-        ImageView sendButton = findViewById(R.id.image_send);
+        ImageView sendButton = this.<ImageView>findViewById(R.id.image_send);
         sendButton.setOnClickListener((View v) -> {
-            EditText input = findViewById(R.id.edit_message);
+            @SuppressLint("CutPasteId") EditText input = findViewById(R.id.edit_message);
             String inputText = input.getText().toString();
             if (!inputText.matches("")) {
                 onSendMessageClick(inputText, senderId);

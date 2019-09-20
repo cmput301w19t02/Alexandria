@@ -7,7 +7,6 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,8 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java9.util.Optional;
-import java9.util.concurrent.CompletableFuture;
+import java.util.Objects;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.cache.ObservableUserCache;
@@ -24,6 +22,7 @@ import ca.ualberta.CMPUT3012019T02.alexandria.controller.ChatController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import ca.ualberta.CMPUT3012019T02.alexandria.model.user.UserProfile;
+import java9.util.concurrent.CompletableFuture;
 
 /**
  * Shows a profile of a user
@@ -56,7 +55,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
         // Toolbar
         Toolbar toolbar = findViewById(R.id.user_profile_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);    // remove default title
 
         // back button
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
@@ -88,17 +87,16 @@ public class ViewUserProfileActivity extends AppCompatActivity {
                 if (photoId != null) {
                     imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
                         if (errorImage == null) {
-                            Bitmap bitmap = resultImage;
 
-                            if (bitmap != null) {
-                                Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                                        Math.min(bitmap.getWidth(), bitmap.getHeight()),
-                                        Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                            if (resultImage != null) {
+                                Bitmap squareBitmap = Bitmap.createBitmap(resultImage, 0, 0,
+                                        Math.min(resultImage.getWidth(), resultImage.getHeight()),
+                                        Math.min(resultImage.getWidth(), resultImage.getHeight()));
 
                                 RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
                                         .create(getResources(), squareBitmap);
                                 drawable.setCornerRadius(Math.min(
-                                        bitmap.getWidth(), bitmap.getHeight()));
+                                        resultImage.getWidth(), resultImage.getHeight()));
                                 drawable.setAntiAlias(true);
 
                                 ImageView imageView = findViewById(R.id.user_profile_image);

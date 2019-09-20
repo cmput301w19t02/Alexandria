@@ -42,18 +42,17 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.Objects;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
-import ca.ualberta.CMPUT3012019T02.alexandria.cache.ImageCache;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import java9.util.concurrent.CompletableFuture;
 
 public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private CameraPosition mCameraPosition;
     private Location mLastKnownLocation;
     private boolean markerExists = false;
 
@@ -62,7 +61,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
     // Default location (Edmonton, AB) assuming permissions are denied
-    private final LatLng mDefaultLocation = new LatLng(53.5444,-113.4909);
+    private final LatLng mDefaultLocation = new LatLng(10.0308423,-76.3595);
     private static final int DEFAULT_ZOOM = 15;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
@@ -73,14 +72,14 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
         if (savedInstanceState != null) {
             mLastKnownLocation = savedInstanceState.getParcelable("location");
-            mCameraPosition = savedInstanceState.getParcelable("camera_position");
+            CameraPosition mCameraPosition = savedInstanceState.getParcelable("camera_position");
         }
 
         setContentView(R.layout.activity_location);
 
         Toolbar toolbar = findViewById(R.id.send_location_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);    // remove default title
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v -> finish());
@@ -89,6 +88,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_fragment);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
     }
 
@@ -179,6 +179,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                     if (task.isSuccessful()) {
                         // Set the map's camera position to the current location of the device.
                         mLastKnownLocation = task.getResult();
+                        assert mLastKnownLocation != null;
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                 new LatLng(mLastKnownLocation.getLatitude(),
                                         mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
@@ -230,7 +231,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
      */
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[],
+                                           @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         mLocationPermissionGranted = false;
         switch (requestCode) {

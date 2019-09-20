@@ -16,11 +16,10 @@ import static org.junit.Assert.assertTrue;
 
 public class OwnedBookTests {
 
-    private final String TEST_USERNAME = "342c495e_fdfa_44fa_8ab6_a8a74385b1be";
-    private final String TEST_PASSWORD = "c32271c9-eb3f-4313-8f1e-db54c0158e5b";
-
     @Before
     public void authenticate() throws InterruptedException, ExecutionException, TimeoutException {
+        String TEST_USERNAME = "342c495e_fdfa_44fa_8ab6_a8a74385b1be";
+        String TEST_PASSWORD = "c32271c9-eb3f-4313-8f1e-db54c0158e5b";
         UserController.getInstance().authenticate(TEST_USERNAME, TEST_PASSWORD).get(5, TimeUnit.SECONDS);
     }
 

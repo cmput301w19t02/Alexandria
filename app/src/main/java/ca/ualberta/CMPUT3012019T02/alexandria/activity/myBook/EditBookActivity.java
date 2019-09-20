@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
@@ -54,7 +55,7 @@ public class EditBookActivity extends AddNewBookActivity {
         // toolbar
         Toolbar toolbar = findViewById(R.id.add_new_book_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);    // remove default title
 
         updateUItoEdit();
 
@@ -68,6 +69,7 @@ public class EditBookActivity extends AddNewBookActivity {
 
         // get ISBN number of the book being edited
         Bundle extras = getIntent().getExtras();
+        assert extras != null;
         if (extras.getString(ISBN_KEY) == null) {
             isbn = null;
             showError("The ISBN is not provided.");
@@ -351,8 +353,8 @@ public class EditBookActivity extends AddNewBookActivity {
         AppCompatEditText titleField = findViewById(R.id.add_book_add_title_field);
         AppCompatEditText authorField = findViewById(R.id.add_book_add_author_field);
 
-        title = titleField.getText().toString();
-        author = authorField.getText().toString();
+        title = Objects.requireNonNull(titleField.getText()).toString();
+        author = Objects.requireNonNull(authorField.getText()).toString();
     }
 
     /**

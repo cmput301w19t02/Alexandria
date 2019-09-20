@@ -10,6 +10,8 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
 import java9.util.concurrent.CompletableFuture;
@@ -40,8 +42,8 @@ public class LoginActivity extends AppCompatActivity {
 
         errorMessage.setText("");
 
-        String username = usernameField.getText().toString().trim();
-        String password = passwordField.getText().toString();
+        String username = Objects.requireNonNull(usernameField.getText()).toString().trim();
+        String password = Objects.requireNonNull(passwordField.getText()).toString();
 
         if (!validator(username,password)) return;
 

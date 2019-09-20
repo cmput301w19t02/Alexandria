@@ -17,6 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 import ca.ualberta.CMPUT3012019T02.alexandria.R;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.ImageController;
 import ca.ualberta.CMPUT3012019T02.alexandria.controller.UserController;
@@ -39,7 +41,7 @@ public class ViewMyProfileActivity extends AppCompatActivity {
         // toolbar
         Toolbar toolbar = findViewById(R.id.profile_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);    // remove default title
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);    // remove default title
 
         // back button
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
@@ -81,17 +83,16 @@ public class ViewMyProfileActivity extends AppCompatActivity {
                         ImageController imageController = ImageController.getInstance();
                         imageController.getImage(photoId).handleAsync((resultImage, errorImage) -> {
                             if (errorImage == null) {
-                                Bitmap bitmap = resultImage;
 
-                                if (bitmap != null) {
-                                    Bitmap squareBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                                            Math.min(bitmap.getWidth(), bitmap.getHeight()),
-                                            Math.min(bitmap.getWidth(), bitmap.getHeight()));
+                                if (resultImage != null) {
+                                    Bitmap squareBitmap = Bitmap.createBitmap(resultImage, 0, 0,
+                                            Math.min(resultImage.getWidth(), resultImage.getHeight()),
+                                            Math.min(resultImage.getWidth(), resultImage.getHeight()));
 
                                     RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory
                                             .create(getResources(), squareBitmap);
                                     drawable.setCornerRadius(Math.min(
-                                            bitmap.getWidth(), bitmap.getHeight()));
+                                            resultImage.getWidth(), resultImage.getHeight()));
                                     drawable.setAntiAlias(true);
 
                                     runOnUiThread(() -> {
@@ -177,8 +178,8 @@ public class ViewMyProfileActivity extends AppCompatActivity {
                 UserController.getInstance().deauthenticate();
                 Intent start_new_main_intent = new Intent(this,
                         MainActivity.class);
-                start_new_main_intent.setFlags(start_new_main_intent.FLAG_ACTIVITY_NEW_TASK |
-                        start_new_main_intent.FLAG_ACTIVITY_CLEAR_TASK);  // clear activity  history
+                start_new_main_intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK);  // clear activity  history
                 startActivity(start_new_main_intent);
                 break;
 
